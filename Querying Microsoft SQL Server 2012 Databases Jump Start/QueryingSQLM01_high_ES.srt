@@ -12,23 +12,23 @@ en la zona de Bellevue/Redmond/Seattle. Vamos a estar presentando
 
 4
 00:00:25,483 --> 00:00:30,350
-una clase de Querying Microsoft SQL Server 2012 contigo hoy.
+una clase de Querying Microsoft SQL Server 2012 para ustedes hoy.
 
 5
 00:00:30,433 --> 00:00:33,466
-Muchas gracias por tomarte el tiempo de unirte a nosotros. Queremos algún
+Muchas gracias por tomarse el tiempo de unirse a nosotros. Queremos algún
 
 6
 00:00:33,483 --> 00:00:37,466
-tipo de interacción para que sea capaz de darnos algún tipo de retroalimentación,
+tipo de interacción para que sean capaces de darnos algún tipo de retroalimentación,
 
 7
 00:00:37,483 --> 00:00:41,333
-con el fin de que estarás viendo la presentación en las próximas
+ya que estarán viendo la presentación en las próximas
 
 8
 00:00:41,483 --> 00:00:44,466
-horas, a la derecha de tu pantalla hay una interfáz de chat, 
+horas, a la derecha de su pantalla hay una interfáz de chat, 
 
 9
 00:00:44,483 --> 00:00:48,416
@@ -52,7 +52,7 @@ estaremos monitoreando las conversaciones así cómo lo estarán haciendo desde 
 
 14
 00:01:03,483 --> 00:01:06,350
-Y los más interesante es que si nos puedes escribir una buena pregunta,
+Y los más interesante es que si nos pueden escribir una buena pregunta,
 
 15
 00:01:06,433 --> 00:01:09,466
@@ -60,7 +60,7 @@ nos la van a enviar y nos vamos a tomar el tiempo en vivo y
 
 16
 00:01:09,483 --> 00:01:12,466
-te estaremos respondiendo. La buena noticias es que no vas a
+les estaremos respondiendo. La buena noticias es que no vas a
 
 17
 00:01:12,483 --> 00:01:15,433
@@ -84,31 +84,31 @@ vamos a hablar, Quiero estar seguro de que todos entienden
 
 22
 00:01:26,383 --> 00:01:30,466
-what you've gotten yourself into. This is more of a Level 300 class.
+a lo que sean metido. Esto es más que una clase de nivel 300.
 
 23
 00:01:30,483 --> 00:01:32,466
-And we're trying to meet the audience that's trying to learn
+Y estámos tratando de conocer a la audiencia que quiere aprender
 
 24
 00:01:32,483 --> 00:01:36,466
-the technical skills required for some of the advanced Transact-SQL
+los conocimientos técnicos requeridos para algunas de las consultas Transact-SQL
 
 25
 00:01:37,233 --> 00:01:40,466
-queries within SQL Server. So you should have a basic understanding
+avanzadas dentro de SQL Server. Por lo que deben tener un conocimiento básico
 
 26
 00:01:40,483 --> 00:01:44,466
-at least of relational databases, understanding the use of the
+al menos de bases de datos relacionales, entender el uso de
 
 27
 00:01:44,483 --> 00:01:47,200
-SSMS, or the SQL Server Management Studio, because we're going
+SSMS, o de SQL Server Management Studio, porque vamos
 
 28
 00:01:47,283 --> 00:01:50,466
-to be spending a lot of time in there, and then a basic knowledge
+a pasar mucho tiempo en ello, and then a basic knowledge
 
 29
 00:01:50,483 --> 00:01:52,466
