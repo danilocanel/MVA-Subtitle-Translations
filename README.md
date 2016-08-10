@@ -21,7 +21,7 @@ Puedes utilizar cualquier reproductor que te permita importar el subtitulo para 
 
 Si desea contribuir, aquí algunas notas y directrices:
  1. Has "Fork" de este repositorio
- 2. Duplica el archivo que deseas traducir, renombrarlo agregando un guion bajo más el código del idioma. (Ejemplo: QueryingSQLM01_high.str -> QueryingSQLM01_high_ES.str para traducir el archivo base que está en inglés al español).t
+ 2. Duplica el archivo que deseas traducir, renombrarlo agregando un guion bajo más el código del idioma. (Ejemplo: QueryingSQLM01_high.str -> QueryingSQLM01_high_ES.str para traducir el archivo base que está en inglés al español).
  3. Mientras aún no hayas terminado de traducir el archivo utiliza en el "Summary" de cada commit: "Traducción" (Sin las comillas).
  4. Si ya terminaste de traducir un archivo utiliza el "Summary" "Traducción final" (Sin las comillas), esto nos ayudará a saber cuándo poder utilizar el archivo o contribuir con una revisión de la traducción.
  5. Luego de que hayas terminado de traducir tu archivo has clic en el botón "New Pull Request" de tu repositorio compara los cambios hechos en tu repositorio con los de este repositorio.
