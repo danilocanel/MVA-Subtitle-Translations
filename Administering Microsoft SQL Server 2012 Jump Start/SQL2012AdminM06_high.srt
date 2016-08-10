@@ -1,0 +1,4372 @@
+1
+00:00:00,333 --> 00:00:04,0
+[Music]
+
+2
+00:00:18,366 --> 00:00:20,333
+Welcome back. Module 6,
+
+3
+00:00:20,216 --> 00:00:23,466
+our final one of the day. I am Rich Currey, still, and will continue
+
+4
+00:00:24,483 --> 00:00:28,233
+to be. George Squillace, still, and will continue to be.
+
+5
+00:00:28,316 --> 00:00:30,466
+George, what've we got coming to end things up tonight?
+
+6
+00:00:30,483 --> 00:00:36,0
+>> An interesting and a really vital topic to a SQL database administration,
+
+7
+00:00:36,483 --> 00:00:41,466
+the topic of high availability, a bunch of different things to
+
+8
+00:00:41,483 --> 00:00:45,466
+take a look at within high availability. We'll first have to
+
+9
+00:00:45,183 --> 00:00:49,466
+take a look at what high availability is and the particular kinds
+
+10
+00:00:49,483 --> 00:00:52,466
+of things that it covers. And then, we're going to drill down
+
+11
+00:00:52,483 --> 00:00:55,466
+into a number of high availability technologies.
+
+12
+00:00:57,483 --> 00:00:58,466
+>> All right, so...
+
+13
+00:00:58,483 --> 00:01:02,466
+>> Now I want to be clear, a couple of these are really not covered
+
+14
+00:01:02,483 --> 00:01:06,466
+on the exam whatsoever; that's not so much the relevance.
+
+15
+00:01:06,483 --> 00:01:09,466
+For example, replication: not really covered at all on the exam
+
+16
+00:01:10,483 --> 00:01:13,466
+but because the topic is high availability I want all of you
+
+17
+00:01:13,483 --> 00:01:17,466
+to have a decent big picture look at the availability options
+
+18
+00:01:17,483 --> 00:01:21,333
+that are within the product. So I'll have an inclusion of all
+
+19
+00:01:21,483 --> 00:01:26,166
+those at least a little bit, for your sake not so much for exam purposes.
+
+20
+00:01:26,483 --> 00:01:30,466
+>> So let's start out, what is high availability all about, George?
+
+21
+00:01:30,483 --> 00:01:34,466
+>> When I'm trying to protect my environment, I need duplication
+
+22
+00:01:34,483 --> 00:01:39,466
+at some level or levels. So high availability refers to having
+
+23
+00:01:39,483 --> 00:01:43,466
+something available after some form of failure.
+
+24
+00:01:43,483 --> 00:01:48,283
+>> So if a machine crashes or if a disk file breaks.
+
+25
+00:01:48,450 --> 00:01:48,466
+>> Exactly.
+
+26
+00:01:48,483 --> 00:01:50,466
+>> Disk drive breaks, something along those lines.
+
+27
+00:01:51,166 --> 00:01:54,466
+>> So I could have media failures. I could have complete server failures.
+
+28
+00:01:54,483 --> 00:01:57,466
+I could have complete datacenter failures. There are failures,
+
+29
+00:01:57,483 --> 00:02:00,466
+really, at a number of different catastrophic levels.
+
+30
+00:02:01,483 --> 00:02:05,466
+So we have different kinds of high availability technologies;
+
+31
+00:02:06,483 --> 00:02:10,466
+some protect against hardware. Well, one in particular: failover
+
+32
+00:02:10,483 --> 00:02:15,0
+clustering or what I'll call traditional failover clustering
+
+33
+00:02:15,483 --> 00:02:17,466
+protects against hardware failure. I have a lot more to talk
+
+34
+00:02:17,483 --> 00:02:22,466
+about there so we'll save the more detailed explanation until later.
+
+35
+00:02:22,216 --> 00:02:22,350
+>> Okay.
+
+36
+00:02:22,433 --> 00:02:27,466
+>> Now in particular there are multiple technologies that protect
+
+37
+00:02:27,183 --> 00:02:31,466
+against media failure, the loss of a database, database file,
+
+38
+00:02:31,483 --> 00:02:36,466
+along things like that. And so we'll see that all of these involve
+
+39
+00:02:37,483 --> 00:02:41,466
+duplicating database data, the entire database or a portion of
+
+40
+00:02:41,483 --> 00:02:43,466
+a database somehow.
+
+41
+00:02:43,483 --> 00:02:46,466
+>> Okay, so what's the first one that we want to talk about?
+
+42
+00:02:46,483 --> 00:02:49,466
+>> Okay so the first one we want to take a look at is replication.
+
+43
+00:02:50,316 --> 00:02:53,466
+And what you want to picture here is Grandpa's old cottage.
+
+44
+00:02:53,483 --> 00:02:57,316
+This is something that's been around for a long time; it's tried
+
+45
+00:02:57,400 --> 00:03:00,466
+and true. It's loved. It's useful.
+
+46
+00:03:00,483 --> 00:03:03,466
+To tell you the truth, though, replication is a handful.
+
+47
+00:03:04,483 --> 00:03:07,466
+It's very highly configurable and there are a lot of ways that
+
+48
+00:03:07,483 --> 00:03:10,466
+you can architect it. Rich, you know you're in trouble when you
+
+49
+00:03:10,483 --> 00:03:15,216
+go to look up books on replication and you see that any of the books...
+
+50
+00:03:15,300 --> 00:03:17,466
+There are only a couple of books available on it but they're
+
+51
+00:03:17,483 --> 00:03:19,316
+over 500 pages.
+
+52
+00:03:20,483 --> 00:03:24,466
+Simple Talk is coming up with a free ebook on replication; it
+
+53
+00:03:24,183 --> 00:03:25,466
+should be out any time now.
+
+54
+00:03:26,416 --> 00:03:29,466
+>> That's a good thing because I don't care what you're doing,
+
+55
+00:03:29,483 --> 00:03:33,250
+replication at some level, you're probably going to have to deal
+
+56
+00:03:33,333 --> 00:03:34,466
+with it in your SQL server career.
+
+57
+00:03:34,483 --> 00:03:37,466
+>> And not only that but it's probably going to get tangled at
+
+58
+00:03:37,483 --> 00:03:40,200
+some particular point and you're going to have to learn how to
+
+59
+00:03:40,283 --> 00:03:43,466
+untangle it as well. Now every one of the topic areas in this
+
+60
+00:03:43,483 --> 00:03:47,466
+module is going to have a general pattern like: what are the
+
+61
+00:03:47,483 --> 00:03:52,183
+facts, the basic facts, the basic technology that it uses or...
+
+62
+00:03:52,266 --> 00:03:52,383
+>> Okay.
+
+63
+00:03:52,466 --> 00:03:56,166
+>> ...movement or duplication method? Then, what are the hands-on
+
+64
+00:03:56,250 --> 00:03:59,466
+or general hands-on processes for implementing it? And then,
+
+65
+00:03:59,483 --> 00:04:04,466
+sorry, not a single one of the technologies is perfect.
+
+66
+00:04:04,483 --> 00:04:11,466
+Every one has something glaring that's omitting or some potential drawback.
+
+67
+00:04:11,483 --> 00:04:15,466
+And that's even true with the very newest technology which has
+
+68
+00:04:15,200 --> 00:04:18,466
+a lot to love, and that's AlwaysOn technology. So let's get
+
+69
+00:04:18,483 --> 00:04:21,233
+busy and take a look at replication.
+
+70
+00:04:21,483 --> 00:04:25,466
+>> So let's start out with the basics: what's replication all about?
+
+71
+00:04:25,483 --> 00:04:31,166
+>> Okay, replication allows me to identify objects within a database,
+
+72
+00:04:31,250 --> 00:04:34,433
+specific objects which we call articles.
+
+73
+00:04:34,450 --> 00:04:34,466
+>> Okay.
+
+74
+00:04:34,483 --> 00:04:38,466
+>> These could be things like tables, even a filtered table where
+
+75
+00:04:38,483 --> 00:04:42,466
+I have a portion of columns, a portion of rows, so we will refer
+
+76
+00:04:42,483 --> 00:04:47,466
+to that a portion of an object or a whole object. And I have
+
+77
+00:04:47,166 --> 00:04:53,300
+a collection of articles that are then contained within a publication.
+
+78
+00:04:53,483 --> 00:04:56,466
+>> So kind of like a magazine and the articles in a magazine.
+
+79
+00:04:56,483 --> 00:05:03,466
+>> Yeah. And then, that is made available to one or more SQL servers.
+
+80
+00:05:03,233 --> 00:05:07,466
+So the machine which is making the data available is a publisher.
+
+81
+00:05:07,483 --> 00:05:10,466
+The machine which is consuming it is a subscriber.
+
+82
+00:05:11,350 --> 00:05:16,466
+And in a more elaborate architecture there will be a role somewhere
+
+83
+00:05:16,483 --> 00:05:21,383
+on the publisher, on the subscriber or maybe even on a separate
+
+84
+00:05:21,466 --> 00:05:25,466
+box that is doing the data movement and that's called the distributor.
+
+85
+00:05:25,483 --> 00:05:28,466
+>> So kind of like the U.S. Postal Service sometimes.
+
+86
+00:05:28,483 --> 00:05:32,450
+>> Sure. The distributor can be on anyone of those machines.
+
+87
+00:05:32,483 --> 00:05:36,466
+and in a larger environment I might have a dedicated distributor.
+
+88
+00:05:36,483 --> 00:05:38,466
+>> Okay. Now as far as...
+
+89
+00:05:39,166 --> 00:05:42,466
+>> Data distribution, that's part of what this is all about; data
+
+90
+00:05:42,483 --> 00:05:44,466
+duplication, data distribution.
+
+91
+00:05:45,483 --> 00:05:49,250
+You're going to see a graph on the slide here which illustrates
+
+92
+00:05:49,483 --> 00:05:56,466
+a balancing act, so we have autonomy versus latency. Now there
+
+93
+00:05:56,483 --> 00:05:59,466
+are times where I might have a copy of a database or a copy of
+
+94
+00:06:00,166 --> 00:06:04,466
+an article and I want it transactionally very consistent
+
+95
+00:06:08,483 --> 00:06:12,466
+with the original object. And notice, that moves us towards very
+
+96
+00:06:12,483 --> 00:06:17,166
+low latency. But if we happen to lose a connection between the
+
+97
+00:06:17,483 --> 00:06:21,466
+two machines that are replicating then we have no autonomy so
+
+98
+00:06:21,483 --> 00:06:22,466
+we're going to have problem.
+
+99
+00:06:22,483 --> 00:06:25,466
+>> So very little time for them to have to be...
+
+100
+00:06:27,483 --> 00:06:30,466
+in the difference between them, very little time to make them
+
+101
+00:06:30,483 --> 00:06:33,466
+the same again, but there's a high dependency between each other.
+
+102
+00:06:34,483 --> 00:06:39,333
+>> Exactly. Now on the opposite end we have very high latency
+
+103
+00:06:39,483 --> 00:06:44,333
+that allows maybe a lack of connectivity for an extended period
+
+104
+00:06:44,483 --> 00:06:47,466
+of time. But no worries, maybe I don't need the latest data,
+
+105
+00:06:48,483 --> 00:06:52,350
+so we have other ways of being able to handle that high autonomy
+
+106
+00:06:52,483 --> 00:06:56,466
+but also with high latency. Now I don't need you to memorize
+
+107
+00:06:56,483 --> 00:07:01,433
+all the terms in between the two extremes; just realize you have
+
+108
+00:07:01,483 --> 00:07:02,466
+a lot of choices.
+
+109
+00:07:02,483 --> 00:07:03,433
+>> Oh yeah.
+
+110
+00:07:03,483 --> 00:07:07,466
+>> There are a lot of ways to weave this, and I have a lot of
+
+111
+00:07:07,483 --> 00:07:11,466
+respect for those that wrote the code to get all of this to work.
+
+112
+00:07:11,483 --> 00:07:16,466
+>> In one of my previous lives, George, I had 120 databases that
+
+113
+00:07:16,483 --> 00:07:20,466
+we were synchronizing data with, going through with replication
+
+114
+00:07:20,483 --> 00:07:26,466
+in different levels and I've got to tell you: it was a lot of work.
+
+115
+00:07:26,483 --> 00:07:31,216
+It is a great technology that requires a lot of attention.
+
+116
+00:07:31,300 --> 00:07:36,466
+>> Okay. Now I've already stated what some of the possible articles are.
+
+117
+00:07:36,483 --> 00:07:39,466
+I could have a complete or filtered table, but there are some
+
+118
+00:07:39,483 --> 00:07:43,466
+other objects such as a stored procedure that produces rows,
+
+119
+00:07:43,483 --> 00:07:48,466
+a view. Now a curiosity is that whenever I pick an object with
+
+120
+00:07:48,483 --> 00:07:52,466
+dependencies, like a view or stored procedure, the underlying
+
+121
+00:07:52,483 --> 00:07:54,433
+objects come along with it.
+
+122
+00:07:54,450 --> 00:07:54,466
+>> Okay.
+
+123
+00:07:55,483 --> 00:07:59,466
+>> You know, you have to select those too. So in the process
+
+124
+00:07:59,200 --> 00:08:02,466
+of configuring replication, I have to determine a schedule for
+
+125
+00:08:02,483 --> 00:08:06,466
+how frequently I will want the propagated updates to go to the
+
+126
+00:08:06,483 --> 00:08:12,466
+target or subscriber. In this case agent services are going to
+
+127
+00:08:12,483 --> 00:08:16,0
+have to communicate with other agent services. So whether you
+
+128
+00:08:16,483 --> 00:08:19,466
+use code or the graphical user interface, you're going to have
+
+129
+00:08:19,483 --> 00:08:23,466
+to configure agent security. These are the basics of replication.
+
+130
+00:08:24,450 --> 00:08:27,466
+>> So what are the broad types of replication available?
+
+131
+00:08:28,483 --> 00:08:31,466
+>> You'll see on the next slide that there are a number of different
+
+132
+00:08:31,483 --> 00:08:35,266
+replication types, and I've shown you one of the wizard steps
+
+133
+00:08:35,483 --> 00:08:40,466
+involved in setting up a replicated set of objects if you use
+
+134
+00:08:40,483 --> 00:08:45,466
+the wizard. So we have Snapshot, Transactional and Merge; those
+
+135
+00:08:45,483 --> 00:08:49,466
+are the broad types. And notice we have two different kinds of
+
+136
+00:08:49,483 --> 00:08:51,466
+Transactional Replication.
+
+137
+00:08:51,483 --> 00:08:58,466
+So with Snapshot I'll have a large amount of changes; maybe 80
+
+138
+00:08:59,483 --> 00:09:03,466
+percent of the data in an article changes from cycle to cycle.
+
+139
+00:09:03,483 --> 00:09:08,466
+So rather than tracking the individual changes moment by moment,
+
+140
+00:09:08,483 --> 00:09:13,466
+we just take everything wrapped up in the publication and replicate it.
+
+141
+00:09:13,483 --> 00:09:16,466
+>> So it'd be like taking a picture of your kid once a week and
+
+142
+00:09:16,483 --> 00:09:18,333
+replacing it in the frame.
+
+143
+00:09:18,416 --> 00:09:22,466
+>> Exactly. That's a good analogy. Now on the opposite end, Merged
+
+144
+00:09:22,483 --> 00:09:24,316
+Replication would be like...
+
+145
+00:09:24,483 --> 00:09:27,466
+If you're familiar with domain controllers, I might have three
+
+146
+00:09:27,483 --> 00:09:31,466
+different Active Directory domain controllers, each holding full
+
+147
+00:09:31,483 --> 00:09:36,466
+copies of the object. And if an object changes in one copy then
+
+148
+00:09:36,166 --> 00:09:38,466
+that's going to change in the other copies as well.
+
+149
+00:09:38,483 --> 00:09:43,466
+Transactional Replication would be when I have some modification;
+
+150
+00:09:43,483 --> 00:09:47,466
+I want that more immediately reflected in a destination.
+
+151
+00:09:48,383 --> 00:09:52,466
+And like I said, there are many configurable options with this.
+
+152
+00:09:53,483 --> 00:09:56,466
+>> So how do I implement it? What are the different steps that
+
+153
+00:09:56,483 --> 00:09:57,466
+go into it?
+
+154
+00:09:57,483 --> 00:10:01,466
+>> Well, taking a look at implementing replication there are lots
+
+155
+00:10:02,483 --> 00:10:05,466
+of things to like when it comes to high availability because
+
+156
+00:10:05,483 --> 00:10:10,466
+I'm duplicating data. You'll notice it can support not only one
+
+157
+00:10:10,483 --> 00:10:15,316
+subscriber but I can have multiple subscribers for one publication,
+
+158
+00:10:15,400 --> 00:10:17,466
+so I can have even more than one copy.
+
+159
+00:10:17,483 --> 00:10:20,466
+>> So I could take data from one spot and send it out to a whole
+
+160
+00:10:20,483 --> 00:10:21,466
+bunch of different servers?
+
+161
+00:10:21,483 --> 00:10:26,0
+>> A bunch of different servers anywhere on my network. So this
+
+162
+00:10:26,483 --> 00:10:28,466
+could be geographically distributed... That's what I'm trying
+
+163
+00:10:28,483 --> 00:10:31,466
+to point out in the lower right part of the diagram... so different
+
+164
+00:10:32,483 --> 00:10:36,466
+IP subnets, different SQL servers even in different datacenters.
+
+165
+00:10:36,483 --> 00:10:41,300
+Now there's no automatic failover. So if I'm pointing an application
+
+166
+00:10:41,383 --> 00:10:45,466
+to some data on one machine and it fails, there is absolutely
+
+167
+00:10:45,483 --> 00:10:47,466
+nothing that
+
+168
+00:10:48,483 --> 00:10:51,466
+redirects a client. This would be an entirely manual process,
+
+169
+00:10:51,483 --> 00:10:54,466
+and it depends on how the application makes a connection.
+
+170
+00:10:54,483 --> 00:10:58,466
+If you can point to a different IP address or change the connection
+
+171
+00:10:58,483 --> 00:11:02,466
+string of the application, that would dictate in part how you
+
+172
+00:11:02,483 --> 00:11:08,466
+would perform failover. There are shared folders where replicated
+
+173
+00:11:08,483 --> 00:11:11,466
+updates are stored and the distributor will pick them up there
+
+174
+00:11:11,483 --> 00:11:16,466
+and then move them along. Lots and lots of moving parts here.
+
+175
+00:11:16,483 --> 00:11:17,466
+>> Cool.
+
+176
+00:11:18,483 --> 00:11:23,300
+>> So let's take a look at the strengths and weakness. A strength:
+
+177
+00:11:23,383 --> 00:11:25,466
+replication has been around for a long time.
+
+178
+00:11:26,483 --> 00:11:28,466
+It's tried and true. You've said you've used it...
+
+179
+00:11:29,0 --> 00:11:29,466
+>> Absolutely.
+
+180
+00:11:29,483 --> 00:11:30,466
+>> ...a lot.
+
+181
+00:11:30,483 --> 00:11:34,466
+>> Lots of configurability. I don't need any specialty hardware
+
+182
+00:11:34,483 --> 00:11:38,466
+so I can have completely different hardware configurations, one
+
+183
+00:11:38,483 --> 00:11:41,466
+as a publisher and one as a subscriber; as long as I can handle
+
+184
+00:11:41,483 --> 00:11:45,466
+the workload, that's fine. I can span datacenters which covers
+
+185
+00:11:45,483 --> 00:11:52,166
+a catastrophic datacenter loss and I can have multiple secondary copies.
+
+186
+00:11:52,483 --> 00:11:56,466
+And depending on the replication method that I use, they also
+
+187
+00:11:56,483 --> 00:11:59,466
+can be locally modified and the changes replicated back.
+
+188
+00:11:59,483 --> 00:12:02,466
+>> But what about weakness? What are the things that might keep
+
+189
+00:12:02,483 --> 00:12:04,333
+you from choosing?
+
+190
+00:12:04,483 --> 00:12:05,466
+>> They all have a price, right?
+
+191
+00:12:05,483 --> 00:12:07,350
+>> Absolutely. Everything does.
+
+192
+00:12:07,433 --> 00:12:11,466
+>> We saw no manual client failover and in fact depending on how
+
+193
+00:12:11,483 --> 00:12:14,466
+my application makes a connection to SQL server that could really
+
+194
+00:12:14,483 --> 00:12:17,466
+be a handful. So you need to look at that for your own environment.
+
+195
+00:12:18,483 --> 00:12:21,466
+Also, this is not really a system data kind of protection; this
+
+196
+00:12:22,333 --> 00:12:26,466
+is for user data, user database data. And unless you select
+
+197
+00:12:26,483 --> 00:12:31,466
+every single table in your database, it's only partial database protection.
+
+198
+00:12:31,483 --> 00:12:32,283
+>> Okay.
+
+199
+00:12:32,366 --> 00:12:35,466
+>> And by the way, you're not going to likely select every table
+
+200
+00:12:35,483 --> 00:12:36,466
+for replication.
+
+201
+00:12:37,483 --> 00:12:38,466
+>> No, no, no.
+
+202
+00:12:39,166 --> 00:12:42,466
+>> Tell me your own opinion, I'm looking for an opinion here,
+
+203
+00:12:42,483 --> 00:12:45,466
+have you ever gotten replication really tangled up and it really
+
+204
+00:12:45,483 --> 00:12:48,466
+caused some snarls to get it back up and running?
+
+205
+00:12:48,483 --> 00:12:53,0
+>> Frequently one of the things that we ran into was when you
+
+206
+00:12:53,483 --> 00:12:57,400
+had a problem with replication, just about the only choice in
+
+207
+00:12:57,483 --> 00:13:01,466
+some cases was to delete it and start it all over again.
+
+208
+00:13:01,483 --> 00:13:03,466
+>> So you killed the subscription...
+
+209
+00:13:03,483 --> 00:13:04,200
+>> Yep.
+
+210
+00:13:04,283 --> 00:13:05,433
+>> ...and started over. Yeah, I've heard...
+
+211
+00:13:05,450 --> 00:13:05,466
+>> Yep.
+
+212
+00:13:05,483 --> 00:13:08,466
+>> ...of this as a plan of attack, do we call it?
+
+213
+00:13:08,483 --> 00:13:12,466
+>> Yep. Yeah, one of the things that is highly recommended with
+
+214
+00:13:12,483 --> 00:13:15,466
+replication is that when you do set it up and configure it that
+
+215
+00:13:15,483 --> 00:13:19,466
+you script out the replication and save those scripts because
+
+216
+00:13:19,483 --> 00:13:22,383
+that will make it a lot easier.
+
+217
+00:13:22,483 --> 00:13:25,466
+>> Excellent. Good piece of advice.
+
+218
+00:13:25,483 --> 00:13:28,466
+Okay, so next up if you guys would flip to my screen,
+
+219
+00:13:30,316 --> 00:13:34,466
+we'll take a look at how we would walk through the publication
+
+220
+00:13:35,483 --> 00:13:38,466
+creating process. So I'm connected in Management Studio.
+
+221
+00:13:38,483 --> 00:13:42,216
+You'll notice there's a replication node, and from there I can
+
+222
+00:13:42,300 --> 00:13:44,166
+choose New Publication.
+
+223
+00:13:44,483 --> 00:13:48,466
+No surprise: I get to a wizard. It welcomes me and from there
+
+224
+00:13:49,483 --> 00:13:53,466
+I have to dictate where the distributor in this architecture
+
+225
+00:13:53,483 --> 00:13:58,466
+will be. So with this particular architecture I'm saying that
+
+226
+00:13:58,200 --> 00:14:02,466
+the publisher will also be the distributor. Remember, lots of
+
+227
+00:14:02,483 --> 00:14:04,416
+different choices there.
+
+228
+00:14:04,483 --> 00:14:10,266
+So after that we'll find that there has to be folder designated
+
+229
+00:14:10,350 --> 00:14:14,433
+where updates can be found that the distributor will pick up
+
+230
+00:14:14,483 --> 00:14:19,166
+on and then move to a target location. So if there are enormous
+
+231
+00:14:19,483 --> 00:14:22,466
+amounts of updates or you have a number of subscribers making
+
+232
+00:14:23,166 --> 00:14:26,300
+connections, you might want to make sure that you specify a place
+
+233
+00:14:26,383 --> 00:14:27,466
+that has enough space.
+
+234
+00:14:28,483 --> 00:14:32,466
+Now another thing to keep in mind compared to our other technologies,
+
+235
+00:14:32,483 --> 00:14:38,466
+all of this occurs within a single database. So notice as far
+
+236
+00:14:38,483 --> 00:14:42,466
+as the scope of protection, we're actually inside the boundaries
+
+237
+00:14:42,483 --> 00:14:46,466
+of the database. So I have to pick the database within which
+
+238
+00:14:46,483 --> 00:14:50,266
+I want to replicate and then this should look a little bit familiar.
+
+239
+00:14:50,350 --> 00:14:51,466
+>> Yeah, I saw that one earlier.
+
+240
+00:14:51,483 --> 00:14:55,466
+>> Now think about this, there are certain doors you go through
+
+241
+00:14:55,483 --> 00:15:00,466
+in life, the door slams behind you and there's no knob on your side.
+
+242
+00:15:00,483 --> 00:15:01,416
+>> Okay.
+
+243
+00:15:01,483 --> 00:15:06,466
+>> And similarly when we change the publication type, that's a
+
+244
+00:15:06,200 --> 00:15:08,466
+door we don't go back through. There are several other choices.
+
+245
+00:15:09,483 --> 00:15:13,366
+You step in a bear trap, you have to rip the subscription or
+
+246
+00:15:13,450 --> 00:15:15,466
+publication out in order to make a change.
+
+247
+00:15:15,483 --> 00:15:19,466
+>> So once you've set it, that's about it. Okay.
+
+248
+00:15:19,483 --> 00:15:21,466
+>> You're going to have to stick with that.
+
+249
+00:15:22,266 --> 00:15:25,466
+>> So next up, this is important: you'll see this is the list
+
+250
+00:15:25,483 --> 00:15:28,466
+of articles. You guys got to go back to my slide. Thanks.
+
+251
+00:15:28,483 --> 00:15:32,466
+You have to pick from within the boundaries of available articles.
+
+252
+00:15:32,483 --> 00:15:35,466
+So you can read, we have tables, stored procedures. But notice
+
+253
+00:15:35,483 --> 00:15:39,216
+that we have the plus signs next to a couple of the objects.
+
+254
+00:15:39,300 --> 00:15:44,466
+So we can expand those and see the individuals on each one.
+
+255
+00:15:44,483 --> 00:15:49,466
+And in fact on a column by stinking column basis, I can...
+
+256
+00:15:49,483 --> 00:15:52,466
+>> Oh, so you don't even have to do a whole table.
+
+257
+00:15:52,483 --> 00:15:56,350
+>> That's right. So I don't have to do all columns but in addition...
+
+258
+00:15:57,466 --> 00:16:03,216
+Let me get up to this next part... I also can filter by rows.
+
+259
+00:16:03,300 --> 00:16:05,416
+So seriously what if I have a table that has
+
+260
+00:16:07,483 --> 00:16:11,466
+data from a bunch of regions and I only want the American region
+
+261
+00:16:11,483 --> 00:16:15,466
+or North American region? I can essentially write a Where clause
+
+262
+00:16:15,483 --> 00:16:20,466
+here and from the Where clause determine only that data which
+
+263
+00:16:20,183 --> 00:16:20,466
+I want.
+
+264
+00:16:20,483 --> 00:16:22,466
+>> That is pretty cool.
+
+265
+00:16:22,483 --> 00:16:27,466
+>> Granularity is the big deal here. Now there is a potential
+
+266
+00:16:27,483 --> 00:16:30,466
+to have more than subscriber. We saw that as a strong point.
+
+267
+00:16:31,483 --> 00:16:36,466
+So after we've configured this, we have a place where an additional
+
+268
+00:16:36,483 --> 00:16:41,466
+subscriber can go to pick up changes and also on an ongoing basis
+
+269
+00:16:41,483 --> 00:16:45,466
+for those current subscribes. And now I'm at the Snapshot Agent
+
+270
+00:16:45,483 --> 00:16:50,466
+which sets up on what regularity will a
+
+271
+00:16:52,483 --> 00:16:55,466
+replication cycle occur. So this is going to end up creating
+
+272
+00:16:55,483 --> 00:17:02,466
+an agent job and use the normal agent job and scheduling process.
+
+273
+00:17:02,483 --> 00:17:05,466
+>> So a snapshot is only going to update when the agent tells
+
+274
+00:17:05,483 --> 00:17:06,466
+it to.
+
+275
+00:17:06,483 --> 00:17:07,466
+>> Exactly.
+
+276
+00:17:07,483 --> 00:17:08,466
+>> Okay.
+
+277
+00:17:08,483 --> 00:17:12,250
+>> And for agent security, depending on what particular type of
+
+278
+00:17:12,333 --> 00:17:15,466
+replication I'm going to use, I'll have to make an association
+
+279
+00:17:15,483 --> 00:17:19,466
+of the agent in one instance to the agent in another instance.
+
+280
+00:17:19,483 --> 00:17:23,466
+I just wanted you to see that; not necessarily all the gory detail.
+
+281
+00:17:24,483 --> 00:17:28,200
+Now towards the end of the wizard, it asks me do I just want
+
+282
+00:17:28,283 --> 00:17:31,250
+to script? But I don't want to do it. Do I want to create the
+
+283
+00:17:31,333 --> 00:17:35,466
+publication but not script? Or, what Mister Safety would do...
+
+284
+00:17:35,483 --> 00:17:37,466
+>> Absolutely. You do them both.
+
+285
+00:17:37,483 --> 00:17:41,466
+>> I'm going to do both, and from there it asks me more questions.
+
+286
+00:17:41,483 --> 00:17:44,166
+Basically how do I want to create the script file?
+
+287
+00:17:44,483 --> 00:17:48,466
+So, do I want append the new script file to an existing?
+
+288
+00:17:48,483 --> 00:17:52,466
+Maybe I have a whole batch of replication script code that I
+
+289
+00:17:52,483 --> 00:17:57,466
+want to have and a couple of other options there. And then,
+
+290
+00:17:57,483 --> 00:18:01,450
+finally complete the wizard. I name my publication
+
+291
+00:18:03,233 --> 00:18:05,466
+and then it gives me a status update.
+
+292
+00:18:05,483 --> 00:18:06,366
+>> Awesome, George.
+
+293
+00:18:06,450 --> 00:18:09,466
+>> There you go. So after that I would then see in the list of
+
+294
+00:18:09,483 --> 00:18:14,466
+publications, I would see a publication.
+
+295
+00:18:14,483 --> 00:18:19,466
+>> Awesome. Awesome. So replication: all about getting data from
+
+296
+00:18:19,483 --> 00:18:23,466
+Point A to Point B. It's more about the movement of the data
+
+297
+00:18:23,483 --> 00:18:25,466
+than it is about everything else, right?
+
+298
+00:18:25,483 --> 00:18:29,466
+>> Yeah, and also the fact that I can very carefully control the
+
+299
+00:18:29,483 --> 00:18:33,466
+type of data in the frequency that I want to send it. So I think
+
+300
+00:18:33,483 --> 00:18:37,466
+replication really isn't considered a pure high availability
+
+301
+00:18:37,483 --> 00:18:40,466
+technology but it's duplicating data.
+
+302
+00:18:40,233 --> 00:18:44,466
+>> So if I move one step closer then and I want a database to
+
+303
+00:18:45,483 --> 00:18:48,466
+be more tightly coupled to its replica, what would I do there?
+
+304
+00:18:48,483 --> 00:18:52,466
+>> Well, let's take a look at the next technology, log shipping.
+
+305
+00:18:52,483 --> 00:18:56,466
+Again, log shipping is a tried and true technology. Let's go
+
+306
+00:18:56,483 --> 00:18:59,466
+to the next slide and we'll take a look at the big picture here.
+
+307
+00:18:59,483 --> 00:19:03,466
+So we have the same pattern that we'll look at for log shipping
+
+308
+00:19:03,483 --> 00:19:09,466
+that we did in replication and the other technologies too: the
+
+309
+00:19:09,483 --> 00:19:13,466
+basics, how we put it together, how failover works and a strength
+
+310
+00:19:13,483 --> 00:19:17,466
+and weakness comparison. Now if you'll go back for just a second,
+
+311
+00:19:17,483 --> 00:19:20,466
+one of the things that you'll see here, in the screenshot I've
+
+312
+00:19:20,483 --> 00:19:25,200
+gotten properties on a particular database. And you'll notice
+
+313
+00:19:25,283 --> 00:19:28,466
+at the bottom we have log shipping as one of the pages.
+
+314
+00:19:29,266 --> 00:19:33,466
+What is the key place to get that started? Well, of course enabling it.
+
+315
+00:19:33,483 --> 00:19:38,466
+So let's go on the basics and I want you to focus on the diagram here.
+
+316
+00:19:38,483 --> 00:19:42,466
+We'll say that right now I have SQL Server 1 in the upper left
+
+317
+00:19:42,483 --> 00:19:46,433
+and it's serving the production copy of a database.
+
+318
+00:19:46,450 --> 00:19:46,466
+>> Okay.
+
+319
+00:19:46,483 --> 00:19:51,383
+>> So I have maybe a web app, a windows app that's used to make
+
+320
+00:19:51,466 --> 00:19:55,466
+a connection to that and so I'll have clients on a network probably
+
+321
+00:19:55,483 --> 00:19:57,383
+close to that machine.
+
+322
+00:19:57,466 --> 00:19:58,333
+>> Okay.
+
+323
+00:19:58,416 --> 00:20:01,466
+>> Now I run through the log shipping configuration and a bunch
+
+324
+00:20:02,483 --> 00:20:05,466
+of moving parts are put in place. First of all this primarily
+
+325
+00:20:05,483 --> 00:20:11,466
+applies to user databases but the entire database, its schema
+
+326
+00:20:11,483 --> 00:20:16,466
+and its data, so this is clearly a high availability technology.
+
+327
+00:20:16,483 --> 00:20:20,466
+>> So no longer do we have the ability to choose individual objects
+
+328
+00:20:20,483 --> 00:20:23,466
+to filter out data. It's all or nothing here.
+
+329
+00:20:23,483 --> 00:20:24,433
+>> Yeah, it's all or nothing.
+
+330
+00:20:24,450 --> 00:20:24,466
+>> Okay.
+
+331
+00:20:24,483 --> 00:20:28,466
+>> So as I walk through the wizard first I create a schedule that
+
+332
+00:20:28,483 --> 00:20:32,466
+says to take the transaction log of the current database, back
+
+333
+00:20:32,483 --> 00:20:37,466
+it up, generally pretty frequently and then, store those transaction
+
+334
+00:20:37,483 --> 00:20:42,466
+logs in a shared folder preferably that's nearby.
+
+335
+00:20:42,483 --> 00:20:48,0
+>> So does that schedule for the transaction log backup, does
+
+336
+00:20:48,483 --> 00:20:50,466
+that drive the latency between the two databases?
+
+337
+00:20:51,483 --> 00:20:54,466
+>> Definitely. And in fact before we get done we will see there
+
+338
+00:20:54,483 --> 00:20:58,466
+are several schedules that can be carefully crafted so that you
+
+339
+00:20:58,483 --> 00:21:02,466
+get exactly the latency that you want. And this can very much
+
+340
+00:21:02,183 --> 00:21:05,333
+work in your favor. Hold on to that thought for a second....
+
+341
+00:21:05,416 --> 00:21:06,466
+>> Okay. Hanging on, baby.
+
+342
+00:21:06,483 --> 00:21:09,466
+>> All right. So next part of the wizard: we have to determine
+
+343
+00:21:09,483 --> 00:21:14,183
+on what level of frequency will take the backed up transaction
+
+344
+00:21:14,266 --> 00:21:20,233
+logs close to another shared folder that may be in the same datacenter
+
+345
+00:21:20,316 --> 00:21:25,466
+on a different SQL server on a completely different subnet, completely
+
+346
+00:21:25,483 --> 00:21:30,466
+different area of the network meaning a different geographical location.
+
+347
+00:21:30,483 --> 00:21:36,466
+As long as the SQL Agent can connect to you in C share, it's reachable.
+
+348
+00:21:36,483 --> 00:21:40,466
+So in the worse of cases we could have a datacenter failure and
+
+349
+00:21:40,483 --> 00:21:44,466
+as long as all our mission critical databases were log shipped
+
+350
+00:21:44,483 --> 00:21:49,233
+to another destination, all that data is there, everybody say, "Ah."
+
+351
+00:21:49,316 --> 00:21:49,466
+>> Ah.
+
+352
+00:21:49,483 --> 00:21:51,400
+>> We're not done yet, though, Rich.
+
+353
+00:21:51,416 --> 00:21:51,433
+>> Oh.
+
+354
+00:21:51,450 --> 00:21:51,466
+>> Because...
+
+355
+00:21:51,483 --> 00:21:52,466
+>> There's more?
+
+356
+00:21:52,483 --> 00:21:56,466
+>> ...now we have a third schedule. And by the way these can
+
+357
+00:21:56,483 --> 00:21:59,466
+all have different timeframes; that's part of the point.
+
+358
+00:21:59,483 --> 00:22:00,466
+>> Okay.
+
+359
+00:22:00,200 --> 00:22:04,466
+>> So I can back up, let's say, every ten minutes, take those
+
+360
+00:22:04,483 --> 00:22:08,466
+backups every hour in one folder, copy them to anther folder
+
+361
+00:22:08,483 --> 00:22:13,466
+and then, the third schedule basically does a perpetual mini-restore.
+
+362
+00:22:14,483 --> 00:22:19,466
+So it keeps the transaction logs restored over the top of the
+
+363
+00:22:19,483 --> 00:22:24,466
+destination database or databases because I can actually have
+
+364
+00:22:24,483 --> 00:22:29,316
+more than one copy of a log ship database. That's good news.
+
+365
+00:22:29,400 --> 00:22:29,466
+>> Absolutely.
+
+366
+00:22:29,483 --> 00:22:33,466
+>> And in fact, this is strategic: I could actually have different
+
+367
+00:22:33,483 --> 00:22:38,166
+restore schedules, maybe one aggressive and one not aggressive,
+
+368
+00:22:38,250 --> 00:22:42,466
+so it could account for maybe a DB uh-oh. I have maybe a four-hour
+
+369
+00:22:42,166 --> 00:22:46,466
+delay with one log ship copy, and in that case it's not going
+
+370
+00:22:46,483 --> 00:22:51,0
+to receive an error for hours based on that. That may help me
+
+371
+00:22:52,183 --> 00:22:54,466
+position well in a recovery situation.
+
+372
+00:22:54,483 --> 00:22:57,300
+>> That's pretty cool. Now is the recovery the only thing that
+
+373
+00:22:57,383 --> 00:23:00,466
+you can use log shipping for or are there other things that you
+
+374
+00:23:00,483 --> 00:23:01,466
+can do with a log ship database?
+
+375
+00:23:01,483 --> 00:23:05,466
+>> Well, one point to bring out is that with the database there,
+
+376
+00:23:05,483 --> 00:23:11,466
+there's a setting that says what is going to be important: read-only
+
+377
+00:23:12,483 --> 00:23:16,466
+querying of the destination Log Shipped Copy or
+
+378
+00:23:17,483 --> 00:23:21,466
+the restore job. So, one of those is going to win. So let's
+
+379
+00:23:21,483 --> 00:23:22,466
+picture something.
+
+380
+00:23:22,483 --> 00:23:23,0
+>> Okay.
+
+381
+00:23:23,483 --> 00:23:27,466
+>> Let's say I have a connect user that's read-only querying a
+
+382
+00:23:28,483 --> 00:23:29,433
+log shipped copy.
+
+383
+00:23:29,450 --> 00:23:29,466
+>> Okay.
+
+384
+00:23:29,483 --> 00:23:34,333
+>> One of two things is going to win when the next restore schedule
+
+385
+00:23:34,483 --> 00:23:38,466
+comes up. Either, the user that's connected in querying is going
+
+386
+00:23:38,483 --> 00:23:42,466
+to be allowed to win and continue querying until he or she is
+
+387
+00:23:43,483 --> 00:23:47,466
+good and done or the backup job says, "Honey, I'm home."
+
+388
+00:23:48,350 --> 00:23:52,0
+Boom, comes in. Does the restore. Kicks out the connected user.
+
+389
+00:23:52,483 --> 00:23:53,450
+So which one are you going to pick?
+
+390
+00:23:53,483 --> 00:23:54,466
+>> It depends.
+
+391
+00:23:54,483 --> 00:23:58,466
+>> Excellent. That's the answer to every consultant's question.
+
+392
+00:23:58,483 --> 00:24:00,466
+>> You fell into that trap perfectly.
+
+393
+00:24:01,483 --> 00:24:05,466
+All right, so that's the essence of log shipping. Lots to like
+
+394
+00:24:05,483 --> 00:24:09,466
+about it. So now that we take a look at log shipping, let's go
+
+395
+00:24:09,483 --> 00:24:13,466
+to implementing it. So I can configure this in Management Studio.
+
+396
+00:24:13,483 --> 00:24:18,466
+You'll see an example of this coming up and there are lots of
+
+397
+00:24:18,483 --> 00:24:22,466
+stored procedures that can weave all of this together. I didn't
+
+398
+00:24:22,483 --> 00:24:26,466
+mention this: I think there are over a hundred stored procedures
+
+399
+00:24:26,233 --> 00:24:27,466
+just related to replication...
+
+400
+00:24:28,366 --> 00:24:28,466
+>> So let me guess...
+
+401
+00:24:28,483 --> 00:24:30,166
+>> Whatever. A whole bunch.
+
+402
+00:24:31,433 --> 00:24:36,250
+>> Given a choice, I'd want Management Studio to use its wizardry?
+
+403
+00:24:36,483 --> 00:24:38,466
+>> He he he. Badoomp, shh.
+
+404
+00:24:39,350 --> 00:24:43,466
+>> All right. So it's late in the afternoon, I apologize. Keep going.
+
+405
+00:24:43,483 --> 00:24:46,466
+>> So I can use... As a matter of fact if I script the whole process
+
+406
+00:24:47,483 --> 00:24:49,466
+out, these are the stored procedures that I'm going to see.
+
+407
+00:24:49,483 --> 00:24:50,466
+>> Awesome.
+
+408
+00:24:50,483 --> 00:24:54,466
+>> I have to have a recovery model that can use the log file and
+
+409
+00:24:54,483 --> 00:24:58,166
+more than likely this is going to be the full recovery model.
+
+410
+00:24:58,250 --> 00:25:02,466
+And so looking at the architecture diagram we see that multiple...
+
+411
+00:25:02,166 --> 00:25:07,466
+well, a backup job is going to have to be created, multiple copy jobs...
+
+412
+00:25:08,183 --> 00:25:12,466
+or, I should say a copy job and then restore jobs to perpetually
+
+413
+00:25:12,483 --> 00:25:13,466
+restore the database.
+
+414
+00:25:14,483 --> 00:25:18,466
+There is an optional architectural element called a monitor server
+
+415
+00:25:18,483 --> 00:25:22,466
+which can be queryable and it doesn't need to be any fancy addition either.
+
+416
+00:25:23,166 --> 00:25:25,466
+I can have that as part of the architecture too.
+
+417
+00:25:25,483 --> 00:25:27,466
+>> And what does the monitor server give you?
+
+418
+00:25:28,483 --> 00:25:31,0
+>> Why don't you run with that one?
+
+419
+00:25:32,200 --> 00:25:34,433
+How's that for tossing the hot football?
+
+420
+00:25:34,450 --> 00:25:34,466
+[Laughing]
+
+421
+00:25:34,483 --> 00:25:37,466
+Okay, so you're going to put me on the hotspot. So the monitor
+
+422
+00:25:37,483 --> 00:25:42,466
+server is going to watch the process and then, if it fails, if
+
+423
+00:25:42,483 --> 00:25:46,466
+the primary fails it's going to help me failover?
+
+424
+00:25:46,483 --> 00:25:48,466
+>> No, it's not going to help me failover. It's really more of
+
+425
+00:25:48,483 --> 00:25:53,200
+a tattletale object honestly. So there is no manual failover
+
+426
+00:25:53,283 --> 00:25:56,466
+whatsoever with log shipping. And in fact let's go over to failover
+
+427
+00:25:56,483 --> 00:25:58,466
+basics where we can take a look at this.
+
+428
+00:25:59,483 --> 00:26:04,466
+So if I have a failure, it depends on what happens to the source.
+
+429
+00:26:04,483 --> 00:26:08,466
+If I have a catastrophic server loss, well, I
+
+430
+00:26:09,483 --> 00:26:13,400
+sure don't have any transaction log data there to grab.
+
+431
+00:26:13,450 --> 00:26:13,466
+>> Nope.
+
+432
+00:26:13,483 --> 00:26:17,466
+>> So if I happen to have a problem where maybe the machine is
+
+433
+00:26:17,483 --> 00:26:21,466
+still available but the SQL server service is not running or
+
+434
+00:26:21,483 --> 00:26:24,466
+there is some damage to the database, at least grab those most
+
+435
+00:26:24,483 --> 00:26:29,266
+recently backed up transaction logs and copy them near to where
+
+436
+00:26:29,350 --> 00:26:34,466
+I want to recover. So back up the primary database log with no
+
+437
+00:26:34,483 --> 00:26:36,466
+recovery; that's going to capture the tail of the log too.
+
+438
+00:26:36,483 --> 00:26:39,466
+So I'm going to bring all of that data over and I'm going to
+
+439
+00:26:39,483 --> 00:26:43,466
+perform a normal database recovery on the destination.
+
+440
+00:26:43,483 --> 00:26:47,466
+It's going to have some jobs associated with being a secondary.
+
+441
+00:26:47,483 --> 00:26:52,466
+Disable all of those. You may want to turn it back on later,
+
+442
+00:26:52,483 --> 00:26:55,466
+so don't kill the jobs, just disable them. And then, what you
+
+443
+00:26:55,483 --> 00:26:59,466
+may want to do is to establish high availability at the destination,
+
+444
+00:27:00,400 --> 00:27:03,216
+you're going to want to configure log shipping on that machine.
+
+445
+00:27:03,483 --> 00:27:05,466
+But what do you with clients?
+
+446
+00:27:07,483 --> 00:27:09,466
+>> You got me on that one, George.
+
+447
+00:27:09,483 --> 00:27:12,466
+>> So a couple things you could do with clients; it depends on
+
+448
+00:27:12,483 --> 00:27:17,466
+how the application is architected: if the application is a connection
+
+449
+00:27:17,483 --> 00:27:20,466
+string that points to an IP address, well, you can change the
+
+450
+00:27:20,483 --> 00:27:21,466
+IP address of the destination.
+
+451
+00:27:22,450 --> 00:27:22,466
+>> Okay.
+
+452
+00:27:22,483 --> 00:27:25,466
+>> That's one way. Another way you do it is if your application
+
+453
+00:27:25,483 --> 00:27:30,466
+connect string points to a DNS name, well, you can change the
+
+454
+00:27:30,483 --> 00:27:35,466
+IP address in DNS and then, clients are redirected transparently
+
+455
+00:27:35,483 --> 00:27:39,466
+as well. So there's not a perfect transactional failover while
+
+456
+00:27:39,483 --> 00:27:43,466
+somebody's using the log ship machine, but those are
+
+457
+00:27:44,483 --> 00:27:49,466
+some of the failover options. So notice totally manual intervention.
+
+458
+00:27:49,483 --> 00:27:52,466
+But there's opportunity for being graceful.
+
+459
+00:27:52,200 --> 00:27:55,333
+>> And for log shipping just like with replication, there are
+
+460
+00:27:55,483 --> 00:27:56,466
+strengths and weaknesses, right?
+
+461
+00:27:56,483 --> 00:27:59,433
+>> So strengths: it's been around forever.
+
+462
+00:27:59,450 --> 00:27:59,466
+>> That's a good thing.
+
+463
+00:27:59,483 --> 00:28:02,466
+>> I'm sure a lot of people know how to use it which means you
+
+464
+00:28:02,483 --> 00:28:06,466
+might be able to get help untangling it. You have multiple copy
+
+465
+00:28:07,166 --> 00:28:10,466
+jobs and restore jobs with their own schedules, so I can have
+
+466
+00:28:11,483 --> 00:28:15,466
+more than one copy. And like I mentioned before maybe on aggressive
+
+467
+00:28:15,483 --> 00:28:19,466
+log ship copy doing a perpetual restore, maybe only a few minutes
+
+468
+00:28:19,483 --> 00:28:24,216
+behind the original server, the production server, and a maybe
+
+469
+00:28:24,300 --> 00:28:26,366
+another copy that's a few hours behind.
+
+470
+00:28:26,450 --> 00:28:26,466
+>> Okay.
+
+471
+00:28:26,483 --> 00:28:31,416
+>> Just to help. It's not, as you'll see from the demonstration,
+
+472
+00:28:31,483 --> 00:28:36,433
+too difficult to initially configure or manage and no specialty hardware.
+
+473
+00:28:36,450 --> 00:28:36,466
+That's good.
+
+474
+00:28:36,483 --> 00:28:37,466
+>> That's a good thing.
+
+475
+00:28:37,483 --> 00:28:43,466
+>> Now because copy jobs can move from UNC path to UNC path this
+
+476
+00:28:43,483 --> 00:28:47,466
+means anywhere in my network where I have access I can even span
+
+477
+00:28:47,483 --> 00:28:49,466
+geographical regions.
+
+478
+00:28:50,483 --> 00:28:51,466
+>> Okay.
+
+479
+00:28:51,483 --> 00:28:56,466
+>> My secondary database is read-only queryable based on how I
+
+480
+00:28:56,483 --> 00:29:02,466
+have that set up, and alert jobs can be set up if a replication
+
+481
+00:29:02,183 --> 00:29:07,166
+cycle doesn't occur. I just said the R-word. If I have a failed
+
+482
+00:29:07,250 --> 00:29:11,466
+job either in restoring or copying and it doesn't occur within
+
+483
+00:29:11,483 --> 00:29:15,466
+a certain threshold, I get an alert. Everybody say, "Ah."
+
+484
+00:29:15,166 --> 00:29:17,366
+>> And what about the weaknesses? What are the things we need
+
+485
+00:29:17,450 --> 00:29:18,250
+to look for?
+
+486
+00:29:18,333 --> 00:29:22,466
+>> So manual failover as described. This also has to be configured
+
+487
+00:29:22,483 --> 00:29:26,466
+on a per database basis, so it doesn't protect the entire instance.
+
+488
+00:29:27,333 --> 00:29:29,466
+And it can't protect master.
+
+489
+00:29:30,483 --> 00:29:33,466
+So you're not going to turn the
+
+490
+00:29:35,483 --> 00:29:39,466
+full recovery model on master so that is an, what would you say,
+
+491
+00:29:39,483 --> 00:29:41,466
+un-protectable database?
+
+492
+00:29:41,483 --> 00:29:42,416
+>> Yeah, that sounds...
+
+493
+00:29:42,450 --> 00:29:42,466
+>> We'll go with that.
+
+494
+00:29:42,483 --> 00:29:45,266
+>> ...like it. Okay, so let's take a look at log shipping.
+
+495
+00:29:45,350 --> 00:29:48,466
+If you guys will zip to my machine for a sec. Actually hold
+
+496
+00:29:48,483 --> 00:29:49,466
+on for just a sec.
+
+497
+00:29:52,233 --> 00:29:55,466
+>> Ah, you were a little bit late on that call there, George.
+
+498
+00:29:56,400 --> 00:30:01,466
+>> Okay. All right, so taking a look, I'm looking at properties
+
+499
+00:30:01,483 --> 00:30:05,0
+of a database and the point to focus on is
+
+500
+00:30:06,483 --> 00:30:11,466
+the recovery model. I have to have something that has logged
+
+501
+00:30:11,483 --> 00:30:14,466
+transactions that are not going to be overwritten like in the
+
+502
+00:30:15,333 --> 00:30:18,466
+simple recovery model. Now from there I'm going to go to the
+
+503
+00:30:18,483 --> 00:30:23,466
+transaction log shipping page, properties of the database, and
+
+504
+00:30:23,483 --> 00:30:26,433
+after I'm in the right recovery model what do you think I'm going
+
+505
+00:30:26,450 --> 00:30:26,466
+to do?
+
+506
+00:30:27,483 --> 00:30:30,466
+>> That checkbox that's sitting there staring at me looks like
+
+507
+00:30:30,483 --> 00:30:31,466
+a good place to start.
+
+508
+00:30:31,483 --> 00:30:34,466
+>> So that's like kicking off the domino chain. After I click
+
+509
+00:30:34,483 --> 00:30:38,466
+on Enable, a whole bunch of action occurs.
+
+510
+00:30:40,483 --> 00:30:44,283
+So enable this as a primary database; this'll be the production
+
+511
+00:30:44,366 --> 00:30:47,466
+database copy. And then, I would click on Backup Settings.
+
+512
+00:30:47,483 --> 00:30:49,466
+I really don't need to look at that. That's just going to set
+
+513
+00:30:49,483 --> 00:30:54,466
+up a job with a schedule. So that's really business... Excuse me.
+
+514
+00:30:54,483 --> 00:30:56,466
+Excuse me... as usual.
+
+515
+00:30:57,0 --> 00:30:58,466
+[Laughing]
+
+516
+00:30:58,483 --> 00:31:00,466
+Squeaky, over here, doing the demo.
+
+517
+00:31:00,483 --> 00:31:03,266
+>> Yeah, squeaky Squillace.
+
+518
+00:31:03,483 --> 00:31:07,466
+So transaction log backup settings. So transaction log backups
+
+519
+00:31:07,483 --> 00:31:10,466
+are performed by an agent job running on the primary. I'm going
+
+520
+00:31:11,0 --> 00:31:14,466
+to have a place, a shared folder where I'm going to place my
+
+521
+00:31:14,483 --> 00:31:17,466
+backed up transaction logs.
+
+522
+00:31:17,483 --> 00:31:21,300
+>> And that's where the partner servers can go and grab it from.
+
+523
+00:31:21,483 --> 00:31:26,350
+>> Now I could actually do this two ways: I could have one folder
+
+524
+00:31:26,483 --> 00:31:30,466
+for storing the logs and then copying those to another folder
+
+525
+00:31:30,483 --> 00:31:34,466
+nearby or I could actually specify that through the same folder.
+
+526
+00:31:34,483 --> 00:31:35,466
+>> Okay.
+
+527
+00:31:35,483 --> 00:31:37,466
+>> So, Consultant, how are you going to pick?
+
+528
+00:31:38,483 --> 00:31:40,466
+>> Let's see, it depends.
+
+529
+00:31:40,483 --> 00:31:44,466
+>> It depends. I would say if they're geographically distributed,
+
+530
+00:31:44,483 --> 00:31:47,466
+I would pick different folders. If they're in the same datacenter
+
+531
+00:31:47,483 --> 00:31:51,466
+then maybe big deal, what does it matter that they're different?
+
+532
+00:31:51,483 --> 00:31:53,466
+>> It's probably going to be the same server anyway. They're going
+
+533
+00:31:53,483 --> 00:31:55,333
+to have easy access.
+
+534
+00:31:55,483 --> 00:31:58,466
+>> Lots of controls here. So I can delete transaction logs that
+
+535
+00:31:58,483 --> 00:32:02,466
+are older than a certain time, get an alert if no backup occurs within.
+
+536
+00:32:02,483 --> 00:32:06,466
+If I want to carefully have naming conventions for these related
+
+537
+00:32:06,483 --> 00:32:10,466
+jobs, fine. I can do all that. So after that,
+
+538
+00:32:11,483 --> 00:32:15,216
+let's see I think I just did that. So let's go here.
+
+539
+00:32:17,483 --> 00:32:20,466
+Again, business as usual. Job schedule. Sorry, didn't need to
+
+540
+00:32:20,483 --> 00:32:21,200
+go there.
+
+541
+00:32:21,483 --> 00:32:22,466
+Okay, next up.
+
+542
+00:32:23,483 --> 00:32:27,466
+I now have the secondary database settings. Now I have to point
+
+543
+00:32:27,483 --> 00:32:32,316
+to the instance where I want to have this database, and the database
+
+544
+00:32:32,400 --> 00:32:36,466
+names don't actually have to match. Please, Rich, keep it straightforward.
+
+545
+00:32:36,483 --> 00:32:39,466
+Have the same database names. And this would seem to make sense,
+
+546
+00:32:39,483 --> 00:32:44,466
+but now I'm in the first tab Initialize the Secondary Database.
+
+547
+00:32:44,483 --> 00:32:48,466
+Do I want Management Studio to restore a backup? So I may already
+
+548
+00:32:48,483 --> 00:32:52,450
+have a database copy there. Maybe it's already there. Or, I
+
+549
+00:32:52,483 --> 00:32:55,466
+can actually set up the process right here and now.
+
+550
+00:32:55,483 --> 00:32:56,466
+>> Okay.
+
+551
+00:32:56,483 --> 00:32:58,466
+>> So after that...
+
+552
+00:33:04,483 --> 00:33:06,466
+Did I jump ahead here? Let me see.
+
+553
+00:33:06,483 --> 00:33:07,466
+>> Nope.
+
+554
+00:33:07,483 --> 00:33:12,466
+Nope. So you set up the database. You set up the destination.
+
+555
+00:33:13,333 --> 00:33:14,466
+You're specifying the locations, right?
+
+556
+00:33:15,333 --> 00:33:18,333
+>> Yep, so specify locations. If the secondary database will be
+
+557
+00:33:18,416 --> 00:33:22,466
+created when the backup is restored, specify the place for data
+
+558
+00:33:22,483 --> 00:33:23,466
+and log files.
+
+559
+00:33:23,483 --> 00:33:24,450
+>> Okay.
+
+560
+00:33:24,483 --> 00:33:27,466
+>> That's if it didn't already exist. So next up I'm in the middle
+
+561
+00:33:27,483 --> 00:33:32,466
+tab Copy Files. So this is where I could specify a second folder
+
+562
+00:33:32,483 --> 00:33:36,466
+if I wanted to or point to the original folder where I had my
+
+563
+00:33:37,333 --> 00:33:38,466
+backup jobs.
+
+564
+00:33:38,216 --> 00:33:38,466
+>> Okay.
+
+565
+00:33:38,483 --> 00:33:41,466
+>> My normal inclination is to have separate locations.
+
+566
+00:33:42,483 --> 00:33:45,400
+And if anybody has a lot of experience with this and has a strong
+
+567
+00:33:45,483 --> 00:33:48,466
+feeling on the matter, it might be interesting to see what some
+
+568
+00:33:48,483 --> 00:33:53,166
+of the pulses are there. But I set up a UNC path here. And again,
+
+569
+00:33:53,250 --> 00:33:57,466
+delete copies after a certain threshold of time. Have a copy
+
+570
+00:33:57,483 --> 00:34:02,466
+job name. Set up the schedule. So all that, of course, is independently
+
+571
+00:34:02,483 --> 00:34:04,433
+configurable as well.
+
+572
+00:34:04,483 --> 00:34:06,466
+We don't really need to look at schedule.
+
+573
+00:34:07,483 --> 00:34:11,466
+Now finally we're on the last part of the configuration.
+
+574
+00:34:11,483 --> 00:34:15,466
+And you'll see two radial buttons there which answers the question,
+
+575
+00:34:16,0 --> 00:34:23,466
+what's going to win. Do I want users that are querying the database
+
+576
+00:34:23,483 --> 00:34:27,466
+to have precedence or do I want the restore jobs to have precedence
+
+577
+00:34:27,483 --> 00:34:31,333
+and cut out those connected read-only users?
+
+578
+00:34:31,483 --> 00:34:34,466
+Notice I have delay restoring backups at least a certain amount
+
+579
+00:34:34,483 --> 00:34:35,466
+of time,
+
+580
+00:34:36,483 --> 00:34:41,466
+alert if no restore occurs within and then, again, a job name.
+
+581
+00:34:42,483 --> 00:34:45,466
+>> So the three pieces are: How often do you want to back it up
+
+582
+00:34:45,483 --> 00:34:48,466
+and where do you want to put the backups? How often do you want
+
+583
+00:34:49,333 --> 00:34:51,466
+to copy them and where are you going to copy them to? And then,
+
+584
+00:34:51,483 --> 00:34:55,466
+how often do you want to restore and will you let people query it?
+
+585
+00:34:55,483 --> 00:35:00,166
+>> Excellent summary. And so finally if I wanted to monitor server,
+
+586
+00:35:00,483 --> 00:35:03,350
+yeah, I'd have to go through some of the same configuration there,
+
+587
+00:35:03,433 --> 00:35:05,466
+how I'm going to have the agents talk to each other or which
+
+588
+00:35:05,483 --> 00:35:09,466
+instance is going to do it, the job that will handle it.
+
+589
+00:35:09,483 --> 00:35:12,466
+And then, I'm at the end of the wizard.
+
+590
+00:35:12,483 --> 00:35:13,466
+>> Cool.
+
+591
+00:35:13,483 --> 00:35:17,466
+>> So that's basic log shipping. Now it's really beyond the scope
+
+592
+00:35:17,483 --> 00:35:20,316
+of showing how to perform the recovery but there are lots of
+
+593
+00:35:20,400 --> 00:35:25,283
+good references when it comes to rolling over or taking a secondary
+
+594
+00:35:25,366 --> 00:35:26,466
+server and putting it into production.
+
+595
+00:35:27,333 --> 00:35:31,466
+>> So the key there with log shipping is that we've got the ability
+
+596
+00:35:31,483 --> 00:35:34,466
+to control the schedule of shipping but there is still a time
+
+597
+00:35:34,483 --> 00:35:38,466
+lag there. And we really don't have any failover capabilities.
+
+598
+00:35:38,483 --> 00:35:41,466
+What's the next step in the progression here?
+
+599
+00:35:41,483 --> 00:35:43,466
+>> Let's see, did we take a look at strengths and weaknesses of
+
+600
+00:35:43,483 --> 00:35:44,283
+log shipping...?
+
+601
+00:35:44,366 --> 00:35:44,466
+>> Yes we did.
+
+602
+00:35:44,483 --> 00:35:48,466
+>> We did. Okay. So next up, exactly like you said, having something
+
+603
+00:35:48,483 --> 00:35:54,216
+that's a more automated failover, and that's database mirroring.
+
+604
+00:35:54,300 --> 00:35:58,466
+So database mirroring entered the picture in SQL 2005 and it
+
+605
+00:35:58,483 --> 00:36:03,466
+was a very exciting feature at the time namely because a technology
+
+606
+00:36:03,483 --> 00:36:06,466
+we're going to look at, failover clustering, was there
+
+607
+00:36:07,483 --> 00:36:12,466
+and it has certain strengths and advantages. Log shipping has
+
+608
+00:36:12,483 --> 00:36:16,233
+its strengths and advantages, and neither of them addressed what
+
+609
+00:36:16,316 --> 00:36:17,466
+mirroring did at the time.
+
+610
+00:36:18,483 --> 00:36:19,466
+>> Okay.
+
+611
+00:36:19,483 --> 00:36:21,466
+>> I have to give away a little bit of the end of the movie.
+
+612
+00:36:21,483 --> 00:36:26,466
+In the very worst case of failover clustering, you could have
+
+613
+00:36:26,183 --> 00:36:30,466
+a very long failover time; automatic, but it might be long.
+
+614
+00:36:30,483 --> 00:36:32,466
+>> All right. Well, let's hold off on that a little bit.
+
+615
+00:36:33,483 --> 00:36:35,333
+>> Yeah, we'll have to hold off on that and take a look at mirroring.
+
+616
+00:36:35,416 --> 00:36:38,466
+So same general pattern: what are the basics, how do I set it
+
+617
+00:36:38,483 --> 00:36:42,466
+up, strengths and weakness, etcetera. So let's take a look at
+
+618
+00:36:43,450 --> 00:36:43,466
+the basics.
+
+619
+00:36:44,483 --> 00:36:49,466
+So I have one instance, we'll call it the Principle Instance,
+
+620
+00:36:49,483 --> 00:36:52,466
+and it's serving a production copy of the database.
+
+621
+00:36:52,483 --> 00:36:53,466
+>> Okay.
+
+622
+00:36:53,483 --> 00:36:57,0
+>> Now with newer .NET technologies that were out at the time...
+
+623
+00:36:57,483 --> 00:37:00,466
+I don't remember what .NET version. Maybe even 2.0 back then.
+
+624
+00:37:00,483 --> 00:37:04,466
+But anyway, that's immaterial. So with a newer .NET connection
+
+625
+00:37:04,483 --> 00:37:09,466
+string technology you could not only have a primary connection
+
+626
+00:37:09,483 --> 00:37:13,333
+string but an alternate server name in the connection string.
+
+627
+00:37:13,483 --> 00:37:16,466
+And this is part of the automatic client failover trickery.
+
+628
+00:37:17,166 --> 00:37:17,466
+>> Okay.
+
+629
+00:37:17,483 --> 00:37:21,166
+>> So I have to have a recovery model. I don't know if it has
+
+630
+00:37:21,250 --> 00:37:24,216
+to be full but you would only set it up in full. You wouldn't
+
+631
+00:37:24,300 --> 00:37:28,283
+even use bulk log. And essentially it works like this: I have
+
+632
+00:37:28,366 --> 00:37:33,466
+a secondary server and on a transaction by transaction basis,
+
+633
+00:37:33,483 --> 00:37:37,466
+I have transactions going over the network, maybe to the same
+
+634
+00:37:37,483 --> 00:37:42,466
+datacenter, maybe anywhere where I have IP connectivity in my network.
+
+635
+00:37:42,483 --> 00:37:47,466
+And picture people marching together... Left, left...
+
+636
+00:37:48,483 --> 00:37:54,466
+transactionally each copy, transaction by transaction, are kept consistent.
+
+637
+00:37:54,483 --> 00:37:57,466
+>> So it's almost like log shipping with no delay.
+
+638
+00:37:58,400 --> 00:38:03,466
+>> No transactional delay whatsoever because... well, actually
+
+639
+00:38:03,483 --> 00:38:06,466
+with two out of three of the options. One of them actually allows
+
+640
+00:38:06,483 --> 00:38:10,466
+a delay but hold that thought for a second. So I have perfectly,
+
+641
+00:38:11,483 --> 00:38:15,466
+transactionally consistent copies of my database.
+
+642
+00:38:16,366 --> 00:38:20,433
+But we're still on a one database at a time instance.
+
+643
+00:38:20,450 --> 00:38:20,466
+Right?
+
+644
+00:38:20,483 --> 00:38:25,466
+>> Yeah, this is protecting on a per database instance. Now there
+
+645
+00:38:25,483 --> 00:38:30,466
+is some overhead here, Rich. The database destination is inaccessible.
+
+646
+00:38:30,483 --> 00:38:35,300
+It's considered to be in a perpetually recovering state and so
+
+647
+00:38:35,383 --> 00:38:39,466
+unless I... Please don't keel over here...
+
+648
+00:38:39,483 --> 00:38:41,466
+set up database snapshots, this could...
+
+649
+00:38:41,483 --> 00:38:42,466
+>> Oh dear.
+
+650
+00:38:42,483 --> 00:38:44,466
+>> And they're not bad. They have a place. I like...
+
+651
+00:38:44,483 --> 00:38:45,466
+>> Yep, yep, yep, yep.
+
+652
+00:38:45,483 --> 00:38:49,466
+>> ...snapshots. But that is the only way that the destination
+
+653
+00:38:49,483 --> 00:38:53,166
+copy is queryable. So am I going to set up mirroring on maybe,
+
+654
+00:38:53,483 --> 00:38:55,333
+you know, a 5MB database?
+
+655
+00:38:55,483 --> 00:38:56,466
+>> Nah, I wouldn't.
+
+656
+00:38:56,483 --> 00:39:00,416
+>> I'm going to set this up on something that's more mission critical,
+
+657
+00:39:00,483 --> 00:39:04,466
+which means I'd probably allocate a secondary box for this.
+
+658
+00:39:04,483 --> 00:39:10,366
+So I might specify another 5, 10, 20 grand server that basically
+
+659
+00:39:10,450 --> 00:39:14,466
+is not serving another role unless something goes wrong.
+
+660
+00:39:14,216 --> 00:39:17,466
+>> A just-in-case server instead of a just-in-time server.
+
+661
+00:39:17,483 --> 00:39:19,466
+>> Exactly. All right.
+
+662
+00:39:19,483 --> 00:39:24,466
+>> So how do we set this up? How do we configure mirroring?
+
+663
+00:39:24,483 --> 00:39:28,466
+>> All right, so looking at the configuration options there are
+
+664
+00:39:28,483 --> 00:39:32,466
+three possible ways we can set up mirroring and I want to focus
+
+665
+00:39:32,200 --> 00:39:36,466
+on the one that really is the jazzy one, the one that provides
+
+666
+00:39:36,483 --> 00:39:41,466
+the best amount of high availability and in fact immediate, within
+
+667
+00:39:41,483 --> 00:39:44,166
+ten seconds, failover guarantee.
+
+668
+00:39:44,250 --> 00:39:47,466
+>> Sounds like a plan. If I'm doing it, I want to go for the best.
+
+669
+00:39:47,483 --> 00:39:51,466
+I have a primary server. I have a secondary server, and I configure
+
+670
+00:39:51,483 --> 00:39:56,266
+objects called endpoints which, for all practical purposes, are
+
+671
+00:39:56,350 --> 00:40:00,466
+listening ears that one machine uses to send transactions to
+
+672
+00:40:00,483 --> 00:40:05,466
+another TCP-IP Endpoint. So it has a port number. I'll configure
+
+673
+00:40:06,483 --> 00:40:09,466
+authentication, probably configure encryption, so that I don't
+
+674
+00:40:09,483 --> 00:40:12,433
+have to worry about that data being intercepted.
+
+675
+00:40:12,450 --> 00:40:12,466
+>> Okay.
+
+676
+00:40:14,483 --> 00:40:19,466
+>> So that's the principal and the mirrored copy. I then also
+
+677
+00:40:19,483 --> 00:40:23,466
+have a tattle-tale or a tie breaker. And this is absolutely
+
+678
+00:40:23,483 --> 00:40:29,466
+necessary for the automatic failover. It produces a tie-breaker
+
+679
+00:40:29,483 --> 00:40:30,450
+or core.
+
+680
+00:40:30,483 --> 00:40:35,466
+So in the circumstance where the principal is unavailable to
+
+681
+00:40:35,483 --> 00:40:40,350
+server its role, you have to have quorum between the mirrored
+
+682
+00:40:40,433 --> 00:40:46,466
+database and the witness. And within ten seconds, the mirrored
+
+683
+00:40:46,483 --> 00:40:51,466
+copy and the witness agree that there has been a failure.
+
+684
+00:40:51,483 --> 00:40:57,350
+The final transaction is rolled back, and the secondary copy
+
+685
+00:40:57,433 --> 00:41:02,466
+is put into production that quick. Now that covers database failover.
+
+686
+00:41:02,483 --> 00:41:06,466
+What about client redirection? Well, remember in the newer...
+
+687
+00:41:06,483 --> 00:41:10,466
+Well, it was new back then. In the newer .NET connection strings
+
+688
+00:41:10,483 --> 00:41:14,466
+they also could list a secondary server so client connections,
+
+689
+00:41:14,483 --> 00:41:18,366
+after they had a hiccup connecting to the first one, you'd set
+
+690
+00:41:18,450 --> 00:41:23,466
+up a retry and they'd automatically reconnect to the secondary
+
+691
+00:41:23,166 --> 00:41:25,416
+copy and be put into production.
+
+692
+00:41:25,483 --> 00:41:27,466
+>> That sounds pretty cool. That sounds pretty cool. Are there
+
+693
+00:41:27,483 --> 00:41:31,450
+any geographical limitations or anything like that? Is mirroring
+
+694
+00:41:31,483 --> 00:41:32,466
+restricted at all?
+
+695
+00:41:32,483 --> 00:41:36,316
+>> No, in fact as long as I can reach from one machine to another
+
+696
+00:41:36,400 --> 00:41:41,466
+via IP then mirroring is a possibility. So this would cover
+
+697
+00:41:41,483 --> 00:41:45,466
+a catastrophic datacenter failure as well.
+
+698
+00:41:45,483 --> 00:41:50,466
+>> So theoretically I could put it on a public Internet IP address
+
+699
+00:41:50,483 --> 00:41:55,166
+and mirror across outside of my own domain even.
+
+700
+00:41:55,483 --> 00:41:59,383
+>> I probably wouldn't do that. Probably I would have either tunneling
+
+701
+00:41:59,466 --> 00:42:02,250
+connections, VPN connections among my sites. And this would
+
+702
+00:42:02,333 --> 00:42:05,466
+be within my own personal network.
+
+703
+00:42:05,483 --> 00:42:08,466
+>> Security always comes first, doesn't it?
+
+704
+00:42:08,483 --> 00:42:10,466
+>> So mirroring strengths and weaknesses:
+
+705
+00:42:12,483 --> 00:42:17,466
+one of the biggest advantages is that I have automatic database
+
+706
+00:42:17,483 --> 00:42:22,466
+failover, automatic client failover and within ten-second recovery.
+
+707
+00:42:23,483 --> 00:42:26,466
+>> Okay. So those are some of the strongest features about it.
+
+708
+00:42:26,483 --> 00:42:29,466
+Honestly, as you'll see, it's really not that tough to initially
+
+709
+00:42:29,483 --> 00:42:33,433
+set up, especially if you use the graphical user interface.
+
+710
+00:42:33,450 --> 00:42:33,466
+>> Cool.
+
+711
+00:42:34,483 --> 00:42:38,233
+>> Now log shipping we saw; it didn't require any specialty hardware.
+
+712
+00:42:38,316 --> 00:42:42,466
+The other high availability technology at the time did, so that
+
+713
+00:42:42,483 --> 00:42:46,466
+made mirroring look really nice. No specialty hardware. I can
+
+714
+00:42:46,483 --> 00:42:48,466
+have mismatched hardware.
+
+715
+00:42:48,483 --> 00:42:49,316
+>> That's always a good thing.
+
+716
+00:42:49,400 --> 00:42:53,316
+>> Different CPUs. Different memory. Different vendor brands.
+
+717
+00:42:53,483 --> 00:42:56,466
+None of that is material when it comes to mirroring.
+
+718
+00:42:56,483 --> 00:42:58,466
+>> So weaknesses? Uh-oh.
+
+719
+00:42:59,450 --> 00:42:59,466
+>> Uh-oh.
+
+720
+00:42:59,483 --> 00:43:00,466
+>> The D-word.
+
+721
+00:43:02,483 --> 00:43:03,366
+>> No.
+
+722
+00:43:03,450 --> 00:43:08,466
+>> Mirroring is deprecated. It is a dead-man walking feature.
+
+723
+00:43:08,483 --> 00:43:11,466
+>> Please tell me. I'm going to try and give away a little bit
+
+724
+00:43:11,483 --> 00:43:14,466
+of the end of the movie. Is there a replacement?
+
+725
+00:43:14,483 --> 00:43:16,466
+>> Thankfully there is a replacement. That's going to be...
+
+726
+00:43:16,483 --> 00:43:18,466
+>> We're going to be talking about it, right?
+
+727
+00:43:18,483 --> 00:43:21,466
+>> We will hopefully real soon. But, yeah.
+
+728
+00:43:21,483 --> 00:43:22,466
+>> All right.
+
+729
+00:43:22,483 --> 00:43:26,266
+>> So it's deprecated. I have to have three servers. I don't
+
+730
+00:43:26,350 --> 00:43:29,466
+need three servers with log shipping; have to have three servers
+
+731
+00:43:29,483 --> 00:43:32,466
+in order to get high availability mode.
+
+732
+00:43:32,233 --> 00:43:34,466
+>> But the witness doesn't have to be anything special, right?
+
+733
+00:43:34,483 --> 00:43:35,466
+>> Doesn't have to be anything special.
+
+734
+00:43:35,483 --> 00:43:36,466
+>> Okay.
+
+735
+00:43:36,483 --> 00:43:41,466
+>> Mirroring has to be configured on a database by database basis.
+
+736
+00:43:41,483 --> 00:43:45,466
+So if I had ten production databases that I want mirrored, I'm
+
+737
+00:43:46,483 --> 00:43:49,466
+going to have to configure mirroring on behalf of each and every one.
+
+738
+00:43:49,483 --> 00:43:50,366
+>> Okay.
+
+739
+00:43:50,450 --> 00:43:53,466
+>> So now let's multiply that. If I had a hundred or two hundred
+
+740
+00:43:53,483 --> 00:43:57,466
+databases on an instance, that's going to be a lot.
+
+741
+00:43:57,483 --> 00:43:58,466
+>> All right.
+
+742
+00:43:58,483 --> 00:44:02,200
+>> Finally, no system database protection with mirroring.
+
+743
+00:44:02,283 --> 00:44:05,466
+>> Okay, so replication can't be used to protect system databases.
+
+744
+00:44:05,483 --> 00:44:09,466
+Log shipping can't be used, and neither can mirroring?
+
+745
+00:44:09,483 --> 00:44:10,316
+>> Nope.
+
+746
+00:44:10,400 --> 00:44:10,466
+>> All right.
+
+747
+00:44:10,483 --> 00:44:14,466
+>> This brings us... Oh, let's take a look at how we implement mirroring.
+
+748
+00:44:14,483 --> 00:44:15,466
+>> Absolutely.
+
+749
+00:44:15,483 --> 00:44:18,233
+>> And actually hold off on the screen for just a second while
+
+750
+00:44:18,316 --> 00:44:19,466
+I get some things arranged.
+
+751
+00:44:20,483 --> 00:44:21,466
+>> Okay. Roger that.
+
+752
+00:44:24,483 --> 00:44:29,0
+>> So I start off the same way I would often when in doubt: right-click.
+
+753
+00:44:29,483 --> 00:44:34,450
+So, I'll get properties of a particular database, and additionally
+
+754
+00:44:34,483 --> 00:44:36,466
+I still have a mirroring page.
+
+755
+00:44:36,200 --> 00:44:36,466
+>> Okay.
+
+756
+00:44:36,483 --> 00:44:39,466
+>> So I go to the mirroring page, and how about if I start up
+
+757
+00:44:39,483 --> 00:44:42,216
+at the top? Configure security.
+
+758
+00:44:42,483 --> 00:44:45,333
+>> So they have to be able to talk to each other and there's security
+
+759
+00:44:45,416 --> 00:44:46,450
+involved in doing it.
+
+760
+00:44:46,483 --> 00:44:52,166
+>> Yeah. If I'm shipping transaction logs transaction by transaction,
+
+761
+00:44:52,250 --> 00:44:56,266
+something has to do it. It is the agent. The agents have to
+
+762
+00:44:56,350 --> 00:44:59,466
+talk to each other. So when I click on that button, yeah, I'm
+
+763
+00:44:59,483 --> 00:45:03,466
+going to have to walk through a wizard to configure how those
+
+764
+00:45:03,166 --> 00:45:07,466
+agents will communicate. So after I start the wizard it asks
+
+765
+00:45:07,483 --> 00:45:11,466
+me, do I want a witness server? And remember, for the highest
+
+766
+00:45:11,483 --> 00:45:15,466
+level of availability, the fanciest option: yes, I must have
+
+767
+00:45:15,483 --> 00:45:16,466
+a witness.
+
+768
+00:45:16,483 --> 00:45:17,466
+>> Okay.
+
+769
+00:45:17,483 --> 00:45:18,466
+>> So after that
+
+770
+00:45:20,266 --> 00:45:23,466
+I have to involve the particular servers to configure.
+
+771
+00:45:26,483 --> 00:45:30,216
+Now that I have identified that I do want a witness, I continue
+
+772
+00:45:30,300 --> 00:45:31,350
+the wizard this way.
+
+773
+00:45:33,483 --> 00:45:37,466
+So now configure the principal, meaning if I said that I want
+
+774
+00:45:37,483 --> 00:45:41,466
+to have a witness, of course I have to configure the principal.
+
+775
+00:45:41,166 --> 00:45:45,166
+Of course I have to configure the secondary. And, yes, I do
+
+776
+00:45:45,250 --> 00:45:48,466
+now want to configure the witness. But first up is the principal.
+
+777
+00:45:48,483 --> 00:45:52,466
+Now an assumption is made. If I started at a particular instance
+
+778
+00:45:52,483 --> 00:45:56,466
+in a particular database, it must mean that instance, and I can't
+
+779
+00:45:56,483 --> 00:46:00,466
+change the name right there. I can change whether or not I want
+
+780
+00:46:00,166 --> 00:46:03,466
+encryption, and I probably want it. I can change the port and
+
+781
+00:46:03,483 --> 00:46:06,466
+I'm going to have to communicate with my firewall folks if I
+
+782
+00:46:06,483 --> 00:46:11,416
+have VPN connections from site to site and I want to have cross-site mirroring.
+
+783
+00:46:11,483 --> 00:46:15,466
+And an object, a listening ear object, is made called an endpoint,
+
+784
+00:46:15,483 --> 00:46:19,466
+and I may have naming conventions I want to adhere to. At least
+
+785
+00:46:19,483 --> 00:46:22,466
+I get the ability to name that.
+
+786
+00:46:22,483 --> 00:46:26,233
+>> And that port is not the database engine port; it's a separate
+
+787
+00:46:26,316 --> 00:46:30,466
+port that's set up specifically for mirroring, correct?
+
+788
+00:46:30,183 --> 00:46:34,466
+>> Absolutely. Now a little bit of a fluky thing here, when I
+
+789
+00:46:34,483 --> 00:46:36,400
+was running through this...
+
+790
+00:46:37,366 --> 00:46:41,466
+Don't do this in real life... I had all three instances on one
+
+791
+00:46:41,483 --> 00:46:45,466
+machine just to reduce some of the moving parts. And that's
+
+792
+00:46:45,483 --> 00:46:50,166
+why Listener Port 5023 was suggested. I can't have the same
+
+793
+00:46:50,250 --> 00:46:52,416
+port used on the same machine.
+
+794
+00:46:52,483 --> 00:46:53,466
+>> Yep, makes sense.
+
+795
+00:46:53,483 --> 00:46:57,466
+>> Normally I'd have the same port across all of the machines
+
+796
+00:46:57,483 --> 00:47:00,466
+but I can't do this within one machine. So that's why a separate
+
+797
+00:47:00,483 --> 00:47:04,466
+listening port was suggested so I have a second instance, a different
+
+798
+00:47:04,483 --> 00:47:06,466
+point and an endpoint name.
+
+799
+00:47:08,350 --> 00:47:11,466
+All right, from there I have to validate identity by saying who
+
+800
+00:47:11,483 --> 00:47:17,266
+I am and then, finally configuring the witness. So pretty standard
+
+801
+00:47:17,350 --> 00:47:20,466
+stuff there: create an endpoint, port, etcetera.
+
+802
+00:47:22,450 --> 00:47:27,366
+All right, have to validate identify to the witness; pretty straightforward there.
+
+803
+00:47:27,483 --> 00:47:33,466
+And then, supply service account on behalf of each of the instances.
+
+804
+00:47:33,483 --> 00:47:35,466
+Remember, they may not be the same accounts.
+
+805
+00:47:35,483 --> 00:47:36,466
+>> That's true.
+
+806
+00:47:36,483 --> 00:47:37,433
+>> Please tell me they're...
+
+807
+00:47:37,450 --> 00:47:37,466
+>> As a matter of fact...
+
+808
+00:47:37,483 --> 00:47:38,466
+>> ...different accounts.
+
+809
+00:47:38,483 --> 00:47:41,183
+>> ...I was going to say if it's best practices, they won't be.
+
+810
+00:47:41,266 --> 00:47:46,466
+>> Yeah. So I walk through the wizard and there I go. There's mirroring.
+
+811
+00:47:46,166 --> 00:47:50,466
+Now the fun part: so it'll show progress
+
+812
+00:47:54,483 --> 00:47:58,466
+and then ask me if I immediately want to start synchronizing
+
+813
+00:47:58,483 --> 00:48:03,466
+transactions from the principal to the witness. And it asks
+
+814
+00:48:03,483 --> 00:48:07,466
+me if I want to start mirroring right now or maybe later on.
+
+815
+00:48:08,450 --> 00:48:08,466
+>> Okay.
+
+816
+00:48:08,483 --> 00:48:12,466
+>> Now after... And by the way I clicked on start so that it would
+
+817
+00:48:12,483 --> 00:48:17,466
+have started. And this is when I get back to the mirroring page
+
+818
+00:48:17,483 --> 00:48:20,466
+and there is a significant button here.
+
+819
+00:48:21,400 --> 00:48:23,466
+Notice the Failover button.
+
+820
+00:48:23,483 --> 00:48:28,466
+So the Failover button allows me to manually failover and gracefully.
+
+821
+00:48:28,483 --> 00:48:31,466
+So I might do this for something like a rolling upgrade. So I
+
+822
+00:48:31,483 --> 00:48:34,466
+apply a service pack on the secondary
+
+823
+00:48:35,483 --> 00:48:40,333
+machine, reboot it, make sure mirroring is re-established, failover
+
+824
+00:48:40,416 --> 00:48:43,466
+to that one, rinse and repeat on the primary and then, get back
+
+825
+00:48:43,483 --> 00:48:48,466
+to my original configuration. If I need very high availability
+
+826
+00:48:48,483 --> 00:48:52,466
+I have to have a technology like this. All right, so this is
+
+827
+00:48:52,483 --> 00:48:55,333
+where I would have manual failover. It would probably be a little
+
+828
+00:48:55,483 --> 00:48:56,466
+bit more dramatic to see
+
+829
+00:48:57,483 --> 00:49:01,466
+pulling the network cable on an actual machine that's being mirrored
+
+830
+00:49:01,483 --> 00:49:04,466
+and see it automatically failover. That would be kind of cool.
+
+831
+00:49:04,483 --> 00:49:06,466
+>> Yeah, but we don't have multiple machines.
+
+832
+00:49:07,483 --> 00:49:08,466
+>> All right.
+
+833
+00:49:09,166 --> 00:49:12,300
+So if I did click on the Failover button, we'd see, "Failover
+
+834
+00:49:12,383 --> 00:49:15,466
+database mirroring will swap the roles of mirror and principal,"
+
+835
+00:49:15,483 --> 00:49:18,466
+basically go through the rollover process. And that's it.
+
+836
+00:49:18,483 --> 00:49:23,466
+>> So what's the technology now that's replacing mirroring?
+
+837
+00:49:23,483 --> 00:49:24,466
+Where are we going with SQL Server?
+
+838
+00:49:24,483 --> 00:49:31,466
+>> All right. So the hot technology, really a game-maker, is a
+
+839
+00:49:31,483 --> 00:49:36,466
+new technology in SQL Server 2012 called AlwaysOn. And this
+
+840
+00:49:36,483 --> 00:49:41,466
+will be especially noteworthy after we look at our final technology
+
+841
+00:49:41,483 --> 00:49:48,466
+because it really overcomes all of the weaknesses of all of the
+
+842
+00:49:48,483 --> 00:49:51,466
+other models, the other high availability technologies.
+
+843
+00:49:51,483 --> 00:49:55,466
+>> So this is the last of the SQL Server options for HA?
+
+844
+00:49:55,483 --> 00:50:00,466
+>> Yeah. So we have the standard plan of attack here: basics,
+
+845
+00:50:00,483 --> 00:50:05,466
+how we implement it, failover, etcetera. So first of all, this
+
+846
+00:50:05,483 --> 00:50:09,466
+is a new feature in SQL 2012 and we will see that it provides
+
+847
+00:50:09,483 --> 00:50:14,466
+failover for a collection of user databases. So I can have what's
+
+848
+00:50:14,483 --> 00:50:20,466
+called an availability group define multiple databases and have
+
+849
+00:50:20,483 --> 00:50:21,433
+multiple copies.
+
+850
+00:50:21,450 --> 00:50:21,466
+>> Wow.
+
+851
+00:50:21,483 --> 00:50:26,433
+>> See, my mirroring copy was not readable and I could only have one.
+
+852
+00:50:26,450 --> 00:50:26,466
+>> Yeah.
+
+853
+00:50:26,483 --> 00:50:31,466
+>> Here, I can have multiple copies and I can failover multiple
+
+854
+00:50:31,483 --> 00:50:34,466
+copies at once. There's lots to like about this. Really only
+
+855
+00:50:34,483 --> 00:50:37,466
+one drawback but that's another slide.
+
+856
+00:50:37,166 --> 00:50:38,466
+>> Yeah, I was going to say, "Wait for the strengths and weaknesses.
+
+857
+00:50:38,483 --> 00:50:39,466
+Don't give it away."
+
+858
+00:50:39,483 --> 00:50:44,466
+>> So a collection of primary replica databases support read-write collections.
+
+859
+00:50:44,483 --> 00:50:48,466
+A collection of secondary replica databases, up to four, support
+
+860
+00:50:48,483 --> 00:50:54,383
+read-only connections, but it requires a particular Windows feature
+
+861
+00:50:54,466 --> 00:50:57,466
+technology called Windows Clustering.
+
+862
+00:50:58,483 --> 00:51:03,466
+We find also just like with mirroring that we can have Synchronous
+
+863
+00:51:04,166 --> 00:51:08,466
+Commit mode. That means before a transaction is considered committed,
+
+864
+00:51:08,483 --> 00:51:12,466
+it has to have already committed on all of the destination copies.
+
+865
+00:51:13,316 --> 00:51:15,466
+That's synchronous meaning marching in step.
+
+866
+00:51:16,483 --> 00:51:20,466
+Asynchronous would mean I send a transaction log over to a destination.
+
+867
+00:51:21,483 --> 00:51:25,383
+I continue business as usual. Maybe it commits right away; maybe
+
+868
+00:51:25,466 --> 00:51:29,466
+it doesn't. And then, we also have planned and automatic failover
+
+869
+00:51:30,333 --> 00:51:34,466
+with no data loss other than maybe the transaction that was in
+
+870
+00:51:34,483 --> 00:51:36,466
+progress at the time.
+
+871
+00:51:36,483 --> 00:51:39,466
+>> That is pretty cool. How do I get this going? What do I need
+
+872
+00:51:39,483 --> 00:51:42,216
+to do to put it together and make it work?
+
+873
+00:51:42,300 --> 00:51:46,466
+>> So each instance hosting an availability group must be a Windows
+
+874
+00:51:46,483 --> 00:51:51,466
+Server Failover Clustering node. I have to add the Windows Clustering feature.
+
+875
+00:51:51,483 --> 00:51:53,466
+>> So this is an OS-level requirement.
+
+876
+00:51:53,483 --> 00:51:57,166
+>> That is an OS-level requirement. And fortunately the building
+
+877
+00:51:57,483 --> 00:52:00,466
+or using the failover clustering feature has gotten a whole lot
+
+878
+00:52:00,483 --> 00:52:02,466
+sweeter over the years.
+
+879
+00:52:02,483 --> 00:52:06,433
+>> Okay. Probably no surprise. I have to have the same instance
+
+880
+00:52:06,483 --> 00:52:11,466
+collation on all of the possible member copies in the availability group.
+
+881
+00:52:11,483 --> 00:52:12,466
+>> Okay.
+
+882
+00:52:12,483 --> 00:52:15,466
+>> And then, I have to enable the AlwaysOn availability group
+
+883
+00:52:15,483 --> 00:52:20,366
+feature on each instance. Multiple ways to do that. After I
+
+884
+00:52:20,450 --> 00:52:24,283
+enable it then I walk through a wizard. It waves a wand...
+
+885
+00:52:24,483 --> 00:52:25,400
+He, he, he, he, he....
+
+886
+00:52:25,416 --> 00:52:25,466
+[Laughing]
+
+887
+00:52:25,483 --> 00:52:29,466
+>> It waves a wand over a number of activities. You have to configure
+
+888
+00:52:29,483 --> 00:52:33,466
+what databases you want to have as part of the availability group.
+
+889
+00:52:33,483 --> 00:52:36,466
+You have to configure a database mirroring endpoint. Does that
+
+890
+00:52:36,483 --> 00:52:37,183
+sound familiar?
+
+891
+00:52:37,266 --> 00:52:37,466
+>> Yeah, it does.
+
+892
+00:52:37,483 --> 00:52:40,466
+>> All right. So there's some familiarity there. Create an availability
+
+893
+00:52:40,483 --> 00:52:45,466
+group listener. Specify replica copies. And then, select an
+
+894
+00:52:45,216 --> 00:52:47,466
+initial synchronization option.
+
+895
+00:52:47,483 --> 00:52:51,466
+>> That's pretty cool. Now what about failover? What happens with
+
+896
+00:52:51,483 --> 00:52:52,466
+failover with all of these on?
+
+897
+00:52:52,483 --> 00:52:55,466
+>> Okay, so we have a couple different... well, three different
+
+898
+00:52:55,483 --> 00:52:59,466
+failover modes: automatic failover, which would be the most glamorous
+
+899
+00:52:59,483 --> 00:53:03,466
+of them and, other than maybe the current transaction that was
+
+900
+00:53:03,483 --> 00:53:05,466
+in progress, no data loss.
+
+901
+00:53:05,483 --> 00:53:09,466
+Like mirroring we can also have planned, manual failover without
+
+902
+00:53:09,483 --> 00:53:14,466
+data loss. And then, in the case where we have some serious problem
+
+903
+00:53:15,483 --> 00:53:18,466
+but not an automatic failover we can tell it... Well, these
+
+904
+00:53:18,483 --> 00:53:20,433
+are my words... "Dang it, failover!"
+
+905
+00:53:20,450 --> 00:53:20,466
+>> Okay.
+
+906
+00:53:21,166 --> 00:53:25,466
+>> So forced, manual failover possibly losing transactions.
+
+907
+00:53:25,483 --> 00:53:27,466
+>> And what happens when they do failover?
+
+908
+00:53:27,483 --> 00:53:31,350
+>> During failover, the failover target takes over the primary
+
+909
+00:53:31,433 --> 00:53:36,466
+role, recovers its databases and brings them online as the new primary.
+
+910
+00:53:36,483 --> 00:53:41,466
+The former primary replica when available, if it were to self-heal...
+
+911
+00:53:42,283 --> 00:53:45,466
+Maybe somebody did a server reset or something like that...
+
+912
+00:53:45,483 --> 00:53:50,266
+will switch to a secondary and its databases become secondary copies.
+
+913
+00:53:50,483 --> 00:53:54,466
+Then based on policy, the forms of failover that a given replica
+
+914
+00:53:54,483 --> 00:53:58,466
+supports are specified by the failover mode property.
+
+915
+00:53:59,483 --> 00:54:02,433
+>> So, okay, we've gone through all this: what are the some the
+
+916
+00:54:02,483 --> 00:54:04,466
+strengths and weaknesses we can expect from AlwaysOn?
+
+917
+00:54:04,483 --> 00:54:09,466
+>> All right, strengths: very fast and automatic database and
+
+918
+00:54:09,233 --> 00:54:11,433
+client failover like mirroring.
+
+919
+00:54:11,450 --> 00:54:11,466
+>> Okay.
+
+920
+00:54:12,333 --> 00:54:16,466
+>> Very flexible configuration with multiple failover replicas
+
+921
+00:54:16,483 --> 00:54:17,466
+unlike mirroring.
+
+922
+00:54:17,483 --> 00:54:21,183
+>> That's cool. So you get more than one DB at a time.
+
+923
+00:54:21,266 --> 00:54:25,166
+>> Read-only access to replicas which we did not get with mirroring.
+
+924
+00:54:25,483 --> 00:54:26,333
+>> Yay!
+
+925
+00:54:26,416 --> 00:54:30,383
+>> Can backup replicas to offload work. So take my replica, which
+
+926
+00:54:30,466 --> 00:54:34,466
+is transactionally consistent, put the backup load on it rather
+
+927
+00:54:34,483 --> 00:54:36,466
+than the one that's serving production.
+
+928
+00:54:36,483 --> 00:54:41,466
+>> So now I'm distributing my resource load using AlwaysOn not
+
+929
+00:54:41,483 --> 00:54:42,466
+just getting HA.
+
+930
+00:54:42,483 --> 00:54:43,466
+>> That's right.
+
+931
+00:54:43,483 --> 00:54:44,466
+>> That's cool.
+
+932
+00:54:44,483 --> 00:54:48,466
+>> No special hardware necessary unlike another technology we're
+
+933
+00:54:48,483 --> 00:54:53,233
+going to look at. And I can also span datacenters because of
+
+934
+00:54:53,316 --> 00:54:57,433
+having endpoints that are reachable across IP subnets.
+
+935
+00:54:57,450 --> 00:54:57,466
+>> Very cool.
+
+936
+00:54:57,483 --> 00:55:01,466
+>> And my own opinion: this is not particularly trivial.
+
+937
+00:55:02,450 --> 00:55:02,466
+>> No.
+
+938
+00:55:02,483 --> 00:55:07,300
+>> So that's it; it's not particularly trivial.
+
+939
+00:55:07,383 --> 00:55:12,466
+>> Yeah, it is an expensive option but it gives you a whole lot
+
+940
+00:55:13,433 --> 00:55:19,250
+of possibilities for both resource utilization and high availability
+
+941
+00:55:19,333 --> 00:55:20,466
+disaster recovery.
+
+942
+00:55:21,483 --> 00:55:25,466
+>> As far as... I don't have a canned demonstration for this but
+
+943
+00:55:25,183 --> 00:55:26,466
+I actually can do better.
+
+944
+00:55:27,483 --> 00:55:32,0
+Use Bing and find the URL for Microsoft Virtual Labs. I don't
+
+945
+00:55:32,483 --> 00:55:36,366
+know if it's MicrosoftVirtualLabs.com or what. Somebody find
+
+946
+00:55:36,450 --> 00:55:39,466
+that out. And there is actually a library of a bunch of different
+
+947
+00:55:40,483 --> 00:55:44,466
+SQL Server-specific virtual labs. They have two specifically
+
+948
+00:55:44,483 --> 00:55:49,466
+on AlwaysOn. So guess what? You can put your own hands on it.
+
+949
+00:55:49,200 --> 00:55:51,466
+Run through those particular configuration labs; I think you'll
+
+950
+00:55:51,483 --> 00:55:52,466
+find that interesting.
+
+951
+00:55:52,483 --> 00:55:58,466
+>> That is very cool. Very cool. So what then is the last HA
+
+952
+00:56:00,433 --> 00:56:02,300
+possibility that we've got here?
+
+953
+00:56:02,383 --> 00:56:05,466
+>> All right. The last one we take a look at is also tried and
+
+954
+00:56:05,483 --> 00:56:11,300
+true, failover clustering. Lots of places out there with failover cluster.
+
+955
+00:56:11,383 --> 00:56:16,466
+So we have our typical blueprint here: basics, implementation,
+
+956
+00:56:17,350 --> 00:56:19,466
+things like that. So let's take a look at the basics.
+
+957
+00:56:21,200 --> 00:56:25,466
+With all of the high availability technologies, you must understand
+
+958
+00:56:25,483 --> 00:56:27,433
+the scope of protection.
+
+959
+00:56:27,450 --> 00:56:27,466
+>> Yep.
+
+960
+00:56:27,483 --> 00:56:31,466
+>> What we're trying to protect. Now what we're trying to protect
+
+961
+00:56:31,483 --> 00:56:37,466
+with failover clustering is a hardware node failure. So should
+
+962
+00:56:37,483 --> 00:56:42,466
+I lose all the power supplies of a machine, I have a motherboard
+
+963
+00:56:43,166 --> 00:56:49,466
+meltdown, I lose availability of the hardware node then the SQL
+
+964
+00:56:49,483 --> 00:56:54,466
+Server service is going to rollover to another node and run on
+
+965
+00:56:54,483 --> 00:57:00,466
+that machine. But keep in mind, the databases that are attributed
+
+966
+00:57:00,483 --> 00:57:05,250
+to that particular cluster as it's called are not redundant.
+
+967
+00:57:05,483 --> 00:57:10,416
+Their data is not redundant. The redundancy protection here is
+
+968
+00:57:10,483 --> 00:57:12,283
+the server hardware node.
+
+969
+00:57:12,366 --> 00:57:16,466
+>> So we're not talking about data storage protection; we're talking
+
+970
+00:57:16,483 --> 00:57:18,466
+about resource availability protection.
+
+971
+00:57:18,483 --> 00:57:22,416
+>> We are talking about hardware. Now in order to implement this,
+
+972
+00:57:22,483 --> 00:57:26,466
+I have a lot of hardware that I have to architect and it's particular.
+
+973
+00:57:27,300 --> 00:57:31,466
+This is partly opinion; there are others that might have other opinions.
+
+974
+00:57:31,483 --> 00:57:36,466
+I think it's particular. So I'm going to set up my physical hardware
+
+975
+00:57:36,483 --> 00:57:42,466
+first, install Windows then I must implement a Windows Failover Cluster.
+
+976
+00:57:42,483 --> 00:57:46,350
+It requires a certain configuration. And then, I'm going to
+
+977
+00:57:46,433 --> 00:57:50,466
+add one or more additional nodes that will be part of the Windows
+
+978
+00:57:50,483 --> 00:57:55,466
+Failover Cluster. The restriction here is that ultimately what
+
+979
+00:57:55,483 --> 00:57:59,466
+I get is a portable name. I get a name that clients are going
+
+980
+00:57:59,200 --> 00:58:03,466
+to connect to. That name and all the resources that pertain to
+
+981
+00:58:03,483 --> 00:58:09,466
+it can run on one hardware node or can run on any other node
+
+982
+00:58:09,483 --> 00:58:11,466
+in the same cluster.
+
+983
+00:58:12,183 --> 00:58:19,466
+Only specific services and applications support this kind of
+
+984
+00:58:19,483 --> 00:58:24,466
+behavior, so shared folders, a couple of other Windows key features
+
+985
+00:58:24,483 --> 00:58:28,466
+and then a couple of applications like Exchange and SQL Server.
+
+986
+00:58:28,483 --> 00:58:33,466
+SQL Server, specifically with this, you must install after you
+
+987
+00:58:33,483 --> 00:58:38,466
+already have your Windows cluster and some other things occur
+
+988
+00:58:38,483 --> 00:58:39,466
+after the fact.
+
+989
+00:58:40,483 --> 00:58:43,466
+Now architecturally... In fact, let's jump to the architecture
+
+990
+00:58:43,483 --> 00:58:47,450
+diagram and I think this is going to help point out some other things.
+
+991
+00:58:47,483 --> 00:58:50,433
+So notice I need at least two physical nodes.
+
+992
+00:58:50,450 --> 00:58:50,466
+>> Okay.
+
+993
+00:58:50,483 --> 00:58:54,466
+>> Well, even with virtualization I can actually virtualize a
+
+994
+00:58:54,233 --> 00:58:57,466
+cluster; that's way too complicated to talk about right now.
+
+995
+00:58:57,483 --> 00:59:01,466
+So the picture you're looking at really is more typical of something
+
+996
+00:59:01,483 --> 00:59:02,466
+I'd see a few years ago.
+
+997
+00:59:02,483 --> 00:59:05,466
+>> So two physically separate computers.
+
+998
+00:59:05,483 --> 00:59:09,466
+>> Yeah, two physically separate computers. Notice they're going
+
+999
+00:59:09,483 --> 00:59:12,466
+to have a network adapter for clients to connect to.
+
+1000
+00:59:12,483 --> 00:59:16,333
+They're going to have a network adapter for their own personal
+
+1001
+00:59:16,483 --> 00:59:20,466
+traffic among those nodes in the cluster. And notice the heart
+
+1002
+00:59:20,483 --> 00:59:26,466
+there represents a 1.1-second packet. Every 1.1 seconds the
+
+1003
+00:59:26,483 --> 00:59:31,466
+heartbeat packet is used to establish kind of a keep-alive among
+
+1004
+00:59:31,483 --> 00:59:36,333
+the other cluster members. Now the other part of this is that
+
+1005
+00:59:36,416 --> 00:59:39,466
+I'm going to have a storage area network. In the past before
+
+1006
+00:59:39,483 --> 00:59:43,383
+SANs were popular, there were some other technologies. But essentially
+
+1007
+00:59:43,466 --> 00:59:47,466
+we have to have a technology that allows more than one possible
+
+1008
+00:59:47,483 --> 00:59:53,333
+box to control the same LUN. So this could be iSCSI; this could
+
+1009
+00:59:53,483 --> 00:59:58,466
+be a fibre channel. But I allocate resources such as
+
+1010
+01:00:00,416 --> 01:00:04,466
+a bunch of disks for data files, a bunch of disks for log files
+
+1011
+01:00:04,166 --> 01:00:08,466
+and then, I have another resource which is called the Quorum.
+
+1012
+01:00:10,483 --> 01:00:14,466
+As seen in this diagram, I have to have a tie-breaker kind of
+
+1013
+01:00:14,483 --> 01:00:18,466
+resource that says, "This is the node that's actually in charge."
+
+1014
+01:00:19,316 --> 01:00:23,466
+In the past this would be just another small unit of storage,
+
+1015
+01:00:23,483 --> 01:00:27,466
+like seriously a few megabytes, on the storage area network.
+
+1016
+01:00:27,483 --> 01:00:32,200
+These days and more typically and better this could just be a
+
+1017
+01:00:32,283 --> 01:00:35,400
+UNC file share on some third machine.
+
+1018
+01:00:35,450 --> 01:00:35,466
+>> Awesome.
+
+1019
+01:00:35,483 --> 01:00:37,466
+>> And I would say that's more typical.
+
+1020
+01:00:37,483 --> 01:00:38,466
+>> Awesome.
+
+1021
+01:00:38,483 --> 01:00:41,166
+>> All right. So after I have all this hardware set up...
+
+1022
+01:00:41,483 --> 01:00:47,466
+And word on the street has it that you want these machines absolutely identical.
+
+1023
+01:00:48,483 --> 01:00:51,466
+You're not always told that, but you want the same firmware in
+
+1024
+01:00:51,483 --> 01:00:56,466
+your host bus adapter, same motherboard, same network adapters
+
+1025
+01:00:56,483 --> 01:01:00,466
+in the same slots with the same amount of memory and memory speed.
+
+1026
+01:01:00,483 --> 01:01:03,466
+I mean, you want them as identical as possible.
+
+1027
+01:01:04,216 --> 01:01:07,333
+>> So once you've got all that configured and everything is good
+
+1028
+01:01:07,416 --> 01:01:13,466
+to go how do we then deal with the failover process itself?
+
+1029
+01:01:13,483 --> 01:01:17,466
+>> A couple other little architectural elements: I have
+
+1030
+01:01:20,366 --> 01:01:24,466
+after my Windows Cluster installed SQL Server, and the portable
+
+1031
+01:01:24,483 --> 01:01:28,466
+name here, the SQL cluster is what clients will connect to.
+
+1032
+01:01:28,483 --> 01:01:31,466
+And then, we have failover.
+
+1033
+01:01:32,283 --> 01:01:35,466
+Let's say I have a hardware node failure. There's going to be
+
+1034
+01:01:35,483 --> 01:01:40,466
+a policy that says, "If I have more than one extra machine in
+
+1035
+01:01:40,483 --> 01:01:44,466
+the cluster, prefer to failover to this one." And, will I allow
+
+1036
+01:01:45,0 --> 01:01:49,466
+it to be automatic? Yes or no? So failover is determined by a policy.
+
+1037
+01:01:50,250 --> 01:01:54,466
+Now there has to be quorum or agreement among the nodes in the
+
+1038
+01:01:54,483 --> 01:01:58,466
+cluster as to who is actually serving the instance.
+
+1039
+01:01:58,200 --> 01:01:59,0
+>> Okay.
+
+1040
+01:01:59,483 --> 01:02:02,466
+>> So this could be determined by a couple different ways: node
+
+1041
+01:02:02,483 --> 01:02:06,466
+majority, node and file share, node and disk majority, disk only.
+
+1042
+01:02:06,483 --> 01:02:09,466
+So you have options there. This is expanded from what you might
+
+1043
+01:02:09,483 --> 01:02:11,466
+have had maybe ten years ago.
+
+1044
+01:02:11,483 --> 01:02:12,166
+>> All right.
+
+1045
+01:02:12,250 --> 01:02:13,466
+>> Okay, brace yourself.
+
+1046
+01:02:13,483 --> 01:02:15,466
+>> I'm braced. Give it a ride.
+
+1047
+01:02:15,483 --> 01:02:21,400
+>> Now essentially when my cluster fails over, the SQL Server restarts.
+
+1048
+01:02:21,483 --> 01:02:24,466
+And if I have a hundred databases on that instance, we know every
+
+1049
+01:02:24,483 --> 01:02:28,466
+time SQL Server restarts, every one of those databases has to
+
+1050
+01:02:28,483 --> 01:02:33,466
+go through the redo and undo process. So failover in the worst
+
+1051
+01:02:33,483 --> 01:02:38,466
+of cases could really be lengthy which means it's not quite as
+
+1052
+01:02:38,483 --> 01:02:43,466
+attractive as always on or mirroring, but it protects the entire
+
+1053
+01:02:43,483 --> 01:02:47,466
+instance which the other technologies do not do.
+
+1054
+01:02:47,483 --> 01:02:48,466
+>> Awesome.
+
+1055
+01:02:49,483 --> 01:02:53,200
+>> A good point is that there is zero client configuration.
+
+1056
+01:02:53,483 --> 01:02:57,466
+Clients point to a portable name. So this pretty much dovetails
+
+1057
+01:02:57,483 --> 01:02:59,466
+into the strengths and weaknesses.
+
+1058
+01:02:59,483 --> 01:03:02,466
+Clustering has been around for a long time. That means a lot
+
+1059
+01:03:02,483 --> 01:03:05,466
+of people know about it, have established policies of how to
+
+1060
+01:03:05,483 --> 01:03:09,466
+do it. And setting up the hardware or validating that the hardware
+
+1061
+01:03:09,483 --> 01:03:13,466
+will work right is done with a nifty wizard, the Windows Cluster
+
+1062
+01:03:13,483 --> 01:03:14,466
+Validation Tool.
+
+1063
+01:03:15,483 --> 01:03:18,466
+Weaknesses: specialty hardware required.
+
+1064
+01:03:19,483 --> 01:03:22,466
+It's more expensive. It requires more expertise.
+
+1065
+01:03:23,300 --> 01:03:26,383
+For those who don't know how to operate a cluster role, you may
+
+1066
+01:03:26,466 --> 01:03:32,466
+introduce the opposite of high availability; you may reduce availability
+
+1067
+01:03:32,483 --> 01:03:33,466
+by causing a problem.
+
+1068
+01:03:34,183 --> 01:03:35,0
+>> Oh, yeah.
+
+1069
+01:03:35,483 --> 01:03:40,216
+>> And then, keep in mind: data is not duplicated with a failover cluster.
+
+1070
+01:03:40,300 --> 01:03:45,466
+So it's often the case if you were to use this, you would combine
+
+1071
+01:03:45,483 --> 01:03:49,466
+it with one of the other technologies like log shipping or mirroring. Or...
+
+1072
+01:03:50,483 --> 01:03:51,466
+>> Or?
+
+1073
+01:03:51,483 --> 01:03:53,466
+>> ...you're going to use AlwaysOn.
+
+1074
+01:03:54,333 --> 01:03:56,466
+>> AlwaysOn. That would be the one.
+
+1075
+01:03:56,200 --> 01:03:58,466
+>> All right, Rich. So that wraps up all the stuff that I had
+
+1076
+01:03:58,483 --> 01:03:59,466
+for today.
+
+1077
+01:03:59,483 --> 01:04:02,466
+>> That's awesome. George, I want to thank you for your time today.
+
+1078
+01:04:02,183 --> 01:04:02,400
+>> Thank you.
+
+1079
+01:04:02,483 --> 01:04:07,466
+>> I appreciate it. Also, for those of you out here on the view
+
+1080
+01:04:07,483 --> 01:04:11,466
+watching us, in the bottom of your browser there is a poll.
+
+1081
+01:04:11,483 --> 01:04:17,266
+This poll is probably the one that we really hope that you add
+
+1082
+01:04:17,350 --> 01:04:21,466
+your feedback into. It really is how we know how well we did
+
+1083
+01:04:21,483 --> 01:04:26,250
+and gives us a chance to get better in future ones. Again, thank
+
+1084
+01:04:26,333 --> 01:04:28,466
+you so much for joining us today. For George.
+
+1085
+01:04:28,483 --> 01:04:29,466
+>> Thank you.
+
+1086
+01:04:29,483 --> 01:04:33,466
+>> And Rich. And everybody out in the back that helped out,
+
+1087
+01:04:34,483 --> 01:04:39,450
+Elise and Danny and Barry, thanks very much. Hopefully we'll
+
+1088
+01:04:39,483 --> 01:04:41,466
+see you again down the road. Have a great... Woah!
+
+1089
+01:04:42,483 --> 01:04:44,466
+>> I want to put in a plug for your session on Friday.
+
+1090
+01:04:44,483 --> 01:04:48,466
+>> Yeah, we'll see. We've got another one coming up. Check the
+
+1091
+01:04:48,216 --> 01:04:53,333
+schedule on the web if you're interested. We've got data warehousing
+
+1092
+01:04:53,483 --> 01:04:57,466
+in SSIS in a day or two. Thanks again. Have a great evening,
+
+1093
+01:04:57,483 --> 01:05:01,466
+afternoon, morning, whatever it is wherever you are.
+

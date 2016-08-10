@@ -1,0 +1,4516 @@
+1
+00:00:00,333 --> 00:00:07,333
+[Music]
+
+2
+00:00:17,483 --> 00:00:20,466
+Welcome back folks.
+
+3
+00:00:21,483 --> 00:00:26,466
+Thanks for coming back. We are here to finish up this afternoon's
+
+4
+00:00:26,483 --> 00:00:31,466
+Administering SQL Server 2012 Jump Start. I'm Rich Currey.
+
+5
+00:00:31,483 --> 00:00:35,466
+I'm here with Mr. George Squillace, SQL in his name.
+
+6
+00:00:35,483 --> 00:00:37,466
+George what do we got coming up next?
+
+7
+00:00:37,483 --> 00:00:40,250
+>> Well for the back nine we have some good topics.
+
+8
+00:00:40,483 --> 00:00:43,466
+Now that we have a solid platform of SQL Server, we've installed
+
+9
+00:00:43,483 --> 00:00:47,466
+the product, have configured server and database level options,
+
+10
+00:00:47,483 --> 00:00:50,466
+learned how to make sure the product is running optimally.
+
+11
+00:00:50,483 --> 00:00:53,466
+Now we have to take a look at some data stewardship.
+
+12
+00:00:53,483 --> 00:00:57,466
+That'll be Managing Data Module 4, security and high availability
+
+13
+00:00:57,483 --> 00:01:01,466
+to follow. So for this particular module we're going to take
+
+14
+00:01:01,483 --> 00:01:04,466
+a look at Managing Data, Data Stewardship, things like that.
+
+15
+00:01:05,266 --> 00:01:05,466
+>> Alrighty.
+
+16
+00:01:05,483 --> 00:01:07,466
+>> Moving over the overview.
+
+17
+00:01:08,483 --> 00:01:12,466
+There's a phrase that the DBA should take to heart and that is
+
+18
+00:01:12,483 --> 00:01:14,300
+"Tag I'm it".
+
+19
+00:01:14,316 --> 00:01:14,466
+[Laughter]
+
+20
+00:01:15,233 --> 00:01:18,466
+>> Usually we end up with everything.
+
+21
+00:01:18,483 --> 00:01:22,333
+>> Yeah, "Tag I'm It". So I am as the database administrator,
+
+22
+00:01:22,416 --> 00:01:26,333
+I am the data steward. So we'll take a look at protecting data
+
+23
+00:01:26,483 --> 00:01:30,333
+as a data steward, which means not only duplicating it via the
+
+24
+00:01:30,483 --> 00:01:35,466
+backup process. But also when the chips are down Rich we got
+
+25
+00:01:35,483 --> 00:01:36,433
+to be able to put it back down.
+
+26
+00:01:36,450 --> 00:01:36,466
+>> Yeah.
+
+27
+00:01:36,483 --> 00:01:39,466
+>> Got to be able to restore. So we'll look at backups, backup
+
+28
+00:01:39,483 --> 00:01:43,166
+strategies, restores, and then some other database maintenance
+
+29
+00:01:43,250 --> 00:01:47,466
+and administration kinds of tests. Like moving databases entirely
+
+30
+00:01:47,483 --> 00:01:52,466
+or just relocating their files, maintaining database integrity,
+
+31
+00:01:52,483 --> 00:01:56,183
+some other tools like that, so. That's up for this particular module.
+
+32
+00:01:56,266 --> 00:02:00,333
+>> Alright so of course whenever anything goes wrong you want
+
+33
+00:02:00,416 --> 00:02:01,466
+to make sure that you have a...
+
+34
+00:02:02,483 --> 00:02:05,266
+>> Backup strategy or restore, what?
+
+35
+00:02:05,350 --> 00:02:06,466
+>> A backup.
+
+36
+00:02:06,483 --> 00:02:07,233
+>> Yeah a backup.
+
+37
+00:02:07,316 --> 00:02:11,466
+>> Absolutely we got to be able to back it up so that we can recover
+
+38
+00:02:11,216 --> 00:02:11,466
+it later.
+
+39
+00:02:12,483 --> 00:02:15,366
+>> Now I imagine especially for those of you that have a good
+
+40
+00:02:15,450 --> 00:02:18,466
+amount of experience with the product, the backing up and recovery models.
+
+41
+00:02:19,333 --> 00:02:21,466
+They're not brand new, but I do want to challenge you for the
+
+42
+00:02:21,483 --> 00:02:25,466
+exam that you've walked all the way through the process of learning
+
+43
+00:02:25,483 --> 00:02:28,466
+the different backup, or different recovery models, different
+
+44
+00:02:28,483 --> 00:02:35,416
+backup types. I will tell you there is an X factor, some aspect
+
+45
+00:02:35,483 --> 00:02:38,466
+of unknown when you actually come to a point where you have to
+
+46
+00:02:38,483 --> 00:02:42,466
+restore or recover a database, or a whole system. Some unknowns
+
+47
+00:02:42,483 --> 00:02:46,466
+that are going to pop up, you must have walked through the process
+
+48
+00:02:46,483 --> 00:02:47,466
+to recover.
+
+49
+00:02:47,483 --> 00:02:50,466
+That way when the X factors come up
+
+50
+00:02:51,483 --> 00:02:54,433
+it won't be any more difficult than otherwise.
+
+51
+00:02:54,450 --> 00:02:54,466
+>> Absolutely.
+
+52
+00:02:54,483 --> 00:02:57,466
+>> So the first thing we have to take a look at is a quick look
+
+53
+00:02:57,483 --> 00:03:01,466
+at the recovery models. Note there are only three. So that makes
+
+54
+00:03:01,483 --> 00:03:04,183
+the decision making process a little easier.
+
+55
+00:03:04,266 --> 00:03:06,333
+>> As long as you know what they are and what they do.
+
+56
+00:03:06,416 --> 00:03:11,466
+>> So the model database is used whenever a new database is created.
+
+57
+00:03:11,483 --> 00:03:15,466
+It's copied, so whatever options it has those will be applied
+
+58
+00:03:15,483 --> 00:03:19,466
+to a new database unless they're overridden. The model database
+
+59
+00:03:19,483 --> 00:03:23,466
+after installation is the full recovery model. This is the most
+
+60
+00:03:23,483 --> 00:03:28,466
+complete recovery model. It permits point in time recovery and
+
+61
+00:03:28,483 --> 00:03:32,466
+recovery from failed medium. Bulk-logged recovery model, actually
+
+62
+00:03:32,483 --> 00:03:35,466
+I'm going to skip to simple for a moment. With the simple recovery
+
+63
+00:03:35,483 --> 00:03:39,466
+model we'll find out that we are able to restore full backups
+
+64
+00:03:40,333 --> 00:03:44,350
+and differential backups. But the way that the log file is maintained
+
+65
+00:03:44,433 --> 00:03:48,466
+is different with the simple recovery model. Transactions after
+
+66
+00:03:48,483 --> 00:03:51,466
+they've been logged into the log file and then rolled forward
+
+67
+00:03:51,483 --> 00:03:55,466
+into the database are truncated, which is where the previous
+
+68
+00:03:55,483 --> 00:04:00,166
+name of the simple recovery model got its name, truncate log
+
+69
+00:04:00,483 --> 00:04:04,466
+on check point.. So there's no data in the log file that permits
+
+70
+00:04:04,483 --> 00:04:09,416
+point and time recovery. In fact if you try to perform a transaction
+
+71
+00:04:09,483 --> 00:04:12,466
+log backup on a database with a simple recovery model it's not
+
+72
+00:04:12,483 --> 00:04:16,466
+even an available option, so now picture startling between two
+
+73
+00:04:16,483 --> 00:04:20,466
+different possibilities. That's really the bulk-logged recovery
+
+74
+00:04:20,483 --> 00:04:24,466
+model and it's not really a perpetual model that you'll stay in.
+
+75
+00:04:24,483 --> 00:04:28,466
+This is an interim model that you'll use when you're going to
+
+76
+00:04:28,200 --> 00:04:29,466
+perform bulk operations.
+
+77
+00:04:31,483 --> 00:04:39,333
+So the point is certain operations are minimally logged and when
+
+78
+00:04:39,416 --> 00:04:43,466
+in the bulk-logged recovery model you'll take up less log space,
+
+79
+00:04:43,483 --> 00:04:49,466
+there's less overhead with the bulk import operation, so it's
+
+80
+00:04:49,483 --> 00:04:50,466
+more efficient.
+
+81
+00:04:50,483 --> 00:04:55,466
+>> So the full model recovers all of, has the ability to trace
+
+82
+00:04:55,483 --> 00:04:59,233
+and track all of the work done. The simple just gives you enough
+
+83
+00:04:59,316 --> 00:05:01,466
+to restart the database if you need it.
+
+84
+00:05:01,483 --> 00:05:05,350
+>> Exactly so there are times where maybe I have a developer copy
+
+85
+00:05:05,433 --> 00:05:08,466
+of a database. It doesn't need to have absolutely everything
+
+86
+00:05:08,483 --> 00:05:11,250
+to the nearest moment, or maybe I have a database that I can
+
+87
+00:05:11,333 --> 00:05:15,466
+refresh easily from some other process. So a simple recovery
+
+88
+00:05:15,233 --> 00:05:18,466
+model might make sense for some of those. I have the options
+
+89
+00:05:18,483 --> 00:05:21,466
+because they're reasonable in certain cases.
+
+90
+00:05:23,283 --> 00:05:26,466
+>> So what about the backup itself, what are the different statements
+
+91
+00:05:26,483 --> 00:05:28,466
+and options that you can use there?
+
+92
+00:05:28,483 --> 00:05:32,466
+>> So you can see that not only do we backup the database files.
+
+93
+00:05:32,483 --> 00:05:36,466
+But we also have a separate statement for backing up and protecting,
+
+94
+00:05:36,483 --> 00:05:40,466
+and managing the log file. There are a bunch of options that
+
+95
+00:05:40,483 --> 00:05:44,266
+come along with each of these. In particular for the test takers
+
+96
+00:05:44,350 --> 00:05:46,466
+you are going to want to know the most popular
+
+97
+00:05:48,483 --> 00:05:53,466
+options, like with differential, with init/noinit, format, some
+
+98
+00:05:53,483 --> 00:05:54,466
+of those other ones.
+
+99
+00:05:56,216 --> 00:06:00,316
+>> What about making sure that your backups actually were successful,
+
+100
+00:06:00,400 --> 00:06:03,466
+that they worked. That you can go out and make use of them later.
+
+101
+00:06:03,483 --> 00:06:08,466
+>> Sure, picture a scenario where I might have an awful lot of
+
+102
+00:06:08,483 --> 00:06:11,466
+databases and an awful lot of backup files.
+
+103
+00:06:12,466 --> 00:06:16,466
+Now, let's say you're the primary DBA, you're out with an unexpected
+
+104
+00:06:17,450 --> 00:06:17,466
+gallbladder operation.
+
+105
+00:06:17,483 --> 00:06:18,216
+>> Oh boy.
+
+106
+00:06:18,300 --> 00:06:19,433
+>> Tag I'm it.
+
+107
+00:06:19,450 --> 00:06:19,466
+>> Yep.
+
+108
+00:06:19,483 --> 00:06:23,466
+>> Now I'm the one that has to go in and restore. I might not
+
+109
+00:06:23,483 --> 00:06:28,466
+know what your particular strategy was for storing and naming files.
+
+110
+00:06:28,483 --> 00:06:32,466
+So now I have to take a look at the contents of those backups
+
+111
+00:06:32,483 --> 00:06:35,466
+before I actually use them. So we have a number of integrity
+
+112
+00:06:35,483 --> 00:06:39,466
+and fact finding kinds of statements that we can use against
+
+113
+00:06:39,483 --> 00:06:41,283
+backup files.
+
+114
+00:06:41,366 --> 00:06:42,466
+>> Cool, what are those all about?
+
+115
+00:06:42,483 --> 00:06:45,466
+>> So we have restore verify only, restore header only.
+
+116
+00:06:45,483 --> 00:06:48,466
+We'll see these in an upcoming demonstration and the types of
+
+117
+00:06:49,0 --> 00:06:53,466
+information that they provide, lots and lots of facts other than
+
+118
+00:06:53,200 --> 00:06:53,466
+one of them.
+
+119
+00:06:54,333 --> 00:06:54,466
+>> What's that?
+
+120
+00:06:54,483 --> 00:06:57,466
+>> Three give a lot of facts and we'll get to the one that doesn't
+
+121
+00:06:57,483 --> 00:07:02,266
+give us a whole lot of information other than, okay, or not okay.
+
+122
+00:07:02,350 --> 00:07:04,466
+>> Alright, so leave me sitting on the edge of my seat.
+
+123
+00:07:04,483 --> 00:07:05,433
+We'll come back to it.
+
+124
+00:07:05,483 --> 00:07:06,466
+>> As I often do.
+
+125
+00:07:06,483 --> 00:07:10,466
+>> Yeah, yeah, yeah. Alright, so is it the, do we have the same
+
+126
+00:07:10,483 --> 00:07:14,466
+concerns about backing up system databases that we do backing
+
+127
+00:07:14,200 --> 00:07:15,466
+up user databases?
+
+128
+00:07:15,483 --> 00:07:18,466
+>> Some general concerns are the same. But there are special
+
+129
+00:07:19,166 --> 00:07:23,466
+considerations related to the system databases. First of all,
+
+130
+00:07:24,0 --> 00:07:28,466
+with a couple of the system databases if they are corrupt to
+
+131
+00:07:28,483 --> 00:07:31,466
+a certain degree you're not going to have a usable SQL Server.
+
+132
+00:07:31,483 --> 00:07:35,466
+Let me be more clear. So the master database, if it's corrupt
+
+133
+00:07:37,450 --> 00:07:41,433
+to a certain degree the SQL Server Service will not start.
+
+134
+00:07:41,450 --> 00:07:41,466
+>> Okay.
+
+135
+00:07:41,483 --> 00:07:45,466
+>> In that case you don't have a SQL Server instance. So that's
+
+136
+00:07:45,483 --> 00:07:49,466
+obviously a game breaker. Additionally, if your MSDB database
+
+137
+00:07:49,483 --> 00:07:53,466
+is corrupt then the Agent Service will not start.
+
+138
+00:07:54,233 --> 00:07:57,466
+Although I've never run into this, if the model database in some
+
+139
+00:07:57,483 --> 00:08:01,466
+weird way would get corrupt, I don't know how, but if it were
+
+140
+00:08:01,483 --> 00:08:05,316
+that could also actually stop the SQL Server Service from, pardon
+
+141
+00:08:05,400 --> 00:08:06,166
+me from running.
+
+142
+00:08:06,250 --> 00:08:06,466
+>> Okay.
+
+143
+00:08:07,366 --> 00:08:12,466
+>> Additionally. Additionally you don't want to change the recovery
+
+144
+00:08:12,483 --> 00:08:14,466
+models of the system databases.
+
+145
+00:08:15,450 --> 00:08:18,466
+The right there means there is the possibility of changing that
+
+146
+00:08:18,483 --> 00:08:22,466
+on MSDB if you wanted to. But more than likely you're just going
+
+147
+00:08:22,483 --> 00:08:26,466
+to back that up in full every time you back it up. You would
+
+148
+00:08:26,483 --> 00:08:30,466
+restore it in full rather than worrying about a point in time recovery.
+
+149
+00:08:30,483 --> 00:08:34,466
+I know, sorry don't press me up for off the top of my head.
+
+150
+00:08:34,483 --> 00:08:37,466
+But with one or more of the system databases even if you change
+
+151
+00:08:37,483 --> 00:08:40,466
+the recovery model, it doesn't change what actually happens.
+
+152
+00:08:40,483 --> 00:08:42,466
+It's a peculiarity with them.
+
+153
+00:08:42,483 --> 00:08:45,466
+>> Cool, so why don't we go take a look at that.
+
+154
+00:08:46,483 --> 00:08:50,466
+George is going to show us how the backup statements work and
+
+155
+00:08:50,233 --> 00:08:52,466
+the different effects that they've got, and some of those backup
+
+156
+00:08:52,483 --> 00:08:55,466
+integrity statements that he was talking about just a minute
+
+157
+00:08:55,483 --> 00:08:57,450
+ago, as well.
+
+158
+00:08:57,483 --> 00:09:01,466
+>> Alright, so let me make sure I see what instance we're connected
+
+159
+00:09:01,233 --> 00:09:03,166
+to, just to double check.
+
+160
+00:09:05,483 --> 00:09:07,466
+>> Okay, so.
+
+161
+00:09:07,183 --> 00:09:10,466
+>> So I'm going to create a database that we'll use for our purposes.
+
+162
+00:09:10,483 --> 00:09:16,300
+Some of the information that I used for preparing for this presentation
+
+163
+00:09:16,383 --> 00:09:19,466
+is this link up there, just wanted you to see that.
+
+164
+00:09:20,483 --> 00:09:23,466
+Now what I'm going to do is create a destination for the backup.
+
+165
+00:09:24,483 --> 00:09:27,466
+I'm going to use what's called a device, pardon me.
+
+166
+00:09:27,483 --> 00:09:28,466
+>> Okay, what is a device do?
+
+167
+00:09:28,483 --> 00:09:32,466
+>> A device is a friendly name; really it's no more than a convenience
+
+168
+00:09:32,483 --> 00:09:37,466
+feature, a convenient destination, friendly name that I'll use
+
+169
+00:09:37,483 --> 00:09:40,466
+for a backup destination rather than some lengthy complicated
+
+170
+00:09:41,483 --> 00:09:46,466
+path with spaces, and things like that. So I'll create my device,
+
+171
+00:09:47,483 --> 00:09:51,466
+strangely if you were to right click on that device under server
+
+172
+00:09:51,483 --> 00:09:54,200
+objects, backup devices.
+
+173
+00:09:54,483 --> 00:09:57,466
+You tried to look at its contents; it would say that nothing
+
+174
+00:09:57,483 --> 00:10:01,466
+is there right now. So there won't be any content until you actually
+
+175
+00:10:01,483 --> 00:10:02,466
+back that up.
+
+176
+00:10:03,166 --> 00:10:03,466
+>> So...
+
+177
+00:10:03,483 --> 00:10:07,233
+>> Now I'm going to put some data in the database and then I'm
+
+178
+00:10:07,316 --> 00:10:10,466
+going to back it up. I'm going to use just a basic backup statement,
+
+179
+00:10:10,483 --> 00:10:14,466
+backup the database. A couple basic options and this will be
+
+180
+00:10:14,483 --> 00:10:18,466
+the first backup that I have for that particular database.
+
+181
+00:10:18,483 --> 00:10:20,466
+Let's see what I biffed here.
+
+182
+00:10:21,183 --> 00:10:23,166
+Did I add an underscore in the name?
+
+183
+00:10:25,483 --> 00:10:35,466
+>> Nah it was giving a device, file doesn't exist I believe, so...
+
+184
+00:10:36,483 --> 00:10:38,466
+>> So we'll just make this easy.
+
+185
+00:10:41,483 --> 00:10:44,466
+>> Yep just specifying it and that brings up a good point.
+
+186
+00:10:44,483 --> 00:10:48,466
+That you do have the ability to use devices or you can code the
+
+187
+00:10:48,483 --> 00:10:54,466
+actual location in using single quotes around the location.
+
+188
+00:10:54,483 --> 00:10:57,466
+>> Both, that's right. So this time let's go professional and
+
+189
+00:10:57,483 --> 00:10:59,466
+check my code.
+
+190
+00:11:04,483 --> 00:11:06,0
+Well Rich we're getting a little...
+
+191
+00:11:06,483 --> 00:11:07,466
+>> File equals disk equals.
+
+192
+00:11:08,366 --> 00:11:11,466
+>> Oh yeah I have to, see that's a syntax change.
+
+193
+00:11:13,316 --> 00:11:14,466
+With the device I don't need that.
+
+194
+00:11:14,483 --> 00:11:15,466
+>> Right.
+
+195
+00:11:15,483 --> 00:11:19,466
+>> So now let's check syntax and I do appreciate you being my
+
+196
+00:11:19,483 --> 00:11:21,166
+second set of eyes.
+
+197
+00:11:23,483 --> 00:11:27,466
+>> Okay, this is one of those moments that every DBA and every
+
+198
+00:11:28,483 --> 00:11:32,466
+developer gets into. You can stare at the trees for ten minutes
+
+199
+00:11:32,483 --> 00:11:35,466
+and you still can't see the forest.
+
+200
+00:11:38,366 --> 00:11:39,466
+So let's,
+
+201
+00:11:41,483 --> 00:11:47,466
+da, da, da, da, good effort on troubleshooting here, corrections...
+
+202
+00:11:50,483 --> 00:11:53,333
+>> I tell you what how about we just back it up with a gooey.
+
+203
+00:11:53,483 --> 00:11:56,466
+>> There you go and then we'll script it out, how's that.
+
+204
+00:11:57,483 --> 00:12:00,466
+>> So we're going to add in our device here,
+
+205
+00:12:01,483 --> 00:12:04,466
+specifying the location in the gooey,
+
+206
+00:12:07,483 --> 00:12:09,366
+and giving it a file name.
+
+207
+00:12:16,300 --> 00:12:18,233
+Keep talking.
+
+208
+00:12:18,483 --> 00:12:20,466
+>> Alrighty, and now that I have the destination,
+
+209
+00:12:23,483 --> 00:12:24,466
+I have my backup.
+
+210
+00:12:25,483 --> 00:12:26,466
+>> Alright.
+
+211
+00:12:27,250 --> 00:12:30,333
+>> So now I'm going to change some data, backup the log.
+
+212
+00:12:34,233 --> 00:12:34,250
+>> Okay.
+
+213
+00:12:34,333 --> 00:12:35,466
+>> And then
+
+214
+00:12:37,483 --> 00:12:40,466
+I'll have to back that up to a device as well.
+
+215
+00:12:46,483 --> 00:12:49,466
+>> So we're going to go back in and again using a gooey this time
+
+216
+00:12:49,483 --> 00:12:55,466
+we are going to choose a transaction log backup, and specify
+
+217
+00:12:55,483 --> 00:12:59,466
+the destination. We can either put it to the same file as its
+
+218
+00:12:59,483 --> 00:13:03,466
+set here, or we can send it to a different destination.
+
+219
+00:13:03,483 --> 00:13:08,466
+>> Yep, and notice that I'm going to append to the existing backup set.
+
+220
+00:13:08,483 --> 00:13:11,466
+That equates to the T SQL option of with noinit.
+
+221
+00:13:11,483 --> 00:13:12,466
+>> Okay.
+
+222
+00:13:12,483 --> 00:13:15,466
+>> So that means add to the current file.
+
+223
+00:13:18,483 --> 00:13:21,466
+Make some more modifications. So next what I'm going to do,
+
+224
+00:13:23,266 --> 00:13:27,466
+we'll take a look at the backup device that I made, and Rich
+
+225
+00:13:27,483 --> 00:13:29,350
+remind me what was that?
+
+226
+00:13:29,433 --> 00:13:34,466
+>> D:\ backups\hc.bak, does that sound right?
+
+227
+00:13:35,333 --> 00:13:36,466
+>> We'll find out in a second won't we?
+
+228
+00:13:36,483 --> 00:13:38,0
+>> We'll find out in a second.
+
+229
+00:13:39,483 --> 00:13:41,466
+>> When you go off the reservation with backups.
+
+230
+00:13:41,483 --> 00:13:43,166
+>> Yeah, yeah, yeah.
+
+231
+00:13:43,250 --> 00:13:43,466
+>> Unscripted.
+
+232
+00:13:43,483 --> 00:13:46,466
+>> Yeah unscripted, yeah, yeah it happens all the time.
+
+233
+00:13:46,483 --> 00:13:48,466
+>> Or is it from file equals?
+
+234
+00:13:50,450 --> 00:13:50,466
+>> Yep.
+
+235
+00:13:50,483 --> 00:13:52,333
+[Laughter]
+
+236
+00:13:56,483 --> 00:13:57,466
+>> Is it warmer in here now?
+
+237
+00:13:57,483 --> 00:13:59,383
+>> It's getting hot.
+
+238
+00:13:59,450 --> 00:13:59,466
+>> Yeah, yeah, yeah.
+
+239
+00:13:59,483 --> 00:14:02,466
+>> That's what happens when you're under the spotlight and things
+
+240
+00:14:02,483 --> 00:14:04,466
+are going south here.
+
+241
+00:14:04,483 --> 00:14:06,466
+>> I promised I looked at this.
+
+242
+00:14:06,483 --> 00:14:09,466
+>> Right click go to backups, find the device.
+
+243
+00:14:13,483 --> 00:14:15,466
+>> Sorry, right click where?
+
+244
+00:14:15,483 --> 00:14:20,466
+>> So if we go in, let's verify that file location first off.
+
+245
+00:14:20,166 --> 00:14:22,466
+>> Yeah, okay so we have to go to Windows Explorer,
+
+246
+00:14:26,483 --> 00:14:29,466
+no that's of my local machine not my virtual machine.
+
+247
+00:14:29,483 --> 00:14:30,416
+>> There it is.
+
+248
+00:14:33,483 --> 00:14:35,366
+>> Yeah, D drive.
+
+249
+00:14:38,483 --> 00:14:40,466
+Well isn't that curious.
+
+250
+00:14:43,233 --> 00:14:44,466
+>> Huh, we lost the file.
+
+251
+00:14:44,483 --> 00:14:48,166
+>> Well actually the folder didn't exist. I thought I had an
+
+252
+00:14:48,483 --> 00:14:53,466
+automation procedure to make that so, what wasn't made to begin with. Okay.
+
+253
+00:14:53,483 --> 00:14:54,466
+>> Alright.
+
+254
+00:14:54,483 --> 00:14:56,166
+>> Let's try this for recovery now.
+
+255
+00:14:57,483 --> 00:15:00,466
+At least I imagine we're getting some pretty funny comments.
+
+256
+00:15:00,483 --> 00:15:01,466
+[Laughter]
+
+257
+00:15:01,483 --> 00:15:05,466
+>> Okay, so this just goes to show that no matter how long you've
+
+258
+00:15:05,483 --> 00:15:08,466
+been doing things and no matter how many times you've done the
+
+259
+00:15:09,333 --> 00:15:15,466
+same thing. Yeah, it's called brainous interruptus, okay.
+
+260
+00:15:15,200 --> 00:15:16,200
+>> My goodness.
+
+261
+00:15:16,283 --> 00:15:20,350
+>> And we'll give George a second here to kind of get things going.
+
+262
+00:15:20,433 --> 00:15:20,466
+>> Yeah, I think...
+
+263
+00:15:20,483 --> 00:15:24,466
+>> But really and truly what we're talking about here is trying
+
+264
+00:15:24,483 --> 00:15:28,450
+to look at the contents of the backup file to retrieve what's
+
+265
+00:15:28,483 --> 00:15:29,400
+in there, right George?
+
+266
+00:15:29,483 --> 00:15:34,433
+>> Absolutely, so let's say I did use a command or I listed, this
+
+267
+00:15:34,483 --> 00:15:37,166
+was going to be part of the punch line. I had maybe a couple
+
+268
+00:15:37,250 --> 00:15:41,416
+of full backups. I had a couple differential backups intermingled
+
+269
+00:15:41,483 --> 00:15:44,200
+with some logged file backups. Now I need to find out what's
+
+270
+00:15:44,283 --> 00:15:47,466
+in that file, when it was last taken, maybe the range of log
+
+271
+00:15:47,483 --> 00:15:51,433
+sequence numbers to compare that with another log, with another backup.
+
+272
+00:15:51,450 --> 00:15:51,466
+>> Yep.
+
+273
+00:15:51,483 --> 00:15:55,416
+>> All the good juicy information that I would want to find I
+
+274
+00:15:55,483 --> 00:15:59,466
+need to be familiar with these verification statements. So we
+
+275
+00:15:59,483 --> 00:16:03,466
+have restore verify only. I have to give away then to the movie now.
+
+276
+00:16:03,483 --> 00:16:07,200
+And what we'll find out is when I use restore verify only, if
+
+277
+00:16:07,283 --> 00:16:10,466
+there's no problem I get absolutely minimal feedback. It just
+
+278
+00:16:10,483 --> 00:16:12,466
+says the backup is okay.
+
+279
+00:16:13,483 --> 00:16:14,200
+>> Okay.
+
+280
+00:16:14,283 --> 00:16:17,466
+>> So not much there. Now these others if I want to get a look
+
+281
+00:16:18,483 --> 00:16:23,283
+at maybe the subject line of the backup. I have restore header
+
+282
+00:16:23,366 --> 00:16:28,466
+only, I can get facts on the particular items within the backup
+
+283
+00:16:28,483 --> 00:16:33,466
+file, so files within files, file list only, and then also label only.
+
+284
+00:16:33,483 --> 00:16:37,466
+They all give me slightly different overlapping information depending
+
+285
+00:16:37,483 --> 00:16:41,466
+on what I happen to be seeking, so.
+
+286
+00:16:41,200 --> 00:16:41,466
+>> Okay.
+
+287
+00:16:42,483 --> 00:16:45,466
+>> So those are the verification statements that we planned on
+
+288
+00:16:45,483 --> 00:16:46,466
+looking at.
+
+289
+00:16:47,483 --> 00:16:49,350
+Alright, that's good for that.
+
+290
+00:16:49,433 --> 00:16:55,466
+>> Alright and this also does bring up a little bit of a topic.
+
+291
+00:16:55,483 --> 00:16:59,466
+You really, really do want to make sure that as you're going
+
+292
+00:16:59,483 --> 00:17:02,466
+through your backups and setting them up, this is a good place
+
+293
+00:17:02,483 --> 00:17:05,466
+to kind of throw in when backups go bad what do you need to do?
+
+294
+00:17:05,483 --> 00:17:09,466
+You need to test them and make sure that they actually worked.
+
+295
+00:17:09,483 --> 00:17:11,466
+This is a good lesson on that one.
+
+296
+00:17:11,483 --> 00:17:13,266
+>> Very good object lesson indeed.
+
+297
+00:17:13,350 --> 00:17:13,466
+>> Alright.
+
+298
+00:17:13,483 --> 00:17:17,466
+>> For our next topic we're going to take a look at Restores and Recovery.
+
+299
+00:17:17,483 --> 00:17:21,250
+So there's a process that's undertaken by the database engine
+
+300
+00:17:21,333 --> 00:17:23,466
+during a restore. You want to be familiar with that. There are
+
+301
+00:17:23,483 --> 00:17:27,316
+different kinds of restores, actually a pretty good laundry list
+
+302
+00:17:27,400 --> 00:17:30,466
+of available restore options you want to be familiar with those.
+
+303
+00:17:31,483 --> 00:17:33,466
+There are restore statements in the same way that there were
+
+304
+00:17:33,483 --> 00:17:39,266
+backup statements. Then, yes system databases have special consideration,
+
+305
+00:17:39,383 --> 00:17:39,466
+as well.
+
+306
+00:17:40,483 --> 00:17:45,466
+So one of the Charters of the restoration process, and to back
+
+307
+00:17:45,483 --> 00:17:49,466
+up just a little bit, if you have enough instances and databases
+
+308
+00:17:49,483 --> 00:17:50,466
+it's not if...
+
+309
+00:17:50,483 --> 00:17:51,466
+>> It's when.
+
+310
+00:17:51,483 --> 00:17:52,466
+>> It's when.
+
+311
+00:17:52,483 --> 00:17:55,466
+I was telling you the other day about the story that happened
+
+312
+00:17:55,483 --> 00:17:58,466
+to me. Nobody likes paying their auto insurance, right.
+
+313
+00:17:58,483 --> 00:18:02,466
+Nobody likes doing that mundane, you know the kind of work that
+
+314
+00:18:02,483 --> 00:18:06,466
+you're not really congratulated for. But something when my son
+
+315
+00:18:06,483 --> 00:18:10,416
+was two possessed him to scratch all the way around my car.
+
+316
+00:18:10,483 --> 00:18:11,466
+>> Oh dear.
+
+317
+00:18:11,483 --> 00:18:15,466
+>> I kid you not. The auto insurance company decided to process
+
+318
+00:18:15,483 --> 00:18:19,466
+a claim for it. I was grateful for that. But nonetheless, that's
+
+319
+00:18:20,483 --> 00:18:24,466
+when you want it to matter. When you need the recovery part,
+
+320
+00:18:24,483 --> 00:18:28,466
+and so backing up is great but you're going to have to be able
+
+321
+00:18:28,483 --> 00:18:32,466
+to actually perform restore. So we'll see that there's a process
+
+322
+00:18:32,483 --> 00:18:37,466
+involved in the recovery process. Namely, I have to lay all
+
+323
+00:18:37,483 --> 00:18:41,466
+of my backed up data on the file system so the combination of
+
+324
+00:18:41,483 --> 00:18:46,466
+full backups, differential, and log backups. After that we're
+
+325
+00:18:46,483 --> 00:18:48,283
+going to have all of our log data.
+
+326
+00:18:48,483 --> 00:18:52,183
+In the log data for our running database likely there will be
+
+327
+00:18:52,266 --> 00:18:56,466
+transactions that were hardened to the log that were not completed.
+
+328
+00:18:56,216 --> 00:18:57,466
+They need to be peeled out.
+
+329
+00:18:58,483 --> 00:19:02,466
+There are transactions in the log that were hardened but never
+
+330
+00:19:02,200 --> 00:19:05,466
+got applied to the database. They need to be rolled forward.
+
+331
+00:19:05,483 --> 00:19:10,466
+So collectively we refer to this as copy, redo, and undo.
+
+332
+00:19:11,483 --> 00:19:15,466
+Now from a big picture standpoint there are a few general principles.
+
+333
+00:19:15,483 --> 00:19:18,466
+Well first you don't want to make the situation worse.
+
+334
+00:19:20,0 --> 00:19:24,466
+So I guess that's just a general principle. Calm down, you might
+
+335
+00:19:24,483 --> 00:19:27,466
+be found in a stressful situation.
+
+336
+00:19:28,483 --> 00:19:33,466
+There's a situation where my server maybe intact but maybe my
+
+337
+00:19:33,483 --> 00:19:37,466
+data file somehow has a problem. I lost the media or the LUN
+
+338
+00:19:37,483 --> 00:19:41,466
+that it sits on. In that case as long as the SQL Server Service
+
+339
+00:19:41,483 --> 00:19:46,466
+is running you're able to capture all the way to the end of the
+
+340
+00:19:46,483 --> 00:19:49,466
+log, the tail of the log we call it, which means you're going
+
+341
+00:19:49,483 --> 00:19:52,466
+to want to back that up. That's going to be one of your early
+
+342
+00:19:52,483 --> 00:19:55,466
+on procedures in the recovery process.
+
+343
+00:19:56,483 --> 00:20:01,466
+In fact built in to the product, if you don't attempt to backup
+
+344
+00:20:01,483 --> 00:20:05,466
+the tail of the log you will be barked at. It will tell you,
+
+345
+00:20:05,166 --> 00:20:08,466
+you have to override to do any other kind of behavior there.
+
+346
+00:20:08,483 --> 00:20:09,466
+>> Absolutely.
+
+347
+00:20:09,483 --> 00:20:14,216
+>> So now, what would be the normal series of restore events that
+
+348
+00:20:14,300 --> 00:20:16,466
+you'd have? We see these at the bottom of the slide. I'm going
+
+349
+00:20:16,483 --> 00:20:22,466
+to lay down my most recent full, followed by my most recent differential.
+
+350
+00:20:22,483 --> 00:20:23,466
+>> Okay, alright.
+
+351
+00:20:23,483 --> 00:20:26,466
+>> Differentials are cumulative so I only need my most recent
+
+352
+00:20:26,483 --> 00:20:31,466
+one, followed by the series of every logged file since that differential,
+
+353
+00:20:32,416 --> 00:20:34,250
+followed by the tail of the log.
+
+354
+00:20:35,0 --> 00:20:39,466
+>> So you've got all those different actions but what are the
+
+355
+00:20:39,483 --> 00:20:43,466
+different ways that you can apply them? What are the different
+
+356
+00:20:43,483 --> 00:20:46,466
+combinations that you can use? Are there different kinds of restore
+
+357
+00:20:46,483 --> 00:20:48,466
+strategies that are available?
+
+358
+00:20:48,483 --> 00:20:53,466
+>> Yeah, sure. So if I have the simple recovery model, we looked
+
+359
+00:20:53,483 --> 00:20:56,433
+at the fact that I have no log data to restore.
+
+360
+00:20:56,450 --> 00:20:56,466
+>> Okay.
+
+361
+00:20:56,483 --> 00:21:00,466
+>> So I'm only going to be able to restore either just a full
+
+362
+00:21:00,483 --> 00:21:05,0
+backup or full plus most recent differential, if I incorporated
+
+363
+00:21:05,483 --> 00:21:06,433
+that into my strategy.
+
+364
+00:21:06,450 --> 00:21:06,466
+>> Okay.
+
+365
+00:21:06,483 --> 00:21:09,383
+>> I will tell you you're going to want to know the sequence of
+
+366
+00:21:09,466 --> 00:21:14,466
+events in the series of the process, so for the exam well, definitely.
+
+367
+00:21:14,483 --> 00:21:15,433
+>> Alright.
+
+368
+00:21:15,483 --> 00:21:19,466
+>> Now if I have a full recovery I have more to work with.
+
+369
+00:21:19,483 --> 00:21:20,466
+>> That's true.
+
+370
+00:21:20,483 --> 00:21:23,466
+>> So I have the full database that I have to lay down as what
+
+371
+00:21:23,483 --> 00:21:25,466
+we call a baseline restore.
+
+372
+00:21:25,483 --> 00:21:26,466
+>> Okay.
+
+373
+00:21:26,483 --> 00:21:30,0
+>> After that the most recent differential and then a series of
+
+374
+00:21:30,483 --> 00:21:35,466
+logged files all the way till the end of the log, unless I want
+
+375
+00:21:35,483 --> 00:21:38,316
+something fancy that we'll take a look at shortly.
+
+376
+00:21:38,400 --> 00:21:38,466
+>> Alright.
+
+377
+00:21:39,483 --> 00:21:43,466
+>> I might have to restore a system database, so a system database
+
+378
+00:21:43,483 --> 00:21:48,466
+restores, and then some fancier or esoteric kinds of restores.
+
+379
+00:21:48,483 --> 00:21:52,233
+If I have an advanced database design I might need to restore
+
+380
+00:21:52,316 --> 00:21:56,466
+just a single file or all the files in a particular file group.
+
+381
+00:21:56,483 --> 00:22:00,466
+Now an ultimate fancy, if my application is already architected
+
+382
+00:22:00,483 --> 00:22:01,433
+for this.
+
+383
+00:22:01,450 --> 00:22:01,466
+>> Alright.
+
+384
+00:22:01,483 --> 00:22:06,466
+>> Is that I can perform an online restore where I bring the database
+
+385
+00:22:06,483 --> 00:22:10,266
+online file group by file group.
+
+386
+00:22:10,350 --> 00:22:15,350
+>> Now wait a minute. If I hear the word online I'm thinking it's
+
+387
+00:22:15,433 --> 00:22:17,383
+available for people to use?
+
+388
+00:22:17,466 --> 00:22:20,466
+>> That's right it's available in pieces on a file group by file
+
+389
+00:22:20,483 --> 00:22:22,466
+group basis.
+
+390
+00:22:22,183 --> 00:22:25,466
+>> So you would have had to have backed it up file group by file
+
+391
+00:22:25,483 --> 00:22:27,466
+group to start with, right?
+
+392
+00:22:27,483 --> 00:22:31,466
+>> It's very strange, I can actually backup the database in full
+
+393
+00:22:31,483 --> 00:22:35,466
+and still do a file based restore. I wouldn't usually do it
+
+394
+00:22:35,483 --> 00:22:40,383
+that way. I would've probably performed a file by file backup,
+
+395
+00:22:40,466 --> 00:22:44,466
+but I can actually do a per file restore from a full backup.
+
+396
+00:22:44,183 --> 00:22:45,466
+I've don't this before.
+
+397
+00:22:45,483 --> 00:22:46,466
+>> Awesome, awesome.
+
+398
+00:22:46,483 --> 00:22:50,200
+>> We also have a piece meal restore, which is a smaller more
+
+399
+00:22:50,283 --> 00:22:54,466
+granular kind of restore. Then per page if I happen to have page
+
+400
+00:22:54,483 --> 00:22:57,466
+corruptions, that's an Enterprise edition feature.
+
+401
+00:22:57,483 --> 00:23:03,466
+>> Wow, so just like with backups there are options on the restore
+
+402
+00:23:03,483 --> 00:23:05,466
+statement as well, yes?
+
+403
+00:23:05,216 --> 00:23:07,466
+>> Yep, so I not only have backup statements, of course I have
+
+404
+00:23:08,333 --> 00:23:11,316
+restore statements. I have restore database and I also restore
+
+405
+00:23:11,400 --> 00:23:15,466
+log, each with typical options. I've listed some of those here.
+
+406
+00:23:15,483 --> 00:23:17,466
+These are ones you'll definitely want to be familiar with.
+
+407
+00:23:17,483 --> 00:23:22,466
+In particular when you take a look at restore a log, notice that
+
+408
+00:23:22,483 --> 00:23:27,466
+I can restore all the way to the end of the log, but I can also
+
+409
+00:23:27,483 --> 00:23:31,466
+stop short of that particular point in time, if I want to.
+
+410
+00:23:31,483 --> 00:23:35,166
+>> Does that take care of those so called user induced errors?
+
+411
+00:23:35,483 --> 00:23:42,400
+>> Yes, yep so as long as I have an idea of when the "U-Oh" occurred
+
+412
+00:23:42,483 --> 00:23:44,466
+then I can pick a point in time.
+
+413
+00:23:44,483 --> 00:23:45,466
+>> Awesome.
+
+414
+00:23:45,483 --> 00:23:48,466
+>> A little caveat though, keep in mind the clock time on a system
+
+415
+00:23:49,483 --> 00:23:53,466
+versus the watch that somebody's wearing, versus real time.
+
+416
+00:23:53,483 --> 00:23:57,466
+Those might not perfectly correlate. So if you think you're
+
+417
+00:23:57,483 --> 00:24:00,466
+being very precise you just might want to be careful about that.
+
+418
+00:24:00,483 --> 00:24:02,466
+>> Good tip, good tip.
+
+419
+00:24:03,283 --> 00:24:06,466
+So what about the system databases? Do we have things that we
+
+420
+00:24:06,483 --> 00:24:09,466
+need to be worried about there? Are there different approaches
+
+421
+00:24:09,483 --> 00:24:10,350
+there as well?
+
+422
+00:24:10,433 --> 00:24:13,466
+>> Yep, the system databases require some special treatment.
+
+423
+00:24:13,483 --> 00:24:17,466
+So in the worse case, let's say master is corrupt.
+
+424
+00:24:17,483 --> 00:24:18,466
+>> Okay.
+
+425
+00:24:18,216 --> 00:24:21,466
+>> I'm not going to have a running SQL Server at that time.
+
+426
+00:24:21,483 --> 00:24:22,466
+You'll know it.
+
+427
+00:24:22,483 --> 00:24:25,433
+>> Yeah you're going to go and start SQL and it's going to yell
+
+428
+00:24:25,450 --> 00:24:25,466
+at you.
+
+429
+00:24:25,483 --> 00:24:29,333
+>> Yeah you're going to know it. So in fact what I need is a,
+
+430
+00:24:29,483 --> 00:24:34,383
+basically a factor fresh puny little master, just enough so that
+
+431
+00:24:34,466 --> 00:24:37,466
+the SQL Server Service will start. After it will start then
+
+432
+00:24:37,483 --> 00:24:42,466
+I can restore the, of course I have a backup of master somewhere.
+
+433
+00:24:42,166 --> 00:24:43,466
+>> One would certainly hope so.
+
+434
+00:24:43,483 --> 00:24:47,466
+>> So I restore master and then the rest of the planets will align.
+
+435
+00:24:47,483 --> 00:24:48,466
+[Laughter]
+
+436
+00:24:48,483 --> 00:24:52,466
+Alright, now that's when master is corrupt. When master is not
+
+437
+00:24:52,483 --> 00:24:55,466
+corrupt then I just need to restore right over the top of it.
+
+438
+00:24:55,483 --> 00:24:59,466
+Keep in mind that master is aware of all the instance level settings,
+
+439
+00:24:59,483 --> 00:25:03,333
+instance level security. It's aware of every database that's
+
+440
+00:25:03,416 --> 00:25:07,466
+on the instance, every data file, every database option that's
+
+441
+00:25:07,483 --> 00:25:10,466
+set on every database. So it's particularly important.
+
+442
+00:25:10,483 --> 00:25:14,466
+>> So minimally you should probably backup master whenever you
+
+443
+00:25:14,483 --> 00:25:18,466
+do anything major for sure, and on a regular basis anyway.
+
+444
+00:25:18,483 --> 00:25:22,300
+>> Yeah, I have, I agree with both of those. I would have a routine
+
+445
+00:25:22,383 --> 00:25:25,466
+process that would backup my system databases at least daily
+
+446
+00:25:25,483 --> 00:25:29,466
+so I have at least that. But then I'd want to have a knee jerk
+
+447
+00:25:29,483 --> 00:25:34,266
+reaction any time I make an instance level change, I would have
+
+448
+00:25:34,350 --> 00:25:38,466
+a job that I could run Ad-Hoc. So related to our previous module
+
+449
+00:25:38,483 --> 00:25:41,466
+and that would backup the system databases and put that in some
+
+450
+00:25:41,483 --> 00:25:42,466
+handy place.
+
+451
+00:25:42,483 --> 00:25:47,250
+>> What about Model MSDB, TempDB the other system databases, are
+
+452
+00:25:47,333 --> 00:25:49,316
+there any issues there that we should be aware of?
+
+453
+00:25:49,400 --> 00:25:52,466
+>> Sure if model is corrupt then SQL Server again will not start.
+
+454
+00:25:53,483 --> 00:25:56,466
+So I would have to restore model from a backup, but as long as
+
+455
+00:25:57,483 --> 00:25:59,466
+master or, I
+
+456
+00:26:02,483 --> 00:26:03,466
+lost my train of thought there.
+
+457
+00:26:05,166 --> 00:26:08,466
+>> That would be the derailment, it happens.
+
+458
+00:26:09,450 --> 00:26:09,466
+>> Yeah there we go.
+
+459
+00:26:09,483 --> 00:26:13,433
+>> So with model then it's just like we're covering a user database,
+
+460
+00:26:13,450 --> 00:26:13,466
+is model...
+
+461
+00:26:13,483 --> 00:26:14,283
+>> Yep, model...
+
+462
+00:26:14,366 --> 00:26:15,466
+>> Is that what you were trying to say?
+
+463
+00:26:15,483 --> 00:26:16,466
+>> And recovering
+
+464
+00:26:18,483 --> 00:26:21,466
+MSDB, if it fails then the Agent Service will not start. So I'm
+
+465
+00:26:21,483 --> 00:26:25,466
+going to have to recover that in order to start the Agent Service.
+
+466
+00:26:25,483 --> 00:26:28,350
+>> And TempDB, what a about TempDB is there anything there.
+
+467
+00:26:28,433 --> 00:26:30,250
+>> No there's nothing there, why not?
+
+468
+00:26:30,333 --> 00:26:32,466
+>> Well, I don't know you tell me.
+
+469
+00:26:32,483 --> 00:26:36,450
+>> The TempDB is rebuilt every single time that the instance is started.
+
+470
+00:26:36,483 --> 00:26:39,466
+So you'll never incorporate that as part of your backup strategy.
+
+471
+00:26:40,483 --> 00:26:43,466
+>> Alright, so can we go take a look at the restores or?
+
+472
+00:26:43,483 --> 00:26:44,466
+>> Yeah, let's take a look.
+
+473
+00:26:46,483 --> 00:26:50,466
+>> We venture off into demo land once again.
+
+474
+00:26:51,333 --> 00:26:53,333
+>> Let's see what do we have up for this?
+
+475
+00:26:54,483 --> 00:26:56,466
+>> Okay, let's see what happens.
+
+476
+00:27:00,216 --> 00:27:03,466
+>> So let me make sure I have a folder that will accommodate our
+
+477
+00:27:03,483 --> 00:27:04,350
+backups first.
+
+478
+00:27:05,283 --> 00:27:05,466
+>> Alrighty.
+
+479
+00:27:05,483 --> 00:27:08,466
+>> Let's see how this goes, Rich. We'll be up for a little bit
+
+480
+00:27:08,483 --> 00:27:10,466
+of excitement, make a couple of devices.
+
+481
+00:27:10,483 --> 00:27:11,466
+[Laughter]
+
+482
+00:27:12,333 --> 00:27:14,466
+>> You always wonder if the next one's going to break the trend.
+
+483
+00:27:14,483 --> 00:27:16,200
+>> Yeah, alright.
+
+484
+00:27:16,483 --> 00:27:21,466
+So I'm going to make a database, make some stuff in the database.
+
+485
+00:27:22,166 --> 00:27:22,466
+>> Okay.
+
+486
+00:27:22,483 --> 00:27:27,466
+>> Perform some changes, so I'm just going to, so notice create
+
+487
+00:27:27,483 --> 00:27:29,466
+a bunch of columns. They have some default values.
+
+488
+00:27:29,483 --> 00:27:31,466
+>> Bunch of tables and back it up, yep.
+
+489
+00:27:32,483 --> 00:27:36,466
+>> So next backup my database in full. I'm going to run this
+
+490
+00:27:36,483 --> 00:27:39,466
+one alone before I run the rest of them. You know that's a whole
+
+491
+00:27:39,483 --> 00:27:40,466
+lot better isn't it?
+
+492
+00:27:40,483 --> 00:27:44,466
+>> It, I like seeing that backup statement work.
+
+493
+00:27:44,216 --> 00:27:48,466
+>> Yeah, so then run some modifications, backup the log, and then
+
+494
+00:27:48,483 --> 00:27:51,316
+I'm going to fast forward through a bunch of the rest of them.
+
+495
+00:27:51,400 --> 00:27:55,200
+>> So basically to sum it up, we're making changes to the database,
+
+496
+00:27:55,283 --> 00:27:59,466
+adding data, modifying data, capturing the work through the backup
+
+497
+00:27:59,483 --> 00:28:00,466
+log statements.
+
+498
+00:28:00,483 --> 00:28:04,466
+>> That's right, so more changes, backup the log, more changes,
+
+499
+00:28:04,200 --> 00:28:06,466
+backup the log, lots of changes.
+
+500
+00:28:07,166 --> 00:28:07,466
+>> Okay.
+
+501
+00:28:07,483 --> 00:28:10,466
+>> Then we'll backup the database, notice with differential.
+
+502
+00:28:10,483 --> 00:28:15,466
+>> Okay, so the backup log's capturing the work, the differential
+
+503
+00:28:15,483 --> 00:28:17,466
+is capturing the data that's changed.
+
+504
+00:28:17,483 --> 00:28:21,466
+>> In fact with the differential backup, notice the option I used
+
+505
+00:28:21,483 --> 00:28:22,466
+to select that.
+
+506
+00:28:23,483 --> 00:28:29,466
+It only marks the extense in the data file that I have any particular change.
+
+507
+00:28:29,483 --> 00:28:31,433
+This is kind of a play on statistics.
+
+508
+00:28:31,450 --> 00:28:31,466
+>> Okay.
+
+509
+00:28:31,483 --> 00:28:36,466
+>> What I mean by that is within a database there are often hot spots.
+
+510
+00:28:36,483 --> 00:28:41,466
+So those tables that get the most action that might be the biggest.
+
+511
+00:28:41,483 --> 00:28:47,466
+So statistically if only those extense that have changes occur
+
+512
+00:28:47,483 --> 00:28:51,300
+within the differential backup then that's hopefully not going
+
+513
+00:28:51,383 --> 00:28:54,466
+to be anywhere near as much data compared to a full backup.
+
+514
+00:28:54,483 --> 00:28:57,466
+>> So differentials typically you would use when you've got a
+
+515
+00:28:57,483 --> 00:29:02,350
+small percentage of the database that's having the greatest percentage
+
+516
+00:29:02,433 --> 00:29:03,466
+of changes done to it?
+
+517
+00:29:03,483 --> 00:29:04,433
+>> A lot of action.
+
+518
+00:29:04,450 --> 00:29:04,466
+>> Okay.
+
+519
+00:29:04,483 --> 00:29:08,466
+>> Now another advantage with the differential is that if I have
+
+520
+00:29:08,483 --> 00:29:12,466
+aggressive log backups. Let's say every ten minutes, every 15,
+
+521
+00:29:12,483 --> 00:29:16,466
+every 30, something like that. Picture maybe the requirement
+
+522
+00:29:17,483 --> 00:29:20,466
+to restore from ten in the morning all the way to six pm.
+
+523
+00:29:20,483 --> 00:29:24,466
+That's an awful lot of log restores in that circumstance. I have
+
+524
+00:29:24,483 --> 00:29:27,466
+a general rule of thumb. As you know I often do.
+
+525
+00:29:27,483 --> 00:29:28,466
+>> Yep.
+
+526
+00:29:28,483 --> 00:29:33,466
+>> Whatever reduce the amount of moving parts, keep low the number
+
+527
+00:29:33,483 --> 00:29:36,466
+of moving parts. What I mean by that is the number of restore
+
+528
+00:29:36,483 --> 00:29:38,466
+operations you want to minimize.
+
+529
+00:29:39,333 --> 00:29:39,466
+>> Absolutely.
+
+530
+00:29:39,483 --> 00:29:43,466
+>> Okay, so, what did I just do there? So now I have some more
+
+531
+00:29:43,483 --> 00:29:46,466
+inserts backup log. Let me just go to the bottom of this.
+
+532
+00:29:46,483 --> 00:29:53,466
+Another differential, more log backups, and then we have to get
+
+533
+00:29:53,483 --> 00:29:54,466
+to the exciting conclusion.
+
+534
+00:29:56,483 --> 00:29:59,383
+>> And here we come.
+
+535
+00:30:00,166 --> 00:30:00,466
+>> Alright.
+
+536
+00:30:03,183 --> 00:30:05,283
+>> So can we take a look
+
+537
+00:30:07,483 --> 00:30:09,466
+at the contents of the device?
+
+538
+00:30:14,483 --> 00:30:17,466
+>> Right, so now I can go to media contents and there's actually
+
+539
+00:30:17,166 --> 00:30:22,383
+stuff there. I would probably want to expand these, but lots
+
+540
+00:30:22,466 --> 00:30:26,466
+of useful information. Now this is a pretty version of what I
+
+541
+00:30:26,483 --> 00:30:30,466
+could also get my queuing tables in MSDB, so keep that in mind.
+
+542
+00:30:30,483 --> 00:30:31,366
+>> Okay.
+
+543
+00:30:32,483 --> 00:30:37,250
+>> Alright, this part I'm going to use for the restore stuff.
+
+544
+00:30:37,333 --> 00:30:40,266
+So that concludes the part on backing up.
+
+545
+00:30:40,350 --> 00:30:41,466
+>> Include your recovery and restore.
+
+546
+00:30:42,400 --> 00:30:43,300
+>> So did I misspeak?
+
+547
+00:30:43,383 --> 00:30:46,466
+>> So take a look at the restore part of it now.
+
+548
+00:30:46,233 --> 00:30:46,466
+>> Yep.
+
+549
+00:30:46,483 --> 00:30:50,466
+>> So keep right on trucking there with it George.
+
+550
+00:30:50,483 --> 00:30:51,466
+>> Oh, you know what
+
+551
+00:30:52,483 --> 00:30:54,466
+I'm supposed to show that now.
+
+552
+00:30:54,483 --> 00:30:57,466
+>> Yep, we got the backup working finally. So let's finish up
+
+553
+00:30:57,483 --> 00:30:58,466
+with the restore now.
+
+554
+00:30:58,483 --> 00:31:03,466
+>> Okay, so I want you to observe if I refresh the databases node
+
+555
+00:31:03,483 --> 00:31:06,466
+and look at the manufacturing database. It looks like any old
+
+556
+00:31:06,483 --> 00:31:08,433
+regular database.
+
+557
+00:31:08,450 --> 00:31:08,466
+>> Okay.
+
+558
+00:31:08,483 --> 00:31:12,466
+>> So let's say something comes to my attention, maybe somebody
+
+559
+00:31:12,483 --> 00:31:16,466
+can't query that database, within that database. I realize I
+
+560
+00:31:16,483 --> 00:31:17,433
+had a media failure.
+
+561
+00:31:17,450 --> 00:31:17,466
+>> Alright.
+
+562
+00:31:17,483 --> 00:31:21,466
+>> So now I can go ahead and backup the tail of the log.
+
+563
+00:31:22,483 --> 00:31:26,466
+>> Capturing everything that happens since the last backup.
+
+564
+00:31:26,183 --> 00:31:29,466
+>> Alright and it would probably help if I actually ran all my
+
+565
+00:31:29,483 --> 00:31:31,183
+code and used master.
+
+566
+00:31:31,266 --> 00:31:31,466
+>> There we go.
+
+567
+00:31:32,483 --> 00:31:37,466
+>> Alrighty and after a refresh I'd like you to make an observation.
+
+568
+00:31:38,483 --> 00:31:42,466
+Notice this has kicked the database in the side and immediately
+
+569
+00:31:42,483 --> 00:31:45,166
+placed it into a restoring state.
+
+570
+00:31:45,250 --> 00:31:45,466
+>> Okay.
+
+571
+00:31:45,483 --> 00:31:48,466
+>> I want you to see something wonderful here. Notice if I were
+
+572
+00:31:48,483 --> 00:31:51,466
+to use the gooey and go to do a restore.
+
+573
+00:31:54,183 --> 00:31:57,466
+It shows all of the elements that I would need to bring it up
+
+574
+00:31:57,483 --> 00:32:01,466
+to the moment of, you know all the way to the end of the log.
+
+575
+00:32:01,233 --> 00:32:04,466
+>> So it does all of the telling in what needs to be restored
+
+576
+00:32:04,483 --> 00:32:06,466
+based on the history tables.
+
+577
+00:32:06,483 --> 00:32:07,466
+>> In fact it shows
+
+578
+00:32:09,466 --> 00:32:13,466
+that I need the most recent full, most recent differential, not
+
+579
+00:32:13,483 --> 00:32:14,466
+all the differentials.
+
+580
+00:32:14,483 --> 00:32:15,166
+>> Yep.
+
+581
+00:32:15,483 --> 00:32:19,466
+>> Then of course all the logs that I'd need. Now as bonus round
+
+582
+00:32:19,483 --> 00:32:21,466
+notice if I go to, let's see
+
+583
+00:32:24,483 --> 00:32:28,466
+I'm missing some of the user interface here. I'm looking for
+
+584
+00:32:28,216 --> 00:32:29,466
+the point in time recovery.
+
+585
+00:32:30,483 --> 00:32:31,466
+>> Main page.
+
+586
+00:32:32,483 --> 00:32:35,466
+Do, da, do, da, do,
+
+587
+00:32:37,483 --> 00:32:38,466
+and that's going to be...
+
+588
+00:32:38,483 --> 00:32:41,466
+>> Oh, you know what that might be.
+
+589
+00:32:47,483 --> 00:32:48,166
+Let's see.
+
+590
+00:32:48,250 --> 00:32:48,466
+>> Yep.
+
+591
+00:32:48,483 --> 00:32:50,366
+>> Oh, timeline, duh.
+
+592
+00:32:50,450 --> 00:32:51,466
+>> Right there in front of our nose.
+
+593
+00:32:52,333 --> 00:32:55,466
+>> Come on, come on. Alright so from timeline here notice I have
+
+594
+00:32:55,483 --> 00:33:00,466
+the ability to restore not all the way to the end of the log file.
+
+595
+00:33:00,166 --> 00:33:01,433
+That was the punch line.
+
+596
+00:33:01,483 --> 00:33:02,433
+>> There you go.
+
+597
+00:33:02,483 --> 00:33:05,466
+>> So we have a slider, we can use a specific date and time.
+
+598
+00:33:06,483 --> 00:33:09,466
+In fact you can use a date time value to go to milliseconds if
+
+599
+00:33:10,333 --> 00:33:13,466
+you had that degree of detail.
+
+600
+00:33:14,483 --> 00:33:18,466
+Right, so that wraps up the backup and restoration portion.
+
+601
+00:33:18,483 --> 00:33:22,466
+>> Alright, so the next topic we're talking about here comes up
+
+602
+00:33:22,483 --> 00:33:26,466
+when you have a situation where you want to move a database from
+
+603
+00:33:26,483 --> 00:33:30,466
+one instance to another, or something along those lines.
+
+604
+00:33:30,483 --> 00:33:34,383
+>> Yeah I have a dynamic environment, especially if I have a pile
+
+605
+00:33:34,466 --> 00:33:38,350
+of SQL Servers I might need to move a database to balance load.
+
+606
+00:33:38,433 --> 00:33:42,466
+That's one possible reason. I might want to put a copy of a database
+
+607
+00:33:42,483 --> 00:33:44,466
+somewhere else, that's a possibility.
+
+608
+00:33:44,483 --> 00:33:47,466
+From a work load standpoint I might want to balance the work
+
+609
+00:33:47,483 --> 00:33:52,466
+load on a particular LUN and just move one data file, or move
+
+610
+00:33:52,483 --> 00:33:57,466
+a log file. Maybe I add storage and I now want to move a file
+
+611
+00:33:57,216 --> 00:34:00,466
+up to that. So that's what we'll take a look at next Moving Databases
+
+612
+00:34:01,483 --> 00:34:02,466
+and Database Files.
+
+613
+00:34:03,483 --> 00:34:06,466
+We'll find there's a division here once again between normal
+
+614
+00:34:06,483 --> 00:34:09,466
+user databases and system databases.
+
+615
+00:34:09,483 --> 00:34:13,200
+>> Ah, you got to treat the, some databases special. What a great idea.
+
+616
+00:34:13,216 --> 00:34:13,466
+[Laughter]
+
+617
+00:34:13,483 --> 00:34:17,466
+>> Alright, so moving and copying databases to other instances,
+
+618
+00:34:17,483 --> 00:34:21,200
+multiple techniques, no surprise. We've seen this all a long
+
+619
+00:34:21,283 --> 00:34:22,433
+in the SQL Server product.
+
+620
+00:34:22,450 --> 00:34:22,466
+>> Yep.
+
+621
+00:34:22,483 --> 00:34:25,466
+>> You can use Management Studio when in doubt. I'm going to
+
+622
+00:34:25,483 --> 00:34:30,216
+right click, so I can right click on a database and perform a
+
+623
+00:34:30,300 --> 00:34:34,466
+process called detaching it. Now to compare something, if I were
+
+624
+00:34:34,483 --> 00:34:37,466
+to right click on a database and delete it...
+
+625
+00:34:37,483 --> 00:34:39,466
+>> Yeah that would scare the heck out of me.
+
+626
+00:34:39,483 --> 00:34:41,466
+>> The files are gone,
+
+627
+00:34:43,166 --> 00:34:44,466
+completely gone.
+
+628
+00:34:44,483 --> 00:34:46,466
+>> Makes our last topic kind of important.
+
+629
+00:34:46,483 --> 00:34:50,466
+>> Kind of important. If I merely detach a database the files
+
+630
+00:34:50,483 --> 00:34:54,466
+are still in the file system, but the SQL Server instance no
+
+631
+00:34:54,483 --> 00:34:58,466
+longer has any claws or any hooks on them. In fact I could rename
+
+632
+00:34:58,483 --> 00:35:01,466
+them, delete them, do whatever I want. They're just dumb files
+
+633
+00:35:01,483 --> 00:35:06,466
+in the file system then. Whereas something, the data files when
+
+634
+00:35:06,483 --> 00:35:09,466
+the database is attached I cannot touch them, I cannot rename
+
+635
+00:35:10,483 --> 00:35:14,466
+them, move them, nothing, which is why this procedure's relevant.
+
+636
+00:35:14,483 --> 00:35:18,466
+So after I detach I then would move one or more of the files.
+
+637
+00:35:18,483 --> 00:35:25,466
+Then I would attach, that's the general procedure name in contrast
+
+638
+00:35:25,483 --> 00:35:31,466
+to using Management Studio, SSMS. I can use SP detach DB and
+
+639
+00:35:31,483 --> 00:35:35,466
+I could also move or copy databases using SQL Server integration services.
+
+640
+00:35:35,483 --> 00:35:37,400
+There are specific tasks for that.
+
+641
+00:35:37,450 --> 00:35:37,466
+>> Yep.
+
+642
+00:35:37,483 --> 00:35:40,333
+>> But I can't talk too much about that. That's your thunder
+
+643
+00:35:40,450 --> 00:35:40,466
+for Friday.
+
+644
+00:35:40,483 --> 00:35:42,466
+>> Oh, do you mean you want people to come back.
+
+645
+00:35:42,483 --> 00:35:43,466
+>> Oh yeah.
+
+646
+00:35:43,483 --> 00:35:44,216
+>> That would be cool.
+
+647
+00:35:44,300 --> 00:35:47,433
+>> Yeah I got to dangle some hooks or some carrots out there for that.
+
+648
+00:35:47,450 --> 00:35:47,466
+>> There we go.
+
+649
+00:35:47,483 --> 00:35:49,466
+>> There's a lot of fun stuff there on Friday. I'm looking forward
+
+650
+00:35:49,483 --> 00:35:50,466
+to Friday.
+
+651
+00:35:50,483 --> 00:35:58,183
+>> So as a newer procedure using the SP attach DB, which has existed
+
+652
+00:35:58,266 --> 00:36:02,466
+for a good long time, is being discouraged and now create database
+
+653
+00:36:02,483 --> 00:36:07,466
+with some additional syntax elements and the for attach clause
+
+654
+00:36:08,483 --> 00:36:10,466
+is now being promoted as the way to attach.
+
+655
+00:36:10,483 --> 00:36:11,466
+>> Awesome.
+
+656
+00:36:11,483 --> 00:36:17,466
+>> As with a number of file maintenance and file manipulation operations.
+
+657
+00:36:17,483 --> 00:36:20,466
+I have to use the logical filenames. But what if I don't know
+
+658
+00:36:20,483 --> 00:36:21,383
+what they are?
+
+659
+00:36:22,483 --> 00:36:24,333
+>> Let me guess, you can query.
+
+660
+00:36:24,450 --> 00:36:24,466
+>> Yeah.
+
+661
+00:36:24,483 --> 00:36:25,283
+>> Catalog view.
+
+662
+00:36:25,366 --> 00:36:29,216
+>> Of course, I've catalog views that will reveal everything like that.
+
+663
+00:36:29,300 --> 00:36:33,466
+So let's move on. Take a look at relocating database files within
+
+664
+00:36:33,483 --> 00:36:37,466
+a single instance, so if I want to move a database from one instance
+
+665
+00:36:37,483 --> 00:36:41,466
+to another. I'll have to detach and then I can attach, but what
+
+666
+00:36:41,483 --> 00:36:45,466
+if I just want to relocate one file within an instance?
+
+667
+00:36:45,483 --> 00:36:49,466
+Well I'd use alter database for that and no surprise it will
+
+668
+00:36:49,483 --> 00:36:53,466
+require the use of logical filenames, so.
+
+669
+00:36:53,216 --> 00:36:56,433
+>> Okay and once you've done, you have to actually move the files
+
+670
+00:36:56,450 --> 00:36:56,466
+to so.
+
+671
+00:36:56,483 --> 00:36:59,466
+>> Well yeah and then but I have to move the files in the file
+
+672
+00:36:59,483 --> 00:37:00,466
+system endpoint properly.
+
+673
+00:37:00,483 --> 00:37:03,466
+>> That makes sense. So what about the system databases?
+
+674
+00:37:03,483 --> 00:37:08,466
+>> Yep they need some special treatment. In particular a master,
+
+675
+00:37:08,483 --> 00:37:12,466
+if I for whatever reason that I would decide to move it I'm going
+
+676
+00:37:12,483 --> 00:37:15,400
+to have to use a special startup option. So I'll have to go
+
+677
+00:37:15,483 --> 00:37:18,466
+into SQL Server Configuration Manager. You can look of up the
+
+678
+00:37:18,483 --> 00:37:21,416
+gory details, as long as you know you need a special switch,
+
+679
+00:37:21,483 --> 00:37:22,466
+is it minus M?
+
+680
+00:37:22,483 --> 00:37:23,183
+>> Yeah.
+
+681
+00:37:23,483 --> 00:37:27,466
+>> I think it's minus M, but whatever some startup switch.
+
+682
+00:37:27,483 --> 00:37:31,466
+Then you'll restart the SQL Server Service. Other system databases
+
+683
+00:37:31,483 --> 00:37:35,466
+they'll also require altered database, but you'll have to restart
+
+684
+00:37:35,483 --> 00:37:37,466
+the SQL Server Service.
+
+685
+00:37:38,483 --> 00:37:41,466
+So with that let's take a look at moving a user database.
+
+686
+00:37:42,483 --> 00:37:46,216
+>> Alright, so are we going to move it between instances this
+
+687
+00:37:46,300 --> 00:37:47,466
+time, George?
+
+688
+00:37:47,483 --> 00:37:50,283
+>> Do you know what, I don't even remember off the top of my head.
+
+689
+00:37:50,366 --> 00:37:52,466
+I have something squared away.
+
+690
+00:37:54,483 --> 00:37:55,250
+>> Aright, so.
+
+691
+00:37:55,333 --> 00:37:59,466
+>> So first I'm going to make a database in the default instance.
+
+692
+00:38:00,483 --> 00:38:03,466
+So the default instance I've connected to down here. I'm going
+
+693
+00:38:03,483 --> 00:38:05,466
+to create a database called
+
+694
+00:38:06,483 --> 00:38:08,466
+DB2B moved.
+
+695
+00:38:10,300 --> 00:38:11,283
+>> I love your naming.
+
+696
+00:38:11,366 --> 00:38:11,466
+>> Don't you.
+
+697
+00:38:11,483 --> 00:38:13,466
+>> It actually tells me what you're going to do with it.
+
+698
+00:38:15,483 --> 00:38:18,466
+>> Alright so we happen to see this having been created in the
+
+699
+00:38:18,483 --> 00:38:23,333
+graphical user interface. I see it here right now. So from here
+
+700
+00:38:24,200 --> 00:38:26,466
+I can go ahead and detach it.
+
+701
+00:38:27,483 --> 00:38:30,466
+Now I suppose it would be a little more dramatic if I tried to
+
+702
+00:38:30,483 --> 00:38:34,316
+rename those files, drop them while the database is attached.
+
+703
+00:38:34,333 --> 00:38:34,450
+[Laughter]
+
+704
+00:38:34,400 --> 00:38:37,466
+It's not going to work. But for right now I'll click on okay
+
+705
+00:38:37,483 --> 00:38:41,466
+and notice this is no longer part of the default instance.
+
+706
+00:38:41,483 --> 00:38:44,466
+>> Now it didn't delete the files it just disconnected it from
+
+707
+00:38:44,483 --> 00:38:45,466
+the instance.
+
+708
+00:38:45,483 --> 00:38:49,466
+>> In fact we're going to see this because now what I want to
+
+709
+00:38:49,483 --> 00:38:52,466
+do is attach that database to another instance, whether this
+
+710
+00:38:52,483 --> 00:38:56,466
+is halfway around the planet or you know another machine in the
+
+711
+00:38:56,216 --> 00:38:57,466
+rack, that's immaterial.
+
+712
+00:38:57,483 --> 00:38:58,466
+>> Okay.
+
+713
+00:38:58,166 --> 00:39:01,466
+>> The process is the same. So let me go to Windows Explorer and
+
+714
+00:39:01,483 --> 00:39:03,466
+I have to move a couple of things.
+
+715
+00:39:04,450 --> 00:39:04,466
+>> Alrighty.
+
+716
+00:39:04,483 --> 00:39:06,466
+>> Let me get my task bar here.
+
+717
+00:39:07,483 --> 00:39:13,466
+We'll find in the default instance here's my database to be moved.
+
+718
+00:39:13,483 --> 00:39:14,466
+The other instance
+
+719
+00:39:16,483 --> 00:39:20,466
+is in the marketing folder. Now that's my data file. Next up
+
+720
+00:39:20,483 --> 00:39:21,466
+I'm going to have to go to...
+
+721
+00:39:24,166 --> 00:39:26,466
+>> The log file, L-L-L, in the L drive.
+
+722
+00:39:26,483 --> 00:39:27,466
+>> There we go,
+
+723
+00:39:28,483 --> 00:39:35,466
+L and we'll take my log file and we'll move it to marketing,
+
+724
+00:39:35,233 --> 00:39:41,466
+as well. Alright, next up let's go to the non-default instance,
+
+725
+00:39:41,483 --> 00:39:44,466
+right click on databases, and let's attach.
+
+726
+00:39:45,200 --> 00:39:49,466
+Let's point to our new file location, DB2B moved.
+
+727
+00:39:51,483 --> 00:39:55,466
+Observe with the log file it thinks well it's actually thumb
+
+728
+00:39:55,483 --> 00:40:00,433
+printed in the file where it thinks it's suppose to be, and guess what?
+
+729
+00:40:00,483 --> 00:40:01,466
+>> It's not there anymore.
+
+730
+00:40:01,483 --> 00:40:02,466
+>> Its cheese was moved.
+
+731
+00:40:02,483 --> 00:40:03,200
+>> Alright.
+
+732
+00:40:03,283 --> 00:40:05,400
+>> So we have to point appropriately.
+
+733
+00:40:08,483 --> 00:40:14,466
+So now we have to go to the log file location and here's DB2B
+
+734
+00:40:14,483 --> 00:40:19,166
+moved, click on okay, and there it is.
+
+735
+00:40:19,250 --> 00:40:22,466
+>> And we are back in business, very cool, very cool indeed.
+
+736
+00:40:22,483 --> 00:40:24,466
+>> Let's see if I had any other fun, let's
+
+737
+00:40:28,483 --> 00:40:30,0
+call that good for now.
+
+738
+00:40:30,166 --> 00:40:31,166
+[Laughter]
+
+739
+00:40:31,483 --> 00:40:35,466
+>> Alright, so our next topic George. We're going to be talking
+
+740
+00:40:35,483 --> 00:40:39,466
+about something that really has a lot to do with the backups
+
+741
+00:40:39,483 --> 00:40:42,333
+and restores database integrity?
+
+742
+00:40:42,466 --> 00:40:46,250
+>> Yeah, it's not likely that the database engine will ever, or
+
+743
+00:40:46,333 --> 00:40:49,466
+I should say it's not likely the databases are corrupted.
+
+744
+00:40:49,483 --> 00:40:54,466
+But before you backup a database that is, you don't want to backup
+
+745
+00:40:54,483 --> 00:40:55,433
+a database that's corrupted.
+
+746
+00:40:55,450 --> 00:40:55,466
+>> No.
+
+747
+00:40:56,483 --> 00:40:59,466
+>> You'd like to find out if it's corrupted and then maybe proceed
+
+748
+00:40:59,483 --> 00:41:02,466
+in a maintenance routine through the backup process. So we have
+
+749
+00:41:02,483 --> 00:41:07,466
+to take a look in general at insuring a, I'm sorry, database integrity.
+
+750
+00:41:07,483 --> 00:41:11,466
+This is going to involve the use of some DBCC statements.
+
+751
+00:41:11,483 --> 00:41:14,466
+This would be part of your normal maintenance routine like we
+
+752
+00:41:14,483 --> 00:41:19,466
+saw maintenance routines in an earlier module today. So we're
+
+753
+00:41:19,483 --> 00:41:23,466
+going to take a look at DBCC in general and then specifically
+
+754
+00:41:23,483 --> 00:41:25,466
+related to integrity checking statements.
+
+755
+00:41:25,483 --> 00:41:26,466
+>> Okay.
+
+756
+00:41:26,483 --> 00:41:30,466
+>> How we execute it and in the rare and unfortunate event that
+
+757
+00:41:30,483 --> 00:41:34,383
+it reports errors, what we're going to do about it.
+
+758
+00:41:34,466 --> 00:41:37,233
+>> Oh dear, so what is DBCC after all?
+
+759
+00:41:37,316 --> 00:41:40,466
+>> Alright, so first of all it's the name or the, you know the
+
+760
+00:41:41,333 --> 00:41:45,466
+acronym starts for Database Console Command. This is a new version
+
+761
+00:41:45,483 --> 00:41:50,466
+of the acronym; formally it was Database Cons, easy for me to
+
+762
+00:41:50,216 --> 00:41:55,466
+say, Database Consistency Checker. And now as you can see or
+
+763
+00:41:55,483 --> 00:42:00,466
+as you would see from the link there are lots of DBCC statements.
+
+764
+00:42:00,483 --> 00:42:01,316
+>> Okay.
+
+765
+00:42:02,483 --> 00:42:06,333
+>> The time when a database might become corrupt would not so
+
+766
+00:42:06,483 --> 00:42:09,466
+much be likely with the SQL Server System but with the IO System.
+
+767
+00:42:09,483 --> 00:42:14,466
+Maybe I have a corrupt caching controller or a host bus adapter,
+
+768
+00:42:14,483 --> 00:42:17,466
+something like that. Now some of the statements that we'll see
+
+769
+00:42:18,483 --> 00:42:21,466
+in DBCC they're categorized. We have informational statements,
+
+770
+00:42:21,483 --> 00:42:25,466
+validation statements, maintenance, etcetera. So there are lots
+
+771
+00:42:25,483 --> 00:42:28,466
+of those, it would probably be a good tour of duty to at least
+
+772
+00:42:28,483 --> 00:42:31,466
+become basically familiar with some of them.
+
+773
+00:42:32,350 --> 00:42:36,466
+>> DBCC can be an extremely useful tool when you're looking at
+
+774
+00:42:36,483 --> 00:42:37,466
+the databases.
+
+775
+00:42:37,483 --> 00:42:40,466
+>> So the one that we're going to look at now, let's go to the
+
+776
+00:42:40,483 --> 00:42:46,0
+next slide is DBCC CheckDB. Its purpose is to validate integrity
+
+777
+00:42:46,483 --> 00:42:50,466
+of the database structure and the data inside it. Strangely it
+
+778
+00:42:50,483 --> 00:42:56,416
+actually spawns other processes, other DBCC statements like check
+
+779
+00:42:56,483 --> 00:42:59,466
+allocations, check table, and DBCC check catalog.
+
+780
+00:42:59,483 --> 00:43:00,183
+>> Okay.
+
+781
+00:43:01,483 --> 00:43:04,466
+>> If I have a large database whose integrity I'm attempting to
+
+782
+00:43:04,483 --> 00:43:08,416
+check, there's some options I might want to consider, namely
+
+783
+00:43:08,483 --> 00:43:13,316
+because it might take seriously hours and hours and hours to
+
+784
+00:43:13,400 --> 00:43:17,466
+run this. So notice some of the options that we have physical
+
+785
+00:43:17,483 --> 00:43:21,466
+only, no index, all error messages. This might be if I just
+
+786
+00:43:22,333 --> 00:43:24,466
+want to see error messages. I don't care about all the detailed
+
+787
+00:43:24,483 --> 00:43:28,0
+reporting that it can provide if I want.
+
+788
+00:43:28,150 --> 00:43:28,166
+>> Yep.
+
+789
+00:43:28,250 --> 00:43:31,466
+>> And another one estimate only. So just give me an estimate.
+
+790
+00:43:32,483 --> 00:43:33,466
+>> Of what it would take.
+
+791
+00:43:34,483 --> 00:43:39,233
+>> Next up, in the rare circumstance where a database would have
+
+792
+00:43:39,316 --> 00:43:43,466
+corruption we have repair options. This part is easy there are
+
+793
+00:43:44,483 --> 00:43:48,466
+only two. The other part that's easy is if there's corruption
+
+794
+00:43:48,483 --> 00:43:53,233
+that's reported, it will state what the minimum required repair
+
+795
+00:43:53,316 --> 00:43:56,466
+option of the two is in order to fix something.
+
+796
+00:43:56,483 --> 00:43:58,466
+>> So it will tell you what you need to run.
+
+797
+00:43:58,483 --> 00:44:01,466
+>> It will tell you what you need to run. Now my database is
+
+798
+00:44:01,483 --> 00:44:03,466
+going to have to be in single user mode.
+
+799
+00:44:04,283 --> 00:44:07,466
+I'll use, as we saw earlier that's a database availability option.
+
+800
+00:44:07,483 --> 00:44:11,283
+I'll have to go to alter database to put that in single user mode.
+
+801
+00:44:11,366 --> 00:44:11,466
+>> Okay.
+
+802
+00:44:11,483 --> 00:44:15,216
+>> And now for the two options that I have, Repair_Rebuild.
+
+803
+00:44:15,483 --> 00:44:19,466
+Notice no loss of data integrity within the database and it does
+
+804
+00:44:19,483 --> 00:44:24,466
+some shuffling under the covers to put the database back in good order.
+
+805
+00:44:24,483 --> 00:44:30,466
+Now very unfortunate, if you are advised to use the Repair_Allow_Data_Loss
+
+806
+00:44:30,483 --> 00:44:34,466
+option, this is absolutely the last resort. This is if you have
+
+807
+00:44:34,483 --> 00:44:39,466
+no backups, absolutely out of altitude and ideas, as they say.
+
+808
+00:44:40,483 --> 00:44:45,466
+This is your only choice, picture a gun to your head. You just,
+
+809
+00:44:45,483 --> 00:44:46,433
+you have no other choice.
+
+810
+00:44:46,450 --> 00:44:46,466
+>> Oh dear.
+
+811
+00:44:46,483 --> 00:44:48,466
+>> That's when you're going to pick that.
+
+812
+00:44:49,450 --> 00:44:49,466
+>> Alright.
+
+813
+00:44:49,483 --> 00:44:54,466
+>> Now after you perform your operation you're going to want to
+
+814
+00:44:54,483 --> 00:44:56,466
+make sure that it doesn't occur again. So you're going to have
+
+815
+00:44:56,483 --> 00:44:59,233
+to aim at getting to the root cause.
+
+816
+00:44:59,316 --> 00:45:01,466
+>> Okay, can you show us how it's done George?
+
+817
+00:45:01,483 --> 00:45:05,466
+>> Yeah, let's take a look at using DBCC CheckDB and some of the
+
+818
+00:45:05,483 --> 00:45:06,466
+things that it reports.
+
+819
+00:45:10,483 --> 00:45:11,466
+>> Alright.
+
+820
+00:45:13,483 --> 00:45:17,466
+>> Let me make sure I'm connected to the right instance.
+
+821
+00:45:19,416 --> 00:45:23,466
+So I'll run DBCC CheckDB targeted at a particular database.
+
+822
+00:45:23,483 --> 00:45:25,466
+You'll notice it's...
+
+823
+00:45:25,483 --> 00:45:27,466
+>> Boy there's a lot of messages there.
+
+824
+00:45:27,483 --> 00:45:32,466
+>> It's somewhat verbose, lots and lots and lots of stuff here.
+
+825
+00:45:32,216 --> 00:45:35,466
+>> So I got to read through all that to find out if my database
+
+826
+00:45:35,483 --> 00:45:36,466
+is all set?
+
+827
+00:45:36,483 --> 00:45:39,466
+>> This is kind of like the boss that says I'm thinking of Alise
+
+828
+00:45:39,483 --> 00:45:42,433
+here, just give me the facts please.
+
+829
+00:45:42,450 --> 00:45:43,450
+[Laughter]
+
+830
+00:45:43,483 --> 00:45:44,466
+Are we okay?
+
+831
+00:45:44,483 --> 00:45:45,466
+[Laughter]
+
+832
+00:45:46,383 --> 00:45:50,466
+So you'll notice at the end it says, Alise is here in the room.
+
+833
+00:45:50,166 --> 00:45:51,166
+[Laughter]
+
+834
+00:45:51,483 --> 00:45:54,466
+She's managing our project here. Notice it says zero allocation
+
+835
+00:45:55,0 --> 00:45:59,466
+errors, zero consistency errors. So it took all that to get
+
+836
+00:45:59,483 --> 00:46:00,466
+to that conclusion.
+
+837
+00:46:00,483 --> 00:46:05,466
+>> Yeah, okay tell me George; is there a less verbose way of doing it?
+
+838
+00:46:05,483 --> 00:46:09,466
+>> Let's take a look at running DBCC with no info messages.
+
+839
+00:46:09,483 --> 00:46:10,466
+>> That would be a good one.
+
+840
+00:46:12,483 --> 00:46:15,466
+>> So we'll run that, notice this database is not particularly large.
+
+841
+00:46:15,483 --> 00:46:17,466
+What did we get? Yep, you're okay.
+
+842
+00:46:17,483 --> 00:46:18,466
+[Laughter]
+
+843
+00:46:18,483 --> 00:46:20,433
+Yep, you're okay.
+
+844
+00:46:20,450 --> 00:46:20,466
+>> Alright.
+
+845
+00:46:21,483 --> 00:46:25,433
+>> Alright, now I have a problem child.
+
+846
+00:46:25,450 --> 00:46:25,466
+>> Okay.
+
+847
+00:46:25,483 --> 00:46:29,466
+>> Let's see, I want to make sure my path is right here.
+
+848
+00:46:36,483 --> 00:46:37,466
+>> Alright, so let's...
+
+849
+00:46:37,483 --> 00:46:40,466
+>> So D SQL Admin Jump Start.
+
+850
+00:46:42,483 --> 00:46:44,466
+>> Got that one in the wrong spot, uh.
+
+851
+00:46:45,483 --> 00:46:48,300
+Did I put that on F? Okay, well that was an easy fix. Yep that's
+
+852
+00:46:48,383 --> 00:46:50,466
+an easy change, change it from D to F.
+
+853
+00:46:51,483 --> 00:46:55,466
+>> Okay, let's see if that dog will bark.
+
+854
+00:46:55,483 --> 00:46:56,466
+>> There we go.
+
+855
+00:46:56,483 --> 00:47:01,466
+>> Alright, you've been a patient guy with me Rich.
+
+856
+00:47:01,483 --> 00:47:02,466
+>> I try George, I try.
+
+857
+00:47:02,483 --> 00:47:03,466
+>> You know you've got to be though.
+
+858
+00:47:03,483 --> 00:47:05,466
+>> That's probably because I've been there, done that, got the
+
+859
+00:47:05,483 --> 00:47:08,433
+T-Shirt on these things once or twice myself.
+
+860
+00:47:08,450 --> 00:47:08,466
+>> Yep.
+
+861
+00:47:08,483 --> 00:47:10,266
+>> Hey wait a minute there's red ink.
+
+862
+00:47:10,350 --> 00:47:11,466
+>> Ooh, red ink can be bad.
+
+863
+00:47:13,483 --> 00:47:14,466
+We observe down below
+
+864
+00:47:16,200 --> 00:47:17,416
+there are errors.
+
+865
+00:47:17,450 --> 00:47:17,466
+>> Okay.
+
+866
+00:47:17,483 --> 00:47:21,466
+>> No allocation errors but there are consistency errors and it
+
+867
+00:47:21,183 --> 00:47:25,466
+got worse than that, not in red. What's my only available fix here?
+
+868
+00:47:27,483 --> 00:47:28,216
+>> Repair_Allow_Data_Loss.
+
+869
+00:47:28,300 --> 00:47:33,450
+>> Now strangely how might someone even become acquainted with this?
+
+870
+00:47:33,483 --> 00:47:37,466
+Well I might perform a query and notice I'm doing a select *.
+
+871
+00:47:37,483 --> 00:47:38,466
+>> Yep.
+
+872
+00:47:38,483 --> 00:47:39,433
+>> So all columns, all rows.
+
+873
+00:47:39,450 --> 00:47:39,466
+>> Yep.
+
+874
+00:47:39,483 --> 00:47:43,466
+>> This is going to retrieve every page in the table, ooh.
+
+875
+00:47:43,483 --> 00:47:46,466
+>> Logical consistency based yowsa.
+
+876
+00:47:46,483 --> 00:47:49,466
+>> So let's say an error like this is reported from an end user.
+
+877
+00:47:49,483 --> 00:47:53,466
+They're going to call a help desk, tech support, something like that.
+
+878
+00:47:53,166 --> 00:47:57,166
+Somehow that's going to get the Data Team, but take a look at this.
+
+879
+00:47:58,483 --> 00:48:03,466
+Notice, depending on where the query is made there might be unaffected
+
+880
+00:48:03,483 --> 00:48:06,466
+areas of the same table.
+
+881
+00:48:06,483 --> 00:48:08,466
+>> So some of the data's good, some of the data's not.
+
+882
+00:48:08,483 --> 00:48:12,266
+>> Yep and just a little, this is a little Ad-Hoc here Rich.
+
+883
+00:48:12,350 --> 00:48:14,466
+Let's say I selected * from
+
+884
+00:48:16,483 --> 00:48:23,466
+MSDB.DBO suspect pages, ooh, on target. This would also show
+
+885
+00:48:23,483 --> 00:48:29,316
+up to 1,000 corrupted pages, pages where the check sum didn't
+
+886
+00:48:29,400 --> 00:48:31,466
+match the data that was read.
+
+887
+00:48:31,200 --> 00:48:33,466
+>> That's one of those tables you'd really want to keep an eye
+
+888
+00:48:33,483 --> 00:48:34,466
+on over time.
+
+889
+00:48:34,483 --> 00:48:39,466
+>> And strangely the product is set to only store 1,000 rows of
+
+890
+00:48:39,483 --> 00:48:42,466
+suspect pages. I think that's reasonable.
+
+891
+00:48:42,483 --> 00:48:45,200
+>> I hopefully you go, don't have that many.
+
+892
+00:48:45,283 --> 00:48:48,433
+>> If you had anywhere near 1,000 pages you have bigger problems.
+
+893
+00:48:48,450 --> 00:48:48,466
+>> Yep.
+
+894
+00:48:48,483 --> 00:48:54,466
+>> Alright, so next alter database, set single user with roll
+
+895
+00:48:54,216 --> 00:48:55,233
+back immediate.
+
+896
+00:48:56,483 --> 00:48:58,466
+Here we go over the waterfall, Rich.
+
+897
+00:48:59,483 --> 00:49:03,466
+>> And we're doing that because we restored a corrupt backup.
+
+898
+00:49:03,483 --> 00:49:06,0
+So that kind of gets rid of restore doesn't it?
+
+899
+00:49:06,483 --> 00:49:10,466
+>> We lost all altitude and ideas. We had absolutely no other
+
+900
+00:49:10,483 --> 00:49:15,466
+choice but to repair. So now let's go ahead and put the database
+
+901
+00:49:15,483 --> 00:49:21,466
+back in production, so to say, notice we can query the table now.
+
+902
+00:49:22,0 --> 00:49:22,383
+>> Yep.
+
+903
+00:49:22,466 --> 00:49:23,466
+>> We at least don't get an error.
+
+904
+00:49:24,483 --> 00:49:28,466
+Notice that well our integrity has been maintained.
+
+905
+00:49:29,0 --> 00:49:29,466
+>> That's cool.
+
+906
+00:49:29,483 --> 00:49:34,466
+>> The only thing is though it paid no attention to foreign key
+
+907
+00:49:34,166 --> 00:49:39,466
+references, which means this shows all the order details that
+
+908
+00:49:39,483 --> 00:49:44,316
+are no longer associated with orders. Basically we are in seriously
+
+909
+00:49:44,400 --> 00:49:45,266
+hurting shape.
+
+910
+00:49:45,350 --> 00:49:46,466
+>> So we lost data.
+
+911
+00:49:46,483 --> 00:49:48,466
+>> We lost data. Now that...
+
+912
+00:49:48,483 --> 00:49:52,466
+>> Well that kind of is expected with Repair_Allow_Data_Loss.
+
+913
+00:49:52,233 --> 00:49:52,466
+>> Yep.
+
+914
+00:49:52,483 --> 00:49:56,316
+>> Alright, so what about other maintenance that we do. Are there
+
+915
+00:49:56,400 --> 00:49:59,333
+things that we want to be aware of and things we want to take
+
+916
+00:49:59,450 --> 00:49:59,466
+care of?
+
+917
+00:49:59,483 --> 00:50:03,466
+>> Yep, last up, last topic for this particular session is dealing
+
+918
+00:50:04,166 --> 00:50:07,466
+with Indexes, Statistics, Maintenance. So we have to take a
+
+919
+00:50:07,483 --> 00:50:11,466
+look at a couple of table structures that are out there, indexes,
+
+920
+00:50:11,483 --> 00:50:15,466
+and then some other objects and their maintenance. So with that
+
+921
+00:50:15,483 --> 00:50:19,466
+up, let's go to table structures. If I were to create a table
+
+922
+00:50:19,483 --> 00:50:24,466
+in SQL Server without any special options we would see that A,
+
+923
+00:50:25,450 --> 00:50:28,466
+the data is stored in pages as normal, but the pages are in no
+
+924
+00:50:28,483 --> 00:50:31,333
+particular order within the data file.
+
+925
+00:50:31,450 --> 00:50:31,466
+>> Okay.
+
+926
+00:50:31,483 --> 00:50:36,466
+>> In addition, the rows within those pages are in no particular order.
+
+927
+00:50:36,483 --> 00:50:39,333
+>> Okay, so it's just a heap of data.
+
+928
+00:50:39,483 --> 00:50:40,466
+>> Just a heap of data.
+
+929
+00:50:40,483 --> 00:50:41,283
+>> Alright.
+
+930
+00:50:41,366 --> 00:50:46,433
+>> Often for various query improvement purposes, we will want
+
+931
+00:50:46,483 --> 00:50:52,466
+to impose not only an order of rows within a page, but a logical
+
+932
+00:50:52,483 --> 00:50:55,416
+order from page to page.
+
+933
+00:50:55,450 --> 00:50:55,466
+>> Okay.
+
+934
+00:50:55,483 --> 00:50:59,466
+>> Then some extra pages are stored outside of that clustered
+
+935
+00:50:59,216 --> 00:51:03,266
+table that are used to navigate and find those objects.
+
+936
+00:51:03,350 --> 00:51:04,200
+>> Okay.
+
+937
+00:51:04,283 --> 00:51:07,466
+>> Alright, so now that we know what the two table structures
+
+938
+00:51:07,483 --> 00:51:11,466
+are, we have to take a look at what our indexing options are.
+
+939
+00:51:11,483 --> 00:51:14,466
+There are various ways that we want to query data in SQL Server.
+
+940
+00:51:14,483 --> 00:51:18,466
+We have objects to make sure that those queries are efficient
+
+941
+00:51:18,483 --> 00:51:24,433
+index objects. Now an index is just a list of sorted values.
+
+942
+00:51:24,450 --> 00:51:24,466
+>> Okay.
+
+943
+00:51:25,333 --> 00:51:26,466
+>> Let's keep it simple.
+
+944
+00:51:27,483 --> 00:51:32,200
+As an add on that list of values may impose uniqueness or it
+
+945
+00:51:32,283 --> 00:51:37,333
+may not. I often find that the constraints that are used to make
+
+946
+00:51:37,483 --> 00:51:41,466
+indexes are confused with the index names. So to help you along
+
+947
+00:51:41,183 --> 00:51:44,466
+the way I've made a little matrix here of the different kinds
+
+948
+00:51:44,200 --> 00:51:46,466
+of constraints and indexes, and how they map.
+
+949
+00:51:48,483 --> 00:51:52,250
+>> So what do we need to be aware of with indexes, other than
+
+950
+00:51:52,333 --> 00:51:54,466
+the fact that they help us look stuff up?
+
+951
+00:51:54,483 --> 00:51:59,466
+>> In variably over time data's going to change and indexes are
+
+952
+00:52:00,166 --> 00:52:04,416
+going to get fragmented. So that's going to impose upon us, the
+
+953
+00:52:04,483 --> 00:52:07,466
+Database Administration Team to maintain those indexes.
+
+954
+00:52:07,483 --> 00:52:10,466
+We'll see a couple of ways that we're able to do that. Now before
+
+955
+00:52:11,166 --> 00:52:14,333
+I get there, well there's another object we want to talk about
+
+956
+00:52:14,483 --> 00:52:15,466
+and that is statistics.
+
+957
+00:52:16,483 --> 00:52:18,466
+>> What is statistics do for you?
+
+958
+00:52:19,483 --> 00:52:24,300
+>> First of all statistics are objects that basically compute
+
+959
+00:52:24,383 --> 00:52:28,466
+the estimated number of rows or actually calculate the number
+
+960
+00:52:28,483 --> 00:52:32,300
+of rows in a table. This can be important for the query optimizer
+
+961
+00:52:32,383 --> 00:52:36,466
+when it goes to produce a query execution plan, it may impact
+
+962
+00:52:36,483 --> 00:52:40,450
+the join order of one table to another based on the number of
+
+963
+00:52:40,483 --> 00:52:44,466
+rows in one table compared to another. Also statistics will
+
+964
+00:52:44,483 --> 00:52:48,466
+gather things like, if I'm querying for the name Smith, I might
+
+965
+00:52:48,483 --> 00:52:52,166
+have 10,000 Smiths. If I'm querying for a Squillace I might only
+
+966
+00:52:52,250 --> 00:52:55,433
+have one. That may impact the query execution plan.
+
+967
+00:52:55,450 --> 00:52:55,466
+>> Okay.
+
+968
+00:52:55,483 --> 00:52:59,466
+>> So statistics are valuable objects is the big picture here.
+
+969
+00:53:00,450 --> 00:53:00,466
+>> Alright.
+
+970
+00:53:00,483 --> 00:53:03,466
+>> Now some good news, if I can cut over to my virtual machine
+
+971
+00:53:03,483 --> 00:53:07,466
+for a moment. Let's take a look at the model database. If I
+
+972
+00:53:07,483 --> 00:53:11,466
+go to the model database, we'll notice under options there are
+
+973
+00:53:11,483 --> 00:53:16,466
+a couple of options here. Let's use green, first of all we have
+
+974
+00:53:16,183 --> 00:53:21,466
+the auto create statistics option and we have the auto update
+
+975
+00:53:21,216 --> 00:53:25,466
+statistics option. Now on smaller databases and I don't mean
+
+976
+00:53:25,483 --> 00:53:30,183
+puny, but on something that's not gargantuan these are fine to
+
+977
+00:53:30,266 --> 00:53:33,466
+leave on. There are some that have some very strong opinions
+
+978
+00:53:33,483 --> 00:53:37,0
+on whether or not these should be on, and for the largest databases
+
+979
+00:53:37,483 --> 00:53:40,216
+you'll probably want to have a background automation process
+
+980
+00:53:40,483 --> 00:53:46,166
+to have those updated, or create and update them. The impact
+
+981
+00:53:46,250 --> 00:53:49,466
+here is that if I make a new database it will have the same settings
+
+982
+00:53:49,483 --> 00:53:50,466
+as model.
+
+983
+00:53:50,483 --> 00:53:51,466
+>> Okay.
+
+984
+00:53:51,483 --> 00:53:58,466
+>> So now that we know that, let's go back to our regular slide,
+
+985
+00:53:58,483 --> 00:54:00,466
+if you would please.
+
+986
+00:54:03,483 --> 00:54:07,466
+We see that statistics can also become outdated as data changes.
+
+987
+00:54:07,483 --> 00:54:12,466
+So we now have laid on the table that there are indexes to maintain
+
+988
+00:54:12,483 --> 00:54:18,283
+and statistics to maintain, which brings us to the topic of index fragmentation.
+
+989
+00:54:18,483 --> 00:54:20,466
+>> Okay and what's fragmentation all about?
+
+990
+00:54:21,333 --> 00:54:25,466
+>> There are two kinds of fragmentation that can occur in indexed
+
+991
+00:54:25,483 --> 00:54:29,466
+and tabled data. So we have internal and external fragmentation.
+
+992
+00:54:30,483 --> 00:54:33,466
+Internal fragmentation is kind of like this, let's say I have
+
+993
+00:54:33,483 --> 00:54:35,433
+a little kiddy pool of water.
+
+994
+00:54:35,450 --> 00:54:35,466
+>> Okay.
+
+995
+00:54:35,483 --> 00:54:38,466
+>> I have a bucket that I want to use to carry the water from
+
+996
+00:54:38,483 --> 00:54:42,366
+one place to another. If I only fill the bucket up half way I
+
+997
+00:54:42,450 --> 00:54:44,433
+have to make double the number of trips.
+
+998
+00:54:44,450 --> 00:54:44,466
+>> Makes sense.
+
+999
+00:54:44,483 --> 00:54:49,466
+>> This is like a page of data that's only half full. SQL Server's
+
+1000
+00:54:49,483 --> 00:54:52,466
+going to have to read the page into memory in order to use it
+
+1001
+00:54:52,483 --> 00:54:56,466
+for querying, which means it's taking up twice the amount of
+
+1002
+00:54:56,166 --> 00:55:01,466
+space that it needs to. It's more IO operations to get the pages in.
+
+1003
+00:55:02,166 --> 00:55:07,216
+So often I don't want this. However, if I know I have lots of
+
+1004
+00:55:07,300 --> 00:55:11,466
+rows that I'm going to be adding in then I may want to have it,
+
+1005
+00:55:11,483 --> 00:55:15,466
+have pages partially full, and there's a percentage that I can
+
+1006
+00:55:15,483 --> 00:55:20,466
+use to dictate that called fill factor. Now external pages relates
+
+1007
+00:55:20,483 --> 00:55:25,466
+to the physical location of pages within a data file. When they're
+
+1008
+00:55:25,483 --> 00:55:29,466
+spread out the read-write head of the spindles going to have
+
+1009
+00:55:29,483 --> 00:55:33,466
+to move, any time the read-write head has to unnecessarily move
+
+1010
+00:55:33,483 --> 00:55:38,466
+that is negative performance impact, and you don't want that.
+
+1011
+00:55:38,483 --> 00:55:39,466
+Now, sorry.
+
+1012
+00:55:39,483 --> 00:55:44,466
+>> So how do you now get the maintenance to trigger off? How do
+
+1013
+00:55:45,483 --> 00:55:47,466
+you actually execute that maintenance?
+
+1014
+00:55:47,483 --> 00:55:50,316
+>> Alrighty, well one of the things that you'll want to do is
+
+1015
+00:55:50,400 --> 00:55:53,466
+you may have a particular table that seems to be performing poorly.
+
+1016
+00:55:54,166 --> 00:55:59,466
+So one of the things that I may do, let's say I go to our market
+
+1017
+00:55:59,483 --> 00:56:02,166
+dev database, pick a particular table.
+
+1018
+00:56:02,483 --> 00:56:07,466
+Let's say I go to a particular index, I can get properties on that.
+
+1019
+00:56:08,483 --> 00:56:09,316
+>> Okay.
+
+1020
+00:56:09,400 --> 00:56:12,466
+>> Now this is when I would have the foreknowledge or concern
+
+1021
+00:56:12,483 --> 00:56:15,466
+about a particular index
+
+1022
+00:56:17,483 --> 00:56:21,466
+out of maybe 10,000 that I have in the instances that I operate.
+
+1023
+00:56:21,483 --> 00:56:26,466
+Notice that I can see the fragmentation here and the page fullness.
+
+1024
+00:56:27,450 --> 00:56:27,466
+>> Okay.
+
+1025
+00:56:28,483 --> 00:56:34,183
+>> General threshold, if I see a number above 30% I want to perform
+
+1026
+00:56:34,266 --> 00:56:39,466
+one operation. If I'm maybe ten to 30% I want to perform another operation.
+
+1027
+00:56:40,450 --> 00:56:40,466
+>> Okay.
+
+1028
+00:56:41,483 --> 00:56:42,466
+>> So with that...
+
+1029
+00:56:44,483 --> 00:56:47,466
+>> What are those operations that we want to do?
+
+1030
+00:56:47,483 --> 00:56:50,466
+>> Those operations, I wanted to go back to the slide for just
+
+1031
+00:56:50,483 --> 00:56:54,466
+a second. I showed how you could use the gooey and this is the
+
+1032
+00:56:54,483 --> 00:56:56,466
+index fragmentation page.
+
+1033
+00:56:57,483 --> 00:57:00,466
+So I think that's back one, perfect. So at the bottom you'll
+
+1034
+00:57:00,483 --> 00:57:04,466
+notice I can use the graphical user interface to determine fragmentation.
+
+1035
+00:57:04,483 --> 00:57:08,433
+Also I have a dynamic management object, some of those we looked
+
+1036
+00:57:08,483 --> 00:57:13,466
+at early on. This is a very broad reaching DMF. Notice that
+
+1037
+00:57:13,483 --> 00:57:18,466
+I can look database wide across all indexes in the instance to
+
+1038
+00:57:18,200 --> 00:57:21,466
+determine fragmentation, and more granular than that. Okay, let's
+
+1039
+00:57:21,483 --> 00:57:25,466
+go on then. Then finally, notice that I have automation steps
+
+1040
+00:57:25,483 --> 00:57:30,466
+that I can use to maintain indexes. For indexes I can reorganize
+
+1041
+00:57:31,483 --> 00:57:35,466
+them, which is more of a shuffling and modest efficiency improvement,
+
+1042
+00:57:35,483 --> 00:57:41,233
+modestly improving of fragmentation. Then rebuild actually takes
+
+1043
+00:57:41,316 --> 00:57:45,466
+space to completely recreate the index and then collapses the
+
+1044
+00:57:45,483 --> 00:57:49,466
+old one and replaces with a brand new rebuild index.
+
+1045
+00:57:50,483 --> 00:57:54,466
+Rebuilding takes more time. Enterprise edition has some online
+
+1046
+00:57:54,183 --> 00:57:58,466
+versions of the maintenance operations, and a curious thing when
+
+1047
+00:57:58,483 --> 00:58:03,466
+I reorganize an index if I cancel that in the middle the work
+
+1048
+00:58:03,483 --> 00:58:06,466
+that's been done up to that moment is retained. If I cancel
+
+1049
+00:58:07,483 --> 00:58:10,466
+a rebuild well it never made it to the finish line that I'm not
+
+1050
+00:58:10,483 --> 00:58:11,466
+able to use.
+
+1051
+00:58:11,483 --> 00:58:13,466
+>> Oh, that's too bad.
+
+1052
+00:58:13,183 --> 00:58:16,466
+>> You'll notice from the graphic on the slide also, I'm using
+
+1053
+00:58:16,483 --> 00:58:20,466
+the SSIS version of the maintenance task. Notice I can rebuild
+
+1054
+00:58:20,483 --> 00:58:23,466
+and index, reorganize, and I also can update statistics.
+
+1055
+00:58:23,483 --> 00:58:25,466
+These are very granular, so.
+
+1056
+00:58:25,483 --> 00:58:29,316
+>> So rebuild and a reorganizer are exclusive to each other.
+
+1057
+00:58:29,400 --> 00:58:31,433
+You wouldn't do one and then the other?
+
+1058
+00:58:31,450 --> 00:58:31,466
+>> No.
+
+1059
+00:58:31,483 --> 00:58:33,466
+>> You'd do one or the other.
+
+1060
+00:58:33,483 --> 00:58:36,466
+>> That's right, so what I might do is first have a query that
+
+1061
+00:58:36,483 --> 00:58:41,466
+looks for those objects which have a certain threshold of fragmentation
+
+1062
+00:58:41,483 --> 00:58:45,466
+and reorganize those, and completely separate look for those
+
+1063
+00:58:45,483 --> 00:58:49,466
+objects that have a greater threshold of fragmentation, and then
+
+1064
+00:58:49,216 --> 00:58:50,466
+I would rebuild those.
+
+1065
+00:58:50,483 --> 00:58:51,416
+>> Alright.
+
+1066
+00:58:51,483 --> 00:58:54,466
+>> I do want to go on record saying there are lots of very polar
+
+1067
+00:58:54,483 --> 00:58:59,0
+ideas about what the proper thresholds are how often you should
+
+1068
+00:58:59,483 --> 00:59:02,466
+do this, whether or not you should even bother doing that.
+
+1069
+00:59:02,483 --> 00:59:05,466
+So do a little bit of research there.
+
+1070
+00:59:05,483 --> 00:59:06,300
+>> Alright.
+
+1071
+00:59:06,383 --> 00:59:07,466
+>> And now the final thing that's, let's see you want to see this
+
+1072
+00:59:08,0 --> 00:59:08,466
+last one?
+
+1073
+00:59:08,483 --> 00:59:12,466
+>> I think we can do this last demo, absolutely.
+
+1074
+00:59:12,483 --> 00:59:14,466
+>> Okay, I think it's pretty quick, but let's see.
+
+1075
+00:59:16,483 --> 00:59:20,466
+>> So in this one, we're going to go and after we've already looked
+
+1076
+00:59:20,483 --> 00:59:24,466
+at the fragmentation, as you did in your last little demo.
+
+1077
+00:59:24,483 --> 00:59:27,466
+Now we're going to actually do some maintenance on an index George?
+
+1078
+00:59:27,483 --> 00:59:28,316
+>> Oh, you know what,
+
+1079
+00:59:33,483 --> 00:59:34,466
+oh yeah here we go.
+
+1080
+00:59:37,483 --> 00:59:39,466
+>> Alright, so what do we got going on here?
+
+1081
+00:59:39,483 --> 00:59:42,466
+>> Alright, so I'm going to create a table in TempDB. I'm going
+
+1082
+00:59:42,483 --> 00:59:46,300
+to populate it with some data.
+
+1083
+00:59:46,383 --> 00:59:46,466
+>> Okay.
+
+1084
+00:59:50,416 --> 00:59:52,466
+>> Next up the population.
+
+1085
+00:59:53,483 --> 00:59:56,466
+So we're going to put 10,000 rows in this.
+
+1086
+00:59:56,483 --> 01:00:00,466
+>> And hopefully that one doesn't take to, too long. Boy that's
+
+1087
+01:00:00,483 --> 01:00:01,466
+good SQL's quick, I like that.
+
+1088
+01:00:01,483 --> 01:00:06,466
+>> Yeah, alright next let's check the level of fragmentation using
+
+1089
+01:00:06,483 --> 01:00:10,466
+a dynamic management object. Notice the number, the number of
+
+1090
+01:00:10,483 --> 01:00:15,466
+inputs that this function can take. Notice options like detailed.
+
+1091
+01:00:16,483 --> 01:00:23,466
+>> Alrighty, so we've got a clustered index on the table and it's
+
+1092
+01:00:23,483 --> 01:00:24,466
+telling us what, George?
+
+1093
+01:00:24,483 --> 01:00:28,366
+>> Alright, so now I see the average fragmentation and percent
+
+1094
+01:00:28,450 --> 01:00:29,466
+at the moment.
+
+1095
+01:00:29,233 --> 01:00:29,466
+>> Okay.
+
+1096
+01:00:29,483 --> 01:00:33,466
+>> And another one of particular importance is the average page
+
+1097
+01:00:33,483 --> 01:00:37,466
+space used. Notice it can't be more full than 100%. So it's
+
+1098
+01:00:37,483 --> 01:00:39,316
+fairly jammed packed.
+
+1099
+01:00:39,400 --> 01:00:42,466
+>> I'd say 99. something is pretty doggon good.
+
+1100
+01:00:42,483 --> 01:00:46,166
+>> Now there's some fun query code written here to scramble everything
+
+1101
+01:00:46,483 --> 01:00:50,466
+around and fragment the heck out of the data that's within that
+
+1102
+01:00:50,483 --> 01:00:51,466
+particular table.
+
+1103
+01:00:51,483 --> 01:00:52,466
+>> Okay.
+
+1104
+01:00:52,483 --> 01:00:53,466
+>> So this time around
+
+1105
+01:00:56,350 --> 01:01:00,166
+we'll now query using the same dynamic management object, but
+
+1106
+01:01:00,250 --> 01:01:03,466
+observe now the fragmentation in percent.
+
+1107
+01:01:03,166 --> 01:01:03,466
+>> Yeah, boy.
+
+1108
+01:01:03,483 --> 01:01:07,466
+>> And let's also take a look at the average page space used.
+
+1109
+01:01:08,450 --> 01:01:08,466
+>> Okay.
+
+1110
+01:01:08,483 --> 01:01:10,366
+>> Notice much less used.
+
+1111
+01:01:12,250 --> 01:01:17,400
+Now one of my maintenance options is to use alter index all.
+
+1112
+01:01:17,483 --> 01:01:21,183
+That says on behalf of a table object that I have I'm going to
+
+1113
+01:01:21,266 --> 01:01:23,316
+rebuild all indexes.
+
+1114
+01:01:24,333 --> 01:01:29,466
+>> Okay, that went pretty quick so I would say that was a pretty
+
+1115
+01:01:29,483 --> 01:01:30,466
+small table.
+
+1116
+01:01:30,483 --> 01:01:34,466
+>> Pretty small table. So now let's go ahead and determine if
+
+1117
+01:01:34,483 --> 01:01:38,466
+there is any fragmentation that remains after a rebuild.
+
+1118
+01:01:38,483 --> 01:01:41,333
+You probably can predict the end of the movie, right.
+
+1119
+01:01:41,483 --> 01:01:42,466
+>> Yeah, let's hope so.
+
+1120
+01:01:42,483 --> 01:01:45,466
+>> Average fragmentation and percent, zero.
+
+1121
+01:01:45,483 --> 01:01:46,466
+>> Awesome, awesome.
+
+1122
+01:01:47,483 --> 01:01:51,300
+>> Alright and then average page space used in percent, there
+
+1123
+01:01:51,383 --> 01:01:51,466
+we go.
+
+1124
+01:01:51,483 --> 01:01:54,466
+>> Back up there, a good level, very cool.
+
+1125
+01:01:54,483 --> 01:01:59,466
+>> Okay, so in this session we took a look at data file maintenance,
+
+1126
+01:01:59,483 --> 01:02:02,466
+other kinds of maintenance, data stewardship.
+
+1127
+01:02:03,483 --> 01:02:05,466
+Next up is security.
+
+1128
+01:02:05,483 --> 01:02:10,350
+>> Yeah, we will be back in just about ten minutes. Thanks very
+
+1129
+01:02:10,433 --> 01:02:11,466
+much, see you in a few.
+

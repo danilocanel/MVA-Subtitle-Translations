@@ -1,0 +1,3836 @@
+1
+00:00:00,333 --> 00:00:06,333
+[Music]
+
+2
+00:00:17,483 --> 00:00:21,466
+Welcome back to the Administering  SQL Server Jump Start 2012.
+
+3
+00:00:21,483 --> 00:00:24,466
+We are still here. We're still talking. I'm Rich Currey.
+
+4
+00:00:24,483 --> 00:00:28,466
+Mr. SQL in his name, George Squillace. George, what do we got
+
+5
+00:00:28,483 --> 00:00:29,466
+going in this module?
+
+6
+00:00:29,483 --> 00:00:33,466
+>> Thank you. You can see from the intro slide here now up is
+
+7
+00:00:33,483 --> 00:00:37,316
+performance optimization and troubleshooting. Quick little,
+
+8
+00:00:37,400 --> 00:00:38,350
+I don't know,
+
+9
+00:00:39,483 --> 00:00:42,466
+tracking the trail here. So we first learned how we are going
+
+10
+00:00:42,483 --> 00:00:46,466
+to install the product, make sure it gets put on a good foundation.
+
+11
+00:00:46,483 --> 00:00:50,283
+Then we saw server and database level options that we may sit...
+
+12
+00:00:50,366 --> 00:00:54,466
+or that we may set. But you know, Rich, SQL Server is a dynamic environment.
+
+13
+00:00:54,483 --> 00:00:55,466
+>> Absolutely.
+
+14
+00:00:56,300 --> 00:00:59,466
+>> Lots of things can change moment by moment. So I have kind
+
+15
+00:00:59,483 --> 00:01:00,466
+of a rule of thumb.
+
+16
+00:01:00,483 --> 00:01:01,466
+>> And what would that be?
+
+17
+00:01:01,483 --> 00:01:03,383
+>> We need tools...
+
+18
+00:01:03,483 --> 00:01:04,466
+>> Okay....
+
+19
+00:01:04,483 --> 00:01:06,166
+>> that give us facts.
+
+20
+00:01:06,450 --> 00:01:06,466
+>> Okay.
+
+21
+00:01:07,483 --> 00:01:10,466
+>> But a fact isn't good enough. If an airline pilot knew they
+
+22
+00:01:10,483 --> 00:01:12,466
+didn't have enough fuel to get to their destination...
+
+23
+00:01:12,483 --> 00:01:13,466
+>> That wouldn't be a good thing.
+
+24
+00:01:13,483 --> 00:01:18,466
+>> Not good. Beyond facts, I'm then going to need to make conclusions.
+
+25
+00:01:18,483 --> 00:01:22,166
+I don't have enough fuel. I don't have enough resources for this task.
+
+26
+00:01:22,250 --> 00:01:22,333
+>> Okay.
+
+27
+00:01:22,416 --> 00:01:24,433
+>> And then, finally, I need to do something about it.
+
+28
+00:01:24,450 --> 00:01:24,466
+>> Awesome.
+
+29
+00:01:24,483 --> 00:01:29,433
+>> So the focus in this particular module are on tools and the
+
+30
+00:01:29,483 --> 00:01:33,466
+facts that they provide. So moving along, we're going to take
+
+31
+00:01:33,200 --> 00:01:37,466
+a look at a general principle, general definition "locking."
+
+32
+00:01:38,300 --> 00:01:41,466
+We'll see how that ties into blocking and then how that ties
+
+33
+00:01:41,483 --> 00:01:44,466
+into something particularly negative, deadlocking. We will look
+
+34
+00:01:45,333 --> 00:01:50,300
+at couple other tools: Profiler, auditing and some other tools
+
+35
+00:01:50,383 --> 00:01:53,466
+that relate to performance data capturing.
+
+36
+00:01:53,483 --> 00:01:57,466
+>> So what is locking and blocking and deadlocks? What are those
+
+37
+00:01:58,0 --> 00:01:59,466
+all about, George?
+
+38
+00:01:59,483 --> 00:02:00,466
+>> All righty.
+
+39
+00:02:00,166 --> 00:02:05,466
+So general principle in SQL Server, when data... when data is
+
+40
+00:02:05,483 --> 00:02:10,466
+under modification, picture an eagle with its talons on that
+
+41
+00:02:10,483 --> 00:02:13,433
+particular unit of data, whatever it might be.
+
+42
+00:02:13,450 --> 00:02:13,466
+>> Okay.
+
+43
+00:02:13,483 --> 00:02:17,466
+>> Whether it is a table, an entire table, or an entire row and
+
+44
+00:02:17,483 --> 00:02:22,466
+a key value. There are ranges of lockable resources. And it's
+
+45
+00:02:22,483 --> 00:02:26,466
+kind of like... (slapping)... slapping a hand, making sure that
+
+46
+00:02:26,483 --> 00:02:30,416
+nothing else can touch that data while under modification.
+
+47
+00:02:30,483 --> 00:02:31,466
+>> Okay.
+
+48
+00:02:31,166 --> 00:02:35,466
+>> In a multi-user database system, locking is natural and expected
+
+49
+00:02:35,483 --> 00:02:40,466
+and, in fact, required in order to maintain data integrity.
+
+50
+00:02:40,483 --> 00:02:43,433
+>> So locking's a normal operation, happens all the time.
+
+51
+00:02:43,483 --> 00:02:47,466
+>> Natural and expected. And we'll see that SQL Server...
+
+52
+00:02:47,233 --> 00:02:49,466
+Who wrote the code to do this?
+
+53
+00:02:50,483 --> 00:02:55,466
+Dynamically SQL Server will shrink and grow lockable resources
+
+54
+00:02:55,483 --> 00:02:59,466
+based on its efficiency rule book such as locking just a key
+
+55
+00:02:59,483 --> 00:03:03,466
+value or locking a whole row or a page all the way up to very
+
+56
+00:03:03,483 --> 00:03:07,383
+large scale locks. For example, I restore database, well, the
+
+57
+00:03:07,466 --> 00:03:09,333
+whole database is locked then.
+
+58
+00:03:09,483 --> 00:03:13,216
+>> So SQL Server manages the locking escalation itself.
+
+59
+00:03:13,300 --> 00:03:17,433
+>> Thankfully it does all of it by default. We do have opportunity
+
+60
+00:03:17,483 --> 00:03:20,466
+to stick our hands in the machinery when we absolutely need to.
+
+61
+00:03:20,483 --> 00:03:24,466
+We won't be looking at that. So next definition then is "blocking"
+
+62
+00:03:24,483 --> 00:03:28,233
+which we will see firsthand in a moment. But for now, blocking
+
+63
+00:03:28,316 --> 00:03:32,466
+occurs when one connection is waiting for other connections to
+
+64
+00:03:32,216 --> 00:03:34,466
+release their locked resources.
+
+65
+00:03:35,216 --> 00:03:37,466
+And in a multi-user database system...
+
+66
+00:03:37,483 --> 00:03:38,466
+>> Happens all the time....
+
+67
+00:03:38,483 --> 00:03:43,450
+>> some blocking is expected. So at what point does this become
+
+68
+00:03:43,483 --> 00:03:44,466
+out of whack?
+
+69
+00:03:44,483 --> 00:03:48,466
+>> Probably when it keeps people from getting the information
+
+70
+00:03:48,200 --> 00:03:48,466
+they need.
+
+71
+00:03:48,483 --> 00:03:53,400
+>> Yes. So excessive blocking is undesirable. And then we take
+
+72
+00:03:53,483 --> 00:03:57,466
+this up even one further notch. We'll also see this in an upcoming demonstration.
+
+73
+00:03:57,483 --> 00:04:02,433
+A deadlock occurs when two connections have locked resources
+
+74
+00:04:03,483 --> 00:04:06,166
+and now they're seeking each other's resources.
+
+75
+00:04:06,450 --> 00:04:06,466
+>> Okay.
+
+76
+00:04:06,483 --> 00:04:11,466
+>> And neither... neither connection can terminate until they
+
+77
+00:04:11,483 --> 00:04:15,466
+have each other's resources. As you can imagine, this would produce
+
+78
+00:04:15,483 --> 00:04:19,466
+an infinite loop. SQL Server does something about it, but I can't
+
+79
+00:04:19,483 --> 00:04:21,466
+give the end of the movie just yet.
+
+80
+00:04:21,483 --> 00:04:24,433
+>> Uh-oh. And it is a movie, right, "Catch 22"?
+
+81
+00:04:24,450 --> 00:04:24,466
+>> Oh, yeah.
+
+82
+00:04:25,483 --> 00:04:29,400
+>> Oh yeah. So how do we discover them? How do we solve them?
+
+83
+00:04:29,483 --> 00:04:33,466
+>> So we have seen thus far that there are often a number of tools
+
+84
+00:04:33,483 --> 00:04:38,466
+for any particular job. There's no difference here. We have
+
+85
+00:04:38,483 --> 00:04:43,466
+client error messages that will tell us about deadlock problems specifically.
+
+86
+00:04:43,483 --> 00:04:47,316
+Activity Monitor will tell us about locking and blocking.
+
+87
+00:04:47,483 --> 00:04:50,466
+We have dynamic management objects, a separate topic coming up.
+
+88
+00:04:50,483 --> 00:04:54,466
+We have Profiler, a separate topic coming up. And an area which
+
+89
+00:04:55,483 --> 00:04:58,466
+is getting more and more momentum is Extended Events. If you
+
+90
+00:04:58,483 --> 00:05:01,466
+want to find out more about Extended Events, there are some people
+
+91
+00:05:01,483 --> 00:05:04,233
+out in the industry that are particularly excited about those.
+
+92
+00:05:04,316 --> 00:05:06,183
+So there's a reference there.
+
+93
+00:05:06,483 --> 00:05:11,466
+Now, finally, deadlock problems are solved... wait, that's not
+
+94
+00:05:11,483 --> 00:05:12,466
+quite accurate.
+
+95
+00:05:12,483 --> 00:05:13,216
+>> I was going to say.
+
+96
+00:05:13,300 --> 00:05:17,466
+>> You cannot completely solve deadlock problems. Even some deadlocks
+
+97
+00:05:17,483 --> 00:05:19,433
+are just going to occur.
+
+98
+00:05:19,450 --> 00:05:19,466
+>> Yep.
+
+99
+00:05:19,483 --> 00:05:21,466
+>> But you want to minimize them.
+
+100
+00:05:21,483 --> 00:05:22,183
+>> Okay.
+
+101
+00:05:22,266 --> 00:05:24,466
+>> So some of the ways that you'd minimize them would be making
+
+102
+00:05:24,483 --> 00:05:29,466
+sure the stored procedures that access a series of objects access
+
+103
+00:05:29,483 --> 00:05:31,433
+them in the same order.
+
+104
+00:05:31,450 --> 00:05:31,466
+>> Okay.
+
+105
+00:05:31,483 --> 00:05:34,466
+>> Also, think special operations team.
+
+106
+00:05:35,483 --> 00:05:39,350
+When I say "spec ops," Think of, you know, the Navy SEALs.
+
+107
+00:05:39,433 --> 00:05:42,466
+They get in in the cover of darkness, they do their stuff, they
+
+108
+00:05:42,483 --> 00:05:45,466
+are out of there accomplishing their mission before anybody knows
+
+109
+00:05:45,483 --> 00:05:46,433
+what happens.
+
+110
+00:05:46,450 --> 00:05:46,466
+>> Okay.
+
+111
+00:05:46,483 --> 00:05:52,466
+>> No jokes, please. We will also find out to a degree you can
+
+112
+00:05:52,483 --> 00:05:56,466
+stick your hands in a machinery by setting a connection level
+
+113
+00:05:56,483 --> 00:05:59,466
+setting called the transaction isolation level.
+
+114
+00:06:00,483 --> 00:06:04,466
+And then also you don't want to be browsing data while it's already
+
+115
+00:06:04,483 --> 00:06:06,466
+under modification, explicit
+
+116
+00:06:08,483 --> 00:06:09,466
+or implicit transaction.
+
+117
+00:06:10,383 --> 00:06:13,466
+>> So can we take a look at one of the tools that we might use
+
+118
+00:06:13,483 --> 00:06:16,216
+to find blocking issues maybe?
+
+119
+00:06:16,300 --> 00:06:18,466
+>> Yes. Let's take a look at Activity Monitor.
+
+120
+00:06:19,483 --> 00:06:21,466
+We'll have some fun here.
+
+121
+00:06:21,483 --> 00:06:25,466
+Now, you'll notice at the moment, for whatever this is worth,
+
+122
+00:06:25,483 --> 00:06:29,466
+I'm connected to the Adventure Works database. And Adventure
+
+123
+00:06:29,483 --> 00:06:32,466
+Works happens to have a table here called person.person. It has
+
+124
+00:06:32,483 --> 00:06:37,466
+got about 20,000 rows, just for giggles. And we will notice
+
+125
+00:06:37,483 --> 00:06:41,466
+that I'm freely able to query this. If I look down, you will
+
+126
+00:06:41,483 --> 00:06:44,433
+see I have about 20,000 rows.
+
+127
+00:06:44,450 --> 00:06:44,466
+>> Okay.
+
+128
+00:06:44,483 --> 00:06:47,466
+>> So nothing too dramatic right now. But next, I'm going to
+
+129
+00:06:47,483 --> 00:06:53,466
+copy this code... by the way, psst, take a look at the server
+
+130
+00:06:53,483 --> 00:06:55,350
+process ID here.
+
+131
+00:06:55,433 --> 00:06:58,466
+>> Okay, process ID 54. Got it.
+
+132
+00:06:58,216 --> 00:07:02,466
+>> So every connection is assigned, we call it, a SPID, server
+
+133
+00:07:02,483 --> 00:07:05,466
+process ID. By the way, a little shoutout to SPID.
+
+134
+00:07:06,483 --> 00:07:10,466
+That IS the SQL Server... actually, SQL Pass In Detroit, the
+
+135
+00:07:10,483 --> 00:07:14,466
+SQL Pass user group. So... I'm from Michigan so I got to put
+
+136
+00:07:14,483 --> 00:07:17,466
+in a plug for our own little SPID there. We have a great group there.
+
+137
+00:07:17,483 --> 00:07:18,350
+>> Whoo-hoo.
+
+138
+00:07:18,433 --> 00:07:21,466
+>> Anyway... Yeah, whoo-hoo. I will create a new query window
+
+139
+00:07:22,333 --> 00:07:25,466
+and I will paste the same code in here and run it. What we find
+
+140
+00:07:25,483 --> 00:07:30,466
+is that window by window, I can execute and use the same data
+
+141
+00:07:30,483 --> 00:07:33,466
+at the same time. Nothing dramatic thus far.
+
+142
+00:07:33,483 --> 00:07:36,466
+>> So everybody can do everything, no blocking going on.
+
+143
+00:07:36,483 --> 00:07:40,466
+>> No blocking at the moment because no data is under modification.
+
+144
+00:07:41,483 --> 00:07:45,466
+So next up, let's make a change. Let's update person.person.
+
+145
+00:07:46,450 --> 00:07:46,466
+>> Okay.
+
+146
+00:07:48,483 --> 00:07:52,466
+>> And let's see if this would be, as you call it, Rich, a resume'...
+
+147
+00:07:52,483 --> 00:07:55,466
+what's the RP? Resume' producing event.
+
+148
+00:07:55,483 --> 00:07:56,466
+>> Okay. Yeah, yeah, yeah.
+
+149
+00:07:56,483 --> 00:08:00,466
+>> Let's cause a resume' producing event or at least come close.
+
+150
+00:08:00,483 --> 00:08:04,466
+>> That typically would be a change that is not a good thing within
+
+151
+00:08:04,483 --> 00:08:05,466
+the database.
+
+152
+00:08:05,483 --> 00:08:10,466
+>> And notice my change here. I'm changing all 20,000 context
+
+153
+00:08:10,483 --> 00:08:14,466
+to last name Smith without a where clause. Woopsie.
+
+154
+00:08:14,483 --> 00:08:21,466
+>> Okay. That's... oh, capital P.
+
+155
+00:08:21,483 --> 00:08:23,466
+>> That is... that's right. It is a collation thing.
+
+156
+00:08:23,483 --> 00:08:28,466
+>> Yeah, this database was put in with a collation sequence that's
+
+157
+00:08:28,483 --> 00:08:29,466
+case sensitive.
+
+158
+00:08:30,483 --> 00:08:33,466
+>> Yep. Thanks for covering my tracks there. And same thing here.
+
+159
+00:08:35,350 --> 00:08:35,466
+>> Yeah.
+
+160
+00:08:35,483 --> 00:08:37,466
+>> Of course, I didn't prewrite out the code for this one.
+
+161
+00:08:37,483 --> 00:08:38,466
+So...
+
+162
+00:08:39,483 --> 00:08:40,466
+>> There we go.
+
+163
+00:08:41,483 --> 00:08:44,466
+So the change is going on. It is updating all the records.
+
+164
+00:08:44,483 --> 00:08:47,166
+We got 20,000 records updated, basically.
+
+165
+00:08:47,250 --> 00:08:51,466
+>> And to see if it really occurred, let me scroll through a whole
+
+166
+00:08:51,483 --> 00:08:53,466
+bunch of rows here. What do you observe?
+
+167
+00:08:53,483 --> 00:08:54,466
+>> Yep. It's all Smith.
+
+168
+00:08:54,483 --> 00:08:57,466
+>> So I got a whole lot of Smiths. But now let's see what happens
+
+169
+00:08:57,483 --> 00:09:00,216
+if I go to another window and
+
+170
+00:09:01,483 --> 00:09:03,466
+I attempt to access that same data.
+
+171
+00:09:03,483 --> 00:09:07,183
+>> Okay. Now, is it my imagination or did it actually come back
+
+172
+00:09:07,266 --> 00:09:09,466
+already when you did it earlier?
+
+173
+00:09:09,483 --> 00:09:13,166
+>> No. In my other SPID, I should say my original SPID, the one
+
+174
+00:09:13,250 --> 00:09:17,333
+that's holding onto the locked resources, it actually is able
+
+175
+00:09:17,416 --> 00:09:21,466
+to look at that data. That's a special privilege for that particular connection.
+
+176
+00:09:21,483 --> 00:09:24,466
+But what I'm seeing right here reminds me of Ferris Bueller when
+
+177
+00:09:24,483 --> 00:09:26,466
+he is expected to be in class.
+
+178
+00:09:27,316 --> 00:09:27,466
+>> Bueller? Bueller?
+
+179
+00:09:27,483 --> 00:09:28,466
+>> Bueller, anyone?
+
+180
+00:09:28,483 --> 00:09:29,0
+>> Yep.
+
+181
+00:09:29,483 --> 00:09:35,466
+>> And, of course, this data will never be returned until we have
+
+182
+00:09:35,483 --> 00:09:40,283
+the other transaction complete or terminate. And this is where
+
+183
+00:09:40,366 --> 00:09:41,466
+Activity Monitor comes in.
+
+184
+00:09:41,483 --> 00:09:44,466
+>> Now, if I were to get a phone call from somebody saying, "Hey,
+
+185
+00:09:44,483 --> 00:09:47,466
+I have been sitting on this query for a while," how can I figure
+
+186
+00:09:47,483 --> 00:09:49,466
+out what the cause of that block is?
+
+187
+00:09:49,483 --> 00:09:54,466
+>> Exactly. That's where Activity Monitor comes in. So, strangely,
+
+188
+00:09:54,483 --> 00:09:57,466
+they moved it from the user interface in Object Explorer a version
+
+189
+00:09:57,483 --> 00:10:01,466
+or two ago. And now it is just a button up here in the tool bar.
+
+190
+00:10:01,483 --> 00:10:02,466
+>> Okay.
+
+191
+00:10:02,233 --> 00:10:05,366
+>> So I click on Activity Monitor. We're not going to take the
+
+192
+00:10:05,450 --> 00:10:08,466
+full-time to look at all of these areas, but there's just a lot
+
+193
+00:10:08,483 --> 00:10:10,433
+of great information here.
+
+194
+00:10:10,450 --> 00:10:10,466
+>> Okay.
+
+195
+00:10:10,483 --> 00:10:12,466
+>> We're going to focus on processes.
+
+196
+00:10:13,300 --> 00:10:18,366
+Now, you may remember, the original SPID that started to modify
+
+197
+00:10:18,450 --> 00:10:20,383
+data was SPID 54.
+
+198
+00:10:20,466 --> 00:10:22,450
+>> I remember that. You asked me what it was.
+
+199
+00:10:22,483 --> 00:10:24,466
+>> Excellent. And as I... as I
+
+200
+00:10:26,483 --> 00:10:31,300
+scroll over here, we'll see the head blocker, if I was to expand that.
+
+201
+00:10:31,383 --> 00:10:35,466
+SPID 54 is blocking one other connection. That's what I know
+
+202
+00:10:35,483 --> 00:10:36,433
+from here.
+
+203
+00:10:36,450 --> 00:10:36,466
+>> Okay. Okay.
+
+204
+00:10:37,483 --> 00:10:41,466
+>> Next, if I go to SPID 55, we'll see that it is being blocked
+
+205
+00:10:41,483 --> 00:10:46,466
+by SPID 54. So this point, Rich, you got your phone call.
+
+206
+00:10:46,483 --> 00:10:49,466
+Hey, what's going on? You know, I'm... can't seem to finish
+
+207
+00:10:49,483 --> 00:10:51,183
+whatever I'm trying to do.
+
+208
+00:10:51,266 --> 00:10:51,466
+>> Okay.
+
+209
+00:10:51,483 --> 00:10:55,466
+>> At this point, one available option to the DBA is to determine
+
+210
+00:10:56,483 --> 00:10:59,166
+which process they might want to kill; or they could, of course,
+
+211
+00:10:59,483 --> 00:11:00,466
+do this in code.
+
+212
+00:11:00,483 --> 00:11:01,466
+>> Awesome.
+
+213
+00:11:01,483 --> 00:11:06,466
+>> So now I'm going to head back to my original connection, SPID 54.
+
+214
+00:11:07,483 --> 00:11:12,466
+And I will roll back the transaction after I spell it properly.
+
+215
+00:11:14,483 --> 00:11:18,466
+And let's quickly flip over to the other SPID. Observe now,
+
+216
+00:11:18,483 --> 00:11:23,466
+A, I have results and, B, notice all the last names came back.
+
+217
+00:11:23,483 --> 00:11:25,466
+>> Yeah, no more Smith.
+
+218
+00:11:25,483 --> 00:11:29,466
+>> So Activity Monitor could be a really useful resource to find
+
+219
+00:11:29,483 --> 00:11:32,466
+out why somebody might be blocked at the moment.
+
+220
+00:11:32,483 --> 00:11:36,466
+>> And is that the only way that you can get information on what's
+
+221
+00:11:36,483 --> 00:11:39,333
+going on, George? What's one of the other tools that we've got?
+
+222
+00:11:39,416 --> 00:11:42,466
+>> Oh, we're loaded with tools. And next up, we're going to take
+
+223
+00:11:42,483 --> 00:11:47,466
+a look at Profiler. Profiler is broader than merely locking tracking.
+
+224
+00:11:48,483 --> 00:11:53,466
+Think of Profiler as capturing general kinds of activity that's
+
+225
+00:11:53,483 --> 00:11:57,466
+going on in SQL Server. And, in fact, as I move to the topic
+
+226
+00:11:57,483 --> 00:12:01,316
+slide, this is going to introduce us to the topic of tracing
+
+227
+00:12:01,400 --> 00:12:04,416
+which then will lead us into the topic of what Profiler... pardon me...
+
+228
+00:12:04,483 --> 00:12:05,433
+and what it does.
+
+229
+00:12:05,450 --> 00:12:05,466
+>> Awesome.
+
+230
+00:12:05,483 --> 00:12:12,466
+>> So what is tracing? Tracing is the under-the-covers capturing
+
+231
+00:12:12,483 --> 00:12:16,466
+of activity by the SQL Server process. And you will find that
+
+232
+00:12:16,483 --> 00:12:21,466
+it can record and track all kinds of activity which we refer
+
+233
+00:12:21,483 --> 00:12:26,466
+to as "events" that are contained within event classes. So notice
+
+234
+00:12:26,483 --> 00:12:30,466
+the hierarchy from the side here. I might have one event class,
+
+235
+00:12:30,200 --> 00:12:35,366
+like the locking class, and then the deadlock or blocking events.
+
+236
+00:12:35,450 --> 00:12:40,466
+Another class might be the T SQL class and then T SQL statement
+
+237
+00:12:40,483 --> 00:12:44,466
+begun, T SQL statement completed would be events.
+
+238
+00:12:44,216 --> 00:12:44,466
+>> Okay.
+
+239
+00:12:44,483 --> 00:12:50,466
+>> Now, using system stored procedures, I can, A, turn tracing
+
+240
+00:12:50,483 --> 00:12:55,466
+on, determine what I want to capture, then perform all aspects
+
+241
+00:12:55,483 --> 00:12:59,466
+related to tracing completely without an user interface.
+
+242
+00:12:59,483 --> 00:13:02,466
+And the link that I have at the bottom of the slide will lead
+
+243
+00:13:02,483 --> 00:13:05,400
+you to a further study there.
+
+244
+00:13:05,483 --> 00:13:09,466
+>> Awesome. Is it only through stored procedures? Is there another
+
+245
+00:13:09,183 --> 00:13:10,466
+way that you can get that tracing going?
+
+246
+00:13:10,483 --> 00:13:15,183
+>> Well, for some of us who are mere mortals, or at least just
+
+247
+00:13:15,266 --> 00:13:19,466
+exploring, keep in mind there is a graphical user interface into
+
+248
+00:13:19,483 --> 00:13:23,466
+the tracing subsystem. This is a good way to get a head start.
+
+249
+00:13:23,483 --> 00:13:24,433
+Brace yourself, Rich.
+
+250
+00:13:24,450 --> 00:13:24,466
+>> Uh-oh.
+
+251
+00:13:24,483 --> 00:13:27,466
+>> I have heard stories from some of my student customers saying
+
+252
+00:13:27,483 --> 00:13:32,466
+that based on being told by Microsoft product support services
+
+253
+00:13:32,483 --> 00:13:36,466
+that they have to turn this on to capture something that it will
+
+254
+00:13:36,483 --> 00:13:43,466
+generate gigs and gigs of data in no short time or no quick time frame.
+
+255
+00:13:43,483 --> 00:13:46,466
+>> Absolutely. The bigger the database, the more the data is going
+
+256
+00:13:46,483 --> 00:13:47,466
+to be generated.
+
+257
+00:13:48,483 --> 00:13:51,466
+>> So you'll observe... although the screen shot is a little bit
+
+258
+00:13:51,483 --> 00:13:56,466
+detailed, what you see is, A, a laundry list of captured events.
+
+259
+00:13:56,483 --> 00:14:01,166
+And then when one particular event is selected, you get a lot
+
+260
+00:14:01,483 --> 00:14:02,466
+of detail about it.
+
+261
+00:14:02,483 --> 00:14:03,466
+>> Awesome.
+
+262
+00:14:03,483 --> 00:14:07,466
+>> So Profiler is a graphical user interface tool. I will add
+
+263
+00:14:07,216 --> 00:14:11,466
+it that it adds significant amounts of overhead to the tracing
+
+264
+00:14:11,483 --> 00:14:15,466
+subsystem, which is why the pros like to trace using the system
+
+265
+00:14:15,483 --> 00:14:16,466
+stored procedures.
+
+266
+00:14:16,483 --> 00:14:20,466
+>> Which, by the way, there is an easy way to get to because once
+
+267
+00:14:20,483 --> 00:14:25,200
+you've got your trace configured in the GUI, you can save it
+
+268
+00:14:26,483 --> 00:14:29,466
+and generate the stored procedures from the GUI, from the file
+
+269
+00:14:29,483 --> 00:14:30,466
+menu on a trace.
+
+270
+00:14:30,483 --> 00:14:36,166
+>> Fabulous. So I'd like to think of Profiler as a three-legged
+
+271
+00:14:36,483 --> 00:14:39,466
+stool configuration. That's what the graphic is implying here.
+
+272
+00:14:40,0 --> 00:14:42,466
+One of the first things I have to do when I'm configuring trace
+
+273
+00:14:42,483 --> 00:14:48,466
+is determining the particular events in their particular event classes.
+
+274
+00:14:48,483 --> 00:14:51,466
+That is, of course, of major concern and we'll find out that
+
+275
+00:14:51,483 --> 00:14:54,466
+a template can be used to help us along the way there.
+
+276
+00:14:54,483 --> 00:14:58,466
+There's some premade templates. And, Rich, knowing that you are
+
+277
+00:14:58,483 --> 00:15:01,466
+overzealous as you are...... you can make your own templates
+
+278
+00:15:01,483 --> 00:15:07,466
+and readily use those. So after I pick the events and event classes
+
+279
+00:15:07,483 --> 00:15:11,283
+of activity I want to capture, I then may need to go to an extra
+
+280
+00:15:11,366 --> 00:15:15,466
+level of detail in that there are standard columns of information
+
+281
+00:15:15,483 --> 00:15:20,333
+like the start time of an event, the duration of an event, other
+
+282
+00:15:20,416 --> 00:15:26,466
+aspects of what gets captured. But I can add more columns to
+
+283
+00:15:26,483 --> 00:15:31,466
+what gets captured, if there's some extra stuff I need to capture.
+
+284
+00:15:31,200 --> 00:15:34,466
+This will make more sense when I do my demo in just a moment.
+
+285
+00:15:34,483 --> 00:15:38,466
+And, finally, just a general rule, when it comes to capturing
+
+286
+00:15:38,483 --> 00:15:42,466
+data of any kind, only capture that which you're actually going
+
+287
+00:15:42,200 --> 00:15:46,466
+to bother to look at or that you actually need, and especially...
+
+288
+00:15:47,483 --> 00:15:49,433
+you don't want to have to find a needle in a haystack.
+
+289
+00:15:49,450 --> 00:15:49,466
+>> That wouldn't be good.
+
+290
+00:15:50,333 --> 00:15:53,466
+>> I will promise tracing can create a haystack.
+
+291
+00:15:53,483 --> 00:15:54,466
+[Laughter]
+
+292
+00:15:54,483 --> 00:15:56,466
+Now, we have to have another drumroll.
+
+293
+00:15:56,483 --> 00:15:58,466
+>> Uh-oh. Drumroll, please.
+
+294
+00:15:58,483 --> 00:15:59,466
+[Drumroll]
+
+295
+00:15:59,483 --> 00:16:04,466
+>> Awesome. One of the niftiest things that came about with SQL
+
+296
+00:16:04,483 --> 00:16:09,466
+2005 is the ability to take Windows performance monitoring data
+
+297
+00:16:10,483 --> 00:16:15,466
+and profiling data and merge them into one screen where I could
+
+298
+00:16:16,483 --> 00:16:22,466
+then capture the... basically, I could capture data in both environments
+
+299
+00:16:22,483 --> 00:16:27,466
+and happen to see if there's any correlation of system activity
+
+300
+00:16:27,483 --> 00:16:28,466
+to SQL Server activity.
+
+301
+00:16:28,483 --> 00:16:29,466
+>> Okay.
+
+302
+00:16:29,183 --> 00:16:31,466
+>> This was brilliant and really nifty. If you want to see
+
+303
+00:16:33,266 --> 00:16:36,400
+what that might look like, I have a link there. Also, some of
+
+304
+00:16:36,483 --> 00:16:39,466
+you are going to want to take Profiler to the next level.
+
+305
+00:16:39,183 --> 00:16:42,466
+And there's a book... a free e-book that's been put out by Simple Talk.
+
+306
+00:16:43,483 --> 00:16:46,466
+I think it is Brad McGee. If anybody wants to double-check me
+
+307
+00:16:46,483 --> 00:16:48,466
+on that go to simple-talk.com/books.
+
+308
+00:16:53,483 --> 00:16:55,466
+By the way, I'm big on free stuff.
+
+309
+00:16:55,483 --> 00:16:57,466
+>> That's... I think everybody likes free stuff.
+
+310
+00:16:58,166 --> 00:17:03,400
+>> I'm big on free stuff. And Simple Talk, it's armed by Redgate.
+
+311
+00:17:03,483 --> 00:17:06,416
+Redgate does a great amount for the community. They have a bunch
+
+312
+00:17:06,483 --> 00:17:10,166
+of free e-books there. So if nothing else, attending this segment,
+
+313
+00:17:10,250 --> 00:17:12,466
+you just got a few hundred dollars worth of free e-books.
+
+314
+00:17:12,483 --> 00:17:13,466
+>> Absolutely.
+
+315
+00:17:13,483 --> 00:17:16,466
+>> So we're good. Well, next up, let's not hold off any longer.
+
+316
+00:17:16,483 --> 00:17:18,466
+Let's show them how Profiler works.
+
+317
+00:17:18,483 --> 00:17:20,466
+>> That sounds like a plan. So what are we going to do here?
+
+318
+00:17:20,483 --> 00:17:25,466
+We're going to go and try to generate a deadlock and see what happens?
+
+319
+00:17:25,483 --> 00:17:26,466
+>> Exactly.
+
+320
+00:17:26,183 --> 00:17:27,350
+>> Sounds good.
+
+321
+00:17:27,433 --> 00:17:31,466
+>> So first up, let me go ahead and configure Profiler to be able
+
+322
+00:17:31,483 --> 00:17:34,466
+to capture the information that I want. Thanks for letting me
+
+323
+00:17:34,483 --> 00:17:37,466
+tidy up for just a little bit. And now I'm going to go to my
+
+324
+00:17:37,483 --> 00:17:42,283
+start menu. We will go to all programs. Yes, SQL Server 2012.
+
+325
+00:17:42,366 --> 00:17:46,466
+But now I'm going to go to performance tools, a different compartment.
+
+326
+00:17:46,483 --> 00:17:49,466
+And notice we got both kinds.
+
+327
+00:17:50,200 --> 00:17:51,466
+That's a "Blues Brothers" reference.
+
+328
+00:17:51,483 --> 00:17:52,383
+>> Uh-oh.
+
+329
+00:17:52,466 --> 00:17:56,466
+>> We got both kinds. We got Profiler and we got the DTA. So let's
+
+330
+00:17:56,483 --> 00:17:58,216
+open up Profiler.
+
+331
+00:17:58,483 --> 00:18:00,466
+>> You realize, that's going to go over the heads of a lot of
+
+332
+00:18:00,483 --> 00:18:02,466
+people, myself included.
+
+333
+00:18:02,483 --> 00:18:03,466
+>> Yeah, okay.
+
+334
+00:18:03,483 --> 00:18:04,300
+[Laughter]
+
+335
+00:18:04,483 --> 00:18:09,466
+Being a '80s kid, "Blues Brothers" you couldn't hardly escape.
+
+336
+00:18:09,483 --> 00:18:13,466
+>> I wish I could say I was a '80s kid.
+
+337
+00:18:13,483 --> 00:18:15,200
+[Laughter]
+
+338
+00:18:15,316 --> 00:18:17,466
+All right. So we got Profiler coming in.
+
+339
+00:18:17,483 --> 00:18:21,466
+>> Now, by virtue of seeing that we have to authenticate, this
+
+340
+00:18:21,483 --> 00:18:25,466
+tells you that Microsoft wouldn't have wanted just anyone...
+
+341
+00:18:25,483 --> 00:18:29,466
+or I should say, you as a DBA wouldn't just anyone profiling
+
+342
+00:18:29,483 --> 00:18:33,466
+and putting a burden on a machine. So after we validate identity,
+
+343
+00:18:33,483 --> 00:18:36,466
+we're going to take a look at the first leg of the stool.
+
+344
+00:18:36,483 --> 00:18:39,466
+So let's just call this... What's today? Wednesday?
+
+345
+00:18:40,0 --> 00:18:41,466
+>> Yeah, seems like it.
+
+346
+00:18:41,483 --> 00:18:45,466
+>> We'll just call this Wednesday AM trace. Sorry for those that
+
+347
+00:18:45,483 --> 00:18:48,466
+are 12 hours away, but we are glad that you're here.
+
+348
+00:18:50,483 --> 00:18:54,466
+Next up, I could use one of the standard templates, remember.
+
+349
+00:18:54,483 --> 00:18:56,466
+>> Those are the ones that choose it for you.
+
+350
+00:18:56,483 --> 00:19:00,466
+>> Overzealous Rich might have some of his own on his own machine.
+
+351
+00:19:00,483 --> 00:19:03,466
+And then I have to determine where I'm going to put the output
+
+352
+00:19:03,483 --> 00:19:06,466
+of the trace. So I can save that to a file. I will just pick
+
+353
+00:19:06,483 --> 00:19:10,433
+any old location. If this was going to accommodate a large amount
+
+354
+00:19:10,483 --> 00:19:13,333
+of data, then I'm going to have to put that somewhere else or
+
+355
+00:19:13,416 --> 00:19:16,466
+at least be concerned about where it goes.
+
+356
+00:19:16,216 --> 00:19:16,466
+>> Awesome.
+
+357
+00:19:16,483 --> 00:19:22,166
+>> So, remember, this dictated the events and event classes which
+
+358
+00:19:22,483 --> 00:19:26,466
+we're now going to see when we go to the next tab here, event selection.
+
+359
+00:19:27,166 --> 00:19:32,166
+So the standard template we'll see has picked these particular
+
+360
+00:19:32,483 --> 00:19:37,466
+event classes in bold and then these particular events in those
+
+361
+00:19:37,483 --> 00:19:41,466
+classes and then also standard. It's taking a look...
+
+362
+00:19:42,483 --> 00:19:47,466
+oops. That's nice you can undo the most recent scribbling.
+
+363
+00:19:47,483 --> 00:19:51,466
+Notice the columns or, I should say, the standard columns of
+
+364
+00:19:51,483 --> 00:19:52,466
+information here.
+
+365
+00:19:52,483 --> 00:19:53,266
+>> Okay.
+
+366
+00:19:53,350 --> 00:19:56,466
+>> Now, I'm going to adjust one of the legs of the stool by saying
+
+367
+00:19:56,483 --> 00:20:01,166
+that I want to show all events and in particular observe all
+
+368
+00:20:01,250 --> 00:20:03,466
+of the classes that we have. I don't really want to look at that
+
+369
+00:20:03,483 --> 00:20:07,466
+in super great detail, but I do want to go to the locks area.
+
+370
+00:20:08,0 --> 00:20:08,466
+>> Okay.
+
+371
+00:20:09,216 --> 00:20:13,466
+>> So from here, I'll pick, let's see, deadlock graph, lock deadlock,
+
+372
+00:20:14,216 --> 00:20:17,466
+and lock deadlock chain. Let's say I have an application and
+
+373
+00:20:17,483 --> 00:20:21,466
+I seem to be getting an inordinate amount of deadlocks, more
+
+374
+00:20:21,483 --> 00:20:23,466
+on the definition part there.
+
+375
+00:20:23,483 --> 00:20:24,400
+>> All right.
+
+376
+00:20:24,483 --> 00:20:28,466
+>> Okay. Next leg of the stool. I get my standard columns, but
+
+377
+00:20:28,483 --> 00:20:35,466
+maybe I want to expose those particular areas that offer other columns.
+
+378
+00:20:36,350 --> 00:20:40,466
+So I might want to say, let's say, the ID database to see...
+
+379
+00:20:40,183 --> 00:20:45,466
+to be accompanied with the deadlock chain and other ones.
+
+380
+00:20:46,483 --> 00:20:50,466
+>> So if there is a column for some events that's not included
+
+381
+00:20:50,483 --> 00:20:54,466
+but you're filtering on it, will that event show up in the trace
+
+382
+00:20:54,483 --> 00:20:55,466
+or won't it?
+
+383
+00:20:55,483 --> 00:21:00,466
+>> Only that which I have selected is going to show up and not
+
+384
+00:21:00,483 --> 00:21:05,466
+only that, but I can also filter such that events that would
+
+385
+00:21:05,200 --> 00:21:09,466
+normally be captured aren't... they won't go in the trace.
+
+386
+00:21:09,483 --> 00:21:12,466
+And, notice, I don't have a huge amount of criteria; but all
+
+387
+00:21:12,483 --> 00:21:16,466
+the ones I would probably want filter by database that I want
+
+388
+00:21:16,483 --> 00:21:21,466
+to capture, only activity in this database, or all except a particular
+
+389
+00:21:21,483 --> 00:21:25,466
+database and also on behalf of an application, particular user.
+
+390
+00:21:26,333 --> 00:21:30,466
+So I have a bunch of criteria there. So that is the third leg
+
+391
+00:21:30,200 --> 00:21:33,466
+of the filter. And now I'm going to run my Profiler trace.
+
+392
+00:21:33,483 --> 00:21:36,466
+Now, on a busy machine... this is just a lightly loaded virtual
+
+393
+00:21:36,483 --> 00:21:39,466
+machine, almost no activity, it will not generate a lot quickly.
+
+394
+00:21:39,483 --> 00:21:40,466
+A busy machine...
+
+395
+00:21:40,483 --> 00:21:42,466
+>> (multiple speakers) >> On
+
+396
+00:21:42,483 --> 00:21:45,466
+a busy machine, this would be scrolling and probably going crazy.
+
+397
+00:21:46,483 --> 00:21:50,466
+Next up, let's take a look at some activity or generate some
+
+398
+00:21:50,483 --> 00:21:53,300
+activity that's going to be captured.
+
+399
+00:21:56,483 --> 00:22:00,466
+And module 2... or, I'm sorry, Module 3 deadlock.
+
+400
+00:22:04,483 --> 00:22:08,466
+So let's first go to the marketdev database. Sorry, we're already there.
+
+401
+00:22:08,483 --> 00:22:13,466
+And I want you to make a mental note of a couple IDs in particular.
+
+402
+00:22:14,450 --> 00:22:14,466
+>> Okay.
+
+403
+00:22:14,483 --> 00:22:17,466
+>> So we have two different prospect IDs.
+
+404
+00:22:18,250 --> 00:22:23,466
+So 6800, 7800. They are going to be easy to remember. Now, movie
+
+405
+00:22:24,166 --> 00:22:28,466
+spoiler: Two different connections are going to end up requiring
+
+406
+00:22:28,483 --> 00:22:33,466
+each other's resources never to be finished. This is exactly
+
+407
+00:22:33,483 --> 00:22:35,416
+what a deadlock is.
+
+408
+00:22:35,450 --> 00:22:35,466
+>> Okay.
+
+409
+00:22:35,483 --> 00:22:37,183
+>> So when two resources...
+
+410
+00:22:38,416 --> 00:22:42,466
+I should say when two connections have holds on resources that
+
+411
+00:22:42,483 --> 00:22:47,250
+yet need each other's resources, this will produce an infinite
+
+412
+00:22:47,333 --> 00:22:51,466
+loop of those objects never being released. And we'll have to
+
+413
+00:22:51,483 --> 00:22:53,433
+see what SQL Server does about that.
+
+414
+00:22:53,450 --> 00:22:53,466
+>> Okay.
+
+415
+00:22:53,483 --> 00:22:59,466
+>> I won't tell. Now, notice, every connection has a SPID.
+
+416
+00:22:59,483 --> 00:23:04,433
+And I can use @@SPID to determine what the SPID is of my particular connection.
+
+417
+00:23:04,450 --> 00:23:04,466
+>> All right.
+
+418
+00:23:04,483 --> 00:23:08,466
+>> So let's also make a mental note I'm in SPID 55. And what
+
+419
+00:23:08,483 --> 00:23:14,366
+I want to do is update the first ID in the first connection.
+
+420
+00:23:14,450 --> 00:23:16,466
+>> Okay. So we just changed one record.
+
+421
+00:23:16,483 --> 00:23:20,466
+>> So I have data under modification. Notice, very sneaky, I
+
+422
+00:23:20,483 --> 00:23:24,466
+did not commit the transaction so now a lock is held on that
+
+423
+00:23:24,483 --> 00:23:28,466
+resource, all right? Now, for what it's worth, I have a couple
+
+424
+00:23:28,483 --> 00:23:32,466
+different ways of showing locks, sp lock. And later on in the
+
+425
+00:23:32,483 --> 00:23:36,450
+module we will look at dynamic management views. So we will
+
+426
+00:23:36,483 --> 00:23:40,466
+just leave those alone for right now. Okay. Next, open up another
+
+427
+00:23:40,483 --> 00:23:43,466
+connection and I'm going to have to paste the code below into
+
+428
+00:23:43,483 --> 00:23:44,466
+that window.
+
+429
+00:23:44,483 --> 00:23:45,450
+>> Okay.
+
+430
+00:23:45,483 --> 00:23:46,466
+>> So let me take a look at that.
+
+431
+00:23:47,483 --> 00:23:51,466
+Observe, new SPID 57.
+
+432
+00:23:52,350 --> 00:23:56,466
+We'll also notice that we can confirm that. That's sort of the duh.
+
+433
+00:23:56,483 --> 00:24:01,466
+But now I want to put the second ID under modification.
+
+434
+00:24:02,333 --> 00:24:06,466
+And it's under modification. Also notice I did not commit it.
+
+435
+00:24:06,483 --> 00:24:09,450
+>> All right. So we changed one record in the first window, a
+
+436
+00:24:09,483 --> 00:24:10,466
+different record in the second window.
+
+437
+00:24:10,483 --> 00:24:17,466
+>> And did not commit either. So notice, I'm now back in the first connection.
+
+438
+00:24:17,233 --> 00:24:17,466
+>> Okay.
+
+439
+00:24:17,483 --> 00:24:21,333
+>> And I'm going to attempt to update the second ID.
+
+440
+00:24:22,483 --> 00:24:23,466
+Now what I'm going to do...
+
+441
+00:24:23,483 --> 00:24:25,466
+>> That's kind of sitting there.
+
+442
+00:24:25,483 --> 00:24:29,333
+>> Now what I'm going to do... so notice grinding, grinding, grinding.
+
+443
+00:24:29,483 --> 00:24:33,466
+Now I want to go to the second connection and I want to attempt
+
+444
+00:24:33,483 --> 00:24:34,466
+to update
+
+445
+00:24:36,483 --> 00:24:38,466
+the first resource.
+
+446
+00:24:38,483 --> 00:24:41,466
+>> I see red. Red is not a good thing.
+
+447
+00:24:41,483 --> 00:24:45,466
+>> So how is this for one of the world's scariest messages?
+
+448
+00:24:46,483 --> 00:24:50,0
+Well,maybe not the world's scariest but transaction process blah,
+
+449
+00:24:50,483 --> 00:24:55,466
+blah, blah was deadlocked on locked resources or locked resources
+
+450
+00:24:55,483 --> 00:24:59,216
+with another process and has been chosen as the deadlocked victim.
+
+451
+00:25:00,183 --> 00:25:03,466
+Here's when you know you are overdue for a vacation. If you
+
+452
+00:25:03,483 --> 00:25:07,183
+know IP addresses of certain machines off the top of your head,
+
+453
+00:25:07,266 --> 00:25:11,466
+you're overdue. And if you have memorized SQL Server error message
+
+454
+00:25:11,483 --> 00:25:13,466
+numbers like 1205...
+
+455
+00:25:13,483 --> 00:25:16,466
+>> 1205 is every DBAs nightmare....
+
+456
+00:25:16,483 --> 00:25:18,466
+>> Rich, it is time to go to the Bahamas.
+
+457
+00:25:18,483 --> 00:25:20,466
+>> Never a good thing. Never a good thing.
+
+458
+00:25:20,483 --> 00:25:24,466
+>> So let's go back up to Profiler and see if it found anything.
+
+459
+00:25:25,483 --> 00:25:27,466
+You know what? Did I run it?
+
+460
+00:25:27,483 --> 00:25:29,466
+>> I think you are connected to the wrong database.
+
+461
+00:25:32,483 --> 00:25:33,466
+I have a feeling.
+
+462
+00:25:33,483 --> 00:25:36,466
+>> You know what? I connected to the wrong one. That was dumb.
+
+463
+00:25:37,250 --> 00:25:37,466
+All right.
+
+464
+00:25:37,483 --> 00:25:38,466
+Well...
+
+465
+00:25:39,483 --> 00:25:40,466
+>> Oh, well.
+
+466
+00:25:40,483 --> 00:25:42,466
+>> I needed to connect to pros.
+
+467
+00:25:42,483 --> 00:25:45,466
+>> Back to Adventure Works. Life goes on. But you know what?
+
+468
+00:25:46,483 --> 00:25:49,466
+The deadlock graphic that gets generated does show you all the
+
+469
+00:25:49,483 --> 00:25:52,466
+objects and the statements being executed, so...
+
+470
+00:25:52,483 --> 00:25:54,466
+>> So what do you think? Is it worth to run this again or should
+
+471
+00:25:54,483 --> 00:25:55,466
+we go on?
+
+472
+00:25:55,233 --> 00:25:58,466
+>> Nah, I think it is time to get to the next topic.
+
+473
+00:25:58,483 --> 00:26:02,466
+>> Well, the drama here is that I would have actually seen in
+
+474
+00:26:02,200 --> 00:26:05,466
+Profiler the deadlocks being listed. And then, graphically,
+
+475
+00:26:06,483 --> 00:26:09,466
+I would see how they acquired each other or attempted to acquire
+
+476
+00:26:09,483 --> 00:26:14,466
+each other's resources. And in hovering over the deadlock graphed
+
+477
+00:26:14,483 --> 00:26:19,466
+elements, I would get useful intel for troubleshooting. So that
+
+478
+00:26:19,166 --> 00:26:20,466
+was really the point of that one.
+
+479
+00:26:20,483 --> 00:26:23,466
+>> Awesome. And another technology we've got available to us over
+
+480
+00:26:23,483 --> 00:26:28,466
+and above tracing and Profiler would be auditing. What's that
+
+481
+00:26:28,200 --> 00:26:29,466
+all about, George?
+
+482
+00:26:29,483 --> 00:26:34,466
+>> So in the same way that Profiler and tracing can capture data,
+
+483
+00:26:34,483 --> 00:26:39,466
+auditing can capture data, too, but for a particularly different
+
+484
+00:26:39,483 --> 00:26:43,466
+sort of purpose. So let's take a look at a number of the auditing
+
+485
+00:26:43,483 --> 00:26:46,466
+techniques and then we're going to focus on one particular type
+
+486
+00:26:46,483 --> 00:26:50,466
+of auditing feature which literally has the name...
+
+487
+00:26:51,250 --> 00:26:51,466
+>> "Auditing."...
+
+488
+00:26:51,483 --> 00:26:53,466
+>> "SQL auditing."
+
+489
+00:26:53,483 --> 00:26:54,466
+>> I like that.
+
+490
+00:26:54,483 --> 00:26:59,466
+>> In the past, a little legacy, we had some military standards
+
+491
+00:26:59,483 --> 00:27:00,466
+or governmental standards...
+
+492
+00:27:01,333 --> 00:27:01,466
+>> Yep....
+
+493
+00:27:01,216 --> 00:27:04,466
+>> I guess you would consider those. C2 and common criteria were
+
+494
+00:27:05,0 --> 00:27:07,433
+their common names. These were...
+
+495
+00:27:07,483 --> 00:27:09,466
+is "implementable" a word?
+
+496
+00:27:10,483 --> 00:27:11,416
+>> Yeah, it is. It works.
+
+497
+00:27:11,483 --> 00:27:14,466
+>> It is a word today. So you can implement those in SQL Server
+
+498
+00:27:15,483 --> 00:27:19,383
+at the expense of lots of overhead. Now, the funny thing about
+
+499
+00:27:19,466 --> 00:27:24,350
+auditing is that you might need to turn auditing on to capture activity.
+
+500
+00:27:24,433 --> 00:27:24,466
+>> Yep.
+
+501
+00:27:24,483 --> 00:27:28,466
+>> You don't want people that you are trying to capture to be
+
+502
+00:27:28,483 --> 00:27:29,466
+able to turn it off.
+
+503
+00:27:29,483 --> 00:27:31,466
+>> That would be a good thing, yes.
+
+504
+00:27:31,483 --> 00:27:35,466
+>> So there are some safeguards there with the auditing features.
+
+505
+00:27:35,483 --> 00:27:39,200
+It turns out, they had a lot of overhead and have fallen really
+
+506
+00:27:39,283 --> 00:27:45,266
+out of mind share at least in the SQL Server community. So we'll
+
+507
+00:27:45,350 --> 00:27:49,466
+consider these as older methods, a lot of overhead associated
+
+508
+00:27:49,483 --> 00:27:50,166
+with those.
+
+509
+00:27:50,483 --> 00:27:52,466
+>> All right. What are some of the other ways we can audit the
+
+510
+00:27:52,483 --> 00:27:54,450
+database and catch information?
+
+511
+00:27:54,483 --> 00:27:57,466
+>> We have a bunch of different triggers that exist in SQL Server,
+
+512
+00:27:57,483 --> 00:28:02,466
+DML triggers, so we could capture data modifications and then
+
+513
+00:28:02,483 --> 00:28:06,383
+store that or use a trigger to store that in a table. Same thing
+
+514
+00:28:06,466 --> 00:28:10,466
+with modifying database objects. Like, if I create a table,
+
+515
+00:28:10,483 --> 00:28:15,466
+if I modify a table, schema, I have DBL triggers, we have a log-in triggers.
+
+516
+00:28:15,483 --> 00:28:22,466
+But it is good to know that they're there. They fulfill a particular purpose.
+
+517
+00:28:22,483 --> 00:28:24,416
+But there is a trigger limitation.
+
+518
+00:28:24,483 --> 00:28:25,466
+>> What's the big limitation?
+
+519
+00:28:26,483 --> 00:28:28,466
+>> The limitation is someone can turn it off.
+
+520
+00:28:29,383 --> 00:28:30,0
+>> Ooh, that's not a good thing.
+
+521
+00:28:30,483 --> 00:28:34,466
+>> So you don't want the person whose traffic you want to capture
+
+522
+00:28:34,483 --> 00:28:38,233
+be the one to turn off, you know, auditing.
+
+523
+00:28:38,316 --> 00:28:40,466
+>> That would be like giving the fox the key to the hen house?
+
+524
+00:28:40,483 --> 00:28:41,466
+>> Something like that.
+
+525
+00:28:41,483 --> 00:28:42,466
+>> Oh, dear. Oh, dear.
+
+526
+00:28:42,483 --> 00:28:46,466
+>> Next up, let's take a look at the feature SQL auditing.
+
+527
+00:28:46,483 --> 00:28:49,466
+>> Now, this is the one they want us to use going forward, right?
+
+528
+00:28:49,483 --> 00:28:53,466
+>> That's right. What does this feature provide compared to other
+
+529
+00:28:53,483 --> 00:28:56,216
+types of general auditing methods?
+
+530
+00:28:56,483 --> 00:29:01,466
+It's very granular similar to some of the previous auditing methods,
+
+531
+00:29:01,483 --> 00:29:05,466
+and we can track not only instance-level auditing activities
+
+532
+00:29:05,483 --> 00:29:08,466
+but also database-level auditing activities.
+
+533
+00:29:09,216 --> 00:29:13,466
+And it leverages a technology that's now part of SQL Server Extended Events.
+
+534
+00:29:13,483 --> 00:29:18,466
+And it's essentially, pardon me, a preconfigured Extended Events environment.
+
+535
+00:29:19,450 --> 00:29:19,466
+>> Okay.
+
+536
+00:29:19,483 --> 00:29:21,466
+>> There's some terminology we are going to go through during
+
+537
+00:29:21,483 --> 00:29:25,200
+the demonstration that you will have to become familiar with
+
+538
+00:29:25,283 --> 00:29:27,466
+in order to implement auditing.
+
+539
+00:29:27,483 --> 00:29:31,416
+And we'll see the configuration steps. There are actually a
+
+540
+00:29:31,483 --> 00:29:34,350
+series of configuration steps involved in this.
+
+541
+00:29:34,433 --> 00:29:37,333
+>> So what do you think? Why don't we just go and walk it through
+
+542
+00:29:37,483 --> 00:29:39,466
+and explain it as we show it to you.
+
+543
+00:29:39,483 --> 00:29:40,383
+>> Good plan.
+
+544
+00:29:41,350 --> 00:29:42,350
+So let me close Profiler.
+
+545
+00:29:42,433 --> 00:29:43,466
+>> All right.
+
+546
+00:29:46,466 --> 00:29:50,466
+So SQL auditing, again, it allows us to capture Event Activities
+
+547
+00:29:50,483 --> 00:29:55,166
+similar for what Profiler does but a little bit different technology.
+
+548
+00:29:56,483 --> 00:29:59,450
+>> All right. And here we go.
+
+549
+00:30:03,483 --> 00:30:06,466
+Now, one of the things that we have to determine when we're going
+
+550
+00:30:06,483 --> 00:30:10,466
+to audit is to determine the destination of our audit data.
+
+551
+00:30:10,483 --> 00:30:14,433
+This might be an important concern from an integrity standpoint.
+
+552
+00:30:14,483 --> 00:30:17,183
+We have two destinations of the log data.
+
+553
+00:30:17,266 --> 00:30:18,283
+>> And what are those?
+
+554
+00:30:18,366 --> 00:30:21,466
+>> We have the application log, and we could also specify a file
+
+555
+00:30:21,483 --> 00:30:25,433
+system location that maybe we exclude access to.
+
+556
+00:30:25,450 --> 00:30:25,466
+>> Okay.
+
+557
+00:30:25,483 --> 00:30:29,416
+>> So with that, I'm going to create a server audit...
+
+558
+00:30:30,483 --> 00:30:34,466
+create a server audit object. Notice the name of this. We will
+
+559
+00:30:34,483 --> 00:30:39,233
+call it MarketDevLog and dictate the destination of this.
+
+560
+00:30:39,316 --> 00:30:43,466
+>> So we are going to be writing the messages to the application log.
+
+561
+00:30:43,483 --> 00:30:47,316
+>> To the application log. Next, I'm going to go to the database
+
+562
+00:30:47,400 --> 00:30:52,466
+level and I'm going to create an audit specification. Now, there
+
+563
+00:30:52,483 --> 00:30:57,466
+are server-level audit specifications and database-level audit specifications.
+
+564
+00:30:57,483 --> 00:31:01,466
+And they dictate what it is that I actually want to track or cover.
+
+565
+00:31:02,333 --> 00:31:02,433
+>> Okay.
+
+566
+00:31:02,483 --> 00:31:06,250
+>> So the code is fairly readable here. I'm creating a database-level
+
+567
+00:31:06,366 --> 00:31:10,466
+audit spec. I give it a name and then on behalf of a particular server.
+
+568
+00:31:10,483 --> 00:31:16,466
+And the activity I want is any selecting within... or activity
+
+569
+00:31:16,483 --> 00:31:23,166
+on the marketing schema objects. And notice whom I'm tracking
+
+570
+00:31:23,250 --> 00:31:27,0
+would be anybody within public, which means everyone.
+
+571
+00:31:27,483 --> 00:31:30,466
+>> So you define the action, you define the object, and you define
+
+572
+00:31:30,483 --> 00:31:32,466
+the user that you want to audit.
+
+573
+00:31:32,483 --> 00:31:37,466
+>> That's right. So if I wanted true to... really all over the
+
+574
+00:31:37,483 --> 00:31:42,416
+SQL Server product, I have meta data to retrieve any conceivable
+
+575
+00:31:42,483 --> 00:31:43,466
+information I want.
+
+576
+00:31:44,483 --> 00:31:48,383
+All right. Next up we have to throw a switch on.
+
+577
+00:31:48,450 --> 00:31:48,466
+>> Okay.
+
+578
+00:31:48,483 --> 00:31:51,466
+>> So pointing to the master database, I have to throw a server-level
+
+579
+00:31:51,483 --> 00:31:55,466
+switch on, alter server, alter MarketDevLog and I have to turn
+
+580
+00:31:55,483 --> 00:32:00,466
+that on. Now that I turned that on, I have to turn a switch at
+
+581
+00:32:00,483 --> 00:32:05,466
+the database level. Now, point to the proper database and now
+
+582
+00:32:06,483 --> 00:32:12,333
+that specification that I created a moment ago, I have to turn
+
+583
+00:32:12,416 --> 00:32:14,466
+on as well. And next up
+
+584
+00:32:15,483 --> 00:32:16,466
+the bear trap.
+
+585
+00:32:16,483 --> 00:32:18,466
+>> All right. Let's see it, George.
+
+586
+00:32:18,200 --> 00:32:21,466
+>> Let's go ahead and perform some activity that may be caught
+
+587
+00:32:21,483 --> 00:32:25,466
+and some activity that might not be caught. Notice a bunch of
+
+588
+00:32:25,483 --> 00:32:28,466
+meta data queries that you can run. I will leave that just in
+
+589
+00:32:28,483 --> 00:32:32,466
+the code here. It was brought up on the break time that some
+
+590
+00:32:32,483 --> 00:32:37,466
+of you are interested in the code, and the code will be made available.
+
+591
+00:32:38,450 --> 00:32:40,433
+>> We'll have details coming up a little bit later on how that's
+
+592
+00:32:40,450 --> 00:32:40,466
+going to work.
+
+593
+00:32:40,483 --> 00:32:44,466
+>> I'm flattered you think... Some of this code is right from Microsoft.
+
+594
+00:32:44,483 --> 00:32:50,250
+And we'll give details on where you can get a hold of that. But, yeah.
+
+595
+00:32:50,333 --> 00:32:56,466
+All right. So notice that this object is within marketing, and
+
+596
+00:32:56,483 --> 00:32:59,433
+this object is not within marketing.
+
+597
+00:32:59,450 --> 00:32:59,466
+>> Okay.
+
+598
+00:32:59,483 --> 00:33:02,466
+>> So I'm going to involve some activity
+
+599
+00:33:03,483 --> 00:33:05,466
+that should be audited.
+
+600
+00:33:09,483 --> 00:33:10,466
+>> Interesting.
+
+601
+00:33:10,483 --> 00:33:15,466
+>> That's okay. That was actually not activity to be audited.
+
+602
+00:33:15,183 --> 00:33:15,466
+>> No.
+
+603
+00:33:15,483 --> 00:33:19,466
+>> So now we have to take a look at the application log.
+
+604
+00:33:22,483 --> 00:33:25,466
+>> So we're going to go out to event viewer, look at the application
+
+605
+00:33:25,483 --> 00:33:27,466
+events, see what shows up.
+
+606
+00:33:27,483 --> 00:33:30,466
+>> Yep. So let's go to Windows logs, application log.
+
+607
+00:33:31,483 --> 00:33:33,466
+Uh-huh. Audit event.
+
+608
+00:33:34,483 --> 00:33:35,466
+(Making noise).
+
+609
+00:33:35,483 --> 00:33:37,333
+>> Very cool.
+
+610
+00:33:41,483 --> 00:33:45,416
+Now, you can also get that activity by going to audits in the
+
+611
+00:33:45,483 --> 00:33:46,466
+GUI, correct?
+
+612
+00:33:47,266 --> 00:33:48,216
+>> Yeah. In fact,
+
+613
+00:33:49,483 --> 00:33:53,466
+I can configure a lot... really for all practical purposes, all
+
+614
+00:33:53,483 --> 00:33:56,466
+of this within the graphical user interface.
+
+615
+00:33:58,483 --> 00:34:00,466
+So all of that is available.
+
+616
+00:34:00,483 --> 00:34:01,466
+>> Cool.
+
+617
+00:34:01,483 --> 00:34:06,466
+Cool. So, there's a lot of information about activity and tracing
+
+618
+00:34:06,200 --> 00:34:10,466
+and all that good stuff. What about getting activity about getting
+
+619
+00:34:10,483 --> 00:34:16,283
+information about configurations and how my databases are set
+
+620
+00:34:16,366 --> 00:34:17,466
+up and things like that.
+
+621
+00:34:18,483 --> 00:34:22,166
+You know, is there stuff that we can learn there?
+
+622
+00:34:22,250 --> 00:34:26,466
+>> So SQL Server is a dynamic environment. There are things that
+
+623
+00:34:26,483 --> 00:34:29,466
+are moving, changing all the time. So that's one point.
+
+624
+00:34:29,483 --> 00:34:32,466
+Next point, there are all kinds of facts that I might want to
+
+625
+00:34:32,483 --> 00:34:37,466
+get about my environment. And in increasing measure, there is
+
+626
+00:34:37,483 --> 00:34:42,466
+a recommended way to get that information. And this information
+
+627
+00:34:42,483 --> 00:34:46,466
+is retrieved via catalog views and dynamic management objects.
+
+628
+00:34:47,433 --> 00:34:49,466
+So these are the things that we're going to take a look at in
+
+629
+00:34:49,483 --> 00:34:54,466
+this next little subsection. So I want to start off with a definition, Rich.
+
+630
+00:34:54,166 --> 00:34:55,166
+>> Please do.
+
+631
+00:34:55,483 --> 00:35:01,466
+>> So what is metadata? Metadata is retrieving information about information.
+
+632
+00:35:02,483 --> 00:35:06,466
+So there are very typical pieces of information that database
+
+633
+00:35:06,483 --> 00:35:11,233
+administrators, maybe even database devs would want to retrieve.
+
+634
+00:35:11,316 --> 00:35:15,466
+Fortunately, Microsoft has laid it in our lap or made it accessible
+
+635
+00:35:15,483 --> 00:35:20,466
+easily through normally queriable objects.
+
+636
+00:35:20,216 --> 00:35:20,466
+>> Okay.
+
+637
+00:35:20,483 --> 00:35:22,466
+>> Now, I'd like to demonstrate something. So if you guys would
+
+638
+00:35:22,483 --> 00:35:28,466
+flip over to my virtual machine for a moment. Let's say just
+
+639
+00:35:28,166 --> 00:35:30,433
+on a whim here I create a new database.
+
+640
+00:35:30,450 --> 00:35:30,466
+>> Okay.
+
+641
+00:35:30,483 --> 00:35:35,383
+>> So let's call this busy database and immediately...
+
+642
+00:35:36,483 --> 00:35:40,466
+oops. And immediately
+
+643
+00:35:42,366 --> 00:35:45,283
+we'll go ahead and create it.
+
+644
+00:35:45,366 --> 00:35:50,466
+Now, in my list here, I see my database and observe when I go
+
+645
+00:35:50,483 --> 00:35:51,466
+to views.
+
+646
+00:35:52,266 --> 00:35:54,466
+I don't have any views... user defined views.
+
+647
+00:35:54,483 --> 00:35:56,466
+>> We haven't created anything.
+
+648
+00:35:56,483 --> 00:36:01,466
+>> But observe what I have immediately accessible under system views.
+
+649
+00:36:01,483 --> 00:36:05,466
+Now, for the most part, information schema views, they're queriable
+
+650
+00:36:06,333 --> 00:36:09,166
+objects that they have. But they seem to be falling out of favor.
+
+651
+00:36:09,483 --> 00:36:15,466
+I will say that's an opinion. What seems to be gaining momentum
+
+652
+00:36:15,483 --> 00:36:20,466
+is this remaining set of objects starting from here and then
+
+653
+00:36:20,483 --> 00:36:25,466
+going downward. Notice the sys prefix. So generically we're
+
+654
+00:36:25,483 --> 00:36:29,400
+going to call all of this catalog views.
+
+655
+00:36:29,483 --> 00:36:31,466
+>> Okay. So the catalog views.
+
+656
+00:36:32,483 --> 00:36:35,466
+>> And some of these are queriable objects that get instance level
+
+657
+00:36:35,483 --> 00:36:38,466
+information, something like sys.databases.
+
+658
+00:36:39,450 --> 00:36:39,466
+>> Okay.
+
+659
+00:36:39,483 --> 00:36:43,466
+>> Or I have other objects at the database-level like sys.tables.
+
+660
+00:36:44,483 --> 00:36:47,466
+>> Now, the catalog views are mostly static information, though, right?
+
+661
+00:36:47,483 --> 00:36:52,466
+>> Exactly. So catalog views are static information. But as I
+
+662
+00:36:52,483 --> 00:36:54,466
+scroll down a little bit further,
+
+663
+00:36:56,483 --> 00:36:59,466
+I'm going to get to some objects that have a different prefix,
+
+664
+00:36:59,483 --> 00:37:05,466
+an added prefix. Notice the sys.dm_ prefix.
+
+665
+00:37:05,483 --> 00:37:09,466
+>> Okay. What does that dm refer to?
+
+666
+00:37:09,483 --> 00:37:15,266
+>> So the dm refers to dynamic management object. And if I can
+
+667
+00:37:15,350 --> 00:37:16,166
+flip back...
+
+668
+00:37:17,483 --> 00:37:19,466
+actually, if you guys would flip back to the slides then,
+
+669
+00:37:21,483 --> 00:37:25,466
+let's go through a quick little classification system. But before
+
+670
+00:37:25,483 --> 00:37:31,466
+we advance, you'll see that having normally queriable objects
+
+671
+00:37:31,483 --> 00:37:35,450
+are static catalog views in our dynamic management objects.
+
+672
+00:37:35,483 --> 00:37:40,233
+I can apply all of my normal querying mechanisms to get the information
+
+673
+00:37:40,316 --> 00:37:43,433
+I want. If I can add a little editorial comment.
+
+674
+00:37:43,450 --> 00:37:43,466
+>> Uh-oh.
+
+675
+00:37:43,483 --> 00:37:47,200
+>> Generally speaking, the catalog views and the dynamic management
+
+676
+00:37:47,283 --> 00:37:51,433
+objects provide way more information that you care about.
+
+677
+00:37:51,450 --> 00:37:51,466
+>> Awesome.
+
+678
+00:37:51,483 --> 00:37:54,466
+>> So you are going to come up with your own custom script code.
+
+679
+00:37:54,483 --> 00:37:58,466
+You are going to use where clauses, column lists. You can aggregate
+
+680
+00:37:58,483 --> 00:38:02,466
+where clauses, like I said, all the normal queriable mechanisms.
+
+681
+00:38:02,483 --> 00:38:05,466
+You will come out with your own custom code. Time out.
+
+682
+00:38:06,483 --> 00:38:10,466
+There are lots of resources out there where they already have
+
+683
+00:38:10,483 --> 00:38:14,466
+some of these queries made, and you can appropriate them rather
+
+684
+00:38:14,483 --> 00:38:15,466
+than write them yourself.
+
+685
+00:38:15,483 --> 00:38:17,283
+>> It sounds like a plan to me.
+
+686
+00:38:19,183 --> 00:38:21,466
+>> All right. I don't know if we will have enough time at the
+
+687
+00:38:21,483 --> 00:38:24,466
+end of this session; but if there is one of the sessions today
+
+688
+00:38:24,483 --> 00:38:27,316
+where we do have a couple extra minutes, I will talk about some
+
+689
+00:38:27,400 --> 00:38:31,450
+of my favorite Web sites that I think you should subscribe to.
+
+690
+00:38:31,483 --> 00:38:35,350
+And I have swallowed my own medicine. I'm also a subscriber
+
+691
+00:38:35,433 --> 00:38:37,316
+of every that I would recommend.
+
+692
+00:38:37,400 --> 00:38:38,466
+>> That would be a good thing.
+
+693
+00:38:38,483 --> 00:38:44,466
+>> Moving on, you can argue that there are two major classifications
+
+694
+00:38:44,483 --> 00:38:48,466
+of any of the dynamic management objects; that is, those that
+
+695
+00:38:48,483 --> 00:38:52,466
+have the sys.dm_ prefix.
+
+696
+00:38:52,483 --> 00:38:57,466
+Generally speaking, we call all of them dynamic management objects,
+
+697
+00:38:57,483 --> 00:38:58,466
+or DMOs.
+
+698
+00:38:58,483 --> 00:38:59,300
+>> Okay.
+
+699
+00:38:59,383 --> 00:39:04,400
+>> Further, those that require no input, we refer to as dynamic
+
+700
+00:39:04,483 --> 00:39:05,466
+management views.
+
+701
+00:39:07,433 --> 00:39:09,466
+And those that require...
+
+702
+00:39:10,483 --> 00:39:14,283
+those that require input are called dynamic management functions.
+
+703
+00:39:14,483 --> 00:39:17,466
+Strangely, I can't just look at the name of them and determine,
+
+704
+00:39:17,483 --> 00:39:22,0
+wait, that's a function, that one's a DMV, or dynamic management view.
+
+705
+00:39:22,450 --> 00:39:22,466
+>> True.
+
+706
+00:39:22,483 --> 00:39:24,466
+>> I got to put a plug in for Books Online. I know you are a
+
+707
+00:39:25,483 --> 00:39:26,466
+big fan of Books Online.
+
+708
+00:39:26,483 --> 00:39:28,466
+>> The best help system ever written.
+
+709
+00:39:28,483 --> 00:39:32,466
+>> Every single dynamic management object, probably every catalog
+
+710
+00:39:32,483 --> 00:39:37,466
+object, you can get information you want about... in Books Online.
+
+711
+00:39:37,483 --> 00:39:39,466
+That part is good. Now, let's...
+
+712
+00:39:39,483 --> 00:39:45,466
+A point of reality here. So I've stated we have DMOs and then
+
+713
+00:39:46,483 --> 00:39:49,466
+DMVs and DMFs in sort of a hierarchy, and everyone mangles the names.
+
+714
+00:39:49,483 --> 00:39:50,283
+>> Yep.
+
+715
+00:39:50,366 --> 00:39:53,466
+>> We will just graciously suffer everyone that doesn't know our
+
+716
+00:39:53,483 --> 00:39:57,466
+taxonomy, sorry, and just roll with it.
+
+717
+00:39:57,483 --> 00:39:58,466
+>> There you go.
+
+718
+00:39:58,483 --> 00:40:04,466
+>> Now, for those that have a particular interest, another Michigan
+
+719
+00:40:04,483 --> 00:40:09,466
+person, an awfully busy man, part of one of the west Michigan
+
+720
+00:40:09,483 --> 00:40:14,466
+user groups, Tim Ford, has co-written a book called... I think
+
+721
+00:40:14,483 --> 00:40:17,466
+it is "The Periodic Table of Dynamic Management Objects."
+
+722
+00:40:17,483 --> 00:40:22,366
+So that's a resource. Also being a frequent speaker, conference
+
+723
+00:40:22,450 --> 00:40:25,466
+presenter, had he a presentation that's still out there online.
+
+724
+00:40:25,483 --> 00:40:28,466
+You can easily Google for it here called "The Periodic Table
+
+725
+00:40:28,483 --> 00:40:32,466
+of Dynamic Management Objects." A couple of other resources to
+
+726
+00:40:32,483 --> 00:40:36,466
+run with before we actually take a look at using these, at Redgate,
+
+727
+00:40:36,483 --> 00:40:41,466
+one of their free e-books is called "The DMV Starter Pack," not
+
+728
+00:40:41,483 --> 00:40:45,466
+only an e-book reference but also a bunch of code you can use
+
+729
+00:40:45,483 --> 00:40:50,400
+to solve very typical problems about a busy SQL Server environment.
+
+730
+00:40:50,483 --> 00:40:53,466
+>> That's a good thing to have.
+
+731
+00:40:53,483 --> 00:40:57,466
+>> And then I know at one time, Quest which is now more recently
+
+732
+00:40:57,483 --> 00:40:58,466
+owned by Dell,
+
+733
+00:40:59,483 --> 00:41:03,466
+they had a poster with, I don't know, a whole bunch of dynamic
+
+734
+00:41:03,483 --> 00:41:06,466
+management objects listed on it. But now that you know there
+
+735
+00:41:06,483 --> 00:41:09,466
+are resources, let's take a look at some of the dynamic management
+
+736
+00:41:09,483 --> 00:41:14,466
+objects and see some of the things we can obtain from them.
+
+737
+00:41:14,483 --> 00:41:15,466
+So here we go.
+
+738
+00:41:20,483 --> 00:41:22,466
+>> So what are we going to be looking at here, George?
+
+739
+00:41:22,483 --> 00:41:25,466
+>> So we are going to take a look at... really just a strafing
+
+740
+00:41:26,0 --> 00:41:30,466
+run, a big-picture survey of some of the big dynamic management objects.
+
+741
+00:41:30,483 --> 00:41:34,466
+And we will have this conclusion. Man, I can get anything.
+
+742
+00:41:34,200 --> 00:41:38,166
+Man, I can find out anything I would want to. Honestly, you
+
+743
+00:41:38,250 --> 00:41:42,183
+might have to write a little bit of gnarly query code, but you
+
+744
+00:41:42,266 --> 00:41:45,466
+can get what you want. So that's the conclusion you will have.
+
+745
+00:41:45,483 --> 00:41:51,283
+First, let's take a look at a dynamic management object called sys.dm_exec_requests.
+
+746
+00:41:51,416 --> 00:41:52,466
+Any input required here?
+
+747
+00:41:53,483 --> 00:41:54,466
+>> Mmm, doesn't look like it to me.
+
+748
+00:41:55,333 --> 00:42:00,233
+>> Nope. So this would be classified as a dynamic management view.
+
+749
+00:42:00,316 --> 00:42:00,466
+>> Okay.
+
+750
+00:42:01,350 --> 00:42:05,466
+>> Now, we'll find that if we scroll one of the columns...
+
+751
+00:42:05,483 --> 00:42:08,466
+and this is good insight into one of those that has an awful
+
+752
+00:42:08,483 --> 00:42:13,0
+lot of columns... somewhere in here we'll find the column is
+
+753
+00:42:13,483 --> 00:42:16,466
+user session... or is user process.
+
+754
+00:42:16,483 --> 00:42:19,333
+Heck off the top of my head, I don't even remember where it is
+
+755
+00:42:19,483 --> 00:42:20,466
+and I probably passed it anyway.
+
+756
+00:42:20,483 --> 00:42:21,466
+>> Yeah.
+
+757
+00:42:21,483 --> 00:42:22,466
+>> Think I passed it?
+
+758
+00:42:22,483 --> 00:42:23,466
+>> Probably.
+
+759
+00:42:23,483 --> 00:42:28,466
+>> So let's take a look. Is user process.
+
+760
+00:42:32,483 --> 00:42:33,433
+Can I skip scrolling?
+
+761
+00:42:33,450 --> 00:42:33,466
+>> Yes.
+
+762
+00:42:34,333 --> 00:42:39,466
+>> Let's just use a where clause and execute this to only show
+
+763
+00:42:39,483 --> 00:42:44,466
+non-system processes. I'm using a where clause "is user process
+
+764
+00:42:44,483 --> 00:42:45,466
+equals one."
+
+765
+00:42:47,483 --> 00:42:51,466
+Next up. We'll find that often it's valuable
+
+766
+00:42:52,433 --> 00:42:56,166
+to combine the use of dynamic management objects. These are
+
+767
+00:42:56,483 --> 00:43:02,466
+also DMVs. So, A, we're joining, B, a where clause and, C, we're
+
+768
+00:43:02,483 --> 00:43:07,266
+specifying particular columns. So we're going to use that column
+
+769
+00:43:07,483 --> 00:43:11,166
+to filter the currently executing requests by joining the two
+
+770
+00:43:11,483 --> 00:43:14,300
+tables on session IAD.
+
+771
+00:43:15,300 --> 00:43:18,200
+Notice this has revealed me.
+
+772
+00:43:18,283 --> 00:43:19,466
+>> There you go.
+
+773
+00:43:19,483 --> 00:43:20,466
+>> Next up.
+
+774
+00:43:21,483 --> 00:43:25,466
+Note we can also retrieve details of the SQL batch that's being
+
+775
+00:43:25,483 --> 00:43:29,466
+executed instead of just the handle. And we can do this with
+
+776
+00:43:29,483 --> 00:43:35,466
+a function. Sys.dm_exec_sql_text function. And, like I said,
+
+777
+00:43:35,483 --> 00:43:39,466
+if you memorize some of the function names or DM objects by name,
+
+778
+00:43:39,483 --> 00:43:41,466
+you need a vacation.
+
+779
+00:43:41,483 --> 00:43:42,466
+[Laughter]
+
+780
+00:43:43,483 --> 00:43:45,466
+>> Seeing as there are several hundred of them, I would agree
+
+781
+00:43:45,483 --> 00:43:46,466
+with you.
+
+782
+00:43:46,483 --> 00:43:51,466
+>> So now I'm not only going to perform a join on a couple of DMVs.
+
+783
+00:43:52,0 --> 00:43:57,466
+But then I'm going to outer apply that across a dynamic management function.
+
+784
+00:43:57,483 --> 00:43:59,466
+Let's see what this provides.
+
+785
+00:44:00,483 --> 00:44:05,216
+And we will see this will supply me the program name I'm using,
+
+786
+00:44:05,300 --> 00:44:09,466
+the general statement that I'm using, and my actual query code
+
+787
+00:44:09,483 --> 00:44:13,466
+and a couple of other facts as well. Okay. Take a deep breath
+
+788
+00:44:13,483 --> 00:44:14,466
+here, Rich.
+
+789
+00:44:15,483 --> 00:44:20,466
+Now, it says, "Don't be too concerned about the complexity of
+
+790
+00:44:20,483 --> 00:44:23,466
+the subquery below but note that it's possible to find the actual
+
+791
+00:44:23,483 --> 00:44:26,466
+statement being executed rather than the batch."
+
+792
+00:44:26,483 --> 00:44:28,466
+>> Can I let it out now?
+
+793
+00:44:28,483 --> 00:44:35,466
+>> Yeah, there you go. Go, sorry. Good job. That is somewhat
+
+794
+00:44:35,483 --> 00:44:40,466
+gnarly query code. But as I scroll here, notice I get statement...
+
+795
+00:44:41,450 --> 00:44:41,466
+>> Wow.
+
+796
+00:44:41,483 --> 00:44:45,466
+>> This would be... this would be even more fun if I expanded
+
+797
+00:44:46,166 --> 00:44:46,466
+that all out.
+
+798
+00:44:47,483 --> 00:44:52,466
+>> So you can do a lot of the things that you are doing in Profiler
+
+799
+00:44:52,483 --> 00:44:56,466
+and Event Tracing and all that through queries as well.
+
+800
+00:44:56,483 --> 00:44:58,433
+>> There's so many ways to get information.
+
+801
+00:44:58,450 --> 00:44:58,466
+>> Wow.
+
+802
+00:44:58,483 --> 00:45:02,466
+>> Part of this might be my preference. And so let's see.
+
+803
+00:45:03,483 --> 00:45:09,466
+>> So what about... is Extended Events similar to Profiler?
+
+804
+00:45:09,483 --> 00:45:10,466
+>> I'm sorry. Say that again.
+
+805
+00:45:10,483 --> 00:45:14,466
+>> Extended Events, I've heard a lot about that. Is that similar
+
+806
+00:45:14,483 --> 00:45:17,466
+to Profiler? Are we doing the same kinds of things there?
+
+807
+00:45:18,316 --> 00:45:22,333
+>> Saw a comment from the student... or from the attendee pool there.
+
+808
+00:45:22,416 --> 00:45:24,466
+Extended Events are not going to be part of this session.
+
+809
+00:45:24,483 --> 00:45:30,466
+They are not in detail really at all on the exam, so we're only
+
+810
+00:45:30,483 --> 00:45:35,466
+looking at Profiler for this point. Yep, Profiler is a deprecated...
+
+811
+00:45:35,483 --> 00:45:40,466
+deprecated feature. That means... here's my nickname for a deprecated event.
+
+812
+00:45:40,483 --> 00:45:43,466
+It is a dead man walking. It is going to be going away. It is
+
+813
+00:45:43,483 --> 00:45:46,466
+not gone now, but it is going to be going away. In some cases,
+
+814
+00:45:46,483 --> 00:45:49,466
+we are not even told in how many versions it will go away but
+
+815
+00:45:49,483 --> 00:45:50,466
+it is going away.
+
+816
+00:45:50,483 --> 00:45:55,466
+>> So Extended Events is there. It does the same kind of functionality;
+
+817
+00:45:55,483 --> 00:46:00,466
+but at this point, it is not really a big objective on the exams.
+
+818
+00:46:00,483 --> 00:46:01,266
+>> No.
+
+819
+00:46:01,350 --> 00:46:04,466
+>> And Profiler is not going away any time in the short-term.
+
+820
+00:46:04,483 --> 00:46:05,466
+>> That's right.
+
+821
+00:46:05,483 --> 00:46:06,433
+>> All right.
+
+822
+00:46:06,483 --> 00:46:10,333
+>> So next up, one of the things that you might be interested
+
+823
+00:46:10,483 --> 00:46:14,466
+in is a precious resource, and that is the procedure cache.
+
+824
+00:46:14,483 --> 00:46:18,466
+So I'm able to query, let's just summarize, all the points of
+
+825
+00:46:18,483 --> 00:46:23,466
+interest so I can get plan cache details. I can find the top
+
+826
+00:46:23,483 --> 00:46:25,383
+ten executing queries.
+
+827
+00:46:25,483 --> 00:46:27,466
+Lots of good stuff here.
+
+828
+00:46:27,483 --> 00:46:28,166
+>> Very cool.
+
+829
+00:46:28,483 --> 00:46:31,466
+>> Like I said, there are places out there that will give me...
+
+830
+00:46:32,366 --> 00:46:36,466
+that will hand me this code in my lap and can help me solve various problems.
+
+831
+00:46:36,483 --> 00:46:38,333
+Let's go ahead and move along now.
+
+832
+00:46:39,450 --> 00:46:39,466
+>> All right.
+
+833
+00:46:39,483 --> 00:46:45,466
+So the other thing... we've got these dynamic management objects.
+
+834
+00:46:45,483 --> 00:46:49,333
+We've got the catalog views. We've got Profiler and all that.
+
+835
+00:46:49,483 --> 00:46:53,466
+Is there a technology that kind of brings all that together and
+
+836
+00:46:53,483 --> 00:46:57,466
+pulls it into a way that it becomes useful for us over time?
+
+837
+00:46:57,483 --> 00:47:02,466
+>> Especially. There's... the D in dynamic management objects
+
+838
+00:47:03,333 --> 00:47:06,433
+which describes that it's dynamic information.
+
+839
+00:47:06,450 --> 00:47:06,466
+>> Okay.
+
+840
+00:47:06,483 --> 00:47:10,466
+>> It's changing information. It's not persisted in any way, which
+
+841
+00:47:10,483 --> 00:47:13,466
+brings us to our next topic. Might it be wonderful... by the
+
+842
+00:47:13,483 --> 00:47:15,400
+way, this is where you say "yes."
+
+843
+00:47:15,450 --> 00:47:15,466
+>> Yes.
+
+844
+00:47:15,483 --> 00:47:19,466
+>> Might it be wonderful if I could capture some of that performance
+
+845
+00:47:19,483 --> 00:47:23,466
+data and some of that tracking data, store it long-term, maybe
+
+846
+00:47:23,483 --> 00:47:27,466
+even be able to create some wonderful reports off of it. Of course,
+
+847
+00:47:27,483 --> 00:47:32,466
+the answer is yes. General troubleshooting rule, if I don't know
+
+848
+00:47:32,483 --> 00:47:38,466
+what "normal" is, how can I take my current condition and determine
+
+849
+00:47:38,483 --> 00:47:40,283
+if something is wrong or not?
+
+850
+00:47:40,366 --> 00:47:40,466
+>> You can't.
+
+851
+00:47:40,483 --> 00:47:43,466
+>> Have you ever had a he said/she said some kind of thing?
+
+852
+00:47:43,483 --> 00:47:44,466
+>> Yep, yeah.
+
+853
+00:47:44,483 --> 00:47:48,0
+>> Let's take a look at the management data warehouse.
+
+854
+00:47:48,450 --> 00:47:48,466
+>> Cool.
+
+855
+00:47:50,483 --> 00:47:54,466
+>> All right. The management data warehouse is a really SQL Server
+
+856
+00:47:54,483 --> 00:47:59,466
+database that I can make that has some other mechanisms place
+
+857
+00:47:59,483 --> 00:48:04,466
+on it to grab data from either the current instance and/or other instances.
+
+858
+00:48:04,483 --> 00:48:07,466
+>> Okay. It's configured through a wizard. Actually, I even looked
+
+859
+00:48:07,483 --> 00:48:12,466
+into seeing if I can configure it in code. But I configure it
+
+860
+00:48:12,200 --> 00:48:15,466
+and set it up with two different wizards. What it ends up doing
+
+861
+00:48:15,483 --> 00:48:17,466
+is setting up schedules,
+
+862
+00:48:19,483 --> 00:48:24,466
+SSIS packages, and jobs to grab performance data, put it in what
+
+863
+00:48:24,483 --> 00:48:27,466
+they call the management data warehouse, and also build some
+
+864
+00:48:27,483 --> 00:48:33,350
+wonderfully accessible reports that are viewable from management studio.
+
+865
+00:48:33,433 --> 00:48:34,433
+>> Very cool.
+
+866
+00:48:34,450 --> 00:48:34,466
+>> Very nifty.
+
+867
+00:48:34,483 --> 00:48:38,466
+>> Very cool. How do you set that up? How do you get data collector
+
+868
+00:48:38,483 --> 00:48:39,283
+up and working?
+
+869
+00:48:39,366 --> 00:48:42,466
+>> So as you can see from this slide, there are two wizards that
+
+870
+00:48:42,483 --> 00:48:46,350
+you will invoke. First, I have to get started. I have to create
+
+871
+00:48:46,433 --> 00:48:49,350
+the management data warehouse. An you will see from the first
+
+872
+00:48:49,433 --> 00:48:53,466
+radio button implying that I'm going to run the first wizard.
+
+873
+00:48:53,483 --> 00:48:56,466
+After that, I then set up data collection and do the rest of
+
+874
+00:48:56,483 --> 00:49:00,466
+the configuration process. And you will see in going through
+
+875
+00:49:00,483 --> 00:49:05,466
+these two wizards two sets of roles exist. There is a role for management.
+
+876
+00:49:05,483 --> 00:49:08,0
+And notice there are three different roles, each which are their
+
+877
+00:49:08,483 --> 00:49:13,466
+own privileges, and there are specific database roles for configuration purposes.
+
+878
+00:49:13,483 --> 00:49:16,466
+>> So once you have got the data collector set up, you have set
+
+879
+00:49:16,483 --> 00:49:19,466
+up the management data warehouse, what's the next step?
+
+880
+00:49:19,483 --> 00:49:23,466
+>> Next is allowing it to do its work through the scheduled jobs,
+
+881
+00:49:23,483 --> 00:49:27,466
+and you will see a couple of the... well, two of the three reports
+
+882
+00:49:27,483 --> 00:49:30,466
+that can be produced. Let me ask a rhetorical question.
+
+883
+00:49:30,483 --> 00:49:31,466
+>> Ask away.
+
+884
+00:49:31,483 --> 00:49:34,466
+>> If there were resources on a SQL Server system that you were
+
+885
+00:49:34,483 --> 00:49:37,466
+concerned about, what would be some of the ones you would be
+
+886
+00:49:37,483 --> 00:49:39,300
+most concerned about?
+
+887
+00:49:39,483 --> 00:49:41,466
+>> Probably disk space.
+
+888
+00:49:41,483 --> 00:49:42,466
+>> Disk space.
+
+889
+00:49:42,483 --> 00:49:46,350
+>> Maybe memory or CPU utilization. I mean, those are the things
+
+890
+00:49:46,433 --> 00:49:48,466
+that get used on a computer.
+
+891
+00:49:48,483 --> 00:49:50,466
+>> Sure. And if you guys will go back to the slide, you'll take
+
+892
+00:49:50,483 --> 00:49:54,466
+a look that at least on behalf of these two...
+
+893
+00:49:55,483 --> 00:50:00,166
+these two reports, they show exactly what you were talking about,
+
+894
+00:50:00,250 --> 00:50:05,466
+Rich, those things like disk usage trends, CPU usage, memory,
+
+895
+00:50:06,333 --> 00:50:08,466
+et cetera, some really good stuff.
+
+896
+00:50:08,483 --> 00:50:11,433
+>> So can we take a look at how to set it all up and get it going, George?
+
+897
+00:50:11,450 --> 00:50:11,466
+>> Sure.
+
+898
+00:50:14,483 --> 00:50:18,466
+>> So walking through, you are going to show us the wizards and
+
+899
+00:50:18,483 --> 00:50:22,466
+how it all comes together. And at the end of the day, hopefully
+
+900
+00:50:23,216 --> 00:50:24,466
+we have a data collector.
+
+901
+00:50:24,483 --> 00:50:27,466
+>> That's right. So you will notice from here under management,
+
+902
+00:50:27,483 --> 00:50:31,466
+let me just collapse a little bit to simplify the user interface.
+
+903
+00:50:31,483 --> 00:50:34,466
+Under management, you will notice I have data management.
+
+904
+00:50:34,483 --> 00:50:39,350
+And if I refresh, well, I don't have anything there right now.
+
+905
+00:50:39,433 --> 00:50:43,466
+General rule of thumb in Windows, when in doubt, yeah, I'm going
+
+906
+00:50:43,483 --> 00:50:48,333
+to right click. So right click, configure the management data warehouse.
+
+907
+00:50:48,350 --> 00:50:48,466
+[Laughter]
+
+908
+00:50:48,483 --> 00:50:52,466
+Here are my two radio buttons. Let's get started with the first one.
+
+909
+00:50:52,483 --> 00:50:56,433
+First up, what instance do I want to put the warehouse on?
+
+910
+00:50:56,450 --> 00:50:56,466
+>> Okay.
+
+911
+00:50:56,483 --> 00:51:01,450
+>> And do I already have a warehouse? Or do I want to make one?
+
+912
+00:51:01,483 --> 00:51:04,466
+It probably wouldn't be a bad idea to already create one ahead
+
+913
+00:51:04,483 --> 00:51:08,466
+of time. But skipping a little of the detail, let me go ahead
+
+914
+00:51:08,166 --> 00:51:10,466
+and make the management data warehouse.
+
+915
+00:51:10,483 --> 00:51:13,466
+>> And that's just a standard create database dialogue.
+
+916
+00:51:13,483 --> 00:51:15,466
+>> Standard database.
+
+917
+00:51:15,483 --> 00:51:20,466
+So here is where I can map log-ins and users to the management roles.
+
+918
+00:51:20,483 --> 00:51:24,466
+I don't need to do any of that just yet. And from here, I can
+
+919
+00:51:24,200 --> 00:51:29,0
+click on not Swedish but "finish." [Banging on table]
+
+920
+00:51:29,483 --> 00:51:33,466
+>> That would be the collective grown from the peanut gallery, please.
+
+921
+00:51:33,216 --> 00:51:37,466
+>> If I didn't get up enough on the last break for my comments...
+
+922
+00:51:37,483 --> 00:51:40,316
+>> Keep going, keep going, keep going.
+
+923
+00:51:40,400 --> 00:51:45,466
+>> Next up. We will run the wizard again, set up data collection.
+
+924
+00:51:46,483 --> 00:51:50,266
+So, enter where you want to cache, collect the data locally before
+
+925
+00:51:50,350 --> 00:51:51,283
+it's uploaded.
+
+926
+00:51:53,450 --> 00:51:53,466
+>> Okay.
+
+927
+00:51:53,483 --> 00:51:58,466
+>> I will just pick a dummy location for right now.
+
+928
+00:51:59,483 --> 00:52:03,466
+In reality, you would probably want to pick a location that you
+
+929
+00:52:03,483 --> 00:52:05,466
+are going to have enough space for.
+
+930
+00:52:05,483 --> 00:52:06,233
+>> Okay.
+
+931
+00:52:06,483 --> 00:52:10,466
+>> So let's go ahead and designate the server and database that
+
+932
+00:52:10,483 --> 00:52:12,433
+will host the data warehouse.
+
+933
+00:52:12,483 --> 00:52:13,466
+>> All right.
+
+934
+00:52:14,483 --> 00:52:17,466
+>> And honestly, I thought I put that on prose wear but...
+
+935
+00:52:17,483 --> 00:52:20,466
+>> You defaulted to Instant Works.
+
+936
+00:52:20,483 --> 00:52:21,466
+>> So there's our warehouse.
+
+937
+00:52:23,483 --> 00:52:25,466
+It is always nice having a second set of eyes.
+
+938
+00:52:26,483 --> 00:52:28,466
+Let's click on finish.
+
+939
+00:52:30,483 --> 00:52:34,466
+>> And the wizard does its wonderful thing. It spins, it grins.
+
+940
+00:52:34,483 --> 00:52:39,466
+It winds, it dines. It slices, it dices. And it's done.
+
+941
+00:52:39,483 --> 00:52:42,466
+>> now, what we would want to do is generate some activity, give
+
+942
+00:52:42,483 --> 00:52:44,233
+some time to let the...
+
+943
+00:52:45,483 --> 00:52:49,466
+let the schedule jobs work to collect data. And then we get
+
+944
+00:52:49,483 --> 00:52:53,466
+the nifty reports. So right click on data collection reports,
+
+945
+00:52:53,483 --> 00:52:57,333
+and there are the three very pretty reports.
+
+946
+00:52:57,416 --> 00:52:59,466
+>> Awesome. Very, very cool.
+
+947
+00:52:59,483 --> 00:53:03,466
+>> So that is... those are the basics of configuring the data warehouse.
+
+948
+00:53:03,483 --> 00:53:08,350
+So in this module, we took a loot at SQL Server being a dynamic environment.
+
+949
+00:53:08,433 --> 00:53:09,466
+Lots of ways...
+
+950
+00:53:09,483 --> 00:53:13,416
+or lots of tools that we have that can give facts. Facts can
+
+951
+00:53:13,483 --> 00:53:16,466
+produce conclusions. And from... from the conclusions, we can
+
+952
+00:53:16,483 --> 00:53:18,466
+then implement some changes.
+
+953
+00:53:18,483 --> 00:53:24,466
+>> Awesome. Thanks a lot, George. We will be taking a meal break now.
+
+954
+00:53:24,183 --> 00:53:27,466
+We appreciate the time you've spent and look forward to seeing
+
+955
+00:53:27,483 --> 00:53:29,466
+you back here at the top of the hour.
+
+956
+00:53:29,483 --> 00:53:31,466
+>> And I got to tell you, I'm excited about some of the stuff
+
+957
+00:53:31,483 --> 00:53:32,466
+we are going to look at this afternoon.
+
+958
+00:53:33,483 --> 00:53:36,283
+>> Oh, yeah, we're going to have fun. We're going to have fun.
+
+959
+00:53:36,366 --> 00:53:37,466
+See you in a bit.
+

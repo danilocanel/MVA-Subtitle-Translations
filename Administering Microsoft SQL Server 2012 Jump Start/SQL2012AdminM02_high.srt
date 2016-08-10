@@ -1,0 +1,4076 @@
+1
+00:00:00,333 --> 00:00:06,333
+[Music]
+
+2
+00:00:18,483 --> 00:00:20,466
+Welcome back to the Administering SQL Server 2012
+
+3
+00:00:21,0 --> 00:00:24,466
+Jump Start. I'm Rich Currey. We're here with Mr. George Squillace,
+
+4
+00:00:24,483 --> 00:00:28,416
+SQL is in his name. George, what are we going to be talking about now?
+
+5
+00:00:28,483 --> 00:00:31,466
+>> A good module here, Rich. We are going to take a look at maintaining
+
+6
+00:00:31,483 --> 00:00:35,466
+instances and databases is the big picture. So we will take
+
+7
+00:00:35,483 --> 00:00:39,466
+a look at implementing transparent data encryption.
+
+8
+00:00:39,233 --> 00:00:39,466
+>> Okay.
+
+9
+00:00:39,483 --> 00:00:43,466
+>> Look at compression options. SQL Server product, you know,
+
+10
+00:00:43,483 --> 00:00:48,416
+is very highly configurable. We have a server-level or instance-level options.
+
+11
+00:00:48,483 --> 00:00:51,466
+We will look at some of those, maybe some of those that are particularly
+
+12
+00:00:51,483 --> 00:00:56,233
+good for a heavy workload. We'll also take a look at database options...
+
+13
+00:00:56,316 --> 00:00:56,466
+>> Okay....
+
+14
+00:00:56,483 --> 00:01:00,466
+>> and explore a particular category of options just to see how
+
+15
+00:01:00,483 --> 00:01:04,466
+to change those and such. And then a topic of interest to you...
+
+16
+00:01:04,483 --> 00:01:08,466
+or really more in your area of expertise, the topic of affinity
+
+17
+00:01:08,483 --> 00:01:13,466
+and parallelism for really those carefully... those workloads
+
+18
+00:01:13,483 --> 00:01:15,300
+to be carefully controlled.
+
+19
+00:01:15,383 --> 00:01:16,166
+>> Okay.
+
+20
+00:01:16,250 --> 00:01:18,466
+>> A pet favorite topic of mine, automation.
+
+21
+00:01:18,483 --> 00:01:19,166
+>> There you go.
+
+22
+00:01:19,250 --> 00:01:23,466
+>> So we will look into the two major automation aspects. I imagine
+
+23
+00:01:23,483 --> 00:01:27,466
+a lot of the attendees have heard of some of the automation aspects.
+
+24
+00:01:27,483 --> 00:01:31,466
+But there are certain things for exam prep you just have to have down.
+
+25
+00:01:31,483 --> 00:01:32,416
+>> Awesome.
+
+26
+00:01:32,483 --> 00:01:36,466
+>> And I will also suggest it very much helps if you have hands-on activities.
+
+27
+00:01:37,483 --> 00:01:41,466
+>> Sounds good. So let's start in then, shall we?
+
+28
+00:01:41,483 --> 00:01:45,466
+>> All right. Security is always a concern. And transparent data
+
+29
+00:01:45,483 --> 00:01:48,466
+encryption obviously is a security technology.
+
+30
+00:01:49,250 --> 00:01:53,266
+So in this topic, we'll see the different kinds of encryption
+
+31
+00:01:53,350 --> 00:01:55,466
+that are out there in the I.T. industry and what kinds of problems
+
+32
+00:01:56,0 --> 00:02:01,383
+they solve and then specifically what TDE... what TDE happens
+
+33
+00:02:01,450 --> 00:02:01,466
+to solve...
+
+34
+00:02:01,483 --> 00:02:02,333
+>> Okay....
+
+35
+00:02:02,483 --> 00:02:04,466
+>> the problems that it solves. We will then see how it's applied.
+
+36
+00:02:04,483 --> 00:02:08,250
+That's kind of the big-picture look going in here.
+
+37
+00:02:08,333 --> 00:02:13,466
+>> Awesome. So what is TDE and why would we use it?
+
+38
+00:02:13,483 --> 00:02:18,466
+>> It is a data protection technology. As far as encryption generally
+
+39
+00:02:18,183 --> 00:02:21,433
+goes, I'm concerned about data while it's in motion...
+
+40
+00:02:21,450 --> 00:02:21,466
+>> Yep....
+
+41
+00:02:22,333 --> 00:02:24,466
+>> traveling between two points when someone might be able to
+
+42
+00:02:24,483 --> 00:02:28,466
+intercept it, redirect it, blah, blah, blah or data while it
+
+43
+00:02:28,483 --> 00:02:32,466
+is at rest that someone could steal, alter, something like that.
+
+44
+00:02:33,483 --> 00:02:34,316
+>> Oh, that never happens, right?
+
+45
+00:02:34,400 --> 00:02:36,466
+>> Never happens. Oh, my, I wonder...
+
+46
+00:02:36,483 --> 00:02:39,466
+>> I have actually been a victim of that.
+
+47
+00:02:39,216 --> 00:02:39,466
+>> You have? Data theft?
+
+48
+00:02:40,333 --> 00:02:45,466
+>> Absolutely. Had a laptop that had all of our tax information
+
+49
+00:02:45,483 --> 00:02:51,466
+on it stolen from the state. So it happens. But how's TDE going
+
+50
+00:02:51,483 --> 00:02:53,466
+to deal with that?
+
+51
+00:02:54,483 --> 00:02:59,300
+>> Yeah. Well, to add on to the problem here, now we have terabyte-sized
+
+52
+00:02:59,483 --> 00:03:03,466
+USB drives that I could attach to an instance, easily copy off
+
+53
+00:03:03,483 --> 00:03:05,433
+even some very large backup files.
+
+54
+00:03:05,450 --> 00:03:05,466
+>> Yep.
+
+55
+00:03:05,483 --> 00:03:09,466
+>> Or as we will see later on, detach some data files, copy them
+
+56
+00:03:09,483 --> 00:03:13,466
+over, slurp them over to my USB external. And then I'm away
+
+57
+00:03:13,483 --> 00:03:16,466
+with super important information.
+
+58
+00:03:16,483 --> 00:03:18,466
+>> Absolutely, absolutely.
+
+59
+00:03:18,483 --> 00:03:23,466
+>> Now, a concern about any encryption technology is whether or
+
+60
+00:03:23,483 --> 00:03:28,316
+not it involves changing any other practices involving that data.
+
+61
+00:03:28,400 --> 00:03:28,466
+>> Okay.
+
+62
+00:03:28,483 --> 00:03:32,466
+>> And that's where the T in transparent data encryption comes in.
+
+63
+00:03:32,483 --> 00:03:36,466
+It is just that transparent. As far as an application is concerned,
+
+64
+00:03:36,483 --> 00:03:40,333
+I don't have to write any special code. I don't write any code.
+
+65
+00:03:40,416 --> 00:03:45,466
+I just access the database as normally, and the files are protected
+
+66
+00:03:45,216 --> 00:03:46,466
+on the filesystem from theft.
+
+67
+00:03:47,483 --> 00:03:51,466
+And if somebody tries to attach them, copy them somewhere else...
+
+68
+00:03:51,483 --> 00:03:56,466
+>> So I don't have to do any special programming on the application side?
+
+69
+00:03:56,483 --> 00:03:57,466
+>> No....
+
+70
+00:03:57,483 --> 00:04:00,466
+>> to make... to utilize TDE in the environment?
+
+71
+00:04:00,483 --> 00:04:01,416
+>> Exactly.
+
+72
+00:04:01,450 --> 00:04:01,466
+>> That's cool.
+
+73
+00:04:01,483 --> 00:04:04,466
+>> Yeah, no special... no special protection.
+
+74
+00:04:04,483 --> 00:04:05,450
+>> That's very cool.
+
+75
+00:04:05,483 --> 00:04:09,466
+>> Sorry. No special application treatment. Now, looking into
+
+76
+00:04:09,483 --> 00:04:14,466
+the next slide here, we'll see that transparent data encryption
+
+77
+00:04:14,483 --> 00:04:19,466
+is related to a fairly sophisticated hierarchy of encryption
+
+78
+00:04:19,483 --> 00:04:23,466
+keys that we happen to find in not only Windows but also in the
+
+79
+00:04:23,483 --> 00:04:24,466
+SQL Server product.
+
+80
+00:04:24,483 --> 00:04:25,466
+>> Okay.
+
+81
+00:04:25,483 --> 00:04:30,466
+>> So when I install SQL Server, a key is created for the instance
+
+82
+00:04:30,483 --> 00:04:34,466
+that then becomes the parent key of potentially many, many other keys.
+
+83
+00:04:34,483 --> 00:04:36,433
+That's called the service master key.
+
+84
+00:04:36,450 --> 00:04:36,466
+>> Okay.
+
+85
+00:04:36,483 --> 00:04:41,466
+>> And then we have derived from that a database master key.
+
+86
+00:04:41,483 --> 00:04:45,466
+From that, we'll create certificates for additional encryption.
+
+87
+00:04:45,483 --> 00:04:49,233
+And then, finally, when it comes to encrypting a particular database,
+
+88
+00:04:49,316 --> 00:04:54,466
+there is a database encryption see... pardon me, database encryption key.
+
+89
+00:04:54,483 --> 00:04:57,466
+You will see all this in action with your own two eyes.
+
+90
+00:04:57,483 --> 00:05:01,466
+>> Wow. That sounds like keys upon keys upon keys. You really
+
+91
+00:05:01,483 --> 00:05:03,466
+need a key ring for that, don't you?
+
+92
+00:05:03,483 --> 00:05:05,433
+>> You do need a key ring for that.
+
+93
+00:05:05,450 --> 00:05:05,466
+[Laughter]
+
+94
+00:05:06,483 --> 00:05:10,466
+So you saw from the key hierarchy diagram a little bit of an
+
+95
+00:05:10,483 --> 00:05:15,466
+idea of how TDE is applied. I have to create a database master key.
+
+96
+00:05:15,483 --> 00:05:18,466
+That's... and that will be, of course, derived from the service
+
+97
+00:05:18,483 --> 00:05:22,466
+master key, then a certificate, and then a database encryption key.
+
+98
+00:05:22,483 --> 00:05:25,433
+And then think of being on the end of the runway.
+
+99
+00:05:25,450 --> 00:05:25,466
+>> Yep.
+
+100
+00:05:25,483 --> 00:05:28,466
+>> Got to get off in the air. Got to hit the throttle. Got to
+
+101
+00:05:28,483 --> 00:05:29,466
+turn it on.
+
+102
+00:05:29,483 --> 00:05:32,466
+>> So after you got all those keys, you got to turn them on.
+
+103
+00:05:32,483 --> 00:05:36,466
+>> Yep. Now, moving to the next area here...
+
+104
+00:05:38,450 --> 00:05:38,466
+>> Yeah....
+
+105
+00:05:38,483 --> 00:05:39,466
+>> we have concerns.
+
+106
+00:05:40,483 --> 00:05:42,466
+>> What kinds of concerns might they be?
+
+107
+00:05:43,483 --> 00:05:47,466
+>> There are definitely some potential gotchas with transparent
+
+108
+00:05:48,333 --> 00:05:51,466
+data encryption. You will see some of the items, the possible
+
+109
+00:05:51,483 --> 00:05:55,316
+areas of concern here. I might not be able to recover a database.
+
+110
+00:05:55,400 --> 00:05:59,466
+I might not be able to move it if I don't have the appropriate
+
+111
+00:05:59,483 --> 00:06:00,466
+keys backed up.
+
+112
+00:06:01,450 --> 00:06:01,466
+>> Absolutely.
+
+113
+00:06:01,483 --> 00:06:04,466
+>> So I have a couple links here where you can take a look at
+
+114
+00:06:04,483 --> 00:06:08,216
+some of these things. Obviously, with any encryption, there is
+
+115
+00:06:08,300 --> 00:06:09,466
+going to be some performance overhead.
+
+116
+00:06:09,483 --> 00:06:12,0
+>> You mean it doesn't happen for free?
+
+117
+00:06:12,483 --> 00:06:15,200
+>> No. There's no such thing as a free lunch. We learned that
+
+118
+00:06:15,283 --> 00:06:16,466
+somewhere along the way.
+
+119
+00:06:16,483 --> 00:06:20,466
+>> Yeah, no, I know. So what does it cost? Where does that overhead
+
+120
+00:06:20,483 --> 00:06:21,466
+impact us?
+
+121
+00:06:21,483 --> 00:06:26,333
+>> Its impact is in IO performance as data is written to...
+
+122
+00:06:26,483 --> 00:06:31,466
+written to and decrypted from the files there. Now, precaution-wise,
+
+123
+00:06:32,333 --> 00:06:36,316
+to avoid gotchas, you'll have to back up all the keys in the hierarchy.
+
+124
+00:06:36,400 --> 00:06:39,466
+So I have an article link here, backing up the service master key.
+
+125
+00:06:41,483 --> 00:06:45,466
+From there, you can follow the rest of the article links and
+
+126
+00:06:45,483 --> 00:06:47,466
+look at protecting of the other keys.
+
+127
+00:06:47,483 --> 00:06:50,466
+>> So when you've got a TDE database, you need to have all those
+
+128
+00:06:50,483 --> 00:06:53,466
+keys available in order to restore it at some point.
+
+129
+00:06:54,483 --> 00:06:57,183
+>> And I don't have them on a USB drive that's on the top of my
+
+130
+00:06:57,266 --> 00:06:59,466
+display that says "I'm the DBA."
+
+131
+00:06:59,483 --> 00:07:02,466
+>> Oh, sure, you don't want to hand the keys to the car to anybody
+
+132
+00:07:02,483 --> 00:07:03,466
+that can grab it.
+
+133
+00:07:03,483 --> 00:07:04,466
+>> Exactly.
+
+134
+00:07:04,483 --> 00:07:06,466
+>> Can we take a look at it, George?
+
+135
+00:07:06,483 --> 00:07:07,466
+>> Yeah, let's take a look at it.
+
+136
+00:07:07,483 --> 00:07:08,400
+>> All right.
+
+137
+00:07:10,483 --> 00:07:15,466
+So this one we're going to be talking about data encryption and
+
+138
+00:07:16,483 --> 00:07:19,466
+showing how to put that encryption in place.
+
+139
+00:07:19,483 --> 00:07:20,466
+>> Excellent.
+
+140
+00:07:25,483 --> 00:07:31,466
+>> Now, are we going to be encrypting an entire database on this,
+
+141
+00:07:31,483 --> 00:07:33,466
+George, or just pieces of it?
+
+142
+00:07:33,483 --> 00:07:35,466
+>> We encrypt the entire database.
+
+143
+00:07:35,483 --> 00:07:36,316
+>> Awesome.
+
+144
+00:07:36,400 --> 00:07:37,466
+>> It is entirely protected.
+
+145
+00:07:38,483 --> 00:07:39,366
+So here we go.
+
+146
+00:07:41,483 --> 00:07:46,466
+First, we have to create a database master key. If an instance
+
+147
+00:07:47,483 --> 00:07:51,466
+level key did not already exist, this would then on the fly create
+
+148
+00:07:51,483 --> 00:07:55,466
+a service master key in the strange circumstance that it wouldn't
+
+149
+00:07:55,483 --> 00:07:56,433
+already exist.
+
+150
+00:07:56,450 --> 00:07:56,466
+>> Okay.
+
+151
+00:07:56,483 --> 00:08:00,466
+>> So I can create master key encryption by password.
+
+152
+00:08:00,483 --> 00:08:07,466
+Curiously the password I have here has to adhere to Windows password policy.
+
+153
+00:08:08,483 --> 00:08:11,466
+And, in addition, for those environments that really need robust
+
+154
+00:08:11,483 --> 00:08:15,433
+encryption, you can have this based on a hardware platform module.
+
+155
+00:08:15,450 --> 00:08:15,466
+>> Awesome.
+
+156
+00:08:15,483 --> 00:08:18,166
+>> So for now, this will suffice.
+
+157
+00:08:20,483 --> 00:08:23,166
+>> So we're creating our service master key.
+
+158
+00:08:23,483 --> 00:08:25,183
+And then from there?
+
+159
+00:08:25,483 --> 00:08:29,466
+>> Now creating the master key... and from here we have to create
+
+160
+00:08:29,483 --> 00:08:32,433
+a certificate derived from the master key.
+
+161
+00:08:32,450 --> 00:08:32,466
+>> Okay.
+
+162
+00:08:33,483 --> 00:08:36,466
+>> So you will notice I named the certificate and then I also
+
+163
+00:08:36,483 --> 00:08:41,466
+give a subject for the certificate under the covers the appropriate
+
+164
+00:08:41,483 --> 00:08:43,466
+public/private key pair, all that's made.
+
+165
+00:08:44,483 --> 00:08:47,466
+I don't have to worry about that part. That part is good.
+
+166
+00:08:47,483 --> 00:08:48,266
+>> All right.
+
+167
+00:08:48,350 --> 00:08:52,183
+>> And now, let's take a look at a particular database and apply
+
+168
+00:08:52,266 --> 00:08:56,466
+TDE to it. So, first, I'm going to go ahead and get pointed to
+
+169
+00:08:56,216 --> 00:08:59,466
+the appropriate database. Nothing real fancy there.
+
+170
+00:09:01,483 --> 00:09:06,466
+And then, finally, create database encryption key with an encryption
+
+171
+00:09:07,333 --> 00:09:09,466
+key algorithm. The choice here is AES_256.
+
+172
+00:09:10,483 --> 00:09:14,466
+Yeah, there are a bunch of other choices. This one is the toughest.
+
+173
+00:09:14,483 --> 00:09:15,466
+>> Okay.
+
+174
+00:09:15,483 --> 00:09:17,466
+>> There are reasons to consider using it.
+
+175
+00:09:19,483 --> 00:09:22,466
+Finally, let's go ahead and set this on.
+
+176
+00:09:25,450 --> 00:09:25,466
+>> Uh-oh.
+
+177
+00:09:27,483 --> 00:09:29,233
+>> Oh, I didn't change this.
+
+178
+00:09:30,466 --> 00:09:33,466
+>> Looks like we tried to encrypt the wrong database on that one.
+
+179
+00:09:33,483 --> 00:09:34,366
+Oh, well.
+
+180
+00:09:34,450 --> 00:09:36,466
+>> Yeah. So that actually is an object lesson, huh?
+
+181
+00:09:36,483 --> 00:09:37,466
+>> Yeah.
+
+182
+00:09:37,483 --> 00:09:38,466
+>> There we go.
+
+183
+00:09:38,483 --> 00:09:44,466
+>> All right. So now we've created the certificate. We've created
+
+184
+00:09:44,483 --> 00:09:47,200
+the database master key. We've turned the encryption on.
+
+185
+00:09:47,283 --> 00:09:48,466
+The database is?
+
+186
+00:09:48,483 --> 00:09:49,433
+>> It's encrypted.
+
+187
+00:09:49,450 --> 00:09:49,466
+>> Awesome.
+
+188
+00:09:50,333 --> 00:09:54,466
+>> Now, honestly, Rich, after I run this code, it feels a little anticlimactic.
+
+189
+00:09:54,483 --> 00:09:55,466
+>> It does!
+
+190
+00:09:56,450 --> 00:09:56,466
+>> It's done!
+
+191
+00:09:57,483 --> 00:10:03,466
+>> That means that you don't need to do any programming, so don't
+
+192
+00:10:03,483 --> 00:10:07,466
+let your application guys tell you... that you can't do the encryption.
+
+193
+00:10:07,483 --> 00:10:11,466
+>> I have a couple of recommendations here in my code. A follow-up
+
+194
+00:10:11,483 --> 00:10:14,466
+to this would, of course, be to back up all of the keys.
+
+195
+00:10:14,483 --> 00:10:18,216
+There are other references on that. And then, additionally,
+
+196
+00:10:18,483 --> 00:10:23,466
+you have to model actually recovering this, should you have to
+
+197
+00:10:23,483 --> 00:10:27,466
+move it, should you have to recover from a backup that you want
+
+198
+00:10:27,483 --> 00:10:28,466
+to put on a different machine.
+
+199
+00:10:29,483 --> 00:10:32,466
+>> So you want to make sure that once you've put that encryption
+
+200
+00:10:32,483 --> 00:10:36,466
+in place, that you can also get it restored and you got everything
+
+201
+00:10:36,483 --> 00:10:38,466
+that you need to put it back together.
+
+202
+00:10:38,483 --> 00:10:39,0
+>> That's right.
+
+203
+00:10:39,416 --> 00:10:39,433
+>> Awesome.
+
+204
+00:10:39,450 --> 00:10:39,466
+>> Let's move on.
+
+205
+00:10:39,483 --> 00:10:43,466
+>> So let's talk about this next topic then.
+
+206
+00:10:43,483 --> 00:10:46,466
+A little bit on database compression, I think?
+
+207
+00:10:46,483 --> 00:10:47,466
+>> Yes.
+
+208
+00:10:47,483 --> 00:10:50,466
+>> Things that you can do to make your database more efficient.
+
+209
+00:10:50,483 --> 00:10:54,466
+>> Now, just like encryption, there are various compression technologies
+
+210
+00:10:54,483 --> 00:10:57,466
+that the SQL Server product supports. We are going to look at
+
+211
+00:10:57,483 --> 00:11:00,466
+a couple of those in particular, answering the question what
+
+212
+00:11:00,483 --> 00:11:03,466
+is data compression and then seeing what kind of objects can
+
+213
+00:11:03,483 --> 00:11:07,466
+be compressed. And then, of course, we have to focus on how-tos,
+
+214
+00:11:07,483 --> 00:11:10,466
+hands-on, you know, those kinds of procedures.
+
+215
+00:11:10,483 --> 00:11:13,466
+>> Yeah, it is always nice to know how to do something that they're
+
+216
+00:11:13,483 --> 00:11:17,200
+capable of doing. So let's take a look. What is data compression
+
+217
+00:11:17,283 --> 00:11:18,216
+after all, George?
+
+218
+00:11:18,300 --> 00:11:22,466
+>> Data compression is a trade-off. It is a trade-off by using
+
+219
+00:11:22,483 --> 00:11:26,466
+or observing that you have redundancy in your data using CPU
+
+220
+00:11:26,483 --> 00:11:31,466
+cycles which are in abundance to compress data which may...
+
+221
+00:11:31,483 --> 00:11:36,300
+to reduce its size which may not be in abundance.
+
+222
+00:11:36,383 --> 00:11:36,466
+>> Okay.
+
+223
+00:11:36,483 --> 00:11:39,466
+>> We'll see here there are two different compression options.
+
+224
+00:11:39,483 --> 00:11:42,466
+We have page-by-page or page compression.
+
+225
+00:11:42,483 --> 00:11:43,266
+>> Okay.
+
+226
+00:11:43,350 --> 00:11:47,466
+>> And row-by-row compression, which we will just call row compression.
+
+227
+00:11:47,483 --> 00:11:51,466
+There is backup compression. That's not a particular topic we
+
+228
+00:11:51,483 --> 00:11:52,466
+look at, at this moment.
+
+229
+00:11:52,483 --> 00:11:56,233
+>> So that can be done independently of any data compression, right?
+
+230
+00:11:56,316 --> 00:11:59,466
+>> Absolutely. That is an independently used feature.
+
+231
+00:11:59,483 --> 00:12:01,466
+>> Cool. What kinds of things get compressed?
+
+232
+00:12:01,483 --> 00:12:05,466
+>> Yeah. So there are a lot of objects that are compressible:
+
+233
+00:12:05,483 --> 00:12:11,466
+Heaps, cluster tables, different kinds of indexes, single partitions
+
+234
+00:12:11,483 --> 00:12:12,466
+of a partition table.
+
+235
+00:12:13,483 --> 00:12:17,466
+So I've just listed a few of the objects that are compressible.
+
+236
+00:12:18,483 --> 00:12:22,466
+>> So, basically, anything that holds data can potentially be compressed?
+
+237
+00:12:23,0 --> 00:12:26,466
+>> Yep, general rule of them. Now, if I happen to have file stream
+
+238
+00:12:26,483 --> 00:12:29,466
+objects, I'm going to use a different kind of compression, so
+
+239
+00:12:29,483 --> 00:12:33,166
+just keep that in mind. I will use something different.
+
+240
+00:12:33,483 --> 00:12:35,216
+>> Okay. So how do we go about doing it?
+
+241
+00:12:36,483 --> 00:12:40,383
+>> As I talk about how we do it, part of this relates to the kinds
+
+242
+00:12:40,466 --> 00:12:45,450
+of redundant patterns of data that I might have within rows and
+
+243
+00:12:45,483 --> 00:12:46,466
+also from page to page.
+
+244
+00:12:47,483 --> 00:12:50,466
+Doing a little bit of a research, you will find out different
+
+245
+00:12:50,483 --> 00:12:54,450
+kinds of compression applied to different patterns of redundancy.
+
+246
+00:12:54,483 --> 00:12:58,466
+And that's way more detail than you and I have the stamina to
+
+247
+00:12:58,483 --> 00:13:00,0
+talk about right now.
+
+248
+00:13:00,483 --> 00:13:03,466
+>> But would it generally safe to say if you have data that repeats
+
+249
+00:13:03,483 --> 00:13:08,216
+or if you have got rows that are missing information, that they
+
+250
+00:13:08,300 --> 00:13:11,466
+might be better subjects for compression than other kinds of data?
+
+251
+00:13:11,483 --> 00:13:17,466
+>> Absolutely. So if I have lots of null in a particular table
+
+252
+00:13:17,483 --> 00:13:21,466
+and if I have a number of fixed length columns, that would generally
+
+253
+00:13:21,483 --> 00:13:25,466
+lend itself towards row-by-row compression. Other patterns of
+
+254
+00:13:25,483 --> 00:13:30,466
+data redundancy that might be existing across rows within a page,
+
+255
+00:13:30,483 --> 00:13:34,466
+that might be a candidate for page compression. So you see a
+
+256
+00:13:34,483 --> 00:13:38,466
+quick little look at the code that you can use to apply this
+
+257
+00:13:38,483 --> 00:13:42,466
+which we'll put in practice in just another slide. However, what
+
+258
+00:13:42,483 --> 00:13:47,466
+if I am concerned whether or not compression is going to be worthwhile,
+
+259
+00:13:47,483 --> 00:13:51,466
+you will see a stored procedure that you can use to estimate
+
+260
+00:13:51,483 --> 00:13:55,300
+what the potential reduction in storage would be.
+
+261
+00:13:55,383 --> 00:13:58,466
+>> So I don't need to take a random guess. I can actually go
+
+262
+00:13:58,483 --> 00:14:02,466
+out and figure out if it makes sense to apply the technology?
+
+263
+00:14:02,483 --> 00:14:03,166
+>> Yeah.
+
+264
+00:14:03,250 --> 00:14:04,400
+>> What a great idea.
+
+265
+00:14:04,483 --> 00:14:06,300
+>> You like to drive. You told me this, right?
+
+266
+00:14:06,383 --> 00:14:06,466
+>> Oh, yeah.
+
+267
+00:14:06,483 --> 00:14:09,433
+>> In hearing about the college tour that you did with your son...
+
+268
+00:14:09,450 --> 00:14:09,466
+[Laughter]
+
+269
+00:14:09,483 --> 00:14:11,466
+By the way, that was a heroic effort.
+
+270
+00:14:11,483 --> 00:14:15,166
+>> 2600 miles in five days.
+
+271
+00:14:15,483 --> 00:14:18,466
+>> Yeah, that's a lot. So in the same way while you were probably
+
+272
+00:14:18,483 --> 00:14:20,466
+out on the road, listening to the radio...
+
+273
+00:14:20,483 --> 00:14:21,333
+>> Yeah....
+
+274
+00:14:21,416 --> 00:14:24,466
+>> lots of restrictions you hear in the advertisements, right?
+
+275
+00:14:24,483 --> 00:14:25,383
+>> Oh, yeah.
+
+276
+00:14:25,466 --> 00:14:30,466
+>> "Some restrictions apply." Let's just say in page and row compression,
+
+277
+00:14:30,483 --> 00:14:32,466
+lots of restrictions apply.
+
+278
+00:14:32,483 --> 00:14:33,466
+>> Yep.
+
+279
+00:14:33,483 --> 00:14:37,466
+>> So with that, I have a link to where you can research that more.
+
+280
+00:14:37,483 --> 00:14:42,466
+Let's take a look at the actual code you would use to apply page
+
+281
+00:14:42,183 --> 00:14:43,466
+and row encryption...
+
+282
+00:14:44,483 --> 00:14:45,350
+compression, sorry.
+
+283
+00:14:45,483 --> 00:14:48,466
+>> Yeah, you get hung up on a topic, right? I don't know about
+
+284
+00:14:48,483 --> 00:14:51,466
+you, but language sometimes challenges me.
+
+285
+00:14:51,483 --> 00:14:54,300
+>> Barry, is the text a little better size here?
+
+286
+00:14:54,383 --> 00:14:54,466
+>> A little better.
+
+287
+00:14:54,483 --> 00:14:58,466
+>> A little better, okay. So let me just create something to work
+
+288
+00:14:58,483 --> 00:14:59,466
+with here.
+
+289
+00:15:00,483 --> 00:15:04,466
+So I have a database. I'm pointed to it. I'm going to add some tables.
+
+290
+00:15:05,450 --> 00:15:05,466
+>> Awesome.
+
+291
+00:15:05,483 --> 00:15:09,466
+>> La, la, la, la, la. Notice in the first table, brace yourself
+
+292
+00:15:09,483 --> 00:15:13,466
+here, Rich, I have a bunch of fixed length columns and I did
+
+293
+00:15:13,483 --> 00:15:15,466
+not specify nullability.
+
+294
+00:15:15,483 --> 00:15:18,466
+>> So that means there could be missing values.
+
+295
+00:15:18,483 --> 00:15:20,400
+>> Could be missing values.
+
+296
+00:15:20,450 --> 00:15:20,466
+>> All right.
+
+297
+00:15:20,483 --> 00:15:26,466
+>> And we could also combine the fixed length columns into a variable
+
+298
+00:15:26,233 --> 00:15:30,266
+length column using the row compression. So, notice, I added
+
+299
+00:15:30,350 --> 00:15:33,216
+the "with data compression equals" row.
+
+300
+00:15:33,300 --> 00:15:37,466
+>> So it takes the fixed storage and turns it basically into variable
+
+301
+00:15:37,483 --> 00:15:40,466
+storage so you are only using what you need.
+
+302
+00:15:40,233 --> 00:15:40,466
+>> Exactly.
+
+303
+00:15:40,483 --> 00:15:41,466
+>> Awesome.
+
+304
+00:15:41,483 --> 00:15:45,0
+>> And then for the next one, we have variable length columns
+
+305
+00:15:45,483 --> 00:15:49,200
+that might potentially have repeated data from row to row.
+
+306
+00:15:49,283 --> 00:15:49,466
+>> Okay.
+
+307
+00:15:49,483 --> 00:15:52,466
+>> And in this case, we can have page compression. Now, I can
+
+308
+00:15:52,483 --> 00:15:56,466
+also apply these compression features after the fact.
+
+309
+00:15:57,450 --> 00:15:57,466
+>> Okay.
+
+310
+00:15:57,483 --> 00:16:03,466
+>> But as you can see, I can apply the features either on table
+
+311
+00:16:03,200 --> 00:16:06,466
+creation, if I had the insight to know that I would have redundant
+
+312
+00:16:06,483 --> 00:16:09,366
+data patterns, or after the fact.
+
+313
+00:16:09,450 --> 00:16:10,466
+>> Awesome. Awesome.
+
+314
+00:16:10,483 --> 00:16:12,366
+>> That's it for that demonstration.
+
+315
+00:16:12,450 --> 00:16:17,183
+>> All right. So then let's talk about some of the different options
+
+316
+00:16:17,266 --> 00:16:21,466
+that are available for configuring servers and configuring databases.
+
+317
+00:16:22,483 --> 00:16:27,466
+>> Yeah, the SQL Server product is a huge product, and it is a
+
+318
+00:16:27,483 --> 00:16:29,466
+very configurable product.
+
+319
+00:16:30,483 --> 00:16:35,466
+I think often Microsoft creates products that would serve them,
+
+320
+00:16:35,483 --> 00:16:39,466
+a very, very large enterprise. A very large enterprise needs
+
+321
+00:16:39,483 --> 00:16:44,333
+lots of configurable options. So in this product, we have server
+
+322
+00:16:44,483 --> 00:16:46,433
+or instance level options.
+
+323
+00:16:46,450 --> 00:16:46,466
+>> Okay.
+
+324
+00:16:46,483 --> 00:16:49,466
+>> Database level options. We have to see how to change those.
+
+325
+00:16:49,483 --> 00:16:53,466
+And then we will take a particular tour through changing some
+
+326
+00:16:53,483 --> 00:16:54,466
+database options.
+
+327
+00:16:54,483 --> 00:16:58,466
+>> So are there a lot of different options available at the server level?
+
+328
+00:16:58,483 --> 00:17:00,300
+>> Think Home Depot.
+
+329
+00:17:00,483 --> 00:17:01,466
+>> Oh, no, no.
+
+330
+00:17:02,316 --> 00:17:03,316
+>> Do we have Home Depot everywhere?
+
+331
+00:17:03,400 --> 00:17:04,466
+>> You mean we can find anything?
+
+332
+00:17:04,483 --> 00:17:09,250
+>> Yeah, lots and lots of options. Now, the graphic I have here
+
+333
+00:17:09,333 --> 00:17:12,200
+on my slide is attempting to portray...
+
+334
+00:17:13,166 --> 00:17:14,300
+>> I don't see slides.
+
+335
+00:17:14,483 --> 00:17:16,466
+>> They're on. I don't know what to do.
+
+336
+00:17:16,483 --> 00:17:17,466
+>> Hang on here, everybody.
+
+337
+00:17:17,483 --> 00:17:21,366
+>> We're having a little bit of a tech issue here, so hang on
+
+338
+00:17:21,450 --> 00:17:22,433
+one second.
+
+339
+00:17:22,483 --> 00:17:33,466
+I did hit the power button by mistake, and I powered it back up.
+
+340
+00:17:34,483 --> 00:17:35,466
+>> Did you hit presentation mode?
+
+341
+00:17:35,483 --> 00:17:40,466
+>> I was in it and I was in it again, and here's hoping that we
+
+342
+00:17:40,483 --> 00:17:44,466
+now have success. Hey! How about that! Thanks to the geeks in
+
+343
+00:17:44,483 --> 00:17:45,233
+the back.
+
+344
+00:17:45,250 --> 00:17:45,466
+>> Barry, Danny.
+
+345
+00:17:45,483 --> 00:17:48,383
+>> Without them, we wouldn't have a presentation.
+
+346
+00:17:49,266 --> 00:17:50,466
+>> All righty. Good job, guys.
+
+347
+00:17:51,333 --> 00:17:53,466
+>> So let's go back to the Home Depot store.
+
+348
+00:17:53,483 --> 00:17:57,466
+>> I love this picture. So general rule of thumb, if you don't
+
+349
+00:17:57,483 --> 00:18:00,466
+want somebody to touch something, you put it out of their reach.
+
+350
+00:18:00,483 --> 00:18:01,466
+>> Yep.
+
+351
+00:18:01,483 --> 00:18:06,250
+>> So server option-wise, we'll find that there are 17 basic options.
+
+352
+00:18:06,333 --> 00:18:06,466
+>> Okay.
+
+353
+00:18:06,483 --> 00:18:10,466
+>> If we use a particular feature, SP configure, to take a look
+
+354
+00:18:10,483 --> 00:18:15,466
+at those. Now, there are other options let's just say if Microsoft
+
+355
+00:18:15,483 --> 00:18:19,283
+has put them out of our reach by default, you should consider
+
+356
+00:18:19,366 --> 00:18:21,466
+more carefully if you want to use those.
+
+357
+00:18:21,483 --> 00:18:22,466
+[Laughter]
+
+358
+00:18:22,483 --> 00:18:25,466
+>> If they're hidden, then maybe you don't want to go looking.
+
+359
+00:18:25,483 --> 00:18:29,466
+>> This reminds me of the registry editor, how there are certain
+
+360
+00:18:29,483 --> 00:18:33,466
+things in Windows and in various Microsoft products you can only
+
+361
+00:18:33,483 --> 00:18:37,466
+configure with the registry. So the point is, it's a feature,
+
+362
+00:18:37,483 --> 00:18:40,466
+something that's out of the reach of a normal... you know, a
+
+363
+00:18:40,483 --> 00:18:41,466
+mere mortal.
+
+364
+00:18:41,483 --> 00:18:42,466
+>> Oh, yeah.
+
+365
+00:18:42,483 --> 00:18:46,466
+>> The problem is if you turn those features on or change something
+
+366
+00:18:46,233 --> 00:18:49,0
+with the registry editor, it assumes you are a genius.
+
+367
+00:18:49,166 --> 00:18:50,183
+[Laughter]
+
+368
+00:18:50,200 --> 00:18:53,466
+>> You better know what you are doing before you go and do it.
+
+369
+00:18:53,483 --> 00:18:57,466
+>> Similarly, with the advanced options, we have 69 total options
+
+370
+00:18:57,483 --> 00:19:01,416
+after you turn the advanced options on. I've listed a couple
+
+371
+00:19:01,483 --> 00:19:04,466
+of these. Obviously, there are a lot: Minimum server memory,
+
+372
+00:19:04,483 --> 00:19:06,466
+max server memory.
+
+373
+00:19:07,366 --> 00:19:10,466
+So if I want to immediately contribute a certain amount of memory
+
+374
+00:19:11,483 --> 00:19:14,466
+from the Windows operating system to SQL Server, I can. If I
+
+375
+00:19:14,483 --> 00:19:17,466
+want to throttle to make sure I don't exceed a certain amount,
+
+376
+00:19:17,483 --> 00:19:19,466
+I can do that as well.
+
+377
+00:19:19,483 --> 00:19:22,416
+>> So to go out to change them, to view them?
+
+378
+00:19:22,483 --> 00:19:25,466
+>> Sure. We'll take a look at some of those tools.
+
+379
+00:19:27,483 --> 00:19:32,466
+So I can right click on the instance, get properties, and there
+
+380
+00:19:32,483 --> 00:19:36,466
+are some options that are accessible there. Keep in mind, not
+
+381
+00:19:36,483 --> 00:19:39,466
+every single option is available in the graphical user interface.
+
+382
+00:19:39,483 --> 00:19:40,466
+>> Okay.
+
+383
+00:19:40,166 --> 00:19:43,466
+>> This is very consistent with the SQL Server product.
+
+384
+00:19:43,216 --> 00:19:48,400
+Popular options are in the GUI. Anything, generally speaking,
+
+385
+00:19:48,483 --> 00:19:49,466
+you can accomplish in code.
+
+386
+00:19:49,483 --> 00:19:51,466
+>> And that code would be?
+
+387
+00:19:51,483 --> 00:19:52,466
+>> SP Configure.
+
+388
+00:19:52,483 --> 00:19:53,466
+>> SP Configure.
+
+389
+00:19:54,483 --> 00:19:58,466
+>> So I can turn... Tell me if you think this is circular. I have
+
+390
+00:19:58,483 --> 00:20:04,466
+to turn advanced options on in SP Configure in order to access
+
+391
+00:20:05,483 --> 00:20:06,416
+advanced options.
+
+392
+00:20:07,483 --> 00:20:10,466
+>> So you configure the options that you can see them, then you
+
+393
+00:20:10,483 --> 00:20:14,283
+configure the options, and then, let me guess, you got to configure
+
+394
+00:20:14,366 --> 00:20:15,466
+them again to shut them off.
+
+395
+00:20:15,483 --> 00:20:17,466
+>> Yeah, precisely.
+
+396
+00:20:17,483 --> 00:20:18,466
+>> Perfect.
+
+397
+00:20:18,200 --> 00:20:22,466
+>> So in addition to turning a particular feature on, you'll notice
+
+398
+00:20:22,483 --> 00:20:26,466
+there's a follow-up statement, the reconfigure statement.
+
+399
+00:20:26,166 --> 00:20:29,466
+For the longer version of why you need the reconfigure statement,
+
+400
+00:20:29,483 --> 00:20:30,466
+you will see the link there.
+
+401
+00:20:30,483 --> 00:20:31,466
+>> Okay.
+
+402
+00:20:31,483 --> 00:20:35,466
+>> Just a notable, there's a popular instance level option you
+
+403
+00:20:35,483 --> 00:20:39,400
+might want to switch. That's authentication mode. More of a
+
+404
+00:20:39,483 --> 00:20:43,433
+security topic really. But that's something that you cannot change
+
+405
+00:20:43,483 --> 00:20:44,466
+with SP Configure.
+
+406
+00:20:44,483 --> 00:20:46,433
+>> You got to go to the GUI or...
+
+407
+00:20:46,483 --> 00:20:51,450
+>> You can go to the GUI or use an extend system store procedure.
+
+408
+00:20:51,483 --> 00:20:54,466
+>> Awesome. So what about the database level stuff, George?
+
+409
+00:20:54,483 --> 00:21:00,216
+>> Again, lots and lots of options on a per-database basis.
+
+410
+00:21:00,300 --> 00:21:03,466
+>> And let me guess, not all of them show up in the GUI.
+
+411
+00:21:03,216 --> 00:21:05,466
+>> Bravo. Give him a golf clap, everybody.
+
+412
+00:21:05,483 --> 00:21:07,466
+>> I'm sensing a pattern here.
+
+413
+00:21:07,483 --> 00:21:08,466
+>> Good observation.
+
+414
+00:21:09,483 --> 00:21:14,466
+The options are categorized on a per-database basis, auto options,
+
+415
+00:21:14,483 --> 00:21:19,466
+cursor options. You see some of the laundry list categories of options.
+
+416
+00:21:20,483 --> 00:21:23,466
+>> And how do we actually go through and change this stuff?
+
+417
+00:21:23,483 --> 00:21:27,466
+>> Like you said, with the graphical user interface, when in doubt,
+
+418
+00:21:27,483 --> 00:21:28,333
+right click.
+
+419
+00:21:28,416 --> 00:21:28,466
+>> Yep.
+
+420
+00:21:28,483 --> 00:21:32,400
+>> And select... to effect, I have to select the right object.
+
+421
+00:21:32,483 --> 00:21:35,466
+So I'm going to right click on the database in question, get
+
+422
+00:21:35,483 --> 00:21:37,466
+properties, and then I will go to options.
+
+423
+00:21:37,483 --> 00:21:38,416
+>> Okay.
+
+424
+00:21:38,483 --> 00:21:41,466
+>> Now, this is kind of startling when you first see this. I think
+
+425
+00:21:41,483 --> 00:21:44,466
+there are an awful lot of options here, more than there ever
+
+426
+00:21:44,483 --> 00:21:45,416
+have been really.
+
+427
+00:21:45,483 --> 00:21:46,250
+>> Yep.
+
+428
+00:21:46,333 --> 00:21:49,466
+>> Like it as has been pointed out, the GUI can't change every option.
+
+429
+00:21:49,483 --> 00:21:54,333
+If I do want to change or have availability of any option, you
+
+430
+00:21:54,483 --> 00:21:57,466
+will in code I will use "alter database," point to the name of
+
+431
+00:21:57,483 --> 00:21:59,466
+the database, that's the DBX part...
+
+432
+00:21:59,483 --> 00:22:00,466
+>> Okay....
+
+433
+00:22:00,216 --> 00:22:04,466
+>> and then often use the set statement or set keyword and then
+
+434
+00:22:04,483 --> 00:22:07,466
+the name of the option and how I want to set that, like turning
+
+435
+00:22:07,483 --> 00:22:10,466
+something on, turning something off, et cetera.
+
+436
+00:22:10,483 --> 00:22:13,466
+>> And you don't have to do a reconfigure statement or anything
+
+437
+00:22:13,483 --> 00:22:15,466
+like that when you're doing an alter database, correct?
+
+438
+00:22:15,483 --> 00:22:16,466
+>> Good follow-up.
+
+439
+00:22:16,483 --> 00:22:17,466
+>> All right. Cool.
+
+440
+00:22:17,483 --> 00:22:18,333
+>> Excellent.
+
+441
+00:22:18,416 --> 00:22:21,466
+>> So let's go take a look at some of these. George is going
+
+442
+00:22:21,483 --> 00:22:27,200
+to show us some of the ways that we can effect database properties
+
+443
+00:22:27,283 --> 00:22:29,466
+in this next demo. George?
+
+444
+00:22:29,483 --> 00:22:30,466
+>> All righty. Here we go.
+
+445
+00:22:34,483 --> 00:22:40,450
+>> So what do we got going here, George?
+
+446
+00:22:40,483 --> 00:22:44,466
+>> So next up, let's point to our appropriate database.
+
+447
+00:22:48,483 --> 00:22:51,466
+>> Tiny DB, we are still playing with that one?
+
+448
+00:22:51,183 --> 00:22:52,466
+>> We are still going to play with the tiny database.
+
+449
+00:22:52,483 --> 00:22:53,383
+>> All right.
+
+450
+00:22:53,466 --> 00:22:57,466
+>> And notice we set this to offline. That's one of the availability options.
+
+451
+00:22:57,483 --> 00:23:00,466
+I should have prefaced this, Rich. In particular, we're going
+
+452
+00:23:00,483 --> 00:23:04,433
+to explore what we call availability options of databases.
+
+453
+00:23:04,450 --> 00:23:04,466
+>> Okay.
+
+454
+00:23:04,483 --> 00:23:07,466
+>> So when I use the offline option, the databases, as you can
+
+455
+00:23:07,483 --> 00:23:12,183
+see from my notes here, is absolutely inaccessible, cleanly shuts
+
+456
+00:23:12,266 --> 00:23:16,433
+down the database without having to detach. The drama here...
+
+457
+00:23:16,483 --> 00:23:17,466
+drumroll, please.
+
+458
+00:23:17,483 --> 00:23:18,466
+>> Drumroll.
+
+459
+00:23:18,483 --> 00:23:23,466
+>> We see under "databases" after a refresh that there is a special
+
+460
+00:23:23,483 --> 00:23:26,466
+icon assigned and a description.
+
+461
+00:23:27,483 --> 00:23:29,466
+>> Boy, I tell you what. I like that zoom because you can't see
+
+462
+00:23:29,483 --> 00:23:31,466
+that icon at all without it, can you?
+
+463
+00:23:31,483 --> 00:23:36,466
+>> There you go. That's a pet favorite tool of mine called Zoom
+
+464
+00:23:36,233 --> 00:23:40,466
+It for anybody else that likes software tools. Good job, peanut galley.
+
+465
+00:23:41,483 --> 00:23:47,166
+Microsoft actually acquired a super scary, smart dude a while back.
+
+466
+00:23:47,250 --> 00:23:47,266
+>> Uh-oh.
+
+467
+00:23:47,350 --> 00:23:50,216
+>> And I think Zoom It is one of the tools that he contributed
+
+468
+00:23:50,300 --> 00:23:51,166
+to the pile.
+
+469
+00:23:51,250 --> 00:23:52,466
+>> For a minute there, I thought you were talking about me, and
+
+470
+00:23:53,333 --> 00:23:54,466
+I was wondering where that was going.
+
+471
+00:23:54,483 --> 00:23:55,466
+[Laughter]
+
+472
+00:23:55,483 --> 00:23:59,466
+>> So now I'm going to set the database state to emergency.
+
+473
+00:24:00,483 --> 00:24:02,466
+>> Okay. So that's another availability option?
+
+474
+00:24:02,483 --> 00:24:06,466
+>> Another availability option. Limited access. Only sys admins,
+
+475
+00:24:07,0 --> 00:24:09,233
+plural, is the key, though.
+
+476
+00:24:09,316 --> 00:24:12,466
+>> Okay, so multiple sys admins can hit it at the same time?
+
+477
+00:24:12,233 --> 00:24:12,433
+>> That's right.
+
+478
+00:24:12,450 --> 00:24:12,466
+>> Awesome.
+
+479
+00:24:12,483 --> 00:24:16,216
+>> So there are a couple of specific reasons why I might ever
+
+480
+00:24:16,300 --> 00:24:19,466
+want to go to emergency, like a DBCC repair, we will talk about
+
+481
+00:24:19,483 --> 00:24:24,433
+a little bit later. And also notice a fancy little icon for emergency.
+
+482
+00:24:24,450 --> 00:24:24,466
+>> It turned red.
+
+483
+00:24:25,483 --> 00:24:26,466
+I like that.
+
+484
+00:24:27,483 --> 00:24:29,466
+So what's the next option we got?
+
+485
+00:24:29,483 --> 00:24:33,466
+>> This will turn us back into a normal production database by
+
+486
+00:24:33,483 --> 00:24:34,466
+setting to online.
+
+487
+00:24:34,483 --> 00:24:35,250
+>> Okay.
+
+488
+00:24:35,333 --> 00:24:38,466
+>> Now, another option or another state you might need is read-only.
+
+489
+00:24:39,483 --> 00:24:40,466
+Guess what read-only means?
+
+490
+00:24:42,333 --> 00:24:42,466
+>> Can't write.
+
+491
+00:24:42,483 --> 00:24:47,466
+>> That's right. You only can read. Now, can you think of a circumstance
+
+492
+00:24:47,483 --> 00:24:51,466
+where something like read-only might be particularly valuable?
+
+493
+00:24:52,483 --> 00:24:55,466
+>> One of the things that you might want to do that for is on
+
+494
+00:24:55,483 --> 00:24:59,466
+a reporting database where you want to ensure that data is not
+
+495
+00:24:59,483 --> 00:25:02,416
+being affected by any users.
+
+496
+00:25:02,483 --> 00:25:06,466
+>> You had a good intent. I was thinking of being a mere mortal
+
+497
+00:25:06,483 --> 00:25:09,333
+and committing a DB uh-oh.
+
+498
+00:25:09,483 --> 00:25:12,466
+>> Uh-oh. What's a "DB uh-oh," George?
+
+499
+00:25:12,483 --> 00:25:17,183
+>> A "DB uh-oh" is if a database inadvertently gets damaged and
+
+500
+00:25:17,266 --> 00:25:21,466
+before anybody touches it further, you need to inspect it.
+
+501
+00:25:21,483 --> 00:25:24,466
+So you can take it to a read-only state... notice again the
+
+502
+00:25:24,483 --> 00:25:29,466
+fancy icon... and determine if and to what degree there might
+
+503
+00:25:29,483 --> 00:25:32,466
+be damage to determine what you might do from there.
+
+504
+00:25:32,483 --> 00:25:35,466
+>> Awesome. Awesome. Thanks very much, George.
+
+505
+00:25:35,483 --> 00:25:39,466
+>> All righty. Now, I could, I suppose, have a query that attempts
+
+506
+00:25:39,483 --> 00:25:41,433
+to update the table. It's not going to work.
+
+507
+00:25:41,450 --> 00:25:41,466
+>> Yep.
+
+508
+00:25:42,333 --> 00:25:45,466
+>> Read-only really means read-only. The opposite of read-only,
+
+509
+00:25:45,483 --> 00:25:49,466
+of course, means read-write. And notice it has gone back to its
+
+510
+00:25:49,483 --> 00:25:50,433
+normal state.
+
+511
+00:25:50,450 --> 00:25:50,466
+>> Cool.
+
+512
+00:25:51,166 --> 00:25:55,466
+>> Another availability option is single user. So this allows,
+
+513
+00:25:55,483 --> 00:26:00,466
+well, look what it says, only one authoritative user can connect
+
+514
+00:26:00,483 --> 00:26:03,266
+to the database. And there is a reason that I might use that
+
+515
+00:26:03,350 --> 00:26:07,400
+when I want to use a particular repair operation, which we'll
+
+516
+00:26:07,483 --> 00:26:12,466
+look at later on. And if you like the other icons, Rich, let's
+
+517
+00:26:12,483 --> 00:26:13,466
+see what you think about this.
+
+518
+00:26:14,483 --> 00:26:15,466
+>> Oh!
+
+519
+00:26:15,483 --> 00:26:17,466
+>> Get a little person there.
+
+520
+00:26:17,233 --> 00:26:20,466
+>> They don't call it a GUI for nothing. Graphical, it is.
+
+521
+00:26:22,483 --> 00:26:24,383
+Restricted user.
+
+522
+00:26:24,466 --> 00:26:29,333
+>> Restricted user, multi-user. So we have a bunch of different options.
+
+523
+00:26:29,416 --> 00:26:32,183
+And now I will set it back and put it in production.
+
+524
+00:26:32,450 --> 00:26:32,466
+>> Awesome.
+
+525
+00:26:32,483 --> 00:26:33,466
+>> That's it for that one.
+
+526
+00:26:33,483 --> 00:26:37,466
+>> Awesome. awesome. Thank you. So the next thing that we've
+
+527
+00:26:37,483 --> 00:26:42,216
+got on our schedule we're going to delve into a little bit of
+
+528
+00:26:42,300 --> 00:26:46,416
+affinity and parallelism. George, what's that all about?
+
+529
+00:26:46,483 --> 00:26:47,466
+>> It has to do with workload,
+
+530
+00:26:49,483 --> 00:26:54,0
+CPUs, allocation of resources to IO activity, things like that.
+
+531
+00:26:54,483 --> 00:26:58,466
+>> Okay. And CPU affinity, IO affinity,
+
+532
+00:26:59,483 --> 00:27:02,466
+parallelism, we got a lot of stuff to talk about here.
+
+533
+00:27:02,483 --> 00:27:06,200
+>> A lot of stuff to talk about here. Rich has volunteered to
+
+534
+00:27:06,283 --> 00:27:07,466
+take on this topic.
+
+535
+00:27:08,416 --> 00:27:12,366
+We'll take a look at parallelism defined, affinity defined, and
+
+536
+00:27:12,450 --> 00:27:16,466
+then how we stick our hands in the metal-moving machinery to
+
+537
+00:27:16,483 --> 00:27:20,466
+change things that are not default settings and in what circumstances
+
+538
+00:27:20,483 --> 00:27:22,466
+we might actually undertake that.
+
+539
+00:27:22,483 --> 00:27:31,466
+>> So CPU affinity, basically, is the process of telling SQL Server
+
+540
+00:27:31,483 --> 00:27:36,466
+in a multi-CPU environment which CPUs are going to be involved
+
+541
+00:27:36,483 --> 00:27:40,466
+in processing queries, in managing the database engine and which
+
+542
+00:27:40,483 --> 00:27:43,466
+ones are going to be excluded. Now, you might want to do that
+
+543
+00:27:43,483 --> 00:27:49,466
+for a couple of reasons. You might want to do that because you
+
+544
+00:27:49,483 --> 00:27:53,466
+have license restrictions. You've only purchased license for
+
+545
+00:27:53,483 --> 00:27:57,466
+one or two people... one or two CPUs and you have got a four
+
+546
+00:27:57,483 --> 00:27:58,466
+or eight-CPU box.
+
+547
+00:27:59,483 --> 00:28:03,466
+Maybe there are multiple applications running on that CPU, things
+
+548
+00:28:03,233 --> 00:28:09,466
+like that. IO affinity is the same process. It's just a matter
+
+549
+00:28:09,483 --> 00:28:15,466
+of allowing the CPU to be involved in the read-write process
+
+550
+00:28:16,483 --> 00:28:20,466
+from the data files into memory and back again.
+
+551
+00:28:21,483 --> 00:28:26,466
+Now, the default configuration for any SQL Server instance is
+
+552
+00:28:26,483 --> 00:28:32,466
+for the database engine to make use of all CPUs and all CPU cores,
+
+553
+00:28:32,483 --> 00:28:38,466
+which means that SQL Server really wants to have a dedicated box.
+
+554
+00:28:39,483 --> 00:28:43,466
+When you want to change that, when you've got shared boxes, when
+
+555
+00:28:43,483 --> 00:28:50,466
+you want to be able to control what the box is allocating its
+
+556
+00:28:50,483 --> 00:28:55,466
+resources to. The default behavior is to allow Windows to manage
+
+557
+00:28:55,483 --> 00:28:57,216
+all of those executions.
+
+558
+00:28:58,483 --> 00:29:03,466
+When you set CPU affinity, there is a scheduler created for each
+
+559
+00:29:03,483 --> 00:29:04,416
+CPU core.
+
+560
+00:29:05,483 --> 00:29:12,466
+And it then manages the execution threads inside of the database engine.
+
+561
+00:29:12,483 --> 00:29:18,466
+Now, there is one more consideration and that's NUMA. NUMA is
+
+562
+00:29:18,483 --> 00:29:25,466
+a hardware design where each CPU has its own dedicated memory
+
+563
+00:29:25,483 --> 00:29:27,466
+and its own dedicated bus.
+
+564
+00:29:28,483 --> 00:29:32,466
+Many manufacturers have different design considerations that
+
+565
+00:29:33,166 --> 00:29:36,200
+need to be dealt. With, so whenever you've got a NUMA machine,
+
+566
+00:29:36,483 --> 00:29:37,466
+SQL Server does
+
+567
+00:29:39,316 --> 00:29:44,383
+support NUMA processing. But the configuration that's appropriate
+
+568
+00:29:44,466 --> 00:29:49,466
+really needs to be set up based on the hardware manufacturer.
+
+569
+00:29:49,483 --> 00:29:51,466
+You need to talk to them.
+
+570
+00:29:51,483 --> 00:29:55,466
+>> Not everybody is great at knowing hardware intimately.
+
+571
+00:29:55,483 --> 00:29:58,466
+And for those that might not know, NUMA stands for non-uniform
+
+572
+00:29:59,483 --> 00:30:00,466
+memory access.
+
+573
+00:30:00,483 --> 00:30:04,466
+>> Thanks. I'm acronym challenged. I can never remember TLA,
+
+574
+00:30:06,350 --> 00:30:08,466
+ETLAs, or anything else. You know what an ETLA is, right?
+
+575
+00:30:08,483 --> 00:30:10,466
+>> I don't know what an ETLA is >> So
+
+576
+00:30:10,483 --> 00:30:15,200
+TLA, everybody knows, is a three-letter acronym. ETLA is...
+
+577
+00:30:15,283 --> 00:30:19,466
+can you guess? It is an extended three-letter acronym.
+
+578
+00:30:19,483 --> 00:30:20,466
+>> Awesome.
+
+579
+00:30:20,483 --> 00:30:25,466
+>> Okay. Back to something that's actually worth something now, parallelism.
+
+580
+00:30:26,283 --> 00:30:32,466
+George, parallelism is the ability for SQL Server to utilize
+
+581
+00:30:32,483 --> 00:30:39,466
+multiple processors in the execution of a single query, not three
+
+582
+00:30:40,450 --> 00:30:40,466
+or four.
+
+583
+00:30:41,483 --> 00:30:46,283
+But you asked a question that spread out among three or four
+
+584
+00:30:46,366 --> 00:30:49,466
+different data files on different drives.
+
+585
+00:30:49,483 --> 00:30:54,466
+And it's a complex enough question where SQL Server thinks it
+
+586
+00:30:54,483 --> 00:30:57,466
+might be more efficient to have multiple people working on it
+
+587
+00:30:57,483 --> 00:31:01,466
+at the same time. It's like breaking down a software project
+
+588
+00:31:01,483 --> 00:31:05,466
+into one developer doing everything or four developers working together.
+
+589
+00:31:05,483 --> 00:31:07,333
+Which one's going to be quicker?
+
+590
+00:31:07,483 --> 00:31:08,466
+>> Sure, multiple.
+
+591
+00:31:08,483 --> 00:31:12,466
+>> Yeah. But is there any overhead involved when you got the multiple people?
+
+592
+00:31:12,483 --> 00:31:15,466
+>> Picture four people trying to paint a closet.
+
+593
+00:31:15,233 --> 00:31:15,466
+>> Oh, dear.
+
+594
+00:31:15,483 --> 00:31:16,266
+>> Yeah.
+
+595
+00:31:16,350 --> 00:31:19,283
+>> I would guess there is some coordination involved in making sure.
+
+596
+00:31:19,366 --> 00:31:20,216
+>> Yeah, there's some coordination.
+
+597
+00:31:20,300 --> 00:31:25,466
+>> That's the overhead. In SQL, it means that that is the overhead
+
+598
+00:31:25,483 --> 00:31:28,466
+involved in bringing the results from all the different ones
+
+599
+00:31:28,483 --> 00:31:30,466
+back together. Now, there is...
+
+600
+00:31:32,200 --> 00:31:37,466
+there are a couple of settings available in SQL to control that parallelism.
+
+601
+00:31:37,216 --> 00:31:44,466
+One is over and above the affinity, you can set MAXDOP for index maximum.
+
+602
+00:31:46,483 --> 00:31:48,466
+>> Degree of parallelism.
+
+603
+00:31:48,483 --> 00:31:52,166
+>> Thank you very much, again. My man with the acronyms because
+
+604
+00:31:52,250 --> 00:31:54,466
+I actually forgot what it was for a second.
+
+605
+00:31:55,483 --> 00:31:59,250
+There's also a MAXDOP setting that you can put on an individual
+
+606
+00:31:59,333 --> 00:32:02,466
+query if you want to override the setting for the database, so...
+
+607
+00:32:02,483 --> 00:32:03,466
+>> Wow.
+
+608
+00:32:03,483 --> 00:32:07,466
+>> Last, but not least, there is a cost threshold for parallelism
+
+609
+00:32:07,483 --> 00:32:14,466
+which is set initially at zero which means that all queries are
+
+610
+00:32:14,483 --> 00:32:20,466
+available to be parallelized; doesn't mean that SQL will do it.
+
+611
+00:32:20,483 --> 00:32:25,466
+But by setting that to a specific value, you then are controlling
+
+612
+00:32:26,483 --> 00:32:31,466
+the complexity or the amount of resources that are being used
+
+613
+00:32:32,250 --> 00:32:37,233
+before a query can be considered to be parallelized, okay?
+
+614
+00:32:37,483 --> 00:32:43,466
+To configure CPU affinity, there's alter server configuration.
+
+615
+00:32:43,483 --> 00:32:50,466
+Also, you could right click on the server itself and go to properties,
+
+616
+00:32:50,483 --> 00:32:53,466
+go to processors, and it will allow you to check it off.
+
+617
+00:32:53,483 --> 00:32:55,466
+George, can we go take a look at that one?
+
+618
+00:32:55,483 --> 00:32:57,366
+>> Oh, oh, oh, can I show that one?
+
+619
+00:32:57,450 --> 00:32:58,466
+>> Oh, I think so.
+
+620
+00:32:59,366 --> 00:33:01,466
+George wants to go play. Is that okay?
+
+621
+00:33:02,483 --> 00:33:03,466
+>> Let's go to properties.
+
+622
+00:33:03,483 --> 00:33:04,466
+>> Yeah, that's okay.
+
+623
+00:33:05,483 --> 00:33:09,466
+>> All righty. Well, wait a second. How come I can't select any
+
+624
+00:33:09,483 --> 00:33:10,466
+of these checked boxes?
+
+625
+00:33:12,300 --> 00:33:14,466
+>> Uh-oh. Is that a problem?
+
+626
+00:33:14,483 --> 00:33:16,466
+>> It's not a problem.
+
+627
+00:33:17,483 --> 00:33:18,350
+I just wonder why.
+
+628
+00:33:19,483 --> 00:33:24,400
+>> Hmm. Could it be that this computer only has one CPU with one
+
+629
+00:33:24,483 --> 00:33:25,466
+CPU core?
+
+630
+00:33:25,483 --> 00:33:29,383
+>> Well, it's real hard to allocate multiple processors and configure
+
+631
+00:33:29,466 --> 00:33:32,466
+them if I only have one to begin with. So you are seeing a good
+
+632
+00:33:32,483 --> 00:33:34,466
+design of the user interface here.
+
+633
+00:33:34,483 --> 00:33:36,466
+>> There you go. There you go.
+
+634
+00:33:37,183 --> 00:33:39,383
+And what about the
+
+635
+00:33:40,483 --> 00:33:44,233
+IO affinity, processor affinity, that's for both of them.
+
+636
+00:33:44,316 --> 00:33:49,466
+Down... where is that max degree of parallelism?
+
+637
+00:33:50,483 --> 00:33:54,466
+There is the check boxes for CPU and IO affinity.
+
+638
+00:33:56,216 --> 00:33:56,466
+>> Believe me.
+
+639
+00:33:58,200 --> 00:34:00,166
+>> All right, cool.
+
+640
+00:34:01,483 --> 00:34:09,466
+So let's move into our next topic here a little bit, and I particularly
+
+641
+00:34:09,483 --> 00:34:10,466
+like this topic.
+
+642
+00:34:12,483 --> 00:34:16,466
+>> This is a pet favorite topic of mine as well. There's a chant
+
+643
+00:34:16,483 --> 00:34:20,466
+that every database administrator should have and that is "automate,
+
+644
+00:34:20,166 --> 00:34:21,466
+automate, automate."
+
+645
+00:34:22,483 --> 00:34:26,466
+As we've talked about before, there are good reasons to automate.
+
+646
+00:34:26,483 --> 00:34:30,466
+So in this particular section, we'll take a look at the automation
+
+647
+00:34:31,483 --> 00:34:34,466
+subsystems that SQL Server has available. I don't consider that
+
+648
+00:34:34,483 --> 00:34:38,466
+you've never heard of any of these features before, but I will
+
+649
+00:34:38,483 --> 00:34:40,466
+say before you take your exam...
+
+650
+00:34:41,483 --> 00:34:44,466
+well, before you take your exam, you want to be solid on all
+
+651
+00:34:44,483 --> 00:34:48,466
+these features. So we will take a look at agent jobs and having
+
+652
+00:34:48,483 --> 00:34:52,466
+scheduled workload in the background, automation steps.
+
+653
+00:34:52,483 --> 00:34:57,266
+We'll also take a look at having automation security and the
+
+654
+00:34:57,350 --> 00:35:01,466
+very highly configurable environment there. And then we'll look
+
+655
+00:35:01,483 --> 00:35:06,466
+at the second major automation subsystem, which is the alerting subsystem.
+
+656
+00:35:06,166 --> 00:35:09,0
+>> All right. So what about these jobs, George?
+
+657
+00:35:09,483 --> 00:35:10,383
+>> Big picture here.
+
+658
+00:35:10,450 --> 00:35:10,466
+>> Okay.
+
+659
+00:35:10,483 --> 00:35:14,466
+>> You want to look at some of the moving parts of the automation subsystem.
+
+660
+00:35:14,483 --> 00:35:17,466
+So I have tried to illustrate this briefly. Namely, I can have
+
+661
+00:35:17,483 --> 00:35:22,466
+one or more jobs where a job is a collection of work that I want
+
+662
+00:35:22,483 --> 00:35:26,183
+to run either ad hoc, on demand...
+
+663
+00:35:26,266 --> 00:35:26,466
+>> Okay....
+
+664
+00:35:26,483 --> 00:35:28,466
+>> or that I want scheduled.
+
+665
+00:35:28,200 --> 00:35:28,466
+>> All right.
+
+666
+00:35:28,483 --> 00:35:34,250
+>> So notice job one has one job step. A job step is the work
+
+667
+00:35:34,333 --> 00:35:38,466
+that will get done within a job. And each job step necessarily
+
+668
+00:35:38,483 --> 00:35:40,466
+is assigned a job subsystem.
+
+669
+00:35:41,333 --> 00:35:41,466
+>> Okay.
+
+670
+00:35:41,483 --> 00:35:45,466
+>> So you will notice in job 2 that I could, for example, have
+
+671
+00:35:45,483 --> 00:35:49,283
+more than one schedule. Maybe I have something that has to run
+
+672
+00:35:49,366 --> 00:35:51,466
+at 10:00 in the morning and something that has to run at 8:00
+
+673
+00:35:51,483 --> 00:35:55,466
+at night. Well, there is not an even number of hours or a way
+
+674
+00:35:55,166 --> 00:35:58,466
+to get both of those done unless I have a separate schedule.
+
+675
+00:35:58,483 --> 00:36:03,316
+And what if job 3 is something that depends on when a vendor
+
+676
+00:36:03,400 --> 00:36:06,466
+sends me a file? And that's unpredictable. I won't even have
+
+677
+00:36:06,483 --> 00:36:10,466
+a schedule for that. I just run that ad hoc or on demand.
+
+678
+00:36:11,166 --> 00:36:11,466
+>> Okay. And...
+
+679
+00:36:11,483 --> 00:36:16,466
+>> I'm sorry. The fun part is the reach...
+
+680
+00:36:18,483 --> 00:36:20,466
+who's the stretchy guy in Avengers?
+
+681
+00:36:21,200 --> 00:36:21,466
+>> I don't even know.
+
+682
+00:36:21,483 --> 00:36:25,400
+>> Help me out here. Mr. Fabulous, I think. Somebody in the
+
+683
+00:36:25,483 --> 00:36:26,466
+chat will...
+
+684
+00:36:26,483 --> 00:36:28,466
+>> Mr. Fantastic.
+
+685
+00:36:28,483 --> 00:36:31,466
+>> Mr. Fantastic, okay. So anyway...
+
+686
+00:36:32,383 --> 00:36:36,283
+what's that? The Fantastic Four. Okay, I will get straightened out.
+
+687
+00:36:36,300 --> 00:36:36,466
+>> Not a comic book geek, are you?
+
+688
+00:36:39,216 --> 00:36:42,466
+>> Boy, am I going to get schwacked on the break time. Oh, my gosh.
+
+689
+00:36:43,366 --> 00:36:46,466
+So think about having a super long reach, that's really what
+
+690
+00:36:46,483 --> 00:36:50,466
+the automation subsystem permits because you will see job step-wise,
+
+691
+00:36:50,200 --> 00:36:54,216
+we have T-SQL subsytem, command_exec, anything that's a batch
+
+692
+00:36:54,300 --> 00:36:59,266
+file, an executable command file, Power Shell. Amazing things
+
+693
+00:36:59,350 --> 00:37:02,466
+you can do with Power Shell. Get a free e-book on Power Shell
+
+694
+00:37:02,483 --> 00:37:05,466
+at powershell.com. Sorry, am I missing something?
+
+695
+00:37:07,483 --> 00:37:12,466
+Thank you. I can one SSIS packages. So let's just assume all
+
+696
+00:37:13,333 --> 00:37:16,216
+the automation real estate is covered. Anything I might want
+
+697
+00:37:16,300 --> 00:37:21,366
+to do I can get it covered. And then a final point is that I
+
+698
+00:37:21,450 --> 00:37:26,466
+may want to become notified on the basis of when a job completes
+
+699
+00:37:26,483 --> 00:37:31,466
+and/or if it fails. So lots of moving parts there.
+
+700
+00:37:31,483 --> 00:37:35,466
+>> Now, a lot of times jobs go out and they have to actually access
+
+701
+00:37:35,483 --> 00:37:40,200
+resources either in the database or in other parts of the network
+
+702
+00:37:40,283 --> 00:37:45,466
+or on the computer. How do we manage that whole process and make
+
+703
+00:37:45,483 --> 00:37:48,466
+sure that they don't do anything inappropriate, shall we say?
+
+704
+00:37:48,483 --> 00:37:51,466
+>> Sure, sure. We want to make sure they don't do anything appropriate
+
+705
+00:37:51,483 --> 00:37:54,466
+and that those accounts are not compromised. Well, when it comes
+
+706
+00:37:54,483 --> 00:37:58,200
+to setting up automation security, there are two major divisions.
+
+707
+00:37:58,483 --> 00:37:59,466
+The T-SQL job
+
+708
+00:38:01,483 --> 00:38:05,466
+subsystem is treated sort of unto itself. And the security of
+
+709
+00:38:06,483 --> 00:38:09,433
+a particular job step, that is configurable...
+
+710
+00:38:09,450 --> 00:38:09,466
+>> Okay....
+
+711
+00:38:09,483 --> 00:38:14,466
+>> security on a per job-step basis has to do with ownership.
+
+712
+00:38:14,483 --> 00:38:19,466
+So job owned by sys admin versus a job owned by a non-sys admin.
+
+713
+00:38:19,483 --> 00:38:24,466
+We will see that other job steps have other... they have a different
+
+714
+00:38:24,483 --> 00:38:29,466
+security mechanism. And that's dictated by, again, whether it
+
+715
+00:38:29,483 --> 00:38:33,283
+is a sys admin owned job or a job not owned by sys admin.
+
+716
+00:38:33,366 --> 00:38:36,466
+Rather than to go through the painful detail of seeing this on
+
+717
+00:38:36,483 --> 00:38:39,466
+a slide... or running through all the detail on the slide, this
+
+718
+00:38:39,483 --> 00:38:40,466
+is more of a reference.
+
+719
+00:38:41,483 --> 00:38:47,466
+>> How can we provide an identity for those steps to use per se?
+
+720
+00:38:47,483 --> 00:38:49,466
+>> Yeah. So the SQL Agent...
+
+721
+00:38:49,483 --> 00:38:52,466
+if I could go back for just a sec. The SQL Agent
+
+722
+00:38:54,483 --> 00:38:59,466
+has an account that it must run under. We saw that in the earlier module.
+
+723
+00:38:59,483 --> 00:39:03,466
+So picture, for example, a diameter, a circle with a diameter
+
+724
+00:39:03,483 --> 00:39:08,466
+which represents maybe an amount of privilege. Now, for every
+
+725
+00:39:08,183 --> 00:39:09,466
+job and every job step
+
+726
+00:39:11,300 --> 00:39:14,466
+with this rule book, that will dictate how jobs and job steps
+
+727
+00:39:14,483 --> 00:39:18,466
+will run. Well, fine then. I might need to change that diameter
+
+728
+00:39:18,483 --> 00:39:22,466
+to have generally larger privileges but just for a moment.
+
+729
+00:39:22,483 --> 00:39:27,466
+So I can use "execute as" for T-SQL job steps. As we move into
+
+730
+00:39:27,483 --> 00:39:32,250
+the next topic, we'll see that for other job steps, we have something else.
+
+731
+00:39:32,333 --> 00:39:35,466
+I'm going to move over to my virtual machine for just a moment
+
+732
+00:39:35,483 --> 00:39:37,466
+to reveal something. So if you guys could flip me over.
+
+733
+00:39:38,483 --> 00:39:41,466
+All right. So I'm looking at the SQL Server Agent, and I see
+
+734
+00:39:41,483 --> 00:39:46,283
+a very long laundry list of available proxies.
+
+735
+00:39:46,483 --> 00:39:50,333
+Now here's the relevance. Let's say I happen to have a job, and
+
+736
+00:39:50,483 --> 00:39:53,433
+it doesn't matter what job I have right now. I'm going to open
+
+737
+00:39:53,483 --> 00:39:54,466
+up properties of the job.
+
+738
+00:39:55,450 --> 00:39:55,466
+>> Okay.
+
+739
+00:39:56,483 --> 00:39:58,466
+>> I'm then going to go to steps of the job.
+
+740
+00:39:59,200 --> 00:40:00,466
+And when I edit
+
+741
+00:40:01,483 --> 00:40:07,466
+the properties of the job, notice I could configure run-as.
+
+742
+00:40:08,250 --> 00:40:12,466
+Now, run-as actually says point to a proxy.
+
+743
+00:40:13,483 --> 00:40:18,466
+And the only one run-as is not available for is a T-SQL Agent step.
+
+744
+00:40:18,483 --> 00:40:23,250
+This is where I would use "execute as" in the T-SQL code so I
+
+745
+00:40:23,333 --> 00:40:26,466
+get the same thing done, I just have a different mechanism.
+
+746
+00:40:26,483 --> 00:40:28,466
+>> Got it. So what is a proxy then?
+
+747
+00:40:28,483 --> 00:40:32,466
+>> Yeah, so a proxy is really an alternate identity. If you guys
+
+748
+00:40:32,483 --> 00:40:36,466
+would flip me back to the slides now for a sec. You are going
+
+749
+00:40:36,483 --> 00:40:40,433
+to have to follow me deep down the rabbit hole for a second here.
+
+750
+00:40:40,450 --> 00:40:40,466
+>> Uh-oh.
+
+751
+00:40:41,483 --> 00:40:46,466
+>> So what I need is an alternate identity that's able to do something.
+
+752
+00:40:46,483 --> 00:40:50,466
+So I set up a Windows account, and I assign that account privileges,
+
+753
+00:40:50,483 --> 00:40:52,466
+the privileges I need a job step to have.
+
+754
+00:40:52,483 --> 00:40:53,466
+>> Okay.
+
+755
+00:40:53,483 --> 00:40:58,466
+>> Then I have to create an instance level object, a credential object.
+
+756
+00:40:59,433 --> 00:41:02,466
+Looking at the chain of events here, a credential necessarily
+
+757
+00:41:03,483 --> 00:41:04,466
+points to a Windows account.
+
+758
+00:41:04,483 --> 00:41:05,466
+>> Okay.
+
+759
+00:41:05,216 --> 00:41:10,466
+>> Then I create an agent proxy and an agent proxy necessarily
+
+760
+00:41:10,483 --> 00:41:15,466
+points to a credential. And then, finally, on a job step-by job
+
+761
+00:41:16,483 --> 00:41:21,466
+step basis, I can point to a proxy which then will enlarge the
+
+762
+00:41:21,483 --> 00:41:26,466
+diameter of whatever capability I need for that particular job step.
+
+763
+00:41:26,483 --> 00:41:30,466
+>> Awesome. Now, is that the only security that's involved in
+
+764
+00:41:31,483 --> 00:41:32,466
+SQL Agent?
+
+765
+00:41:33,483 --> 00:41:37,216
+>> Think, Rich, of a really busy server. Maybe I have a couple
+
+766
+00:41:37,300 --> 00:41:41,466
+hundred databases on a machine. We'll learn more and more about
+
+767
+00:41:41,200 --> 00:41:46,466
+maintenance where I might have four or five jobs just for a single database.
+
+768
+00:41:46,483 --> 00:41:50,466
+Multiply that by 100, 200 databases, I could easily have a couple
+
+769
+00:41:50,483 --> 00:41:53,466
+hundred jobs on a heavy workload machine.
+
+770
+00:41:54,0 --> 00:41:54,383
+>> Okay.
+
+771
+00:41:54,466 --> 00:41:59,333
+>> So now I'm at a fork in the road if I'm the system administrator
+
+772
+00:41:59,483 --> 00:42:03,333
+of that instance. I might need some help. So do I want to raise
+
+773
+00:42:03,483 --> 00:42:06,466
+someone all the way to sys admin to give them entire privileges
+
+774
+00:42:06,483 --> 00:42:10,466
+over the job administration system or not?
+
+775
+00:42:10,216 --> 00:42:10,466
+>> I wouldn't.
+
+776
+00:42:10,483 --> 00:42:16,466
+>> And if I don't want to take that approach, I have a job delegation
+
+777
+00:42:16,483 --> 00:42:20,333
+strategy that I can use. Now, over at the right, you'll find
+
+778
+00:42:20,416 --> 00:42:28,466
+a curious laundry list of database roles specific to the MSDB.
+
+779
+00:42:28,166 --> 00:42:32,183
+And where I've highlighted, notice that there are the SQL Agent
+
+780
+00:42:32,266 --> 00:42:37,466
+family of roles and, specifically, there are three. If you are
+
+781
+00:42:37,483 --> 00:42:40,466
+up for the gory detail, I have a hyperlink here where you can
+
+782
+00:42:40,483 --> 00:42:45,466
+see exactly what each role can and cannot do. And the roles
+
+783
+00:42:45,483 --> 00:42:49,466
+are in increasing privilege. So we have the agent user role.
+
+784
+00:42:49,483 --> 00:42:51,466
+It can manage basically what it owns.
+
+785
+00:42:52,483 --> 00:42:57,466
+Pardon me. The reader role can do anything the user role can
+
+786
+00:42:57,483 --> 00:43:02,300
+and some additional stuff, like at least get information on multi-server
+
+787
+00:43:02,383 --> 00:43:07,466
+jobs, properties, schedules. So it can look at everything even
+
+788
+00:43:07,483 --> 00:43:08,433
+beyond what it owns.
+
+789
+00:43:08,450 --> 00:43:08,466
+>> Okay.
+
+790
+00:43:08,483 --> 00:43:12,466
+>> Of course, the SQL Agent operator can touch and change more
+
+791
+00:43:12,483 --> 00:43:15,466
+than that. And then the next up on the proverbial food chain
+
+792
+00:43:15,483 --> 00:43:17,466
+would be a sys admin.
+
+793
+00:43:17,483 --> 00:43:20,300
+>> So I got to ask you a question, George. Over in that little
+
+794
+00:43:20,383 --> 00:43:26,466
+box next to where it's showing the instance, I don't see SQL
+
+795
+00:43:26,183 --> 00:43:27,466
+Agent in there. How come?
+
+796
+00:43:27,483 --> 00:43:29,416
+>> I was hoping you'd ask about that.
+
+797
+00:43:29,483 --> 00:43:31,466
+>> I kind of thought so. That's why its owe on the slide.
+
+798
+00:43:31,483 --> 00:43:35,316
+>> Yeah, yeah, yeah. So why would the agent not show up there
+
+799
+00:43:35,400 --> 00:43:39,466
+if someone is not a member of either sys admin or one of those roles?
+
+800
+00:43:39,483 --> 00:43:43,466
+The agent node doesn't even appear in management studio.
+
+801
+00:43:43,483 --> 00:43:46,350
+>> If they are not going to be to play with it, they ain't even
+
+802
+00:43:46,433 --> 00:43:47,433
+going to be able to see it.
+
+803
+00:43:47,450 --> 00:43:47,466
+>> Yeah.
+
+804
+00:43:47,483 --> 00:43:48,466
+>> I like that.
+
+805
+00:43:48,483 --> 00:43:49,466
+>> I do.
+
+806
+00:43:49,483 --> 00:43:54,466
+>> Can we look at operators and jobs and job steps and all that
+
+807
+00:43:54,483 --> 00:43:57,466
+good stuff? How do we set up that automation?
+
+808
+00:43:58,483 --> 00:44:01,466
+>> All righty. So one of the first things that you'll do in setting
+
+809
+00:44:01,483 --> 00:44:04,466
+up the automation system is setting up an operator. They're going
+
+810
+00:44:04,483 --> 00:44:05,216
+to be...
+
+811
+00:44:06,200 --> 00:44:08,466
+Guys, would you go ahead and flip me to my virtual machine.
+
+812
+00:44:08,483 --> 00:44:12,466
+Thanks. One of the first things I'd want to do is set up an operator.
+
+813
+00:44:12,483 --> 00:44:17,466
+They are going to be the destination notification of job outcome.
+
+814
+00:44:17,483 --> 00:44:22,466
+So we'll take a look. And I will tell you, every bit of this
+
+815
+00:44:23,483 --> 00:44:26,216
+can be configured in code. And we'll see kind of in this demo
+
+816
+00:44:26,300 --> 00:44:32,466
+a mixture of some code and also GUI-based demonstration. So let's
+
+817
+00:44:32,483 --> 00:44:33,466
+say we call this...
+
+818
+00:44:34,266 --> 00:44:38,466
+this operator the DBA team. I'm big on having plural names here.
+
+819
+00:44:38,483 --> 00:44:44,433
+General rule of thumb, the work stays the same, the worker may change.
+
+820
+00:44:44,450 --> 00:44:44,466
+>> Okay.
+
+821
+00:44:44,483 --> 00:44:50,316
+>> So let's just leave kind of a general name here. And for aliasing
+
+822
+00:44:50,400 --> 00:44:52,466
+purposes, we could have something like...
+
+823
+00:44:53,483 --> 00:44:56,466
+what do you call that... a distribution list. So let's say...
+
+824
+00:44:56,483 --> 00:45:01,466
+>> So the operator is not an user. The operator is a message destination.
+
+825
+00:45:01,483 --> 00:45:02,466
+>> That's right.
+
+826
+00:45:02,483 --> 00:45:03,300
+>> Awesome.
+
+827
+00:45:03,483 --> 00:45:07,383
+>> And so I can go ahead and apply the hours of availability for
+
+828
+00:45:07,466 --> 00:45:11,466
+this operator. This becomes important in the circumstance when
+
+829
+00:45:11,483 --> 00:45:15,466
+a notification message is sent. I should have a little fun with
+
+830
+00:45:15,483 --> 00:45:19,466
+this and set 24/7 hours, but I won't bother to do that right now.
+
+831
+00:45:19,483 --> 00:45:22,216
+>> Oh, why not? That's the real world. Have you ever met a DBA
+
+832
+00:45:22,300 --> 00:45:23,466
+that doesn't work 24/7?
+
+833
+00:45:23,483 --> 00:45:27,466
+>> Yeah. so now I have my operator. And subsequent to that, I
+
+834
+00:45:27,483 --> 00:45:29,466
+will go ahead and create a job.
+
+835
+00:45:29,483 --> 00:45:30,466
+>> Okay.
+
+836
+00:45:30,483 --> 00:45:34,466
+>> So let's call this backup system databases.
+
+837
+00:45:35,416 --> 00:45:35,466
+>> Okay.
+
+838
+00:45:36,483 --> 00:45:40,466
+>> So that will be the name of our job. And now I want to set
+
+839
+00:45:40,483 --> 00:45:44,366
+up the job steps. I need to pinch a little bit of code here, Rich.
+
+840
+00:45:46,483 --> 00:45:49,466
+>> Like every good DBA, you prewrote your scripts.
+
+841
+00:45:50,0 --> 00:45:51,366
+>> That I did.
+
+842
+00:45:51,450 --> 00:45:51,466
+>> I like that.
+
+843
+00:45:51,483 --> 00:45:55,400
+>> I will go for double bonus if they even entirely work.
+
+844
+00:45:55,416 --> 00:45:57,466
+[Laughter]
+
+845
+00:45:57,483 --> 00:46:00,300
+>> And, of course, I have my task bar up top which I forgot about
+
+846
+00:46:00,383 --> 00:46:04,466
+and auto hidden. So there is my new job. So next up I'm going
+
+847
+00:46:04,483 --> 00:46:09,333
+to create a new job step, and we'll call this, after I paste
+
+848
+00:46:09,416 --> 00:46:12,466
+in my code, backup master.
+
+849
+00:46:15,483 --> 00:46:18,283
+For brevity, I will just say backup master. You are going to
+
+850
+00:46:18,366 --> 00:46:22,350
+have better titles. You noticed I have a lot of cheeky rules
+
+851
+00:46:22,433 --> 00:46:26,383
+of thumb, and one of my other rules of thumb is leave a trail.
+
+852
+00:46:26,450 --> 00:46:26,466
+>> Oh, yeah.
+
+853
+00:46:26,483 --> 00:46:29,466
+>> I like documentation. I like being obvious.
+
+854
+00:46:29,483 --> 00:46:34,466
+>> Self-documenting is a very good thing. You should practice
+
+855
+00:46:34,483 --> 00:46:37,466
+it in all of your naming conventions on everything.
+
+856
+00:46:37,483 --> 00:46:42,466
+>> There we go. So we'll find that job steps actually have a humble...
+
+857
+00:46:42,483 --> 00:46:43,466
+did I say "humble"?
+
+858
+00:46:43,483 --> 00:46:44,466
+>> You did....
+
+859
+00:46:44,483 --> 00:46:49,466
+>> a humble workflow capability and lots of configurable options
+
+860
+00:46:49,483 --> 00:46:52,466
+with a job step. Of course, it would never be within the realm
+
+861
+00:46:52,483 --> 00:46:56,216
+of possibility for one of my co-workers to already be in the
+
+862
+00:46:56,300 --> 00:46:59,466
+middle of the night reboot a server when there is some automation
+
+863
+00:46:59,483 --> 00:47:02,466
+that's supposed to occur. So I can have retry attempts, retry
+
+864
+00:47:02,483 --> 00:47:07,466
+interval, some basic things like that. After that job step,
+
+865
+00:47:07,166 --> 00:47:09,466
+I'm quickly going to make two new job steps.
+
+866
+00:47:14,483 --> 00:47:16,466
+Let's say
+
+867
+00:47:18,483 --> 00:47:19,466
+backup MSDB.
+
+868
+00:47:20,483 --> 00:47:21,0
+>> Yep.
+
+869
+00:47:22,483 --> 00:47:23,466
+>> One more.
+
+870
+00:47:25,483 --> 00:47:27,466
+>> Let me guess. Backup model.
+
+871
+00:47:27,483 --> 00:47:28,466
+>> Backup model.
+
+872
+00:47:29,316 --> 00:47:31,466
+>> Well, those are the system databases you need to backup, so
+
+873
+00:47:31,483 --> 00:47:32,283
+that works.
+
+874
+00:47:32,366 --> 00:47:34,466
+>> That's right. Now this last time around instead of going to
+
+875
+00:47:34,483 --> 00:47:39,416
+the next step, I want to quit the job reporting success.
+
+876
+00:47:39,483 --> 00:47:40,350
+>> Okay.
+
+877
+00:47:40,433 --> 00:47:41,466
+>> I'll click on okay.
+
+878
+00:47:42,483 --> 00:47:44,466
+And a schedule.
+
+879
+00:47:44,483 --> 00:47:45,466
+>> All right.
+
+880
+00:47:45,483 --> 00:47:48,450
+>> So I would pick a schedule. Let's just say we want this to
+
+881
+00:47:48,483 --> 00:47:53,433
+occur every single day rather than particular days.
+
+882
+00:47:53,450 --> 00:47:53,466
+>> Okay.
+
+883
+00:47:53,483 --> 00:47:57,333
+>> And maybe we want this to occur at 2:00 a.m.
+
+884
+00:47:57,450 --> 00:47:57,466
+>> All right.
+
+885
+00:47:58,333 --> 00:47:58,466
+>> We'll say...
+
+886
+00:47:59,483 --> 00:48:02,466
+give a schedule name nightly at 2:00 a.m.
+
+887
+00:48:04,483 --> 00:48:05,466
+The final part
+
+888
+00:48:07,483 --> 00:48:12,366
+is setting a target for notification. And notice the configurability here.
+
+889
+00:48:12,450 --> 00:48:16,466
+The operator that I have can be notified when the job succeeds,
+
+890
+00:48:17,483 --> 00:48:23,466
+also notified same operator when the job fails, or just when
+
+891
+00:48:24,166 --> 00:48:27,466
+it gives its best effort when it completes whether it finishes
+
+892
+00:48:27,483 --> 00:48:28,466
+successfully or not.
+
+893
+00:48:28,483 --> 00:48:29,250
+>> Awesome.
+
+894
+00:48:29,333 --> 00:48:32,466
+>> Just for drama value, let's see if this dog will bark.
+
+895
+00:48:33,483 --> 00:48:35,183
+We'll go ahead and start it.
+
+896
+00:48:36,483 --> 00:48:38,466
+See if I put in my code right.
+
+897
+00:48:38,483 --> 00:48:40,466
+>> And? Uh-oh.
+
+898
+00:48:41,483 --> 00:48:44,466
+>> Kaboom. So this is where I could use troubleshooting facilities,
+
+899
+00:48:45,483 --> 00:48:50,166
+go ahead and view history and find out what it was that actually
+
+900
+00:48:50,450 --> 00:48:50,466
+went wrong.
+
+901
+00:48:51,483 --> 00:48:55,466
+All right. So we can drill down notice on a step...
+
+902
+00:48:55,483 --> 00:48:59,466
+well, actually job outcome status and then step by step.
+
+903
+00:49:00,483 --> 00:49:01,466
+All right. Awesome.
+
+904
+00:49:01,483 --> 00:49:04,466
+>> Awesome. So is there anything else you can do in Agent that
+
+905
+00:49:04,483 --> 00:49:05,466
+might be useful?
+
+906
+00:49:06,483 --> 00:49:10,466
+>> Wow, lots of stuff. So we have all kinds of other subsystems.
+
+907
+00:49:10,483 --> 00:49:12,466
+Were you referring to the other subsystems we have?
+
+908
+00:49:12,483 --> 00:49:16,466
+>> No, I was thinking more along the lines of letting the Agent
+
+909
+00:49:16,483 --> 00:49:17,466
+tell you when something happens.
+
+910
+00:49:18,483 --> 00:49:22,300
+>> Yes, alerts, uh-huh. I'd like to...
+
+911
+00:49:22,483 --> 00:49:24,466
+let me get a quick look here.
+
+912
+00:49:24,483 --> 00:49:31,466
+Yeah, I'd like to equate the alerting subsystem to a trip wire.
+
+913
+00:49:31,483 --> 00:49:32,466
+>> Okay.
+
+914
+00:49:32,216 --> 00:49:38,466
+>> So let's say I had something on double secret probation in
+
+915
+00:49:38,233 --> 00:49:43,466
+my property, and I wanted to be made aware if somebody crosses
+
+916
+00:49:43,483 --> 00:49:44,466
+into my property...
+
+917
+00:49:45,250 --> 00:49:45,266
+>> Okay....
+
+918
+00:49:45,350 --> 00:49:46,433
+>> and I didn't want them there.
+
+919
+00:49:46,450 --> 00:49:46,466
+>> Okay.
+
+920
+00:49:46,483 --> 00:49:50,466
+>> Compare this to SQL Server. I can set up a listening ear to
+
+921
+00:49:50,483 --> 00:49:55,466
+listen for particular circumstances and should they occur (snapping),
+
+922
+00:49:55,483 --> 00:49:59,333
+knee-jerk reaction, I want SQL Server to do something about it.
+
+923
+00:49:59,450 --> 00:49:59,466
+>> Awesome.
+
+924
+00:49:59,483 --> 00:50:03,466
+>> Now, for your benefit, I have the basic alerting architecture here.
+
+925
+00:50:03,483 --> 00:50:08,466
+And I think what I would like to do is just show you how I configure
+
+926
+00:50:09,450 --> 00:50:09,466
+an alert.
+
+927
+00:50:10,433 --> 00:50:13,466
+Before you flip the slide, notice that I have three...
+
+928
+00:50:13,483 --> 00:50:18,466
+in the light blue area, three key areas that I can use as the
+
+929
+00:50:18,483 --> 00:50:22,466
+basis for setting up the trip wire. So let's go over to my virtual
+
+930
+00:50:22,483 --> 00:50:24,466
+machine now and show some of these.
+
+931
+00:50:27,266 --> 00:50:30,466
+>> All right. So the performance condition alerts, we can do an
+
+932
+00:50:30,483 --> 00:50:35,466
+event alert, we can do a WMI, which is Windows management instrumentation.
+
+933
+00:50:35,483 --> 00:50:39,466
+>> That's right. Now, the first thing I'm going to do is add a
+
+934
+00:50:39,483 --> 00:50:44,466
+couple of custom error messages. Don't laugh at my messages here.
+
+935
+00:50:44,483 --> 00:50:48,416
+It is just purely for humor. You will notice the way that I add
+
+936
+00:50:48,483 --> 00:50:53,466
+a custom error message is with SP addmessage. These are instance
+
+937
+00:50:53,483 --> 00:50:54,466
+level objects.
+
+938
+00:50:55,283 --> 00:50:58,466
+Now, a clever thing is that these can actually be called by stored
+
+939
+00:50:58,483 --> 00:51:02,466
+procedures through the raise error statement. But for right
+
+940
+00:51:02,483 --> 00:51:05,466
+now, let's just make a mental note that we have an error message
+
+941
+00:51:05,483 --> 00:51:09,316
+we might specifically be concerned about, 50649.
+
+942
+00:51:10,483 --> 00:51:15,466
+All right. So just so you know, you can query sys messages if
+
+943
+00:51:15,483 --> 00:51:19,466
+you wanted to see those custom message IDs. All of them, by
+
+944
+00:51:19,483 --> 00:51:24,466
+the way, have to have an ID over 50,000. Okay. So now to set
+
+945
+00:51:24,483 --> 00:51:27,466
+up my alert, I'm going to go to object explorer. When in doubt...
+
+946
+00:51:29,316 --> 00:51:30,383
+>> Select it first.
+
+947
+00:51:30,466 --> 00:51:33,283
+>> That's right... right click and now it will say
+
+948
+00:51:35,483 --> 00:51:39,466
+"error alert." Of course, I'd give probably a better description here.
+
+949
+00:51:39,483 --> 00:51:42,466
+Notice one of the key things is that I may want to set up an
+
+950
+00:51:42,483 --> 00:51:44,466
+alert that I'm not ready to enable.
+
+951
+00:51:44,483 --> 00:51:45,183
+>> Okay.
+
+952
+00:51:45,266 --> 00:51:49,166
+>> So that's a troubleshooting thing. Make sure that you're...
+
+953
+00:51:49,250 --> 00:51:52,466
+that the alert is enabled. So now I have the alert condition.
+
+954
+00:51:52,483 --> 00:51:56,466
+And I want you to observe how the form changes when I pick a
+
+955
+00:51:56,483 --> 00:52:00,433
+different major area of trip wire, as I described.
+
+956
+00:52:00,450 --> 00:52:00,466
+>> All right.
+
+957
+00:52:00,483 --> 00:52:04,466
+>> So we'll use an event alert. The next major thing that we have
+
+958
+00:52:04,483 --> 00:52:10,466
+to determine is will this apply to all databases or just a particular database?
+
+959
+00:52:10,483 --> 00:52:14,433
+>> So we can set up instance level alerts or database level alerts?
+
+960
+00:52:14,450 --> 00:52:14,466
+>> That's right.
+
+961
+00:52:15,233 --> 00:52:15,250
+>> Cool.
+
+962
+00:52:15,333 --> 00:52:18,466
+>> And then all alert errors are
+
+963
+00:52:19,483 --> 00:52:24,466
+all categorized according to a severity. Or I can say that there
+
+964
+00:52:24,483 --> 00:52:29,400
+is a particular error message number that I'm concerned about.
+
+965
+00:52:29,483 --> 00:52:31,200
+Do you remember that number off the top of your head?
+
+966
+00:52:31,283 --> 00:52:31,466
+>> I do not.
+
+967
+00:52:32,483 --> 00:52:35,466
+>> Of course. I should have copied it. So we will this time.
+
+968
+00:52:41,366 --> 00:52:42,333
+There. How's that?
+
+969
+00:52:42,450 --> 00:52:42,466
+>> There we go.
+
+970
+00:52:47,483 --> 00:52:51,466
+>> So the big deal here is what do I want to do about this?
+
+971
+00:52:51,483 --> 00:52:54,466
+So one of the things I might want to do is execute a job.
+
+972
+00:52:55,483 --> 00:52:57,266
+I just picked this one that I made.
+
+973
+00:52:57,350 --> 00:52:57,466
+>> Yep, yep.
+
+974
+00:52:57,483 --> 00:53:03,466
+>> That shows that you can pick a job and/or notice the user interface here.
+
+975
+00:53:05,483 --> 00:53:08,466
+Pink highlighting for the ladies this time. Notice that I can
+
+976
+00:53:08,483 --> 00:53:14,466
+pick all of my standard notification methods, email, pager, et
+
+977
+00:53:14,483 --> 00:53:16,166
+cetera, et cetera.
+
+978
+00:53:16,483 --> 00:53:20,466
+>> Awesome. So just out of curiosity, if you do set up an error
+
+979
+00:53:20,483 --> 00:53:25,466
+alert, where does the Agent monitor for those errors?
+
+980
+00:53:25,483 --> 00:53:26,466
+>> Excellent.
+
+981
+00:53:26,483 --> 00:53:32,466
+So now what we'd find is that I would go to event viewer. A bunch
+
+982
+00:53:32,483 --> 00:53:34,166
+of ways to open up this.
+
+983
+00:53:34,483 --> 00:53:35,466
+Event viewer...
+
+984
+00:53:36,483 --> 00:53:39,466
+time-wise, I'm going to spare actually tripping the alert.
+
+985
+00:53:39,483 --> 00:53:45,466
+But we would then go to Windows logs, application log, and I
+
+986
+00:53:45,483 --> 00:53:48,466
+would see the presence of the alerts here.
+
+987
+00:53:48,483 --> 00:53:52,200
+>> Awesome. So it responds to the message being written to the
+
+988
+00:53:52,283 --> 00:53:55,466
+event log, and that's where the alert gets monitored.
+
+989
+00:53:55,483 --> 00:53:58,466
+>> Yep. That's the listening that I was referring to. It actually
+
+990
+00:53:58,483 --> 00:54:02,0
+was listening to something existing in the event log. Glad that
+
+991
+00:54:02,483 --> 00:54:03,466
+you pointed that out.
+
+992
+00:54:03,216 --> 00:54:03,466
+>> Awesome.
+
+993
+00:54:03,483 --> 00:54:06,466
+>> And then it will kick in to the appropriate action.
+
+994
+00:54:06,483 --> 00:54:10,233
+>> Now, this segues right into our next topic, which if you're
+
+995
+00:54:10,316 --> 00:54:13,466
+going to be notifying people and you are going to be sending
+
+996
+00:54:13,483 --> 00:54:17,466
+emails, well, SQL Server needs to access the mail system.
+
+997
+00:54:18,316 --> 00:54:19,350
+George, what's that all about?
+
+998
+00:54:19,433 --> 00:54:23,466
+>> Just a brief final little topic, an area of capability that
+
+999
+00:54:23,483 --> 00:54:27,466
+SQL Server has is database mail. And we'll see starting with
+
+1000
+00:54:27,483 --> 00:54:32,466
+SQL 2005, so a good number of years ago... everybody sigh with relief...
+
+1001
+00:54:32,483 --> 00:54:37,466
+now this is based on notification of an SMTP server rather than
+
+1002
+00:54:37,483 --> 00:54:41,400
+using the MAPI interface that existed in the past.
+
+1003
+00:54:41,483 --> 00:54:45,466
+Now, there was a particular system stored procedure that has
+
+1004
+00:54:45,483 --> 00:54:48,466
+to be enabled and is used in database mail. You will see the
+
+1005
+00:54:48,483 --> 00:54:50,466
+name of that down below,
+
+1006
+00:54:52,466 --> 00:54:57,466
+sp_send_db mail but this can be used for automation notification
+
+1007
+00:54:57,483 --> 00:55:00,466
+purposes and also for application purposes.
+
+1008
+00:55:01,233 --> 00:55:05,333
+As mail piles up, there is some system tables that you actually
+
+1009
+00:55:05,483 --> 00:55:10,466
+can put your hands on, meaning remove rows, maintain. So brace yourself.
+
+1010
+00:55:10,483 --> 00:55:15,466
+Does this sound circular? I might need a job to maintain some
+
+1011
+00:55:15,483 --> 00:55:17,466
+of the history in email.
+
+1012
+00:55:17,483 --> 00:55:18,466
+[Laughter]
+
+1013
+00:55:19,483 --> 00:55:23,333
+>> Oh, Lord. Maintenance upon maintenance upon maintenance.
+
+1014
+00:55:23,416 --> 00:55:23,433
+>> Yeah, so...
+
+1015
+00:55:23,483 --> 00:55:25,466
+>> That's the way it works with a database.
+
+1016
+00:55:25,483 --> 00:55:28,466
+>> So that wraps us up for this topic, taking a look at server
+
+1017
+00:55:28,483 --> 00:55:33,466
+level options, database level options, setting up the automation system.
+
+1018
+00:55:33,483 --> 00:55:37,466
+>> And we'll be back in about ten minutes with our next topic.
+
+1019
+00:55:37,483 --> 00:55:40,250
+Thanks for hanging out. See you in a little bit.
+
