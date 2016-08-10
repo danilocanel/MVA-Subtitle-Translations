@@ -1,0 +1,2104 @@
+1
+00:00:00,333 --> 00:00:06,333
+[Music]
+
+2
+00:00:12,483 --> 00:00:20,466
+>> Let's go into our next module and kind of take it up a notch here.
+
+3
+00:00:20,483 --> 00:00:23,466
+We're going to go up into the advanced SELECT statements,
+
+4
+00:00:24,483 --> 00:00:26,466
+and in the advanced SELECT statements, we're going to talk in
+
+5
+00:00:26,483 --> 00:00:29,466
+here, as we move down through here, we're going to talk about
+
+6
+00:00:29,483 --> 00:00:34,466
+things like the DISTINCT clause, the aliases, scalar functions,
+
+7
+00:00:35,333 --> 00:00:39,466
+using a CASE, JOINs and MERGEs. We're going to introduce those.
+
+8
+00:00:39,483 --> 00:00:44,383
+Filtering data, sorting data and how we work with the null values.
+
+9
+00:00:44,483 --> 00:00:46,466
+So we're going to take down what we just introduced in module
+
+10
+00:00:46,483 --> 00:00:49,466
+one, and we're going to take it up a notch and start working
+
+11
+00:00:49,483 --> 00:00:53,466
+with some of these advanced options that we have available to us.
+
+12
+00:00:53,483 --> 00:00:55,250
+And we kind of introduced a little bit... we did a little bit
+
+13
+00:00:55,333 --> 00:00:57,466
+of the sorting and the filtering when we used the Where clause
+
+14
+00:00:57,483 --> 00:01:00,466
+already, didn't do much with JOINs, but now we're going to talk
+
+15
+00:01:00,483 --> 00:01:03,466
+about a few of these other more advanced clauses that we can
+
+16
+00:01:03,483 --> 00:01:06,333
+use with the SELECT statement.
+
+17
+00:01:06,483 --> 00:01:09,466
+Tobias, how does this DISTINCT statement help me out here?
+
+18
+00:01:10,0 --> 00:01:15,466
+>> The DISTINCT is all about removing duplicates in a set, and
+
+19
+00:01:16,483 --> 00:01:18,466
+you typically use it for
+
+20
+00:01:19,483 --> 00:01:24,466
+you want to list all of the first names in a table, and you have
+
+21
+00:01:24,483 --> 00:01:27,466
+lots of Johns and even more Tobiases, because it's obviously
+
+22
+00:01:27,483 --> 00:01:32,400
+a very common name. And so if you just say SELECT first name
+
+23
+00:01:32,483 --> 00:01:36,466
+from employees or whatever, it will just give you all of the
+
+24
+00:01:36,166 --> 00:01:38,466
+names in no particular order, but if you say DISTINCT, it will
+
+25
+00:01:38,483 --> 00:01:41,466
+give you the unique combination across all columns, so that's
+
+26
+00:01:41,483 --> 00:01:45,466
+an important thing to remember. DISTINCT goes across the entire row.
+
+27
+00:01:45,483 --> 00:01:49,233
+It doesn't look at for a specific column. So it's across the
+
+28
+00:01:49,316 --> 00:01:52,466
+entire row that you've selected that you're projecting, and then
+
+29
+00:01:52,483 --> 00:01:58,466
+gives you the result back without the duplicates. It's important
+
+30
+00:01:58,483 --> 00:02:03,466
+to know the DISTINCT is typically a fairly expensive statement
+
+31
+00:02:03,483 --> 00:02:07,466
+to run, so the larger the set, the more work we have to do to
+
+32
+00:02:07,483 --> 00:02:11,466
+approve these duplicates. It typically includes sorting the result
+
+33
+00:02:11,483 --> 00:02:14,466
+first and then walking through and removing it, so kind of like
+
+34
+00:02:14,483 --> 00:02:17,466
+you would imagine if you would need to remove duplicates from
+
+35
+00:02:17,233 --> 00:02:19,466
+a set, you would have to do something like that.
+
+36
+00:02:20,483 --> 00:02:25,466
+>> All right. And then here's an example of using a SELECT DISTINCT StoreID.
+
+37
+00:02:25,483 --> 00:02:28,466
+So if I just did a SELECT StoreID from Sales.Customer, it's going
+
+38
+00:02:28,483 --> 00:02:32,466
+to display multiple occurrences of StoreID. By throwing the
+
+39
+00:02:32,483 --> 00:02:35,466
+DISTINCT clause in there, now it's going to just show me every
+
+40
+00:02:35,183 --> 00:02:38,466
+StoreID, or it's going to show it just once, every StoreID, which
+
+41
+00:02:38,483 --> 00:02:40,466
+makes it like you said. It's a little bit more overhead, but
+
+42
+00:02:40,483 --> 00:02:43,466
+my result set is going to have fewer items returned to me.
+
+43
+00:02:43,483 --> 00:02:46,466
+>> And it's important, this thing about performance. We'll probably
+
+44
+00:02:46,483 --> 00:02:48,466
+talk a bit about performance over the day.
+
+45
+00:02:49,483 --> 00:02:53,250
+But first comes functionality, right? You first need to get the
+
+46
+00:02:53,333 --> 00:02:55,466
+results that you're actually interested in, and then you want
+
+47
+00:02:55,483 --> 00:02:59,466
+to optimize this. And obviously, with regards to your results,
+
+48
+00:02:59,483 --> 00:03:01,466
+the more you can constrain it and the more you can understand
+
+49
+00:03:01,483 --> 00:03:06,200
+exactly what's needed, probably the more you can tweak the performance.
+
+50
+00:03:06,283 --> 00:03:09,250
+But at the end of the day, you can't use a blanket statement
+
+51
+00:03:09,333 --> 00:03:12,466
+like never use DISTINCT, because if you don't want the duplicates
+
+52
+00:03:12,483 --> 00:03:15,466
+in there, presumably you should use DISTINCT.
+
+53
+00:03:15,483 --> 00:03:17,466
+>> Yes. As long as you understand the overhead involved, as I
+
+54
+00:03:17,483 --> 00:03:19,466
+said, there are going to be times when you're going to have to
+
+55
+00:03:19,483 --> 00:03:23,466
+use it, but as long as you understand the overhead that's involved
+
+56
+00:03:23,483 --> 00:03:26,466
+with that, you're going to be able to run with that. Here's some
+
+57
+00:03:26,483 --> 00:03:30,466
+using aliases. Those help kind of format. Again, we're going
+
+58
+00:03:30,183 --> 00:03:33,466
+to look at the different ways we could control the results and
+
+59
+00:03:33,483 --> 00:03:36,466
+our result set, so we have calling the aliases here, where we've
+
+60
+00:03:36,483 --> 00:03:41,466
+got select SalesOrderID, UnitPrice, order quantity, as quantity.
+
+61
+00:03:41,483 --> 00:03:43,466
+So that's how that's going to display that. So this is using
+
+62
+00:03:43,483 --> 00:03:47,466
+adding an alias for a column by using the AS clause. We can
+
+63
+00:03:47,483 --> 00:03:52,466
+do something very similar by just using the new column editor.
+
+64
+00:03:52,483 --> 00:03:56,466
+We put Quantity = OrderQty, so we kind of flipped these around
+
+65
+00:03:56,483 --> 00:03:59,466
+without the AS clause, so where the new column header is to the
+
+66
+00:03:59,483 --> 00:04:03,466
+left of the equal sign, as it is in comparison to the right of
+
+67
+00:04:03,483 --> 00:04:07,466
+the AS. You can also accidental column aliases. I like this one.
+
+68
+00:04:07,483 --> 00:04:12,316
+We have sales order ID, unit price and quantity from Sales.SalesOrderDetail.
+
+69
+00:04:12,483 --> 00:04:17,466
+Notice I didn't put a comma after unit price, so this is why
+
+70
+00:04:17,483 --> 00:04:21,466
+it's an accidental alias. What this will do is it will actually
+
+71
+00:04:21,483 --> 00:04:26,466
+give me content that is the unit price with the header of Quantity.
+
+72
+00:04:26,483 --> 00:04:29,466
+Is that the right order, or am I going the other way? I can't remember.
+
+73
+00:04:29,483 --> 00:04:30,466
+We'll see it.
+
+74
+00:04:31,483 --> 00:04:35,466
+Because there's content in there without the comma, it's identifying
+
+75
+00:04:35,483 --> 00:04:38,183
+Quantity as the column header, but it's going to actually display
+
+76
+00:04:38,266 --> 00:04:39,466
+the UnitPrice in there.
+
+77
+00:04:40,483 --> 00:04:42,466
+>> So with regards to this, you may wonder, why do I have three
+
+78
+00:04:43,333 --> 00:04:47,466
+different ways to do the same thing? Is it just that people are confused?
+
+79
+00:04:48,483 --> 00:04:52,466
+No. So, basically, AS is what you should use. AS is what is
+
+80
+00:04:52,483 --> 00:04:57,466
+defined in the ANSI SQL standard. Why we support equals and
+
+81
+00:04:57,483 --> 00:05:01,466
+basically without making AS optional, so that's what you see
+
+82
+00:05:02,166 --> 00:05:05,466
+at the bottom there, is because of legacy reasons. So one of
+
+83
+00:05:05,483 --> 00:05:09,400
+the things that we do very well in SQL Server is keep backwards
+
+84
+00:05:09,483 --> 00:05:13,383
+compatibility working for you. So basically, if we introduce
+
+85
+00:05:13,466 --> 00:05:17,466
+something, even if it's a long, long time ago, you can still
+
+86
+00:05:19,183 --> 00:05:22,166
+run the command today. The only time we go and remove it is basically
+
+87
+00:05:22,250 --> 00:05:26,200
+if it's causing problems. So we highly recommend you use AS,
+
+88
+00:05:26,283 --> 00:05:29,466
+as that's the ANSI SQL way of writing it, but these other ways
+
+89
+00:05:29,483 --> 00:05:30,466
+exist, as well.
+
+90
+00:05:32,233 --> 00:05:35,466
+>> All right, so kind of the idea of aliases is it makes the column
+
+91
+00:05:35,483 --> 00:05:37,466
+headers a little bit more manageable, because sometimes whoever
+
+92
+00:05:37,483 --> 00:05:41,466
+designed the database may not have the most user-friendly column headers.
+
+93
+00:05:41,483 --> 00:05:44,466
+Now we can define those a little bit differently. Aliases to
+
+94
+00:05:44,483 --> 00:05:46,466
+refer to tables, you saw how we did that a little bit earlier.
+
+95
+00:05:46,483 --> 00:05:51,466
+We've got SELECT SalesOrderID, ProductID, from this table Sales.SalesOrderDetail
+
+96
+00:05:52,333 --> 00:05:57,466
+AS SalesOrders. Now I can reference this table as SalesOrders
+
+97
+00:05:57,483 --> 00:06:00,466
+in future statements here. This is some more to the columns.
+
+98
+00:06:00,483 --> 00:06:03,466
+Now it's without the AS, and then we have table aliases in a
+
+99
+00:06:03,483 --> 00:06:08,466
+SELECT clause, and that's what we did earlier, in my demo earlier.
+
+100
+00:06:08,483 --> 00:06:12,466
+Once I define, or if I identify SalesOrders up here with the
+
+101
+00:06:13,333 --> 00:06:16,466
+AS clause, or if I use an AS clause, I have to specify that in
+
+102
+00:06:16,483 --> 00:06:21,466
+the SELECT statement. So that's just the use of the tables as
+
+103
+00:06:21,483 --> 00:06:22,466
+an alias.
+
+104
+00:06:22,483 --> 00:06:25,466
+>> So why would you use these table aliases?
+
+105
+00:06:25,483 --> 00:06:27,466
+>> Well, if you're doing... we're going to talk about JOINs.
+
+106
+00:06:27,483 --> 00:06:30,466
+If you're going to be able to reference, maybe, a table or multiple
+
+107
+00:06:30,483 --> 00:06:34,466
+tables or a table multiple times using different names, like
+
+108
+00:06:34,483 --> 00:06:37,466
+within a JOIN, these are going to be beneficial when we see the
+
+109
+00:06:37,483 --> 00:06:39,166
+JOINs a little bit later.
+
+110
+00:06:39,483 --> 00:06:42,466
+>> Yes, and it will also help you from typing too much. If you
+
+111
+00:06:42,483 --> 00:06:46,416
+need to reference this table name all the time, it will help
+
+112
+00:06:46,483 --> 00:06:48,466
+you if you use aliases and make them shorter.
+
+113
+00:06:51,200 --> 00:06:53,466
+>> CASE expressions. A simple CASE expression, we'll talk about those.
+
+114
+00:06:53,483 --> 00:06:58,433
+This allows us to compare a value to a list of possible values
+
+115
+00:06:58,483 --> 00:07:00,466
+and then perform some...
+
+116
+00:07:01,483 --> 00:07:05,466
+a statement based on the results of that. CASE expressions may
+
+117
+00:07:05,483 --> 00:07:09,466
+be used in your SELECT column, where having clauses or your ORDER
+
+118
+00:07:09,483 --> 00:07:14,466
+BY clause. And an example of these is shown here, where we have
+
+119
+00:07:14,483 --> 00:07:15,466
+SelectProductID, Name
+
+120
+00:07:17,250 --> 00:07:20,466
+and ProductSubCategoryID, CASE ProductSubCategoryID, WHEN 1,
+
+121
+00:07:20,483 --> 00:07:23,466
+then it equals to Beverages. ELSE, it's an unknown category.
+
+122
+00:07:23,483 --> 00:07:26,466
+So pretty much it's going to go down through, and when it finds
+
+123
+00:07:26,483 --> 00:07:30,433
+that the ProductSubCategoryID is equal to 1, we're going to know
+
+124
+00:07:30,483 --> 00:07:34,466
+that it's Beverages. Otherwise, it's going to show it as an Unknown Category.
+
+125
+00:07:34,483 --> 00:07:37,416
+So when I do a demo, I'll show you this command specifically
+
+126
+00:07:37,483 --> 00:07:40,466
+so that you have a better idea here as to what this looks like
+
+127
+00:07:40,183 --> 00:07:40,466
+in action.
+
+128
+00:07:43,416 --> 00:07:44,466
+In fact, let's do that now.
+
+129
+00:07:46,400 --> 00:07:50,466
+So what I'm going to do is I'm going to go back into my image,
+
+130
+00:07:53,483 --> 00:07:54,466
+and so
+
+131
+00:07:57,300 --> 00:08:01,350
+I'm going to go in and I'm going to load a statement up, a query
+
+132
+00:08:02,366 --> 00:08:05,466
+that I had written already. You guys don't want to watch me fat
+
+133
+00:08:06,483 --> 00:08:08,466
+finger everything, so I've got some statements here. We talked
+
+134
+00:08:08,483 --> 00:08:11,466
+a little bit about the DISTINCT here, so we can just run that
+
+135
+00:08:11,483 --> 00:08:15,466
+real quick so we can see that in action. So SELECT DISTINCT StoreID.
+
+136
+00:08:15,483 --> 00:08:19,466
+Let me grab this. So we can run this one here.
+
+137
+00:08:22,483 --> 00:08:25,466
+Click again. Here's the StoreID is null. Then we start getting...
+
+138
+00:08:26,333 --> 00:08:29,466
+wrong window. Then you'll see that we've got some... well, first
+
+139
+00:08:29,483 --> 00:08:32,466
+off, let's look at this. We've got 711 rows.
+
+140
+00:08:33,216 --> 00:08:35,466
+So if we ran this again,
+
+141
+00:08:36,483 --> 00:08:38,466
+and let's just remove this temporarily,
+
+142
+00:08:40,483 --> 00:08:42,466
+and then we run this same statement
+
+143
+00:08:44,300 --> 00:08:47,466
+and we return it. Now we have 19,820 rows. That's the idea of
+
+144
+00:08:47,483 --> 00:08:50,466
+removing those duplicates that we discussed a little bit ago.
+
+145
+00:08:51,483 --> 00:08:55,466
+So we can do that. These are the aliases. We've already seen
+
+146
+00:08:55,483 --> 00:08:59,0
+these in action, so we won't worry about these too much.
+
+147
+00:08:59,483 --> 00:09:03,466
+Let's go ahead and take a look at here's that CASE statement.
+
+148
+00:09:03,483 --> 00:09:05,466
+I want to show you that actually in action. So I'm going to
+
+149
+00:09:05,483 --> 00:09:08,466
+go ahead and execute this. We've already walked you through and
+
+150
+00:09:08,483 --> 00:09:12,366
+talked about it, so we'll execute that now, and you'll see now
+
+151
+00:09:12,450 --> 00:09:16,466
+that we've got ProductID, we've got Name, ProductSubCategoryID,
+
+152
+00:09:16,483 --> 00:09:19,466
+so that's an unknown. If I scroll down, remember, we're looking
+
+153
+00:09:19,483 --> 00:09:24,466
+for Win 1, so if I scroll down here, we could have multiple items here.
+
+154
+00:09:24,483 --> 00:09:28,466
+You'll see now, when I see number one, we're getting Beverages displayed.
+
+155
+00:09:29,483 --> 00:09:32,466
+Everything else, twos, threes through whatever other number,
+
+156
+00:09:32,483 --> 00:09:36,200
+no values are going to display Unknown Category. So it allows
+
+157
+00:09:36,283 --> 00:09:39,466
+us to control what's actually shown here when we're actually
+
+158
+00:09:39,483 --> 00:09:43,466
+performing or running a CASE statement. We can control what's
+
+159
+00:09:44,0 --> 00:09:45,466
+displayed in that column.
+
+160
+00:09:45,483 --> 00:09:48,466
+>> And it's important to know that the CASE statement, it's not
+
+161
+00:09:48,483 --> 00:09:51,466
+a statement, it's an expression. It's a function, so you can
+
+162
+00:09:51,483 --> 00:09:56,466
+use it in any statement, more or less. You can use it in update,
+
+163
+00:09:56,483 --> 00:09:59,466
+set something equals to CASE something or in the ORDER BY clause
+
+164
+00:09:59,483 --> 00:10:04,400
+or in the group by clause or in the ON clause, or whatever.
+
+165
+00:10:04,483 --> 00:10:07,466
+So wherever you can run a function, you can sue the CASE expression.
+
+166
+00:10:08,483 --> 00:10:12,466
+>> JOINs. JOINs are powerful, maybe a little bit confusing sometimes.
+
+167
+00:10:12,483 --> 00:10:14,466
+We're going to talk about JOINs next.
+
+168
+00:10:15,316 --> 00:10:18,266
+And in the JOINs, we've got a few different flavors of JOINs.
+
+169
+00:10:18,350 --> 00:10:22,466
+We have CROSS JOINs, INNER JOINs and OUTER JOINs, and it can
+
+170
+00:10:22,483 --> 00:10:25,466
+be a little overwhelming, but just as an introduction, CROSS
+
+171
+00:10:25,183 --> 00:10:30,333
+JOINs combines all rolls in both tables, sometimes creates what's
+
+172
+00:10:30,416 --> 00:10:34,466
+called a Cartesian product. INNER JOINs provides filter to match
+
+173
+00:10:34,483 --> 00:10:39,466
+rows between the tables, and then the OUTER JOINs display all
+
+174
+00:10:39,483 --> 00:10:43,466
+rows from a designated table, and then it matches rows from the
+
+175
+00:10:43,483 --> 00:10:46,466
+other contents being retrieved from.
+
+176
+00:10:46,483 --> 00:10:50,466
+So INNER JOINs, as we just introduced, are just rows where a
+
+177
+00:10:50,483 --> 00:10:55,466
+match is found in both tables. An example of this is we'll start
+
+178
+00:10:55,483 --> 00:10:59,166
+from the bottom... so I mentioned the idea of having an alias,
+
+179
+00:10:59,250 --> 00:11:02,466
+so I'm going to just jump down to here, where we've got FROM
+
+180
+00:11:02,200 --> 00:11:06,466
+Sales.SalesOrderHeader AS SOH. That's where the SOH is coming from.
+
+181
+00:11:06,483 --> 00:11:12,466
+And then we're JOINing a Sales.SalesOrderDetail AS SOD, and then
+
+182
+00:11:12,483 --> 00:11:14,466
+what we're going to do is we want to return content. These first
+
+183
+00:11:14,483 --> 00:11:18,383
+two columns are coming from the header table. These remaining
+
+184
+00:11:18,466 --> 00:11:21,466
+three columns are coming from the details table. So we're going
+
+185
+00:11:21,483 --> 00:11:25,466
+to JOIN the tables based on the SalesOrderID. They have to have
+
+186
+00:11:25,483 --> 00:11:29,400
+that common column. We're going to JOIN the tables on that SalesOrderID,
+
+187
+00:11:29,483 --> 00:11:33,166
+and that's going to return the content or individual columns
+
+188
+00:11:33,483 --> 00:11:34,466
+from both of those tables
+
+189
+00:11:36,483 --> 00:11:37,466
+in the same result set.
+
+190
+00:11:38,483 --> 00:11:42,233
+>> And, as you can see here, it says JOIN rather than INNER JOIN,
+
+191
+00:11:42,316 --> 00:11:45,466
+and INNER JOIN is the default. So if you just say JOIN, it will
+
+192
+00:11:45,483 --> 00:11:49,466
+go and do an INNER JOIN. The other thing is, the ON clause is
+
+193
+00:11:49,483 --> 00:11:51,466
+the second filter clause.
+
+194
+00:11:52,483 --> 00:11:56,466
+Sorry, it's the filter clause. So before WHERE happens, ON happens, logically.
+
+195
+00:11:57,366 --> 00:12:00,466
+And the ON clause is just like the WHERE clause. You could put
+
+196
+00:12:00,483 --> 00:12:03,466
+basically any predicate in that. It doesn't have to be JOINed
+
+197
+00:12:03,483 --> 00:12:06,466
+on the actual primary key, foreign key relationship. It could
+
+198
+00:12:06,483 --> 00:12:11,450
+be JOIN on this function of this column like something.
+
+199
+00:12:12,300 --> 00:12:16,466
+That's whatever you put there. Obviously, the results may not
+
+200
+00:12:16,483 --> 00:12:20,466
+be what you're expecting, but JOIN actually fairly frequently
+
+201
+00:12:20,483 --> 00:12:24,466
+you can have lots of benefits from JOINing... or answer interesting
+
+202
+00:12:24,483 --> 00:12:29,466
+questions from your data when you're actually not JOINing on
+
+203
+00:12:29,483 --> 00:12:31,466
+the primary key, foreign key relationship.
+
+204
+00:12:31,483 --> 00:12:34,183
+>> What's the difference between an INNER JOIN and an OUTER JOIN?
+
+205
+00:12:34,483 --> 00:12:39,466
+>> So INNER JOIN, you get only the actual combinations across
+
+206
+00:12:39,483 --> 00:12:45,233
+the table or the tables involved, so what you can look at it
+
+207
+00:12:45,316 --> 00:12:49,466
+logically is, you take two tables and you get the massive set
+
+208
+00:12:49,483 --> 00:12:53,466
+of all rows combined with all other rows, and then you apply
+
+209
+00:12:53,483 --> 00:12:55,466
+the filter in the ON clause.
+
+210
+00:12:56,316 --> 00:12:59,466
+Obviously, if you apply this, you say this ID equals that ID,
+
+211
+00:12:59,483 --> 00:13:03,466
+it will only return whatever rows are actually matching across
+
+212
+00:13:04,333 --> 00:13:09,466
+these two tables. So what if, as an example will be, hey, Brian,
+
+213
+00:13:09,483 --> 00:13:14,183
+please give me all customers and their orders, so you probably
+
+214
+00:13:14,266 --> 00:13:19,466
+will JOIN customer table with order table on customer ID.
+
+215
+00:13:20,483 --> 00:13:24,433
+If I change the question slightly, and this is a good way also
+
+216
+00:13:24,483 --> 00:13:27,466
+of kind of practicing SQL is actually translating a question
+
+217
+00:13:27,483 --> 00:13:35,166
+in English or preferably Swedish, where I'm from, to SQL.
+
+218
+00:13:35,250 --> 00:13:38,466
+So if I instead say, hey, can you please give me the list of
+
+219
+00:13:38,483 --> 00:13:42,466
+all customers and their orders and also include customers that
+
+220
+00:13:42,483 --> 00:13:46,366
+don't have any orders, because those won't be returned if I use
+
+221
+00:13:46,450 --> 00:13:50,466
+this INNER JOIN. So the I would instead, if I say FROM customers,
+
+222
+00:13:51,300 --> 00:13:56,466
+JOIN orders, I would say LEFT JOIN, so LEFT OUTER JOIN, which
+
+223
+00:13:56,483 --> 00:14:00,466
+is keep the rows that are not matching from the left table, so
+
+224
+00:14:00,483 --> 00:14:03,466
+customers you say first. That would be the left table, and orders
+
+225
+00:14:03,483 --> 00:14:06,466
+would be the right table. So we have LEFT JOIN, keep from the
+
+226
+00:14:06,483 --> 00:14:08,466
+left table, RIGHT JOIN is just keep from the right table, and
+
+227
+00:14:09,333 --> 00:14:12,466
+FULL JOIN is also include orders that don't have a matching customers.
+
+228
+00:14:12,483 --> 00:14:15,466
+That sounds like a referential integrity issue in this case,
+
+229
+00:14:15,483 --> 00:14:18,466
+but that's basically the OUTER JOINs.
+
+230
+00:14:18,483 --> 00:14:22,466
+>> Okay, excellent. And this is an example of how a LEFT OUTER
+
+231
+00:14:22,200 --> 00:14:26,216
+JOIN as he just described it would be written. So we're looking
+
+232
+00:14:26,300 --> 00:14:28,466
+at customers who did not place orders in this case here, so this
+
+233
+00:14:28,483 --> 00:14:32,466
+is an example of that command that Tobias just actually explained
+
+234
+00:14:32,483 --> 00:14:34,466
+to us. CROSS JOINs.
+
+235
+00:14:35,483 --> 00:14:38,400
+CROSS JOINs combine each role from the first table with each
+
+236
+00:14:38,483 --> 00:14:40,466
+row from the second table. What does that give us?
+
+237
+00:14:43,483 --> 00:14:46,400
+We're combining all of the rows from one table to the other table.
+
+238
+00:14:46,483 --> 00:14:47,466
+Why would I use a CROSS JOIN?
+
+239
+00:14:48,483 --> 00:14:54,366
+>> Well, there's not all that many reasons. You could imagine...
+
+240
+00:14:54,483 --> 00:15:00,466
+so one thing is obviously just generating test data, it's very
+
+241
+00:15:00,216 --> 00:15:02,466
+practical, because you take one table with 10 rows, CROSS JOIN
+
+242
+00:15:02,483 --> 00:15:06,466
+with another table with 10 rows, you get 100 rows back. But you
+
+243
+00:15:06,483 --> 00:15:08,466
+could actually have an interesting example such as you have a
+
+244
+00:15:09,166 --> 00:15:12,466
+currency table with all of the currencies and you CROSS JOIN
+
+245
+00:15:12,483 --> 00:15:15,216
+that with itself, now you get the product of all combinations
+
+246
+00:15:15,300 --> 00:15:16,333
+of currencies.
+
+247
+00:15:18,483 --> 00:15:22,466
+>> All right, so not heavily used is what I heard, but it is nice
+
+248
+00:15:22,483 --> 00:15:23,466
+to have it out there.
+
+249
+00:15:24,450 --> 00:15:25,466
+So now we have a SELF JOIN.
+
+250
+00:15:26,483 --> 00:15:29,200
+So SELF JOIN, compare rows in the same table to each other.
+
+251
+00:15:29,283 --> 00:15:30,466
+Do I have an example of this? I do.
+
+252
+00:15:30,483 --> 00:15:33,466
+>> Well, the currency example I gave was an example of a SELF
+
+253
+00:15:33,483 --> 00:15:35,466
+JOIN, with a CROSS JOIN.
+
+254
+00:15:35,483 --> 00:15:38,466
+>> With a CROSS JOIN. So you can have SELF JOIN with CROSS JOINs.
+
+255
+00:15:38,483 --> 00:15:41,466
+>> Yes. SELF JOIN is just if you JOIN with yourself.
+
+256
+00:15:41,483 --> 00:15:44,466
+>> What are the ones most commonly used? I would say the INNER
+
+257
+00:15:44,166 --> 00:15:46,466
+JOIN, because that's the default. If you just type JOIN, you
+
+258
+00:15:46,166 --> 00:15:49,466
+get INNER, and then your LEFT and RIGHT OUTER JOINs, most likely.
+
+259
+00:15:49,483 --> 00:15:50,466
+>> Yes, absolutely.
+
+260
+00:15:50,483 --> 00:15:54,466
+>> Then, your SELF JOINs and your CROSs JOINs, they're options,
+
+261
+00:15:54,483 --> 00:15:58,466
+but probably not heavily used. We do have, as you can see here,
+
+262
+00:15:58,483 --> 00:16:02,466
+examples available to you for how they would be written, but
+
+263
+00:16:03,483 --> 00:16:07,466
+just to kind of give you some ideas on how they would be used.
+
+264
+00:16:07,483 --> 00:16:09,466
+>> Yes. It's definitely in the order of INNER JOINs and then LEFT
+
+265
+00:16:09,483 --> 00:16:11,466
+JOINs and then FULL JOINs.
+
+266
+00:16:11,483 --> 00:16:14,466
+>> Let's just take a look at a few of these, if we can get just
+
+267
+00:16:14,483 --> 00:16:19,466
+a couple of these to execute. Again, I saved you guys all the
+
+268
+00:16:19,483 --> 00:16:23,466
+headache of me fat-fingering it and trying to type all of this in.
+
+269
+00:16:23,483 --> 00:16:26,466
+This is that statement that I created earlier, that I showed
+
+270
+00:16:26,483 --> 00:16:27,466
+you earlier, I should say.
+
+271
+00:16:29,483 --> 00:16:33,200
+Trying to get it to slide down. There we go. So this is the
+
+272
+00:16:33,283 --> 00:16:36,466
+one that I had written earlier, or discussed earlier, so this
+
+273
+00:16:36,483 --> 00:16:40,466
+is that sample INNER JOIN, and as Tobias pointed out, I don't
+
+274
+00:16:40,483 --> 00:16:43,366
+have INNER JOIN in there. I could make it a little clearer by
+
+275
+00:16:43,450 --> 00:16:47,466
+putting it as INNER JOIN, so you can see exactly the type of
+
+276
+00:16:47,483 --> 00:16:50,466
+JOIN it is, but it's the default. So we're going to go ahead
+
+277
+00:16:50,483 --> 00:16:51,466
+and execute this.
+
+278
+00:16:52,483 --> 00:16:55,466
+And notice we have our SalesOrderID. Remember, that's coming
+
+279
+00:16:55,483 --> 00:16:59,466
+from the SOH, which is the order header. We have the OrderDate.
+
+280
+00:16:59,483 --> 00:17:03,466
+That's also coming from the order header table. And then we
+
+281
+00:17:03,483 --> 00:17:04,466
+have three SOD
+
+282
+00:17:05,483 --> 00:17:08,466
+columns we'll be returning. These are coming from the SalesOrderDetail,
+
+283
+00:17:08,483 --> 00:17:12,466
+so ProductID, UnitPrice and OrderQty. These are being returned
+
+284
+00:17:13,483 --> 00:17:16,466
+from the details. So it's a good way to take content that resides
+
+285
+00:17:16,483 --> 00:17:21,383
+in two different tables. We JOIN them on SalesOrderID... in this
+
+286
+00:17:21,466 --> 00:17:25,466
+case here, 43659, and return results from two different tables
+
+287
+00:17:25,483 --> 00:17:27,350
+into one result set.
+
+288
+00:17:28,450 --> 00:17:30,466
+So it's good that we're able to do that, because often, when
+
+289
+00:17:30,483 --> 00:17:32,466
+we're working with relational databases, we're going to have
+
+290
+00:17:32,483 --> 00:17:35,383
+content multiple tables, and we're going to want to maybe return
+
+291
+00:17:35,466 --> 00:17:39,0
+that content into a single result set, and the use of JOINs will
+
+292
+00:17:39,483 --> 00:17:42,466
+help you perform that. Here's one more example we'll do with
+
+293
+00:17:42,483 --> 00:17:46,466
+a JOIN, and this is the LEFT OUTER JOIN here, and the LEFT OUTER
+
+294
+00:17:47,0 --> 00:17:49,466
+JOIN is going to return all customers... I just messed that up.
+
+295
+00:17:50,483 --> 00:17:53,466
+Where's my undo in this thing? Undo saves me. There we go.
+
+296
+00:17:56,483 --> 00:17:59,466
+So here's an example of a LEFT OUTER JOIN. Again, we saw this
+
+297
+00:17:59,483 --> 00:18:04,466
+on the slide, but we have CustomerID and StoreID, SalesOrderID
+
+298
+00:18:04,483 --> 00:18:08,466
+and OrderDate. And you can see here that CUST.StoreID,
+
+299
+00:18:10,483 --> 00:18:16,466
+these are coming in from the order table, and then the ORD, which
+
+300
+00:18:16,483 --> 00:18:20,466
+is the SalesOrder header, is the SalesOrderID. So we're grabbing
+
+301
+00:18:20,483 --> 00:18:24,466
+content from the left table or the first query in the statement
+
+302
+00:18:25,483 --> 00:18:29,466
+and we're adding additional content from the right statement.
+
+303
+00:18:29,166 --> 00:18:33,466
+So just a quick example just to show you that those do run and
+
+304
+00:18:33,483 --> 00:18:36,433
+that when we're displaying them, so just want to show you how
+
+305
+00:18:36,483 --> 00:18:40,466
+those JOINs actually work for you when we're executing those JOINs.
+
+306
+00:18:42,483 --> 00:18:46,466
+All right, so those are ways for retrieving content from inside
+
+307
+00:18:46,200 --> 00:18:50,466
+of SQL Server from different rows or different tables, if you will.
+
+308
+00:18:50,483 --> 00:18:54,466
+We also have a lot of ways that we want to filter and sort data,
+
+309
+00:18:54,483 --> 00:18:58,216
+and we use the ORDER BY clause, and I briefly did a demo of this already.
+
+310
+00:18:58,300 --> 00:19:00,466
+The ORDER BY just sorts the rows,
+
+311
+00:19:01,483 --> 00:19:05,466
+and it's just a way to make the presentation of the content easier
+
+312
+00:19:05,483 --> 00:19:08,466
+for you. You want to be able to see SalesOrderID.
+
+313
+00:19:09,483 --> 00:19:15,466
+We want it in order, and as an integer. Maybe you want customer
+
+314
+00:19:15,483 --> 00:19:18,433
+by last name, you want to sort them alphabetically. Maybe you
+
+315
+00:19:18,483 --> 00:19:21,466
+want order date. We want to know the most recent order or the
+
+316
+00:19:21,483 --> 00:19:27,466
+order that came in in the past. These are examples of ORDER BYs.
+
+317
+00:19:27,483 --> 00:19:30,166
+So we're doing a SELECT SalesOrderID, CustomerID and OrderDate
+
+318
+00:19:30,250 --> 00:19:33,466
+from the SalesOrderHeader, and we're going to order it by OrderDate,
+
+319
+00:19:33,483 --> 00:19:38,466
+so we're going to give us three columns, SalesOrderID, CustomerID
+
+320
+00:19:38,483 --> 00:19:41,466
+and OrderDate, and we're going to order it chronologically, I
+
+321
+00:19:41,483 --> 00:19:44,183
+think is the right word, by OrderDate.
+
+322
+00:19:44,483 --> 00:19:47,466
+We could also go in and do a SELECT SalesOrderID, CustomerID.
+
+323
+00:19:47,483 --> 00:19:50,433
+Now we're gathering the year, and we're going to create a column,
+
+324
+00:19:50,483 --> 00:19:55,416
+the YEAR from the OrderDate, AS OrderYear, again from the SalesOrderHeader,
+
+325
+00:19:55,483 --> 00:19:59,466
+and we're going to ORDER BY OrderYear. This is an alias we created
+
+326
+00:19:59,483 --> 00:20:01,466
+because we're grabbing just the year from the OrderDate.
+
+327
+00:20:01,483 --> 00:20:04,466
+We're not worried about the time or the date.
+
+328
+00:20:04,483 --> 00:20:07,466
+>> So here's there's something that's just worth mentioning that
+
+329
+00:20:07,483 --> 00:20:12,466
+many people typically ask. So you can say AS OrderYear and then
+
+330
+00:20:12,483 --> 00:20:17,466
+ORDER BY this alias OrderYear, but you can't do it as OrderYear
+
+331
+00:20:17,483 --> 00:20:20,466
+and then in the WHERE clause say WHERE OrderYear is equal to
+
+332
+00:20:20,483 --> 00:20:23,466
+something, and that has to do with this logical query processing
+
+333
+00:20:23,483 --> 00:20:26,466
+that we talked about earlier, because ORDER BY is the only thing
+
+334
+00:20:26,483 --> 00:20:31,416
+that happens after SELECT. So when ORDER BY happens, we know
+
+335
+00:20:31,483 --> 00:20:34,466
+what the column aliases are, but when WHERE happens, we don't
+
+336
+00:20:34,483 --> 00:20:36,466
+know, because SELECT hasn't happened yet.
+
+337
+00:20:36,483 --> 00:20:38,466
+>> Great point. Definitely great point. And the cool thing is,
+
+338
+00:20:38,483 --> 00:20:40,466
+we can reverse this. We've got the same...
+
+339
+00:20:42,483 --> 00:20:45,466
+the top example here is OrderDate. We could do it in reverse
+
+340
+00:20:45,483 --> 00:20:49,466
+order just by using the descending clause down here. And that
+
+341
+00:20:49,233 --> 00:20:52,466
+gives us the same content, but in reverse order of the dates,
+
+342
+00:20:53,0 --> 00:20:56,466
+so instead of the most recent... or instead of the earliest
+
+343
+00:20:56,483 --> 00:21:00,466
+one, we'll have the most recent one on top. We filter data using
+
+344
+00:21:00,183 --> 00:21:02,466
+the WHERE clause. That's one way that we do that. We've seen
+
+345
+00:21:02,483 --> 00:21:05,466
+an example of that, where we had all the rows being dumped out.
+
+346
+00:21:05,483 --> 00:21:08,466
+A little bit overwhelming. So what we've got here is we've got
+
+347
+00:21:08,483 --> 00:21:12,466
+CustomerID, TerritoryID from the Sales.Customer. If I just stop
+
+348
+00:21:12,483 --> 00:21:15,466
+there and not have a WHERE clause, every row is going to be returned
+
+349
+00:21:15,183 --> 00:21:17,466
+from the Customers table. Well, we're going to throw WHERE TerritoryID
+
+350
+00:21:17,483 --> 00:21:21,433
+= 6, so I want to know where all the customers are that belong
+
+351
+00:21:21,483 --> 00:21:24,466
+in TerritoryID = 6, or I don't have to use equal. I could say
+
+352
+00:21:24,483 --> 00:21:29,350
+WHERE TerritoryID >= 6. So now I want all the customers in territories
+
+353
+00:21:29,433 --> 00:21:32,466
+seven through whatever number it goes through. We could also
+
+354
+00:21:32,483 --> 00:21:35,266
+mix some of these up. In the bottom one, we talk about WHERE
+
+355
+00:21:35,350 --> 00:21:37,466
+StoreID >= 1000 AND StoreID <= 1200.
+
+356
+00:21:40,483 --> 00:21:43,466
+So I want everything where the StoreID... now, I've moved away
+
+357
+00:21:43,483 --> 00:21:48,466
+from the TerritoryID. The StoreID is 1000 or higher, but no higher
+
+358
+00:21:48,483 --> 00:21:54,466
+than 1200, so we've got that little gap area or range that we
+
+359
+00:21:54,483 --> 00:21:57,466
+want that StoreID or the content for that StoreID to be returned in.
+
+360
+00:21:57,483 --> 00:22:00,466
+So again, it's controlling what's happening in a result set and
+
+361
+00:22:01,166 --> 00:22:02,466
+how that content is being displayed to you.
+
+362
+00:22:04,166 --> 00:22:06,466
+Other ways we can filter data. Maybe I want more controls.
+
+363
+00:22:06,483 --> 00:22:11,466
+I don't want to see every item. Maybe I've got 100,000 or 500,000
+
+364
+00:22:11,483 --> 00:22:15,466
+rows, and I want just a portion of those rows. But what we can
+
+365
+00:22:15,483 --> 00:22:20,333
+do here is use what's called the SELECT TOP option, and we specify
+
+366
+00:22:20,483 --> 00:22:23,466
+the number of items that we want to see. If I do this SELECT
+
+367
+00:22:23,483 --> 00:22:26,466
+SalesOrderID, CustomerID, from the SalesOrderHeader, and did
+
+368
+00:22:26,483 --> 00:22:31,466
+ORDER BY TotalDue DESC, I could get 20,000 records. I don't know.
+
+369
+00:22:31,483 --> 00:22:34,216
+But what I'm saying here is just give me the top 20.
+
+370
+00:22:34,483 --> 00:22:37,466
+So in this SELECT TOP (20), say, I don't what 100,000 records.
+
+371
+00:22:37,483 --> 00:22:40,466
+I want 20 records or whatever number I put in there, so I could
+
+372
+00:22:40,483 --> 00:22:43,416
+change that to 50 and get the top 50 records. Now, the thing
+
+373
+00:22:43,483 --> 00:22:46,466
+with that is, if I have 100,000 or 200,000 records and I'm trying
+
+374
+00:22:46,483 --> 00:22:51,466
+to do this SELECT TOP (20), what if I had 15 and there's eight
+
+375
+00:22:51,483 --> 00:22:55,466
+more that match, that are exactly identical. What this will
+
+376
+00:22:55,483 --> 00:22:57,466
+do is it will SELECT TOP (20) WITH TIES.
+
+377
+00:22:58,316 --> 00:23:01,466
+Now, instead of displaying just 20, if it hits the 20, if there
+
+378
+00:23:01,483 --> 00:23:04,466
+happens to be 23 because we have some ties, it's going to show
+
+379
+00:23:04,483 --> 00:23:07,466
+you 23 items, because it doesn't want to show you 20. Let's say,
+
+380
+00:23:07,483 --> 00:23:11,466
+for instance, we have a salesperson, and the top 20 salespeople
+
+381
+00:23:11,483 --> 00:23:13,466
+in sales get a bonus.
+
+382
+00:23:13,483 --> 00:23:17,466
+Well, if I just did a SELECT TOP (20) and there were 25 people
+
+383
+00:23:17,483 --> 00:23:21,300
+or 23 people that had the top sales but I didn't put the WITH
+
+384
+00:23:21,383 --> 00:23:24,466
+TIES, there's three people that are not going to get that bonus.
+
+385
+00:23:25,0 --> 00:23:26,466
+There's three people that are going to be upset with me and the
+
+386
+00:23:26,483 --> 00:23:27,466
+way I wrote the code.
+
+387
+00:23:28,283 --> 00:23:32,300
+So we can be careful about that. We can avoid the information
+
+388
+00:23:32,383 --> 00:23:36,466
+being ignored or not displayed by using the WITH TIES option.
+
+389
+00:23:36,483 --> 00:23:39,466
+We could just go a percentage. I have 20,000 rows. Instead of
+
+390
+00:23:39,483 --> 00:23:43,466
+going a finite number of rows being returned, we could just do
+
+391
+00:23:44,166 --> 00:23:47,466
+a percentage of items that are returned. So if I have 20,000
+
+392
+00:23:47,483 --> 00:23:52,466
+items, I'll get 20 items. Don't hold me on the math, so we'll
+
+393
+00:23:52,483 --> 00:23:53,466
+have to see on that here.
+
+394
+00:23:53,483 --> 00:23:57,216
+>> So I'll show a bit of a demo I thought on TOP, because TOP
+
+395
+00:23:57,300 --> 00:23:58,466
+is somewhat interesting.
+
+396
+00:23:59,483 --> 00:24:05,466
+So if we switch over to my machine here, what I'd like to show
+
+397
+00:24:05,483 --> 00:24:09,466
+is, first of all, you already saw TOP, right? We also have support
+
+398
+00:24:09,483 --> 00:24:14,466
+now in SQL Server 2012 for OFFSET and the FETCH keywords, which
+
+399
+00:24:14,483 --> 00:24:18,466
+helps you page through the results, which is very common in web applications.
+
+400
+00:24:18,483 --> 00:24:23,466
+So let's say I just go for Production.Product and
+
+401
+00:24:24,483 --> 00:24:26,466
+then I say ORDER BY,
+
+402
+00:24:28,483 --> 00:24:32,466
+I don't know, UnitPrice, is it ListPrice? There we go, ListPrice.
+
+403
+00:24:32,483 --> 00:24:35,466
+Now, this will give me the full result set back. What I can
+
+404
+00:24:35,483 --> 00:24:40,466
+now go and do is say, well, please OFFSET 10 ROWS
+
+405
+00:24:41,483 --> 00:24:43,466
+and FETCH
+
+406
+00:24:45,483 --> 00:24:47,466
+NEXT 10 ROWS ONLY,
+
+407
+00:24:49,483 --> 00:24:53,466
+and that will actually give me the rows 11 through 20, and now
+
+408
+00:24:53,483 --> 00:24:59,466
+I can go and say you see the first one here is Chainring, apparently.
+
+409
+00:24:59,483 --> 00:25:04,466
+If I go and say, well, SKIP 20 ROWS, it's still...
+
+410
+00:25:06,483 --> 00:25:08,466
+>> Or OFFSET 20 ROWS.
+
+411
+00:25:10,483 --> 00:25:11,466
+>> Oh, sorry.
+
+412
+00:25:11,483 --> 00:25:14,266
+Let's see here.
+
+413
+00:25:15,483 --> 00:25:18,466
+Now there is something. So what's going on here? Well, these
+
+414
+00:25:18,483 --> 00:25:23,466
+guys all have the same list price, so by accident I showed you
+
+415
+00:25:23,483 --> 00:25:25,466
+an even better example. This is amazing.
+
+416
+00:25:25,483 --> 00:25:26,283
+>> Exactly.
+
+417
+00:25:26,366 --> 00:25:32,450
+>> Oh, how good we are, Brian. This is really good. So here we
+
+418
+00:25:32,483 --> 00:25:37,466
+see a problem that is common with basically both TOP and OFFSET
+
+419
+00:25:37,483 --> 00:25:39,466
+and FETCH, which is what happens if I don't order by something
+
+420
+00:25:40,0 --> 00:25:44,466
+that's unique. So let's go and add ProductID in here, which will
+
+421
+00:25:44,483 --> 00:25:46,333
+make it make some more sense.
+
+422
+00:25:46,483 --> 00:25:50,466
+Now, okay, Fork Crown is apparently the top row, and then I'll
+
+423
+00:25:50,483 --> 00:25:51,466
+go and say, well, 40...
+
+424
+00:25:52,483 --> 00:25:56,0
+I'm jumping now forward. And you obviously can use variables
+
+425
+00:25:56,483 --> 00:26:02,233
+and expressions, so I could say here @ OFFSET as I'm passing in.
+
+426
+00:26:02,316 --> 00:26:04,466
+So that's one thing I wanted to show you guys, which is interesting.
+
+427
+00:26:04,483 --> 00:26:08,166
+The other thing, which is a bit special and we haven't talked
+
+428
+00:26:08,483 --> 00:26:11,466
+about UNION, because we don't have it particularly in any of
+
+429
+00:26:11,483 --> 00:26:17,466
+our slides, but UNION is the combination of result sets by concatenating
+
+430
+00:26:17,483 --> 00:26:22,233
+them rather than JOIN, which is combining them horizontally.
+
+431
+00:26:22,316 --> 00:26:28,466
+So I have an example query that let's say Brian just asked me,
+
+432
+00:26:28,483 --> 00:26:33,466
+hello, Tobias, can I get the two most expensive black products
+
+433
+00:26:33,483 --> 00:26:37,466
+and the two most expensive red products in a query. And you
+
+434
+00:26:37,483 --> 00:26:39,466
+go, okay, that sounds like a reasonable question, Brian.
+
+435
+00:26:39,483 --> 00:26:40,466
+>> For a Lamborghini.
+
+436
+00:26:41,483 --> 00:26:45,466
+>> Yes, yes. So I'll go, okay, let's get Name and
+
+437
+00:26:47,483 --> 00:26:49,466
+ListPrice and Color.
+
+438
+00:26:50,483 --> 00:26:53,466
+It must be a fairly boring product, since the only have one color,
+
+439
+00:26:53,483 --> 00:27:00,466
+but anyhow. And I probably want top two, right, and then WHERE
+
+440
+00:27:00,483 --> 00:27:06,250
+Color = "Black" in this case, and I don't know if black is actually
+
+441
+00:27:06,333 --> 00:27:11,466
+a color and how that works, but at any rate. And obviously ORDER
+
+442
+00:27:11,483 --> 00:27:16,233
+BY is important here. You say ORDER BY ListPrice DESC, since
+
+443
+00:27:16,316 --> 00:27:19,466
+we want the most expensive products. Okay, so that happens to
+
+444
+00:27:19,483 --> 00:27:21,466
+be this Mountain 100 Black.
+
+445
+00:27:21,483 --> 00:27:23,466
+>> I think it's a mountain bike or something.
+
+446
+00:27:24,483 --> 00:27:25,466
+>> Well, you never know.
+
+447
+00:27:25,483 --> 00:27:26,466
+>> Never know.
+
+448
+00:27:26,483 --> 00:27:30,466
+>> And the I also wanted the red product, so that seemed like
+
+449
+00:27:30,183 --> 00:27:35,466
+a separate query, so also give me the two most expensive red products.
+
+450
+00:27:36,0 --> 00:27:39,466
+Okay, there we have those. Now, this UNION clause will be very
+
+451
+00:27:39,483 --> 00:27:42,466
+interesting, because that's, again, just taking these without
+
+452
+00:27:42,483 --> 00:27:47,466
+result sets and smashing them together, so I'll say UNION ALL.
+
+453
+00:27:47,483 --> 00:27:51,466
+UNION is implicitly a DISTINCT, so you will automatically go
+
+454
+00:27:51,483 --> 00:27:55,466
+and remove duplicates. That's per the standard, and obviously that's...
+
+455
+00:27:55,483 --> 00:27:58,466
+if you know there are no duplicates between the sets, why pay
+
+456
+00:27:58,483 --> 00:28:01,466
+the cost doing it, so UNION ALL means don't remove duplicates.
+
+457
+00:28:01,483 --> 00:28:04,466
+Actually, the SELECT statement, you can say SELECT ALL, means
+
+458
+00:28:04,483 --> 00:28:08,466
+the same, but no one ever types it. So SELECT DISTINCT and SELECT ALL.
+
+459
+00:28:08,483 --> 00:28:11,466
+So now, we see there is a red squiggly here, right?
+
+460
+00:28:12,483 --> 00:28:16,400
+So if I try this, it will start complaining and say, hey, Tobias,
+
+461
+00:28:16,483 --> 00:28:21,466
+this doesn't really make sense. Because ORDER BY is at the set level.
+
+462
+00:28:21,483 --> 00:28:24,466
+It's at the result set level, so what we're going to actually return.
+
+463
+00:28:25,283 --> 00:28:26,466
+So we know...
+
+464
+00:28:28,483 --> 00:28:30,466
+something happened on my screen.
+
+465
+00:28:30,483 --> 00:28:32,466
+Well, now
+
+466
+00:28:34,483 --> 00:28:35,466
+we see me, but not the screen.
+
+467
+00:28:35,483 --> 00:28:38,466
+>> We're back to you. Should we go back to the demo?
+
+468
+00:28:38,483 --> 00:28:40,466
+>> So now you can see me typing.
+
+469
+00:28:41,216 --> 00:28:44,316
+>> Pretend he's typing the keys that you were just looking at.
+
+470
+00:28:45,266 --> 00:28:49,466
+>> Wonderful. Here we go. So, again, we saw this was the two most
+
+471
+00:28:49,483 --> 00:28:54,466
+expensive black and these were the two most expensive, so about 3000.
+
+472
+00:28:54,483 --> 00:28:57,466
+So let's just remove this ORDER BY clause,
+
+473
+00:28:59,366 --> 00:29:01,466
+and we now get something completely different back. And this
+
+474
+00:29:02,483 --> 00:29:06,350
+is because of the logical processing of the query, right, because
+
+475
+00:29:06,433 --> 00:29:07,466
+first we go and do
+
+476
+00:29:08,483 --> 00:29:12,466
+the FROM clause, the WHERE clause, so we get all of the black
+
+477
+00:29:12,483 --> 00:29:17,466
+products, and then we get just the top first two that we find.
+
+478
+00:29:17,483 --> 00:29:20,466
+And then we go and do the same with the red products, the top
+
+479
+00:29:20,483 --> 00:29:23,383
+first that we find, then we concatenate the result sets and then
+
+480
+00:29:23,466 --> 00:29:27,466
+we sort the result set. So if you turn on the query execution
+
+481
+00:29:27,483 --> 00:29:32,466
+plan that we can find up here, this is something also people
+
+482
+00:29:32,483 --> 00:29:35,466
+use to basically optimize their queries, but it can also be very
+
+483
+00:29:35,483 --> 00:29:38,466
+useful to actually just understand what's going on. So if I
+
+484
+00:29:38,483 --> 00:29:41,466
+look at the execution plan here, we can see, we apparently go
+
+485
+00:29:41,483 --> 00:29:45,466
+and scan an index here, which is the table, the clustered index.
+
+486
+00:29:45,483 --> 00:29:47,466
+Then we do top immediately.
+
+487
+00:29:48,183 --> 00:29:50,466
+There's no sorting that happens before that. Then we concatenate
+
+488
+00:29:50,483 --> 00:29:54,466
+the result sets, and now we go sort based on color.
+
+489
+00:29:55,483 --> 00:29:59,466
+So what I want to do is, instead of this, which there is no...
+
+490
+00:29:59,483 --> 00:30:02,466
+it's not a bug in the product, right? It's just the way that
+
+491
+00:30:02,483 --> 00:30:06,333
+the language works. Instead I can do... and this we will get
+
+492
+00:30:06,416 --> 00:30:09,466
+into more details on later, but I can do a derive table here
+
+493
+00:30:09,483 --> 00:30:12,466
+and say, well, FROM this SELECT clause.
+
+494
+00:30:13,483 --> 00:30:17,466
+Now, it's not ambiguous anymore. I'm saying, well, grab this
+
+495
+00:30:17,483 --> 00:30:21,466
+result set. Now it's the two most expensive black products, and
+
+496
+00:30:21,483 --> 00:30:23,466
+then concatenate that with the
+
+497
+00:30:25,333 --> 00:30:28,466
+two most expensive red products.
+
+498
+00:30:28,483 --> 00:30:32,233
+We have to have aliases here on the tables here or on these sets.
+
+499
+00:30:33,483 --> 00:30:36,416
+And now we'll get the right result. And now I can obviously
+
+500
+00:30:36,483 --> 00:30:38,466
+also add an ORDER BY down here and say, well, I would like to
+
+501
+00:30:38,483 --> 00:30:44,183
+order by name. So that result set, I want those four rows sorted
+
+502
+00:30:44,266 --> 00:30:44,466
+by name.
+
+503
+00:30:45,483 --> 00:30:48,466
+So we get that back, seems to make sense, and now the execution
+
+504
+00:30:49,483 --> 00:30:51,466
+plan, we can see we have a different operator here, which is
+
+505
+00:30:51,483 --> 00:30:54,466
+now the top sort operator.
+
+506
+00:30:54,483 --> 00:30:57,333
+Then we concatenate and then we sort the result set.
+
+507
+00:30:57,416 --> 00:30:57,466
+>> Nice.
+
+508
+00:30:57,483 --> 00:31:02,466
+>> So here we can just see, what does UNION do, which can clearly
+
+509
+00:31:02,200 --> 00:31:07,466
+be useful, and actually how TOP intersects with ORDER BY.
+
+510
+00:31:07,483 --> 00:31:09,466
+>> All right, excellent. Great demo. All right, so that's going
+
+511
+00:31:10,483 --> 00:31:13,466
+to wrap up module two here. We talked about the SELECT statement,
+
+512
+00:31:13,483 --> 00:31:16,466
+we introduced the DISTINCT, reduce. There is some overhead involved,
+
+513
+00:31:16,483 --> 00:31:19,466
+as Tobias pointed out to us, about the DISTINCT removes those
+
+514
+00:31:19,483 --> 00:31:23,466
+redundant roles. We introduced both column and table aliases.
+
+515
+00:31:23,483 --> 00:31:26,466
+We talked about the CASE statement. We talked about the few
+
+516
+00:31:26,483 --> 00:31:28,466
+different types of JOINs that we are going to be comfortable
+
+517
+00:31:28,483 --> 00:31:32,266
+or need to get comfortable working with. Specifically, the default
+
+518
+00:31:32,350 --> 00:31:36,0
+one is the INNER JOIN, and we have the OUTER JOINs. We looked
+
+519
+00:31:36,483 --> 00:31:39,350
+at the ORDER BY and the WHERE clause. We had a nice demo from
+
+520
+00:31:39,433 --> 00:31:43,466
+Tobias on the UNION clause, and we also talked about the TOP
+
+521
+00:31:43,483 --> 00:31:47,466
+clause in this area, here. So let's go ahead and take a 10-minteu
+
+522
+00:31:47,483 --> 00:31:50,466
+break, and what we do when we come back, when we come back, we're
+
+523
+00:31:50,483 --> 00:31:52,466
+going to go into the next module.
+
+524
+00:31:53,483 --> 00:31:56,466
+And when we go to the next module, we're going to start talking
+
+525
+00:31:56,483 --> 00:31:59,466
+about some additional... again, more advanced topics when we're
+
+526
+00:31:59,483 --> 00:32:05,250
+looking at ways for us to query content from SQL Server 2012.
+

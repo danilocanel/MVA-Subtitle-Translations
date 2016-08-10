@@ -1,0 +1,2648 @@
+1
+00:00:00,333 --> 00:00:06,333
+[Music]
+
+2
+00:00:17,266 --> 00:00:21,466
+>> All right, welcome back. That was a quick 10 minutes, Tobias.
+
+3
+00:00:21,483 --> 00:00:23,466
+>> Yes, yes. I am pretty sure it wasn't.
+
+4
+00:00:23,233 --> 00:00:26,466
+>> I barely had time to get my hair cut. But we're going to continue
+
+5
+00:00:26,483 --> 00:00:30,466
+our conversation. What we did to set up the class, we started
+
+6
+00:00:30,483 --> 00:00:34,216
+out with some basic commands, just kind of make sure everyone
+
+7
+00:00:34,300 --> 00:00:36,466
+understood what we were talking about, and if you hadn't heard
+
+8
+00:00:36,483 --> 00:00:40,466
+some terms in the recent past, I just wanted to make sure everybody
+
+9
+00:00:40,483 --> 00:00:43,466
+was comfortable with some of the terms. We did some basic SELECT
+
+10
+00:00:43,483 --> 00:00:46,466
+statements, then we moved into the second module, where we talked
+
+11
+00:00:46,483 --> 00:00:48,466
+a little bit more. We started adding things like DISTINCT and
+
+12
+00:00:48,483 --> 00:00:52,466
+ORDER BY, so we did some sorting, some filtering and kind of
+
+13
+00:00:52,483 --> 00:00:55,466
+took it up a notch. What we're going to do in this module is
+
+14
+00:00:55,483 --> 00:00:58,466
+talk some about the data types, because those are a very important
+
+15
+00:00:58,483 --> 00:01:01,466
+part of data integrity and referential integrity, because making
+
+16
+00:01:01,483 --> 00:01:04,466
+sure when we're creating our columns, when we're creating our
+
+17
+00:01:04,483 --> 00:01:09,466
+tables, for instance, that we have the appropriate data types
+
+18
+00:01:09,483 --> 00:01:11,466
+applied to them. So we're going to look at and we're going to
+
+19
+00:01:11,483 --> 00:01:14,466
+talk about the different data types that are available to us,
+
+20
+00:01:14,483 --> 00:01:17,466
+the usage of the data types, how you may want to convert a data
+
+21
+00:01:18,333 --> 00:01:21,466
+type from one to a different one. Not every one can be created.
+
+22
+00:01:21,483 --> 00:01:24,450
+And then we'll end up doing an introduction in some of the SQL
+
+23
+00:01:24,483 --> 00:01:28,466
+server functions or types of functions that are available for
+
+24
+00:01:28,200 --> 00:01:32,466
+us when we're working with SQL Server 2012. So we're going to
+
+25
+00:01:32,483 --> 00:01:35,466
+introduce these data types and built-in functions. Let's begin
+
+26
+00:01:35,483 --> 00:01:39,466
+with data types, because this is very important when you're adding
+
+27
+00:01:39,483 --> 00:01:42,466
+your content or creating the objects that are going to be created
+
+28
+00:01:42,483 --> 00:01:47,466
+here, and they kind of fall into seven general categories, exact
+
+29
+00:01:48,483 --> 00:01:52,466
+numeric, approximate numeric, date and time, character strings,
+
+30
+00:01:53,233 --> 00:01:56,466
+Unicode characters, binary strings and then some other ones that
+
+31
+00:01:56,483 --> 00:02:00,400
+kind of fall into the Other catch all here.
+
+32
+00:02:01,483 --> 00:02:05,466
+So these are... SQL Server supplied several built-in data types
+
+33
+00:02:05,483 --> 00:02:10,466
+within these categories, like ints, so integers or characters
+
+34
+00:02:10,216 --> 00:02:13,466
+or dates or binary strings. So we're going to begin by talking
+
+35
+00:02:13,483 --> 00:02:17,466
+about exact numbers, so we're looking at precision or we're looking
+
+36
+00:02:17,483 --> 00:02:21,466
+at the idea of having an exact number. We have a tinyint, which
+
+37
+00:02:21,483 --> 00:02:25,466
+is zero to 255, so if there's a value or a field that's never
+
+38
+00:02:25,483 --> 00:02:29,466
+going to exceed 255, you can use tinyint, and you notice it only
+
+39
+00:02:29,483 --> 00:02:33,433
+stores or consumes one byte of information. If you have smallint,
+
+40
+00:02:33,483 --> 00:02:39,466
+that goes up to 32,768, so a value to that or minus 32,768, so
+
+41
+00:02:39,483 --> 00:02:42,466
+if you're going to store a value in between that range, you can
+
+42
+00:02:42,483 --> 00:02:44,466
+do a smallint, two bytes of storage, and I'm not going to read
+
+43
+00:02:45,0 --> 00:02:47,466
+the entire slide to you, but you'll see the idea here, tinyint,
+
+44
+00:02:47,483 --> 00:02:51,466
+smallint, integer, Bigint, quintillion. I didn't even know there
+
+45
+00:02:51,483 --> 00:02:54,466
+was a quintillion word out there, but that goes out to quintillion
+
+46
+00:02:54,483 --> 00:02:56,316
+something or another.
+
+47
+00:02:56,483 --> 00:03:00,466
+We have bits. That's a one, zero or null that's always returned
+
+48
+00:03:00,483 --> 00:03:05,466
+to us, decimal or numeric. We are concerned more about the precision.
+
+49
+00:03:06,450 --> 00:03:09,166
+Money and smallmoney... they must be looking at my paycheck for
+
+50
+00:03:09,483 --> 00:03:14,466
+that one. So those are some of the exact numeric types, and here's
+
+51
+00:03:14,483 --> 00:03:18,466
+an example. I could declare a variable called mydecimal as a
+
+52
+00:03:18,483 --> 00:03:23,466
+decimal with 8,2, so that's going to define what number of decimal
+
+53
+00:03:23,483 --> 00:03:27,466
+points are available and what kind of content or to what the
+
+54
+00:03:28,483 --> 00:03:32,466
+precision we can store content in there. So we declare these
+
+55
+00:03:32,483 --> 00:03:36,466
+items, and we have to take into consideration what kind of content
+
+56
+00:03:36,483 --> 00:03:38,466
+is going to be stored in there. We also have the approximate
+
+57
+00:03:39,483 --> 00:03:43,466
+numerics, where we introduce the float or the real, and it depends
+
+58
+00:03:43,483 --> 00:03:46,466
+on the type that you're using or the value that you're storing.
+
+59
+00:03:46,483 --> 00:03:48,466
+It's anywhere between four or eight bytes for the float.
+
+60
+00:03:48,483 --> 00:03:51,466
+It's four bytes for the real. So it's good for you to understand,
+
+61
+00:03:51,483 --> 00:03:55,466
+as you're deciding what data types to use for the contents to
+
+62
+00:03:55,483 --> 00:03:59,466
+be added to your data, the storage size that's going to be consumed
+
+63
+00:03:59,483 --> 00:04:02,466
+and the type of data that you're going to be storing in those
+
+64
+00:04:02,483 --> 00:04:05,466
+columns, as you identify those columns and those data types.
+
+65
+00:04:07,483 --> 00:04:11,466
+Under the binary strings, we have binary(n) was anywhere between
+
+66
+00:04:11,166 --> 00:04:15,466
+one and 8,000 bytes. Varbinary, variable binary, one to 8,000
+
+67
+00:04:15,483 --> 00:04:18,316
+bites, plus two for storage, if you're looking at the number
+
+68
+00:04:18,400 --> 00:04:23,466
+of bytes, plus two for storage. And we have varbinary(MAX), one
+
+69
+00:04:23,216 --> 00:04:27,466
+to 2.1 billion approximate bytes, so actual length, what actually
+
+70
+00:04:27,483 --> 00:04:31,466
+you're storing there, plus two additional bytes for storage.
+
+71
+00:04:32,483 --> 00:04:33,300
+>> That may vary a little bit.
+
+72
+00:04:33,383 --> 00:04:35,466
+>> That may vary a little bit? Talk to me about that. Why would
+
+73
+00:04:35,483 --> 00:04:36,466
+that vary?
+
+74
+00:04:36,483 --> 00:04:40,466
+>> It depends on how we store these binary large objects.
+
+75
+00:04:42,433 --> 00:04:45,466
+Yes, if you store less than a certain amount, it will be plus
+
+76
+00:04:45,483 --> 00:04:50,450
+two bytes of storage, but if you extend past a certain limit,
+
+77
+00:04:50,483 --> 00:04:52,466
+we'll have to structure the data differently and you'll pay a
+
+78
+00:04:52,483 --> 00:04:55,466
+bit more of an impact on storage.
+
+79
+00:04:55,483 --> 00:04:58,466
+>> Okay. Okay, so this is good to know, some of these little tidbits
+
+80
+00:04:58,483 --> 00:05:04,466
+like that, that there might be some variations to what we were
+
+81
+00:05:04,483 --> 00:05:08,466
+seeing here because of the type of content that's actually being stored.
+
+82
+00:05:09,266 --> 00:05:12,166
+Other data types, we have uniqueidentifier, for instance, a global
+
+83
+00:05:12,250 --> 00:05:16,466
+unique identifier. Now, that global unique identifier, the GUID,
+
+84
+00:05:16,483 --> 00:05:18,466
+how do you pronounce that?
+
+85
+00:05:20,0 --> 00:05:24,333
+>> You're the American, right? I'm a humble foreigner.
+
+86
+00:05:24,416 --> 00:05:29,466
+>> I'm going to put you on the spot here. How would you say that acronym?
+
+87
+00:05:30,450 --> 00:05:30,466
+>> GUID?
+
+88
+00:05:30,483 --> 00:05:34,350
+>> GUID. Okay, good. I always poll this no matter where I teach.
+
+89
+00:05:34,433 --> 00:05:38,233
+I hear GUID. Most places, especially in the Eastern United States,
+
+90
+00:05:38,316 --> 00:05:41,466
+and I hear GUID more in the Midwest and some of the Southern
+
+91
+00:05:41,483 --> 00:05:42,466
+parts of the States. So I always ask.
+
+92
+00:05:42,483 --> 00:05:45,333
+>> So now we've extended this. In Sweden, it's GUID, as well.
+
+93
+00:05:45,483 --> 00:05:46,466
+>> It is GUID?
+
+94
+00:05:46,183 --> 00:05:46,466
+>> GUID.
+
+95
+00:05:47,483 --> 00:05:50,183
+>> Okay, so it's either GUID or GUID. I'm always curious on how
+
+96
+00:05:50,266 --> 00:05:53,316
+people pronounce it, so just curious. Just make a mental note.
+
+97
+00:05:53,400 --> 00:05:55,466
+Do you yourself call it GUID or GUID?
+
+98
+00:05:56,483 --> 00:05:59,466
+So when you're talking to people, some lay people will say GUID,
+
+99
+00:05:59,483 --> 00:06:03,466
+I'm like, what's a GUID? I have a friend that says, how do you
+
+100
+00:06:03,216 --> 00:06:06,466
+pronounce squid? Well, squid is a word. It's not an acronym,
+
+101
+00:06:06,483 --> 00:06:09,466
+so I use GUID, and I was just curious what you used. So that's
+
+102
+00:06:09,483 --> 00:06:11,466
+good to know. Anyways, back on topic.
+
+103
+00:06:12,483 --> 00:06:15,466
+We have cursing... sorry, cursors. It's really not a storage
+
+104
+00:06:15,483 --> 00:06:19,200
+data type, and we will see how we use those a little later on.
+
+105
+00:06:19,283 --> 00:06:22,466
+Tables, we'll use those as a data type, so it's not a table that
+
+106
+00:06:22,483 --> 00:06:25,283
+we've been talking about where we store content in. You're going
+
+107
+00:06:25,366 --> 00:06:27,466
+to see with some of the upcoming examples where we actually use
+
+108
+00:06:27,483 --> 00:06:31,466
+table as a result where we can store result sets into it.
+
+109
+00:06:31,483 --> 00:06:34,466
+So we have some unique other data types that we use, like rowversion
+
+110
+00:06:34,483 --> 00:06:37,466
+is another one, that we have available to us that we can use
+
+111
+00:06:37,483 --> 00:06:39,466
+when we're generating content here.
+
+112
+00:06:40,483 --> 00:06:44,466
+Parse is a new function that was introduced in 2012 that converts
+
+113
+00:06:44,483 --> 00:06:47,466
+strings to date, time and number types.
+
+114
+00:06:48,483 --> 00:06:51,466
+Is this replacing anything, or is just new functionality?
+
+115
+00:06:51,166 --> 00:06:52,466
+>> No. This is net new functionality.
+
+116
+00:06:52,483 --> 00:06:55,350
+>> Okay, so nothing's going to go away. Or like you said, we
+
+117
+00:06:55,433 --> 00:06:58,466
+don't normally rip anything away from people, but nothing's going
+
+118
+00:06:58,483 --> 00:07:01,466
+to be deprecated. It's just a new functionality.
+
+119
+00:07:01,483 --> 00:07:07,466
+>> Correct. An important thing that we also added, so parse is
+
+120
+00:07:07,483 --> 00:07:13,300
+converting basically strings to whatever other, more exact data
+
+121
+00:07:13,383 --> 00:07:16,466
+types that you have, and the typical example is obviously numbers
+
+122
+00:07:17,483 --> 00:07:19,466
+and dates.
+
+123
+00:07:20,483 --> 00:07:23,466
+So actually, I can go ahead and just throw an example in, because
+
+124
+00:07:23,483 --> 00:07:25,466
+it might be somewhat interesting, because this is obviously a
+
+125
+00:07:25,483 --> 00:07:26,466
+common problem.
+
+126
+00:07:28,483 --> 00:07:30,466
+By the way, this Cyrillic character I'll use for something else
+
+127
+00:07:30,483 --> 00:07:32,466
+a little bit later, so don't worry about that one.
+
+128
+00:07:33,483 --> 00:07:39,466
+SO let's just say we want to go and SELECT * FROM Sales.SalesOrderHeader,
+
+129
+00:07:40,166 --> 00:07:46,466
+and my favorite topic happens to be dates for whatever interesting
+
+130
+00:07:46,483 --> 00:07:49,466
+reason, so let's just get the OrderDate here. That's enough.
+
+131
+00:07:50,483 --> 00:07:54,466
+Okay, so the format I'm getting back here is dependent on the
+
+132
+00:07:54,483 --> 00:07:58,350
+client application, how it wants to format it. Now, this format
+
+133
+00:07:58,433 --> 00:08:00,466
+I'm getting back is actually very, very nice, because this is
+
+134
+00:08:00,483 --> 00:08:05,466
+the ISO format. It also happens to be the ANSI format, year,
+
+135
+00:08:05,483 --> 00:08:08,466
+month, day, and it's interesting, this ANSI, it's short for American
+
+136
+00:08:08,483 --> 00:08:12,466
+National Standards Institute, but apparently...
+
+137
+00:08:12,483 --> 00:08:13,466
+>> I know where you're going with this.
+
+138
+00:08:13,483 --> 00:08:17,466
+>> Apparently, here in America, they don't adhere to this this standard.
+
+139
+00:08:17,483 --> 00:08:19,400
+>> We prefer month, day, year.
+
+140
+00:08:19,483 --> 00:08:22,466
+>> Yes. You prefer the one I can't get. That one and Fahrenheit
+
+141
+00:08:22,483 --> 00:08:27,466
+I still struggle with. Anyway, if I just want to go and convert
+
+142
+00:08:27,483 --> 00:08:30,466
+something first, parse is obviously the other direction, so if
+
+143
+00:08:30,483 --> 00:08:37,466
+I want to convert something to a date... in this case, I can
+
+144
+00:08:37,483 --> 00:08:42,466
+say, okay, this ISO format, and
+
+145
+00:08:46,333 --> 00:08:52,466
+see if I can remember the syntax. And I can say here, well,
+
+146
+00:08:52,483 --> 00:08:58,466
+we'll use Swedish culture, it's called, to parse this. so now
+
+147
+00:08:58,483 --> 00:09:02,333
+it goes and apparently automatically now says... well, automatically,
+
+148
+00:09:02,416 --> 00:09:05,466
+obviously, since I told it, but uses the Swedish culture, versus
+
+149
+00:09:05,483 --> 00:09:09,466
+if I want to parse it using American culture, I can do that.
+
+150
+00:09:09,483 --> 00:09:14,466
+And we support all cultures that Windows supports here, so now
+
+151
+00:09:14,166 --> 00:09:18,466
+it happens to be, we do both of these, we happen to get them
+
+152
+00:09:18,483 --> 00:09:21,466
+correctly, and that's because we can figure out exactly what's
+
+153
+00:09:21,483 --> 00:09:23,466
+being used here.
+
+154
+00:09:23,483 --> 00:09:25,466
+>> Nice. The other thing that's interesting though is what if
+
+155
+00:09:25,483 --> 00:09:26,416
+I do...
+
+156
+00:09:27,483 --> 00:09:28,466
+this is hello in Swedish.
+
+157
+00:09:29,483 --> 00:09:33,466
+But apparently, it's not a valid date. Now, an interesting thing
+
+158
+00:09:33,166 --> 00:09:37,333
+that we added is TRYPARSE, and we do this for CAST and CONVERT
+
+159
+00:09:37,483 --> 00:09:39,466
+that we'll get to later, as well. That's basically, if it fails,
+
+160
+00:09:40,0 --> 00:09:43,283
+don't fail the entire statement, return null instead.
+
+161
+00:09:43,366 --> 00:09:43,466
+>> Oh, nice.
+
+162
+00:09:43,483 --> 00:09:46,466
+>> So this can be very, very useful. For example, you can say
+
+163
+00:09:46,483 --> 00:09:51,466
+WHERE TRYPARSE this string in this way is not null... so now
+
+164
+00:09:51,483 --> 00:09:54,466
+you'll get everything that actually can be converted or parsed
+
+165
+00:09:54,483 --> 00:09:55,466
+into a date-time.
+
+166
+00:09:56,483 --> 00:10:00,466
+And the other one I wanted to show is FORMAT, which is the other
+
+167
+00:10:00,483 --> 00:10:04,466
+direction, so PARSE is going from string to an exact data type,
+
+168
+00:10:04,483 --> 00:10:09,466
+and FORMAT is the other direction. So FORMAT this one as...
+
+169
+00:10:10,483 --> 00:10:12,466
+I'll see if I can remember what it is.
+
+170
+00:10:13,483 --> 00:10:16,466
+Let's say, with Swedish culture,
+
+171
+00:10:18,483 --> 00:10:25,466
+so that's the picture string. So this is now the picture string
+
+172
+00:10:25,483 --> 00:10:30,466
+I want to format it using. I can add the culture, as well, but
+
+173
+00:10:31,333 --> 00:10:33,166
+in this case, I won't actually care about the culture. I'll just
+
+174
+00:10:33,483 --> 00:10:39,333
+tell you, please give me year, then give me a colon... for whatever
+
+175
+00:10:39,483 --> 00:10:40,466
+reason, right...
+
+176
+00:10:40,483 --> 00:10:49,466
+month:day:hour, in 24-hour format, and now that's exactly what
+
+177
+00:10:49,483 --> 00:10:53,250
+I get back. So this is also super-super useful, because now you
+
+178
+00:10:53,333 --> 00:10:58,466
+can easily in SQL return the formats that you would like, and
+
+179
+00:10:58,483 --> 00:11:01,466
+that obviously works for numbers, as well.
+
+180
+00:11:02,250 --> 00:11:04,466
+>> Awesome. Yes, that's a great demo, definitely, to see that.
+
+181
+00:11:04,483 --> 00:11:08,466
+So daytime, we'll introduce the general idea of the different
+
+182
+00:11:08,483 --> 00:11:11,466
+data types that we have. Just kind of a high level and some of
+
+183
+00:11:11,183 --> 00:11:15,466
+the categories. We're going to drill into character data types here.
+
+184
+00:11:15,483 --> 00:11:19,333
+And there's really a couple of variations of that. We have the
+
+185
+00:11:19,483 --> 00:11:23,466
+CHAR, the VARCHAR, and we have the Unicode, which is NCHAR and NVARCHAR.
+
+186
+00:11:23,483 --> 00:11:26,466
+And then it looks like the TEXT, the NTEXT, are going to be deprecated,
+
+187
+00:11:26,483 --> 00:11:29,466
+so we want to start leaning towards using the VARCHAR(MAX) and
+
+188
+00:11:29,483 --> 00:11:33,466
+the NVARCHAR(MAX) instead, so you're prepared for that.
+
+189
+00:11:33,483 --> 00:11:36,466
+Now, when they say deprecated, any ideas when that may happen,
+
+190
+00:11:36,483 --> 00:11:43,300
+as the SQL crowd... what was your title? Didn't you create SQL
+
+191
+00:11:43,383 --> 00:11:46,0
+Server back in 1940, '50, or something?
+
+192
+00:11:46,483 --> 00:11:47,466
+>> No. I'm very young.
+
+193
+00:11:48,483 --> 00:11:51,466
+>> Very young. No, it was a compliment, how smart you are.
+
+194
+00:11:54,483 --> 00:12:00,466
+>> Also not very smart. So I actually don't know the exact details
+
+195
+00:12:00,483 --> 00:12:04,466
+of the deprecation plan for TEXT and NTEXT. Overall, we're very careful.
+
+196
+00:12:04,483 --> 00:12:08,466
+Deprecation means you should avoid using it, because we may run
+
+197
+00:12:08,483 --> 00:12:12,466
+into problems in the future and we may have to remove it, so
+
+198
+00:12:12,166 --> 00:12:15,466
+when we announce something for deprecation, it will stay in the
+
+199
+00:12:15,483 --> 00:12:19,466
+product at least three releases, but after that we may remove
+
+200
+00:12:19,483 --> 00:12:21,466
+it, depending on the need for removing it.
+
+201
+00:12:21,483 --> 00:12:23,466
+>> Because I know a lot of people will see it's going to be deprecated,
+
+202
+00:12:23,483 --> 00:12:26,466
+I've got to rewrite everything before the next release comes out.
+
+203
+00:12:26,483 --> 00:12:30,466
+So that's why I was curious. When I hear the word deprecated,
+
+204
+00:12:30,483 --> 00:12:33,466
+no matter what product it is, do I have to hit the panic button,
+
+205
+00:12:33,483 --> 00:12:36,250
+or can I like, okay, I've got a few releases.
+
+206
+00:12:36,333 --> 00:12:39,466
+>> For SQL Server, at least, it's three releases.
+
+207
+00:12:39,483 --> 00:12:42,466
+>> Okay, awesome. So we've got character data types here, and
+
+208
+00:12:43,483 --> 00:12:46,466
+here's the CHAR and NCHAR that understands or introduces the
+
+209
+00:12:47,483 --> 00:12:50,216
+CHAR and NCHAR are fixed rights, and then we've got the VARCHAR
+
+210
+00:12:50,300 --> 00:12:52,466
+and NVARCHAR, variable lengths, and it gives you some storage
+
+211
+00:12:52,483 --> 00:12:55,466
+information here, and it talks about the VARCHAR(MAX) and the
+
+212
+00:12:55,483 --> 00:12:58,183
+NVARCHAR(MAX) and the storage requirements there.
+
+213
+00:12:58,266 --> 00:13:01,466
+>> So here, I wanted to use just a brief demo with this Cyrillic
+
+214
+00:13:01,483 --> 00:13:04,400
+character, to just show the
+
+215
+00:13:06,483 --> 00:13:08,466
+basically use of Unicode.
+
+216
+00:13:08,483 --> 00:13:09,466
+>> So that's a demo on the...
+
+217
+00:13:11,483 --> 00:13:14,466
+you had that character on your screen that I saw earlier and
+
+218
+00:13:14,233 --> 00:13:15,466
+I just didn't know what it was.
+
+219
+00:13:15,483 --> 00:13:16,283
+>> Exactly.
+
+220
+00:13:16,483 --> 00:13:20,466
+>> So let's see what that demo is, see what this little odd character is.
+
+221
+00:13:20,183 --> 00:13:22,466
+Well, not odd in a bad way. I've just not seen it. Unique, that
+
+222
+00:13:22,483 --> 00:13:26,433
+sounds better, right? I think that's better than odd.
+
+223
+00:13:26,450 --> 00:13:26,466
+>> Sure.
+
+224
+00:13:26,483 --> 00:13:27,466
+>> Special.
+
+225
+00:13:28,483 --> 00:13:33,466
+>> It's a character used by a lot of people. At any rate, the
+
+226
+00:13:34,483 --> 00:13:37,466
+most important thing here, this also comes from backwards compatibility,
+
+227
+00:13:37,483 --> 00:13:46,200
+so Unicode, it's a standard, basically, a set of characters that
+
+228
+00:13:46,283 --> 00:13:47,216
+is supposed to span
+
+229
+00:13:48,483 --> 00:13:52,466
+all required characters around the world. Now, this keeps extending
+
+230
+00:13:52,483 --> 00:13:57,466
+and things change quite frequently, but overall, in SQL Server,
+
+231
+00:13:58,350 --> 00:14:04,466
+you're safe. We support up to UTF-16, which is a broad spectrum
+
+232
+00:14:04,483 --> 00:14:08,450
+of characters. At any rate, if I do this,
+
+233
+00:14:10,483 --> 00:14:12,466
+again with the Swedish using the Latin characters,
+
+234
+00:14:13,483 --> 00:14:14,466
+this string is now
+
+235
+00:14:16,483 --> 00:14:23,466
+typed as a VARCHAR string, right? So whatever character set you
+
+236
+00:14:23,483 --> 00:14:26,466
+installed on the database when you set the collation, that's
+
+237
+00:14:26,483 --> 00:14:29,466
+what we're going to use. So in this case, this works just fine,
+
+238
+00:14:29,483 --> 00:14:32,466
+but let's say I just want to add the Cyrillic character here,
+
+239
+00:14:33,483 --> 00:14:38,466
+what happens now is we will go and try to convert characters
+
+240
+00:14:38,483 --> 00:14:43,250
+that are not in this character set into the character set, and
+
+241
+00:14:43,483 --> 00:14:46,466
+Windows has an API for this, and it will return a question mark
+
+242
+00:14:46,483 --> 00:14:50,316
+if the conversion fails. So the important thing here to note
+
+243
+00:14:50,400 --> 00:14:54,466
+is using strings like this is very dangerous if you use Unicode
+
+244
+00:14:55,483 --> 00:14:59,466
+data, which you should do. So, overall, you should definitely
+
+245
+00:15:00,483 --> 00:15:04,466
+move to using NVARCHAR wherever you believe you will need other
+
+246
+00:15:04,483 --> 00:15:06,466
+characters than the default character set installed.
+
+247
+00:15:07,333 --> 00:15:09,466
+>> Is there any extra overhead when you're using NVARCHARs or Unicode?
+
+248
+00:15:09,483 --> 00:15:11,466
+A little bit, right?
+
+249
+00:15:11,483 --> 00:15:15,466
+>> Yes, so basically Unicode... first, we supported UCS-2, which
+
+250
+00:15:15,483 --> 00:15:20,466
+is two bytes per character. If you use UTF-16, which is a different
+
+251
+00:15:20,483 --> 00:15:23,466
+collation, it uses sometimes... it's called surrogate characters,
+
+252
+00:15:23,483 --> 00:15:26,466
+and then you use four bytes for a given character.
+
+253
+00:15:27,483 --> 00:15:31,466
+But, at any rate, if I put the capital N in front of the string,
+
+254
+00:15:31,483 --> 00:15:33,466
+now you'll see we handle it correctly.
+
+255
+00:15:34,333 --> 00:15:37,466
+So that's important. It's not just important that you use the
+
+256
+00:15:37,483 --> 00:15:41,400
+right data type, such as NVARCHAR and NCHAR and NVARCHAR(MAX),
+
+257
+00:15:41,483 --> 00:15:43,466
+but you also need to type your strings this way.
+
+258
+00:15:44,333 --> 00:15:46,466
+>> All right, awesome. Good stuff.
+
+259
+00:15:47,166 --> 00:15:50,466
+Okay, so let's take a look at some of the things we can do with strings.
+
+260
+00:15:50,483 --> 00:15:53,466
+For instance, we have string concatenation, where we can actually
+
+261
+00:15:53,483 --> 00:15:57,466
+merge two different columns or multiple columns. In this case,
+
+262
+00:15:57,483 --> 00:15:59,466
+here, we've got the SELECT BusinessEntityID, FirstName and LastName,
+
+263
+00:15:59,483 --> 00:16:05,466
+and then we're going to concatenate FirstName and LastName as FullName.
+
+264
+00:16:05,483 --> 00:16:07,466
+So when we run this, we're going to see BusinessEntityID, FirstName,
+
+265
+00:16:07,483 --> 00:16:11,466
+LastName, and another column will be added over here, and that's
+
+266
+00:16:11,483 --> 00:16:14,466
+going to actually display FirstName and LastName as FullName
+
+267
+00:16:14,483 --> 00:16:18,466
+in a column. So we can do that. We also have introduced what's
+
+268
+00:16:18,233 --> 00:16:21,300
+called CONCAT() function, and this was... what we're going to
+
+269
+00:16:21,383 --> 00:16:24,466
+do here is select AddressLIne1, City, StateProvinceID.
+
+270
+00:16:25,166 --> 00:16:28,466
+We're going to CONCAT the AddressLine, plus City, plus PostalCode
+
+271
+00:16:28,483 --> 00:16:31,466
+AS Location, and we're going to grab this information from the
+
+272
+00:16:31,483 --> 00:16:34,466
+Person.Address, and again, it's going to store that information.
+
+273
+00:16:35,483 --> 00:16:38,466
+And what this will do, it will convert nulls to an empty string
+
+274
+00:16:38,483 --> 00:16:43,466
+before the concatenation, so you don't end up with some content
+
+275
+00:16:43,233 --> 00:16:47,466
+in there, a role that doesn't contain anything that makes any
+
+276
+00:16:47,216 --> 00:16:50,200
+sense to you. Now, the cool thing about strings, just like we
+
+277
+00:16:50,283 --> 00:16:53,416
+had talked about, we're going to talk in the next session here,
+
+278
+00:16:53,483 --> 00:16:56,466
+like date and times, we have some functions that can be performed.
+
+279
+00:16:56,483 --> 00:16:59,466
+So I can take a string and I can use like SUBSTRING, for instance,
+
+280
+00:16:59,483 --> 00:17:03,366
+and I can pull a section of that string out that might be important
+
+281
+00:17:03,450 --> 00:17:07,466
+to me. I can take a look at the length of the string, so if I'm
+
+282
+00:17:07,216 --> 00:17:10,166
+trying to... hey, if the length of the string is greater than
+
+283
+00:17:10,250 --> 00:17:14,333
+nine or is equal to eight, I'll go out and perform some other
+
+284
+00:17:14,416 --> 00:17:19,466
+task for us. We can change the case on it, so if a string comes
+
+285
+00:17:19,483 --> 00:17:23,466
+in, it's lowercase and I need to get it in uppercase, we can
+
+286
+00:17:23,183 --> 00:17:27,466
+modify that string text. So we have these functions available
+
+287
+00:17:27,483 --> 00:17:29,466
+to us to allow us to take content that we may have imported from
+
+288
+00:17:29,483 --> 00:17:33,466
+a FOT file, for instance, and we want to modify it, or we want
+
+289
+00:17:33,483 --> 00:17:37,466
+to maybe extract certain portions of it, before we add it to
+
+290
+00:17:37,483 --> 00:17:38,466
+a table.
+
+291
+00:17:38,483 --> 00:17:42,333
+And we can use these string functions to perform some of these
+
+292
+00:17:43,483 --> 00:17:46,466
+functions on character data types, for instance, before we go
+
+293
+00:17:46,483 --> 00:17:50,450
+in and add that data. Now, Tobias talked about this a little
+
+294
+00:17:50,483 --> 00:17:52,466
+bit earlier. I think we talked about the LIKE...
+
+295
+00:17:53,366 --> 00:17:55,466
+maybe it was. Maybe I'm confusing it with my other session, but
+
+296
+00:17:55,483 --> 00:17:59,466
+the LIKE predicate is used to check a character string against
+
+297
+00:17:59,483 --> 00:18:04,466
+a pattern, so we use the percent sign, for example. That was
+
+298
+00:18:04,483 --> 00:18:07,466
+kind of like a wildcard. So I want to go out and I want to go
+
+299
+00:18:07,483 --> 00:18:13,466
+out and find anything with a name that has N... what did we use?
+
+300
+00:18:13,483 --> 00:18:16,466
+We had mountain in here before... that has MOUNT, and then we'll
+
+301
+00:18:16,483 --> 00:18:19,466
+put a percent sign in there, and it will be a LIKE. So anything
+
+302
+00:18:19,483 --> 00:18:21,466
+that begins with a MOUNT, and it will actually return anything
+
+303
+00:18:21,483 --> 00:18:24,316
+that returns with a MOUNT and any number of characters to the
+
+304
+00:18:24,400 --> 00:18:26,466
+right of that. So it could be mountain, for instance, and it
+
+305
+00:18:26,483 --> 00:18:29,466
+could be... I can't think of another word with mount on the end
+
+306
+00:18:29,483 --> 00:18:33,233
+of it. So that would be an example where we could use that.
+
+307
+00:18:33,316 --> 00:18:35,466
+If you're trying to just use a single character in place or just
+
+308
+00:18:35,483 --> 00:18:39,466
+a wildcard for a single character, it's an underscore instead.
+
+309
+00:18:39,483 --> 00:18:43,466
+This gives us flexibility to return results or look for results
+
+310
+00:18:43,483 --> 00:18:47,466
+or retrieve results that we're not 100% familiar with or may
+
+311
+00:18:47,483 --> 00:18:51,316
+not know the exact spelling, or maybe it's spelled differently,
+
+312
+00:18:51,400 --> 00:18:54,350
+and it gives us some flexibility of writing queries that allows
+
+313
+00:18:54,433 --> 00:18:57,466
+us to query the content without knowing exactly what it is that
+
+314
+00:18:57,483 --> 00:19:00,466
+we're looking for, by either using the percent or the underscore,
+
+315
+00:19:00,483 --> 00:19:04,466
+as an example, to return that content. And as an example down
+
+316
+00:19:04,483 --> 00:19:09,466
+below, where we're returning the ProductLine, Name and ProductNumber
+
+317
+00:19:09,483 --> 00:19:13,450
+from the product table WHERE name LIKE Mountain%, so anything
+
+318
+00:19:13,483 --> 00:19:15,466
+to the right of mountain. Because you might have mountain bikes,
+
+319
+00:19:15,483 --> 00:19:18,433
+you might have mountain lions out there, and this will return
+
+320
+00:19:18,483 --> 00:19:21,466
+anything that includes the name Mountain and any number of characters
+
+321
+00:19:21,483 --> 00:19:24,466
+to the right of the word Mountain. So it gives us some flexibility
+
+322
+00:19:24,483 --> 00:19:26,466
+when we're performing these SELECT statements.
+
+323
+00:19:26,483 --> 00:19:29,466
+>> And with regards to performance, it's just interesting to note
+
+324
+00:19:30,333 --> 00:19:34,466
+that, if you have an index on the Name column in this case, we
+
+325
+00:19:34,483 --> 00:19:38,466
+can still use the index and seek through the index to find Mountain-something,
+
+326
+00:19:39,183 --> 00:19:42,466
+whereas if you put a wildcard in front of the word, we won't
+
+327
+00:19:42,483 --> 00:19:47,466
+be able to use the index for seeking. We have to scan the entire index.
+
+328
+00:19:47,483 --> 00:19:51,166
+Now, if you need it, you need it, but it's worth noting that.
+
+329
+00:19:51,250 --> 00:19:51,466
+>> There is some overhead.
+
+330
+00:19:51,483 --> 00:19:54,466
+>> There is definitely overhead with using wildcards in the beginning
+
+331
+00:19:54,483 --> 00:19:55,466
+of the string.
+
+332
+00:19:57,483 --> 00:19:58,466
+>> Okay, character data types.
+
+333
+00:19:59,483 --> 00:20:02,383
+Let's see here what we have for demos. Do you have anything
+
+334
+00:20:02,450 --> 00:20:02,466
+you want to show, Tobias?
+
+335
+00:20:03,483 --> 00:20:06,466
+>> Yes, well, I've already shown the Unicode thing.
+
+336
+00:20:06,483 --> 00:20:07,466
+>> You did the cool stuff.
+
+337
+00:20:08,483 --> 00:20:09,466
+All right, let's see here.
+
+338
+00:20:10,483 --> 00:20:12,466
+Okay, that's cool. That's true. That was probably the cooler
+
+339
+00:20:12,483 --> 00:20:15,466
+thing than anything I've got in here to show them, so let's go
+
+340
+00:20:15,483 --> 00:20:18,250
+ahead and talk about date and time data types. We did a little
+
+341
+00:20:18,333 --> 00:20:19,466
+bit of a demo on that where we were doing some conversion with
+
+342
+00:20:20,166 --> 00:20:22,466
+the parse. But we have some data types here, older versions,
+
+343
+00:20:23,483 --> 00:20:26,466
+supported DATETIME and SMALLDATETIME. We now have DATE(TIME),
+
+344
+00:20:27,283 --> 00:20:32,466
+DATETIME2 and DATETIMEOFFSET that we can use, that were introduced
+
+345
+00:20:32,216 --> 00:20:36,466
+in SQL Server 2008, but we can use these for determining the
+
+346
+00:20:36,483 --> 00:20:40,450
+type of date or time or a portion of the date and time that we
+
+347
+00:20:40,483 --> 00:20:44,466
+want returned to us, some interesting or new data types that
+
+348
+00:20:44,483 --> 00:20:46,466
+were introduced for us that allow us... and again, notice the
+
+349
+00:20:46,483 --> 00:20:50,466
+storage for the DATETIME2 that was introduced. Six to eight
+
+350
+00:20:50,483 --> 00:20:53,466
+storage bytes. If you go back to the old DATETIME, there was
+
+351
+00:20:53,483 --> 00:20:55,466
+eight storage bytes for that available.
+
+352
+00:20:55,483 --> 00:20:58,333
+>> And I can show a quick demo here, which is important for you
+
+353
+00:20:58,416 --> 00:21:01,466
+guys to know, when you still use DATETIME, because that's obviously
+
+354
+00:21:01,483 --> 00:21:05,466
+going to be the prevalent data type out there, DATETIME, rather
+
+355
+00:21:05,483 --> 00:21:08,466
+than the new data types, even though they definitely offer benefits.
+
+356
+00:21:08,483 --> 00:21:13,466
+So one thing that's important to know is precision is down to
+
+357
+00:21:13,483 --> 00:21:17,466
+every third millisecond, so this is important inquiries, right,
+
+358
+00:21:17,483 --> 00:21:20,466
+because the very common query is give me everything for the day, right?
+
+359
+00:21:20,483 --> 00:21:24,466
+So get all orders greater than midnight, greater than or equal
+
+360
+00:21:24,483 --> 00:21:26,466
+to midnight and
+
+361
+00:21:28,483 --> 00:21:31,250
+less than or equal to the end of the day. Now, if you do less
+
+362
+00:21:31,333 --> 00:21:36,166
+than next day, that's the safest bet, but just to show you, what
+
+363
+00:21:36,250 --> 00:21:39,216
+can happen here is I'll just use a string here and I'll say...
+
+364
+00:21:39,300 --> 00:21:43,466
+and CAST is a function just for converting. So I'll say okay,
+
+365
+00:21:44,366 --> 00:21:47,466
+what is it, today is the 13th and then 23:59:59,
+
+366
+00:21:50,166 --> 00:21:52,466
+and then you have milliseconds in there, so you will go naturally
+
+367
+00:21:52,483 --> 00:21:53,466
+in and say this, right,
+
+368
+00:21:55,266 --> 00:21:57,166
+as DATETIME?
+
+369
+00:21:58,483 --> 00:22:01,466
+But if I go and execute that, that's apparently tomorrow, because
+
+370
+00:22:01,483 --> 00:22:07,166
+the last millisecond will be 047, so this means that if I go
+
+371
+00:22:07,483 --> 00:22:11,466
+999, it will round up naturally and correctly up to the next second.
+
+372
+00:22:11,483 --> 00:22:17,466
+If I do 998, it will go and round down to 997. So 997 in DATETIME
+
+373
+00:22:17,483 --> 00:22:21,466
+is the end of the day. So that's just an important thing to know
+
+374
+00:22:21,483 --> 00:22:24,333
+when you use this data type. Again, if you just say less than
+
+375
+00:22:24,416 --> 00:22:27,366
+tomorrow, if that's your predicate, you're obviously safe.
+
+376
+00:22:27,450 --> 00:22:28,466
+But it's an important thing to know of.
+
+377
+00:22:29,483 --> 00:22:30,466
+>> All right.
+
+378
+00:22:31,483 --> 00:22:35,466
+So DATETIME, data types, literals, and this is an example of
+
+379
+00:22:35,483 --> 00:22:38,466
+where we just actually do a query of a
+
+380
+00:22:39,483 --> 00:22:43,0
+SalesOrderID and where OrderDate equals a specific date.
+
+381
+00:22:43,483 --> 00:22:47,466
+And these here are DATETIMEs and they have language-neutral formats
+
+382
+00:22:47,483 --> 00:22:49,466
+and some examples of these.
+
+383
+00:22:49,483 --> 00:22:53,466
+Write down... yes, that's amazing, how they go down to the milliseconds
+
+384
+00:22:53,483 --> 00:22:55,466
+nowadays for information.
+
+385
+00:22:55,483 --> 00:22:58,466
+>> Or even nanoseconds, DATETIME2 and TIME.
+
+386
+00:22:58,233 --> 00:22:58,466
+>> Nanoseconds.
+
+387
+00:22:58,483 --> 00:23:01,466
+>> Down to 100 nanoseconds is the max precision that we have.
+
+388
+00:23:01,483 --> 00:23:04,466
+>> 100 nanoseconds. That's amazing. That's really good, to be
+
+389
+00:23:04,483 --> 00:23:06,333
+able to do that.
+
+390
+00:23:06,483 --> 00:23:09,466
+Working with DATETIME separately, here's where we get this example
+
+391
+00:23:09,483 --> 00:23:10,433
+where we have
+
+392
+00:23:11,483 --> 00:23:15,466
+the declared DateOnly, DATETIME, and then SELECT the DateOnly.
+
+393
+00:23:15,483 --> 00:23:18,200
+Notice it returns... at this point, it returns just the date
+
+394
+00:23:18,283 --> 00:23:20,466
+and nothing to do with seconds. It just uses all zeros for the
+
+395
+00:23:20,483 --> 00:23:23,466
+seconds, as if it's midnight. If I did it the opposite day, where
+
+396
+00:23:24,483 --> 00:23:27,466
+I'm looking just for the time, the date's going to be set to
+
+397
+00:23:27,483 --> 00:23:31,466
+January 1st of 1900, and then you'll have the time for that portion.
+
+398
+00:23:31,483 --> 00:23:33,466
+So just some ideas and
+
+399
+00:23:35,483 --> 00:23:38,466
+awareness of different returns that you'll see, results that
+
+400
+00:23:38,483 --> 00:23:41,466
+you'll see, depending on what you're trying to do with the date
+
+401
+00:23:41,483 --> 00:23:42,266
+and time.
+
+402
+00:23:42,350 --> 00:23:44,466
+>> And it's obviously more efficient than to go and use just our
+
+403
+00:23:44,483 --> 00:23:48,466
+new data type or TIME data type, if you're just interested in
+
+404
+00:23:48,483 --> 00:23:50,466
+storing a time or a date.
+
+405
+00:23:51,483 --> 00:23:54,466
+>> Querying date and time values, again, we've just seen how to
+
+406
+00:23:54,483 --> 00:23:58,466
+query one of them. They talk in here about values are stored,
+
+407
+00:23:58,483 --> 00:24:00,466
+queries need to account for time past midnight on a date.
+
+408
+00:24:00,483 --> 00:24:02,466
+That's pretty much what you were just talking about with the
+
+409
+00:24:02,483 --> 00:24:06,466
+precision of that item there, so we won't spend too much time
+
+410
+00:24:06,483 --> 00:24:10,466
+on this. But it's good to understand what the options are and
+
+411
+00:24:10,483 --> 00:24:14,466
+take advantage of these new date and times. Some functions that
+
+412
+00:24:14,483 --> 00:24:17,466
+we have, we can GETDATE, which grabs a current date and time.
+
+413
+00:24:18,483 --> 00:24:22,466
+There's no time zone offset for that. We can do a CURRENT_TIMESTAMP,
+
+414
+00:24:22,483 --> 00:24:26,466
+which does the current DATETIME. SYSDATETIME grabs a current
+
+415
+00:24:26,483 --> 00:24:30,466
+date and time, and then we have SYSDATETIMEOFFSET. This does
+
+416
+00:24:30,483 --> 00:24:34,466
+include a time zone offset, and you can use just a simple SELECT
+
+417
+00:24:35,450 --> 00:24:37,466
+CURRENT_TIMESTAMP, and it will return that information for us.
+
+418
+00:24:38,483 --> 00:24:41,300
+We also have date and time functions for DATENAME...
+
+419
+00:24:42,483 --> 00:24:46,466
+use year, month, day as the datepart. We have year, month data
+
+420
+00:24:46,483 --> 00:24:49,466
+as datepart. We have DAY, MONTH and YEAR, and all of these are
+
+421
+00:24:49,483 --> 00:24:53,466
+items that we can do to extract the portions of a date out to
+
+422
+00:24:53,483 --> 00:24:57,466
+return that information about a date that we might want to drill
+
+423
+00:24:57,216 --> 00:24:59,466
+down to and get into some more detail of.
+
+424
+00:25:00,483 --> 00:25:03,466
+Some additional functions that return date and time from parts.
+
+425
+00:25:04,483 --> 00:25:09,466
+Here, we return a type of data... of date, excuse me. We have
+
+426
+00:25:10,183 --> 00:25:12,466
+DATETIMEFROMPARTS, DATETIME2FROMPARTS.
+
+427
+00:25:12,483 --> 00:25:16,466
+We have the OFFSETFROMPARTS, and just to give you an idea, the
+
+428
+00:25:16,483 --> 00:25:19,466
+functions that return date and time from parts, you have some
+
+429
+00:25:19,483 --> 00:25:25,433
+examples down below of how these would be completed for us, as well.
+
+430
+00:25:27,483 --> 00:25:30,466
+Some additional examples and functions that modify. We can do
+
+431
+00:25:30,483 --> 00:25:33,433
+a DATEADD where we want to add intervals of a specific number
+
+432
+00:25:33,483 --> 00:25:37,466
+of days, as we're seeing here. ENDMONTH, we're trying to look
+
+433
+00:25:37,483 --> 00:25:40,466
+for the end of month for a particular start date.
+
+434
+00:25:41,483 --> 00:25:46,0
+DATEDIFF, we're trying to determine the difference between two dates.
+
+435
+00:25:46,483 --> 00:25:48,466
+So I want to know how long a project is taking, so I have the
+
+436
+00:25:48,483 --> 00:25:51,466
+start date, I have the end date. I can determine the number
+
+437
+00:25:51,483 --> 00:25:55,466
+of days it took for that project to complete by using the DATEDIFF
+
+438
+00:25:55,483 --> 00:25:59,466
+as an option here. The ISDATE is available for... to determine
+
+439
+00:25:59,483 --> 00:26:04,466
+whether a date or time is a valid value, it contains an actual
+
+440
+00:26:04,483 --> 00:26:08,466
+valid value when we're adding these dates and times, here.
+
+441
+00:26:08,483 --> 00:26:13,466
+We had just seen an example that Tobias did using the CAST option here.
+
+442
+00:26:13,483 --> 00:26:18,466
+Here's an example of that. SELECT CAST AS DATETIME as date, AS TodaysDate.
+
+443
+00:26:19,483 --> 00:26:22,466
+It can return an error if the data types are incompatible, so
+
+444
+00:26:22,483 --> 00:26:24,466
+if I'm doing a SELECT CAST this date, and then I want to return
+
+445
+00:26:24,483 --> 00:26:27,183
+that as an integer, we're going to get a little bit of feedback
+
+446
+00:26:27,266 --> 00:26:30,466
+on that, as in the explicit conversion from data type to int
+
+447
+00:26:30,483 --> 00:26:34,466
+is not allowed. So, again, you can convert different columns
+
+448
+00:26:34,483 --> 00:26:37,466
+or different data types. Not everything is convertible to every
+
+449
+00:26:37,483 --> 00:26:41,466
+other data type, so you have to be aware of what can be converted
+
+450
+00:26:41,483 --> 00:26:44,466
+from one date type to another date... or one data type to another
+
+451
+00:26:44,483 --> 00:26:48,266
+data type, and understand what those are before you start going
+
+452
+00:26:48,350 --> 00:26:51,466
+out and trying to use the CAST or the CONVERT commands for performing
+
+453
+00:26:51,483 --> 00:26:53,433
+those conversions.
+
+454
+00:26:53,483 --> 00:26:57,283
+Here's the CONVERT command here. It can be used in SELECT and
+
+455
+00:26:57,366 --> 00:27:01,466
+WHERE clauses. Another example is SELECT COVERT(CHAR(8)) to a
+
+456
+00:27:01,483 --> 00:27:05,466
+CURRENT_TIMESTAMP, and here's the ISO_style we had talked about
+
+457
+00:27:05,483 --> 00:27:09,466
+earlier, as how we can determine how we want that date to be
+
+458
+00:27:09,483 --> 00:27:13,350
+returned to us, what style do we want to use? In this case, here,
+
+459
+00:27:13,433 --> 00:27:15,400
+we're using the ISO_style.
+
+460
+00:27:16,483 --> 00:27:19,466
+So date and time function data types, are there any other date,
+
+461
+00:27:19,483 --> 00:27:23,466
+time function demos you want to see, you want to show?
+
+462
+00:27:25,450 --> 00:27:25,466
+>> No.
+
+463
+00:27:25,483 --> 00:27:27,466
+>> That we haven't discussed, and we had examples. I don't know
+
+464
+00:27:27,483 --> 00:27:29,466
+if there's anything that's unique.
+
+465
+00:27:29,483 --> 00:27:30,466
+>> Not really.
+
+466
+00:27:32,483 --> 00:27:34,466
+We talked about the every third millisecond. The other thing
+
+467
+00:27:34,483 --> 00:27:39,466
+that's more interesting, as an anecdote, is that the date time
+
+468
+00:27:39,483 --> 00:27:43,466
+data type starts at 1753. So if you want to store dates before
+
+469
+00:27:44,166 --> 00:27:50,466
+1753, you would have to go and use the DATE or DATETIME2 or DATETIMEOFFSET
+
+470
+00:27:50,483 --> 00:27:56,466
+data types. It has to do with 1753 is when basically the British
+
+471
+00:27:56,483 --> 00:28:00,466
+Empire moved to using the Gregorian calendar rather than the
+
+472
+00:28:00,483 --> 00:28:05,466
+Julian calendar, so that's why this 1753 was picked.
+
+473
+00:28:05,483 --> 00:28:09,466
+>> Okay, 1753. I'll have to remember that. All right, we have
+
+474
+00:28:09,483 --> 00:28:12,466
+some built-in functions that we can look at and take advantage
+
+475
+00:28:12,483 --> 00:28:16,466
+of, as well, that are available to us, and some of these include
+
+476
+00:28:16,483 --> 00:28:21,466
+the scalar functions, grouped aggregates, windows and rowsets,
+
+477
+00:28:22,233 --> 00:28:25,466
+and we're kind of categorizing these by scope of input and type
+
+478
+00:28:25,483 --> 00:28:26,466
+of output.
+
+479
+00:28:27,483 --> 00:28:30,466
+So if we take a look at scalar functions here, we've got items
+
+480
+00:28:30,483 --> 00:28:34,466
+and categories. We've got configuration, cursor, date and time,
+
+481
+00:28:34,483 --> 00:28:38,466
+security, string, system and these can be used for us to be able
+
+482
+00:28:38,483 --> 00:28:43,466
+to perform functions on these types of data. So here's an example
+
+483
+00:28:43,483 --> 00:28:46,466
+of a date, time functions where we're doing a SELECT SalesOrder
+
+484
+00:28:46,483 --> 00:28:49,466
+and grabbing a year from that particular date. A mathematical
+
+485
+00:28:49,483 --> 00:28:52,466
+function, looking for the absolute value. We're doing a CAST.
+
+486
+00:28:53,0 --> 00:28:54,200
+We've already seen that one.
+
+487
+00:28:54,483 --> 00:28:58,466
+A metadata function, where we're doing something, we're selecting
+
+488
+00:28:58,483 --> 00:29:03,233
+database name as current_database. So if you're working in or
+
+489
+00:29:03,316 --> 00:29:07,466
+programming and you want to be able to retrieve the current database
+
+490
+00:29:07,216 --> 00:29:11,166
+that you're in, you can use this SELECT DB_NAME, open and close
+
+491
+00:29:11,250 --> 00:29:14,366
+paren, and it will return that current_database that you're working in.
+
+492
+00:29:14,450 --> 00:29:16,466
+So it's a good way to determine where you are to make sure you're
+
+493
+00:29:16,483 --> 00:29:19,466
+executing the commands that you want to execute in the appropriate
+
+494
+00:29:19,483 --> 00:29:20,466
+database here.
+
+495
+00:29:21,416 --> 00:29:24,466
+Some Windows functions that we have, we have the RANK function.
+
+496
+00:29:25,483 --> 00:29:28,466
+We OFFSET. We have aggregate and distribution functions.
+
+497
+00:29:28,483 --> 00:29:34,466
+This here is doing a SELECT TOP(5) of ProductID, Name and ListPrice.
+
+498
+00:29:34,483 --> 00:29:39,350
+We're doing the RANK and ORDER BY, by ListPrice, and then we're
+
+499
+00:29:39,433 --> 00:29:42,450
+going to return that in descending order.
+
+500
+00:29:43,450 --> 00:29:44,466
+What's the RankByPrice?
+
+501
+00:29:45,483 --> 00:29:47,466
+What's that going to provide for me?
+
+502
+00:29:48,483 --> 00:29:56,466
+>> So Window functions overall are super, super interesting, and
+
+503
+00:29:56,483 --> 00:30:01,166
+it's one of these things that you need to spend a bit of time
+
+504
+00:30:01,483 --> 00:30:04,466
+playing around with and thinking about to kind of get into the
+
+505
+00:30:05,483 --> 00:30:10,466
+groove of how you use them, but once you do, you will never want
+
+506
+00:30:10,166 --> 00:30:10,466
+to go back.
+
+507
+00:30:12,483 --> 00:30:16,466
+They are super, super, super useful, and let me actually show
+
+508
+00:30:16,483 --> 00:30:21,466
+a few examples, because this one... and I know we've got some
+
+509
+00:30:21,483 --> 00:30:27,300
+feedback on the chat, where you want me to go a bit slower.
+
+510
+00:30:27,383 --> 00:30:32,466
+This one, I'll definitely... it's very good feedback, but this
+
+511
+00:30:32,483 --> 00:30:35,466
+one you'll have to take away that you'll need to spend some more
+
+512
+00:30:35,216 --> 00:30:39,466
+time with to actually get into the groove of it. But I'll show
+
+513
+00:30:39,483 --> 00:30:40,466
+you some examples.
+
+514
+00:30:41,483 --> 00:30:45,466
+So let's just look at kind of a
+
+515
+00:30:46,483 --> 00:30:49,466
+common thing. Let's say we go and SELECT star FROM...
+
+516
+00:30:50,483 --> 00:30:55,250
+let's say SalesOrderDetail, and we'll pretend this is kind of
+
+517
+00:30:55,333 --> 00:30:56,466
+like a transactions table
+
+518
+00:30:57,483 --> 00:30:59,466
+for a bank.
+
+519
+00:30:59,483 --> 00:31:03,466
+And let's just do this for a specific customer ID, or let's just
+
+520
+00:31:03,483 --> 00:31:04,366
+do this.
+
+521
+00:31:05,483 --> 00:31:06,466
+And ORDER BY
+
+522
+00:31:09,483 --> 00:31:12,466
+OrderDate, SalesOrderDetailID.
+
+523
+00:31:15,483 --> 00:31:24,466
+Oh, sorry, there is no OrderDate in here. I'll just do this.
+
+524
+00:31:25,316 --> 00:31:27,466
+Okay. So, first of all,
+
+525
+00:31:28,483 --> 00:31:32,466
+one thing that you may be interested in, in your set, just returning
+
+526
+00:31:32,483 --> 00:31:34,266
+a row number, so which
+
+527
+00:31:36,483 --> 00:31:40,466
+row is this in the particular set? So I can go and just add here
+
+528
+00:31:40,483 --> 00:31:41,466
+and say, give me
+
+529
+00:31:42,483 --> 00:31:46,300
+the row number, and it's kind of like a ranking function, or
+
+530
+00:31:46,383 --> 00:31:49,466
+it is a ranking function. But rank would give you, if multiple
+
+531
+00:31:49,483 --> 00:31:54,466
+rows have the same value, you'll get the same rank, whereas ROW_NUMBER,
+
+532
+00:31:54,483 --> 00:31:58,466
+you'll always get a new row number, even if they're returning
+
+533
+00:31:58,183 --> 00:32:02,333
+the same. So I'll say, okay, give me the ROW_NUMBER, and obviously
+
+534
+00:32:02,416 --> 00:32:06,466
+ROW_NUMBER makes no sense without actually knowing the order.
+
+535
+00:32:06,483 --> 00:32:10,466
+And SELECT, again, is executed before ORDER BY, so you can't
+
+536
+00:32:10,200 --> 00:32:12,466
+really use whatever is in the ORDER BY clause. Plus, you may
+
+537
+00:32:12,483 --> 00:32:15,283
+want to have multiple ROW_NUMBERs, because you're calculating
+
+538
+00:32:15,366 --> 00:32:19,400
+something, so the actual function uses this OVER clause to know
+
+539
+00:32:19,483 --> 00:32:20,466
+about the ranking.
+
+540
+00:32:21,166 --> 00:32:24,466
+So ORDER BY, and I want this, let's say, ordered by SalesOrderID.
+
+541
+00:32:26,483 --> 00:32:32,316
+That's RowNum1, and let's just run this. And you can see we
+
+542
+00:32:32,400 --> 00:32:35,466
+get these row numbers that now start adding up.
+
+543
+00:32:37,483 --> 00:32:40,466
+What I can also do is say, well, I don't just want ROW_NUMBERs.
+
+544
+00:32:40,483 --> 00:32:41,466
+I want ROW_NUMBERs per
+
+545
+00:32:43,300 --> 00:32:49,466
+order, so then I can add the PARTITION BY clause, PARTITION BY
+
+546
+00:32:51,483 --> 00:32:55,450
+SalesOrderID, which means for every order,
+
+547
+00:32:57,216 --> 00:33:02,383
+I'll get new
+
+548
+00:33:04,483 --> 00:33:06,466
+ROW_NUMBERs as they basically reset.
+
+549
+00:33:07,483 --> 00:33:11,466
+So we see here the RowNum1 keeps increasing, whereas RowNum2
+
+550
+00:33:11,233 --> 00:33:15,400
+keeps resenting as I get into a new order.
+
+551
+00:33:16,483 --> 00:33:19,466
+So that's what ROW_NUMBER does, and that's what these kind of
+
+552
+00:33:19,483 --> 00:33:23,466
+functions do, is you tell them, based on the set, here is how
+
+553
+00:33:23,483 --> 00:33:25,466
+you do your calculation, and you do
+
+554
+00:33:26,483 --> 00:33:29,466
+ROW_NUMBER, RANK, DENSERANK and so on. The other thing that's
+
+555
+00:33:29,483 --> 00:33:32,466
+interesting to mention is on aggregate functions. Now, we'll
+
+556
+00:33:33,483 --> 00:33:37,466
+get more into grouping later, so GROUP BY and so on, but aggregates
+
+557
+00:33:37,483 --> 00:33:41,466
+are very useful, together as Windows functions.
+
+558
+00:33:41,483 --> 00:33:46,466
+So we're using the OVER clause, rather, so let's just say I want
+
+559
+00:33:47,483 --> 00:33:48,466
+the sum of
+
+560
+00:33:50,483 --> 00:33:53,466
+UnitPrice here.
+
+561
+00:33:53,483 --> 00:33:58,216
+Now, if I try and execute this, we will complain and say, oh,
+
+562
+00:33:58,300 --> 00:34:02,400
+why do you combine an aggregate with all of these non-aggregate functions?
+
+563
+00:34:02,483 --> 00:34:05,466
+Because what does this mean? You want the sum of UnitPrice per what?
+
+564
+00:34:06,0 --> 00:34:10,200
+Well, you have no grouping, so it will be the sum of one value.
+
+565
+00:34:10,283 --> 00:34:11,416
+That doesn't make sense.
+
+566
+00:34:12,333 --> 00:34:17,466
+But what you can go and do is you can say, give me the sum based
+
+567
+00:34:17,483 --> 00:34:18,400
+on something.
+
+568
+00:34:19,483 --> 00:34:23,466
+So I can now tell it, well, I actually want this sum partitioned
+
+569
+00:34:23,483 --> 00:34:27,466
+by something. So SalesOrderID,
+
+570
+00:34:28,466 --> 00:34:32,466
+and then we can say AS TotalOrderPrice.
+
+571
+00:34:34,483 --> 00:34:37,466
+And as you can see now, the TotalOrderPrice will be the same
+
+572
+00:34:37,483 --> 00:34:42,466
+for all of these rows that adhered to the same order, right?
+
+573
+00:34:42,483 --> 00:34:47,400
+So in this case, this aggregate is actually run across these
+
+574
+00:34:47,483 --> 00:34:51,466
+rows, based on the window that you define. So the PARTITION
+
+575
+00:34:51,483 --> 00:34:56,450
+BY clause defines the window for this calculation, so each partition
+
+576
+00:34:56,483 --> 00:34:59,350
+has its own window that it calculates over. What I can also
+
+577
+00:34:59,433 --> 00:35:03,166
+go and do is say, well, I would like also the total price across
+
+578
+00:35:03,483 --> 00:35:05,466
+all orders, so over everything.
+
+579
+00:35:07,483 --> 00:35:10,466
+Oh, now I managed to zoom it.
+
+580
+00:35:11,483 --> 00:35:13,466
+This is great.
+
+581
+00:35:14,483 --> 00:35:15,466
+>> We'll have to come out.
+
+582
+00:35:15,483 --> 00:35:18,466
+>> And now I can draw something here. Okay, hello.
+
+583
+00:35:19,483 --> 00:35:20,466
+Stop, Mr. Zoom.
+
+584
+00:35:24,400 --> 00:35:27,316
+Okay. This is very interesting.
+
+585
+00:35:29,483 --> 00:35:33,466
+I have tried Ctrl-1. That doesn't seem to...
+
+586
+00:35:35,483 --> 00:35:36,466
+but it doesn't want to go back.
+
+587
+00:35:37,483 --> 00:35:41,466
+Let's call this demo finished. You got an introduction into Window
+
+588
+00:35:41,483 --> 00:35:43,466
+functions, and we'll see if we get back to it a little later,
+
+589
+00:35:43,483 --> 00:35:46,466
+as I try to figure out what's going on with my machine here.
+
+590
+00:35:46,483 --> 00:35:49,466
+>> Yes, the last piece I wanted to talk about is we can use the
+
+591
+00:35:49,483 --> 00:35:52,466
+CHOOSE option here, and then we're going to wrap up this module here.
+
+592
+00:35:52,483 --> 00:35:57,316
+We can use this option to SELECT, CHOOSE three, and we've got
+
+593
+00:35:57,400 --> 00:36:00,450
+three items in the list here. We've got Beverages, Condiments,
+
+594
+00:36:00,483 --> 00:36:03,466
+Confections as CHOOSE results, and then we can choose the different
+
+595
+00:36:03,483 --> 00:36:07,466
+items that we want to choose, so just a way to create a hardcoded
+
+596
+00:36:07,483 --> 00:36:10,466
+list, but a list of items that we can choose to work with.
+
+597
+00:36:10,483 --> 00:36:15,250
+We did some cool built-in function demos, so we're just going
+
+598
+00:36:15,333 --> 00:36:16,466
+to kind of wrap this up.
+
+599
+00:36:17,333 --> 00:36:20,316
+SQL Server associates columns, expressions, variables and parameters
+
+600
+00:36:20,483 --> 00:36:22,466
+with data types. Bottom line, when you create a new table or
+
+601
+00:36:22,483 --> 00:36:25,466
+a new object, we need to understand the type of data that's going
+
+602
+00:36:25,483 --> 00:36:28,0
+to be stored in there. It's not to be taken lightly, because
+
+603
+00:36:28,483 --> 00:36:30,466
+you have to make sure that you're able to store content, the
+
+604
+00:36:30,483 --> 00:36:34,466
+appropriate content, that will enforce data integrity.
+
+605
+00:36:34,483 --> 00:36:38,466
+And you also have to understand how that content's going to be used.
+
+606
+00:36:38,483 --> 00:36:40,466
+For instance, if I enter a character field, I'm not going to
+
+607
+00:36:40,483 --> 00:36:42,466
+be able to perform any calculations on that. So you have to
+
+608
+00:36:42,483 --> 00:36:45,466
+understand what type of data is going to be stored and the type
+
+609
+00:36:45,483 --> 00:36:49,466
+and purpose or use for that data. And we introduce seven categories
+
+610
+00:36:49,483 --> 00:36:54,166
+of built-in data types, as you can see here, exact number, binary
+
+611
+00:36:54,250 --> 00:36:57,183
+strings, date and time, character strings, and we talked about
+
+612
+00:36:57,266 --> 00:37:00,466
+some of the functions that are available for the string, specifically
+
+613
+00:37:00,483 --> 00:37:03,466
+the left, right, the replace, the upper, the lower, if you want
+
+614
+00:37:03,483 --> 00:37:07,266
+to change the casing of it and the substring. We talked about
+
+615
+00:37:07,350 --> 00:37:10,466
+the LIKE, specifically I can use the percent as a wildcard to
+
+616
+00:37:10,483 --> 00:37:11,466
+the right.
+
+617
+00:37:11,483 --> 00:37:14,316
+If you use it to the left, especially when it comes to indexes,
+
+618
+00:37:14,483 --> 00:37:19,466
+and that will be any linked number of characters for that wildcard.
+
+619
+00:37:19,483 --> 00:37:23,466
+Underscore is for a specific character. So let's say for instance,
+
+620
+00:37:23,483 --> 00:37:29,466
+state code, I know it begins with A, but I can't remember if
+
+621
+00:37:29,483 --> 00:37:32,466
+it's AZ, for instance, and I can't think of another state code,
+
+622
+00:37:32,483 --> 00:37:35,433
+all of a sudden, that begins with A.
+
+623
+00:37:35,450 --> 00:37:35,466
+>> WA?
+
+624
+00:37:35,483 --> 00:37:37,433
+>> WA, there we go.
+
+625
+00:37:37,483 --> 00:37:38,466
+>> I'm sorry, begins with A.
+
+626
+00:37:38,483 --> 00:37:41,466
+>> Begins with A, yes. So another state code, Arkansas, whatever
+
+627
+00:37:41,483 --> 00:37:44,466
+that one is. AR, I think? What is it?
+
+628
+00:37:44,483 --> 00:37:45,466
+>> AK.
+
+629
+00:37:45,483 --> 00:37:49,466
+>> Whatever is AB. Obviously, I need to pick up on my geography
+
+630
+00:37:49,483 --> 00:37:54,350
+here, but we can actually use A_, and that would replace just
+
+631
+00:37:54,433 --> 00:37:57,466
+a character or do a wildcard search for a character. So I know
+
+632
+00:37:57,483 --> 00:37:59,466
+a state code that begins with A. Obviously, I don't know my
+
+633
+00:37:59,483 --> 00:38:02,466
+state codes. I know AZ, because that's where I'm from, but apparently
+
+634
+00:38:02,483 --> 00:38:06,333
+I don't know the rest of them. Several date-time data types available,
+
+635
+00:38:06,483 --> 00:38:11,466
+some of the newer ones that we talked about, the DATETIME2, the DATETIMEOFFSET.
+
+636
+00:38:11,483 --> 00:38:13,466
+Make sure you take a look at those, try to utilize those.
+
+637
+00:38:13,483 --> 00:38:15,466
+We're down to nanoseconds for those.
+
+638
+00:38:16,483 --> 00:38:19,266
+Also, we have some functions associated with those DATETIMEs,
+
+639
+00:38:19,350 --> 00:38:24,466
+like GETDATE, CURRENT_TIMESTAMP, SYSDATETIME. So we can use
+
+640
+00:38:24,483 --> 00:38:28,266
+those types of functions for us to be able to retrieve content
+
+641
+00:38:28,350 --> 00:38:32,466
+that we're looking for specifically to dates. So we talked about
+
+642
+00:38:32,483 --> 00:38:36,466
+some scalar functions, kind of introduced those briefly, as well
+
+643
+00:38:36,483 --> 00:38:40,466
+as grouped aggregate. We got a really cool demo on Windows functions
+
+644
+00:38:40,200 --> 00:38:41,466
+from Tobias. That was really cool.
+
+645
+00:38:42,483 --> 00:38:45,466
+Some other functions we just briefly talked about are like CHOOSE,
+
+646
+00:38:45,483 --> 00:38:49,466
+and so it's good that we have these functions that allow us to
+
+647
+00:38:49,483 --> 00:38:51,466
+work with these data types when we choose to work with these
+
+648
+00:38:51,483 --> 00:38:56,366
+data types. So this is the way for us to introduce the idea of
+
+649
+00:38:56,450 --> 00:38:59,466
+what data types are all about, how important they are for us
+
+650
+00:38:59,483 --> 00:39:02,466
+to choose the appropriate data type based on what type of values
+
+651
+00:39:03,483 --> 00:39:05,466
+are going to be stored in there and what maybe calculations or
+
+652
+00:39:05,483 --> 00:39:10,233
+tasks that we want to perform with the data that's stored in there.
+
+653
+00:39:10,316 --> 00:39:12,466
+And then we talked about some of the different functions associated
+
+654
+00:39:12,483 --> 00:39:15,466
+with the different data types, like the character data types
+
+655
+00:39:15,483 --> 00:39:18,466
+or string data types, the DATETIME data types. We introduced
+
+656
+00:39:18,483 --> 00:39:21,466
+some of the functions available for us to extract content or
+
+657
+00:39:21,483 --> 00:39:25,466
+portions of those to retrieve and use those portions in a result
+
+658
+00:39:25,483 --> 00:39:28,466
+set, as an example. So what we're going to do is we're going
+
+659
+00:39:28,483 --> 00:39:33,466
+to break for 10 minutes, and when we come back, we're going to
+
+660
+00:39:33,483 --> 00:39:36,466
+go into our next module, and the next module, we're going to
+
+661
+00:39:36,483 --> 00:39:41,466
+get into more detail about understanding more about different
+
+662
+00:39:41,483 --> 00:39:46,300
+options we have for advanced queries with SQL Server 2012.
+

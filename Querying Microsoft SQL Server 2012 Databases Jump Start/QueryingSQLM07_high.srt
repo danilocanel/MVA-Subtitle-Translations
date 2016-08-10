@@ -1,0 +1,3328 @@
+1
+00:00:00,333 --> 00:00:06,333
+[Music]
+
+2
+00:00:17,483 --> 00:00:18,466
+>> All right, folks, welcome back,
+
+3
+00:00:19,483 --> 00:00:21,466
+and we again appreciate you joining us and sticking
+
+4
+00:00:21,483 --> 00:00:25,466
+with us today. We've gone through six modules already. We have
+
+5
+00:00:25,483 --> 00:00:29,466
+two remaining modules, so still some cool, exciting stuff left
+
+6
+00:00:29,483 --> 00:00:33,0
+for us to discuss, so don't go away. You don't want to miss.
+
+7
+00:00:33,483 --> 00:00:36,0
+The next piece here we're going to be introducing is programming
+
+8
+00:00:36,450 --> 00:00:36,466
+with T-SQL.
+
+9
+00:00:38,200 --> 00:00:40,466
+There's enough components or pieces to this where you can actually
+
+10
+00:00:40,483 --> 00:00:44,266
+do some really decent coding with it, so we're going to introduce
+
+11
+00:00:44,350 --> 00:00:46,466
+some of the programming elements within T-SQL.
+
+12
+00:00:47,483 --> 00:00:49,466
+We're going to talk about the fact that you can provide some
+
+13
+00:00:49,483 --> 00:00:54,466
+error handling, so if your script doesn't work correctly, there's
+
+14
+00:00:54,183 --> 00:00:57,466
+a way to do some catching and management of the errors, and we'll
+
+15
+00:00:57,483 --> 00:01:01,466
+talk about the use of transactions when you're scripting out
+
+16
+00:01:01,483 --> 00:01:04,466
+content using T-SQL. So we're going to spend some time talking
+
+17
+00:01:04,483 --> 00:01:07,466
+about that. Now that we're comfortable with retrieving content
+
+18
+00:01:07,483 --> 00:01:10,466
+and updating content and the implementation of defaults, constraints
+
+19
+00:01:10,483 --> 00:01:13,466
+and triggers, let's take a look at how we can manage content
+
+20
+00:01:13,483 --> 00:01:18,200
+and T-SQL programming elements that are available to us for doing so.
+
+21
+00:01:18,283 --> 00:01:20,466
+We've been mentioning this a little bit all day about the batches,
+
+22
+00:01:20,483 --> 00:01:24,466
+the fact that we can create T-SQL batches, which is really just
+
+23
+00:01:24,483 --> 00:01:28,466
+a collection of one or several T-SQL statements that are sent
+
+24
+00:01:28,483 --> 00:01:30,466
+to SQL Server, then they're parsed to make sure they all make
+
+25
+00:01:30,483 --> 00:01:34,466
+sense and things are all in place. They're optimized, and then
+
+26
+00:01:34,483 --> 00:01:38,466
+they're compiled and then they're executed, as according to what
+
+27
+00:01:38,483 --> 00:01:41,400
+we're asking for that script to do. Some statements that you'll
+
+28
+00:01:41,483 --> 00:01:44,466
+find in there that will include CREATE FUNCTION, CREATE PROCEDURE,
+
+29
+00:01:44,483 --> 00:01:48,466
+CREATE VIEW. These can't be combined with others, so there are
+
+30
+00:01:48,183 --> 00:01:50,466
+some restrictions you have to be aware of when you're looking
+
+31
+00:01:50,483 --> 00:01:54,466
+at creating batches and making sure you can combine those types
+
+32
+00:01:54,200 --> 00:01:59,316
+of batches together. This here is an example of a CREATE VIEW statement.
+
+33
+00:01:59,400 --> 00:02:01,466
+We're creating a view. We saw this earlier on, just creating
+
+34
+00:02:01,483 --> 00:02:06,466
+a view, using a SELECT statement to define what columns we want
+
+35
+00:02:06,483 --> 00:02:09,466
+in the view. We're deciding where we're going to pull the content
+
+36
+00:02:09,483 --> 00:02:11,466
+from, and we have a GO on the end of it. Remember, that's our
+
+37
+00:02:11,483 --> 00:02:15,466
+batch terminator. And this will create this view for us within
+
+38
+00:02:15,483 --> 00:02:18,466
+a batch environment. Remember, the beauty of a script or a batch
+
+39
+00:02:18,483 --> 00:02:22,466
+is the ability to have multiple T-SQL statements, and more importantly,
+
+40
+00:02:22,483 --> 00:02:26,466
+if we save that out, we can schedule that to run at a later time.
+
+41
+00:02:26,483 --> 00:02:29,466
+Now, batches are important to understand because they're parsed
+
+42
+00:02:29,483 --> 00:02:33,466
+for syntax as a whole or as a unit. Syntax errors can cause
+
+43
+00:02:33,483 --> 00:02:37,466
+the entire batch to be rejected. Runtime errors may allow the
+
+44
+00:02:37,483 --> 00:02:42,466
+batch to continue after the failure by default, but by default
+
+45
+00:02:42,483 --> 00:02:45,466
+you also won't know that, so you have to be aware of that.
+
+46
+00:02:45,483 --> 00:02:49,466
+So the good news is batches can contain error handling. And you'll
+
+47
+00:02:49,483 --> 00:02:53,433
+see a couple situations here where we've got an INSERT INTO batch,
+
+48
+00:02:53,483 --> 00:02:55,466
+and it's got a couple of values, a couple of rows of values we're
+
+49
+00:02:55,483 --> 00:02:58,466
+adding, and underneath here we've got an invalid batch, where
+
+50
+00:02:58,483 --> 00:03:03,366
+we're doing insert into a table, and that table doesn't exist.
+
+51
+00:03:03,450 --> 00:03:07,466
+The batch is not going to give you any kind of error handling
+
+52
+00:03:07,483 --> 00:03:11,466
+indicating that that was an issue, so we have to build in our
+
+53
+00:03:11,483 --> 00:03:15,466
+own error handling to make sure we cover everything that we want
+
+54
+00:03:15,483 --> 00:03:16,466
+to cover.
+
+55
+00:03:17,300 --> 00:03:20,466
+Now, most often, we're going to want to reuse a batch, so what
+
+56
+00:03:20,483 --> 00:03:23,466
+we're going to want to do is include variables.
+
+57
+00:03:23,483 --> 00:03:28,433
+This here is an example of creating a batch or a variable, so
+
+58
+00:03:28,483 --> 00:03:31,466
+we're going to declare SalesPersonID as an INT 5. We're going
+
+59
+00:03:31,483 --> 00:03:34,450
+to select OrderYear and we're going to do a count on the distinct
+
+60
+00:03:34,483 --> 00:03:37,466
+CustomerIDs, and then from there we're going to do a SELECT statement.
+
+61
+00:03:37,483 --> 00:03:39,466
+We're going to grab the YEAR from OrderDate, and we're going
+
+62
+00:03:39,483 --> 00:03:42,466
+to specify that as OrderYear. Grab the CustomerID. We're going
+
+63
+00:03:42,483 --> 00:03:45,466
+to grab both of these from the SalesOrderHeader, where there's
+
+64
+00:03:46,333 --> 00:03:49,466
+a certain ID that equals the ID that we passed in. So the beauty
+
+65
+00:03:49,200 --> 00:03:51,466
+of this is, I can reuse this batch, because what I'm going do
+
+66
+00:03:51,483 --> 00:03:55,466
+is, every time I run it, I'm going to pass it in a SalesPersonID,
+
+67
+00:03:55,483 --> 00:03:57,466
+and this this job is going to run or these statements are going
+
+68
+00:03:57,483 --> 00:04:00,466
+to be run against this SalesPersonID that I passed. And with
+
+69
+00:04:00,483 --> 00:04:05,466
+that, we'll go in, and we'll create this AS DerivedYear and we'll
+
+70
+00:04:05,183 --> 00:04:09,450
+GROUP BY OrderYear. So this gives us information and is an example
+
+71
+00:04:09,483 --> 00:04:14,466
+of using variables and the reuse of batches by supplying variables
+
+72
+00:04:14,483 --> 00:04:18,466
+that I can include whenever I want to execute that batch.
+
+73
+00:04:18,483 --> 00:04:20,466
+Some additional information on working with variables. You can
+
+74
+00:04:21,483 --> 00:04:25,466
+declare a variable, supply... declare and initialize at the same time.
+
+75
+00:04:25,483 --> 00:04:28,466
+You can supply accessed create multiple variables and we can
+
+76
+00:04:28,483 --> 00:04:33,466
+use these and pass these as parameters into procedures, as they're
+
+77
+00:04:33,483 --> 00:04:36,466
+shown here. They're executing a procedure called ProdsByCategory.
+
+78
+00:04:37,0 --> 00:04:41,466
+@numrows = @numrows, @catid = @catid, or category ID, and this
+
+79
+00:04:41,483 --> 00:04:45,466
+allows us to execute this procedure, use them in variables that
+
+80
+00:04:45,483 --> 00:04:47,416
+we're passing in here.
+
+81
+00:04:48,300 --> 00:04:51,466
+The other thing we can do is, if we get complex names and we're
+
+82
+00:04:51,483 --> 00:04:55,0
+trying to simplify how we're working with some of the objects,
+
+83
+00:04:55,483 --> 00:04:59,466
+we can create what's called a synonym. A synonym is an alias,
+
+84
+00:04:59,483 --> 00:05:03,250
+or it's a link to an object. Now, that object could be a local
+
+85
+00:05:03,333 --> 00:05:06,466
+object or it could be an object on a linked server. They can
+
+86
+00:05:06,483 --> 00:05:09,466
+be used for referencing these objects, and as you can see here,
+
+87
+00:05:09,483 --> 00:05:13,466
+we're going to create a synonym around the MyProduct table, and...
+
+88
+00:05:13,200 --> 00:05:16,466
+I'm sorry. We're going to create a synonym called MyProduct for
+
+89
+00:05:16,483 --> 00:05:19,416
+AdventureWorks.Production.Product, and then we're going to be
+
+90
+00:05:19,483 --> 00:05:22,466
+able to query the product table using the synonym to shorten
+
+91
+00:05:22,483 --> 00:05:26,466
+that name used required for us to reference that object. So we're
+
+92
+00:05:26,483 --> 00:05:31,466
+going to SELECT ProductID and Name from the synonym called MyProduct,
+
+93
+00:05:31,483 --> 00:05:34,466
+WHERE ProductID 5, and then we'll execute that. So if you have
+
+94
+00:05:35,333 --> 00:05:38,466
+lengthy names, link you would in maybe a LINQ server or even
+
+95
+00:05:38,216 --> 00:05:40,466
+some of the product names that your object names, that you're
+
+96
+00:05:40,483 --> 00:05:44,466
+using, if they're multiple-part names that you're using, we can
+
+97
+00:05:44,483 --> 00:05:47,266
+create a synonym for that, and we can use that for
+
+98
+00:05:48,483 --> 00:05:52,466
+accessing that content. These are like any other object. We create
+
+99
+00:05:52,483 --> 00:05:55,466
+them with a CREATE statement, we modify them with the ALTER statement,
+
+100
+00:05:55,483 --> 00:05:58,466
+and we toast them with a DROP statement, because the toast statement
+
+101
+00:05:58,483 --> 00:06:01,466
+isn't there yet, and it doesn't sound like it's going to get
+
+102
+00:06:01,483 --> 00:06:03,466
+there in the near future. Is that what I'm hearing? Correct.
+
+103
+00:06:03,483 --> 00:06:04,366
+>> Okay.
+
+104
+00:06:04,450 --> 00:06:05,466
+>> I just wanted to make sure you haven't changed your mind.
+
+105
+00:06:05,483 --> 00:06:08,466
+It's been a few hours. I thought maybe you might give in just
+
+106
+00:06:09,166 --> 00:06:09,433
+a little bit. Nope, >> no.
+
+107
+00:06:09,450 --> 00:06:09,466
+It's >> not
+
+108
+00:06:09,483 --> 00:06:13,466
+going to happen, so I've got to write my own. Okay. So batches,
+
+109
+00:06:13,483 --> 00:06:17,383
+variables and synonyms, we've got these available to us here.
+
+110
+00:06:17,466 --> 00:06:20,466
+Let's go ahead and take a look at a couple of these here that
+
+111
+00:06:20,483 --> 00:06:22,466
+we've got some set up here.
+
+112
+00:06:23,483 --> 00:06:27,316
+Let's see, where am I? I've got to get into my image this way, here.
+
+113
+00:06:30,483 --> 00:06:33,466
+So here we've got the idea. This is what we saw earlier.
+
+114
+00:06:33,483 --> 00:06:36,466
+We've got DECLARE @SalesPerson_id INT is 283.
+
+115
+00:06:38,466 --> 00:06:40,466
+That's what we're looking for for a salesperson. We'll see if
+
+116
+00:06:40,483 --> 00:06:44,466
+that's even valid. But we're just going to grab this, highlight
+
+117
+00:06:44,483 --> 00:06:47,466
+it, and this is a statement that I walked you through so you'll
+
+118
+00:06:47,483 --> 00:06:50,200
+have at least a little bit of understanding what it's doing for
+
+119
+00:06:50,283 --> 00:06:53,466
+us here. We'll try to execute it, and it doesn't like Sales.SalesOrderHeader,
+
+120
+00:06:53,483 --> 00:06:58,466
+so let's see what I did wrong here. Sales.SalesOrderHeader the...
+
+121
+00:06:58,483 --> 00:07:04,466
+problem is I'm not master database here. I should grab my USE statement.
+
+122
+00:07:04,483 --> 00:07:08,216
+So let me go ahead and throw that back up there. There we go.
+
+123
+00:07:08,300 --> 00:07:09,466
+Now we'll run this baby.
+
+124
+00:07:10,483 --> 00:07:14,466
+And you'll see by order year, 2005, '06, '07 and '08, customer
+
+125
+00:07:14,483 --> 00:07:20,466
+accounts, 13, 24, 25 and 22 for the salesperson 283. So that's
+
+126
+00:07:20,483 --> 00:07:25,466
+the number of customers they had in 2005, so 2006, they almost doubled.
+
+127
+00:07:25,483 --> 00:07:29,466
+2007, they increased only by one, and in 2008 they decreased
+
+128
+00:07:29,483 --> 00:07:33,333
+by a couple, so starting to slack off a little bit there.
+
+129
+00:07:33,483 --> 00:07:37,466
+So that's the idea of how we can use variables within a procedure
+
+130
+00:07:37,483 --> 00:07:41,466
+and then execute them within that procedure. I also want to
+
+131
+00:07:41,483 --> 00:07:46,366
+take a look at the idea of that's... a little too early for
+
+132
+00:07:46,450 --> 00:07:48,433
+that piece. So that's why we're going to look at that piece.
+
+133
+00:07:48,483 --> 00:07:50,466
+We'll come back to this piece a little bit. It's usually an
+
+134
+00:07:50,483 --> 00:07:53,466
+IF OUT statement, but we're going to come back to that in the
+
+135
+00:07:53,483 --> 00:07:58,466
+next session here. So we'll just jump back to our Windows.
+
+136
+00:07:58,483 --> 00:08:02,466
+Is there anything else I wanted to demo in here? We did the variables.
+
+137
+00:08:06,483 --> 00:08:08,466
+No, that pretty much covers the variables.
+
+138
+00:08:09,483 --> 00:08:12,466
+All right, so that's good for that one. Let's jump back to our
+
+139
+00:08:12,200 --> 00:08:17,400
+slide deck here, and inside of here, I'll get the full screen
+
+140
+00:08:17,483 --> 00:08:18,466
+so you can see everything that's going on here.
+
+141
+00:08:19,483 --> 00:08:22,466
+And we're going to look at control of flow options here, how
+
+142
+00:08:22,483 --> 00:08:26,466
+we can control what's going on in a batch and how we can control
+
+143
+00:08:26,483 --> 00:08:31,450
+the route that it takes, if you will, to be able to execute that
+
+144
+00:08:31,483 --> 00:08:33,433
+batch or the statements within that batch.
+
+145
+00:08:33,483 --> 00:08:37,466
+So SQL provides additional elements that control that flow and
+
+146
+00:08:37,483 --> 00:08:39,466
+the execution of statements within there.
+
+147
+00:08:39,483 --> 00:08:43,466
+The default is for statements to execute sequentially, but we
+
+148
+00:08:43,483 --> 00:08:47,350
+can throw things in there like an IF ELSE, a BEGIN END, a WHILE
+
+149
+00:08:47,433 --> 00:08:50,466
+or a RETURN, and that's going to control what happens. So, suddenly,
+
+150
+00:08:50,200 --> 00:08:54,466
+just going sequentially down through the batch file, it's actually
+
+151
+00:08:54,483 --> 00:08:58,466
+going to control using some of these control of flow language
+
+152
+00:08:58,483 --> 00:09:02,466
+elements to be able to decide what rows or where we want to go
+
+153
+00:09:02,483 --> 00:09:05,466
+within that batch. So for here, for an example here, I've got
+
+154
+00:09:05,483 --> 00:09:10,466
+IF OJBECT_ID is Production.Product, and it's a user product,
+
+155
+00:09:10,483 --> 00:09:14,466
+if it's not null, then print, I am here and contain data, so
+
+156
+00:09:14,483 --> 00:09:17,466
+don't delete me. So that's just a basic statement, just a basic
+
+157
+00:09:18,483 --> 00:09:20,466
+IF statement. Now, if we take it to the next level, we can throw
+
+158
+00:09:20,483 --> 00:09:25,466
+an ELSE in there. IF OBJECT_ID is not null, then print, I am
+
+159
+00:09:25,483 --> 00:09:28,466
+here and contain data, so don't delete me. Otherwise, which
+
+160
+00:09:28,483 --> 00:09:31,466
+means it doesn't exist, we can say, table not found, so feel
+
+161
+00:09:31,483 --> 00:09:35,466
+free to create one, so we can specify this. Now, we're controlling
+
+162
+00:09:35,483 --> 00:09:38,466
+what's going to happen here. So now I can go out there and create
+
+163
+00:09:38,483 --> 00:09:41,466
+a table based on this else statement, or I can just bail out
+
+164
+00:09:41,483 --> 00:09:46,466
+of here and say I want to purge data or I want to select perform...
+
+165
+00:09:46,483 --> 00:09:49,466
+a SELECT statement, because I know there's data that resides
+
+166
+00:09:49,483 --> 00:09:53,466
+in this table. So we can use this. Very helpful when we use
+
+167
+00:09:53,483 --> 00:09:57,283
+the EXIST operator, as well. But it's another way this IF ELSE
+
+168
+00:09:57,366 --> 00:10:01,300
+allows us to control the flow of our content. We can also introduce
+
+169
+00:10:01,383 --> 00:10:04,466
+the use of a WHILE, so what we have here is we're going to declare
+
+170
+00:10:04,483 --> 00:10:08,466
+a variable called BusinessEntityID as an integer, and also as
+
+171
+00:10:08,483 --> 00:10:13,466
+a title, as an NVARCHAR(50), and while BusinessEntityID is less
+
+172
+00:10:13,483 --> 00:10:16,416
+than or equal to 10 so... we're going to give it some parameters,
+
+173
+00:10:16,483 --> 00:10:18,466
+we're going to begin and we're going to do a SELECT Title and
+
+174
+00:10:18,483 --> 00:10:23,466
+JobTitle from the Employee table where Business ID equals what
+
+175
+00:10:23,483 --> 00:10:26,300
+we passed in as Business ID we... began with 10 here.
+
+176
+00:10:26,383 --> 00:10:27,466
+We're going to print the title
+
+177
+00:10:29,316 --> 00:10:33,333
+or the NVARCHAR for that BusinessEntityID, and then we're going
+
+178
+00:10:33,483 --> 00:10:36,466
+to set the BusinessEntityID to equal what it is now plus one.
+
+179
+00:10:36,483 --> 00:10:38,466
+Because, eventually, in order for this WHILE loop to end, we've
+
+180
+00:10:39,166 --> 00:10:41,466
+got to get it up to number 10. So the first time it runs through,
+
+181
+00:10:41,483 --> 00:10:45,466
+it's at number one. When I execute this one, it's going to increment
+
+182
+00:10:45,216 --> 00:10:47,166
+it to number two. It's going to run through the WHILE loop a
+
+183
+00:10:47,483 --> 00:10:50,466
+second time, a third, all the way up until it's number 10, and
+
+184
+00:10:50,483 --> 00:10:54,466
+at that point it will end that WHILE loop and the idea of
+
+185
+00:10:56,483 --> 00:11:00,366
+displaying content from the title and the BusinessEntityID.
+
+186
+00:11:00,450 --> 00:11:04,383
+Now, we can also within here use a BREAK or CONTINUE option to
+
+187
+00:11:04,466 --> 00:11:08,466
+break out of this loop, if we want to, so those are ways for us.
+
+188
+00:11:08,483 --> 00:11:10,466
+We don't have to wait for the WHILE loop. We can set up conditions
+
+189
+00:11:10,483 --> 00:11:13,466
+in there where, if a certain condition is met, hey, don't go
+
+190
+00:11:13,483 --> 00:11:17,466
+up to number 10. We have a way for you to bail out of here.
+
+191
+00:11:18,483 --> 00:11:21,250
+So control of flow options, do you have any cool demos you want
+
+192
+00:11:21,333 --> 00:11:23,466
+to show for control of flow options? I've got some of the ones
+
+193
+00:11:23,483 --> 00:11:27,466
+I've just shown. I can use those, which is fine. Go >> ahead,
+
+194
+00:11:27,483 --> 00:11:31,466
+show the demos. I have something in mind for error handling and transactions.
+
+195
+00:11:31,483 --> 00:11:32,466
+Okay, >> perfect.
+
+196
+00:11:32,483 --> 00:11:35,466
+So let me jump over here, then, and we're going to go back in
+
+197
+00:11:35,483 --> 00:11:42,450
+to this image here, and let's let this download a bit here.
+
+198
+00:11:46,400 --> 00:11:49,300
+So in here we've got the IF ELSE statement that we saw a little
+
+199
+00:11:49,383 --> 00:11:53,233
+bit earlier. All right, so over here, we've got IF OBJECT_ID
+
+200
+00:11:53,316 --> 00:11:57,466
+is not null, then print, I'm here. If it is, then print, table
+
+201
+00:11:57,483 --> 00:12:00,466
+not found, so feel free to create one. So this is using the
+
+202
+00:12:00,483 --> 00:12:01,466
+IF ELSE statement.
+
+203
+00:12:02,483 --> 00:12:05,466
+So let's go out here. I'm here and contain data so don't delete
+
+204
+00:12:05,483 --> 00:12:09,466
+me gets printed out for us, so it found this object from this
+
+205
+00:12:09,483 --> 00:12:13,400
+table called OBJECT_ID. It found an object called Production.Product.
+
+206
+00:12:13,483 --> 00:12:17,466
+It's of the type of user, so it's going to display that content
+
+207
+00:12:17,483 --> 00:12:18,466
+for me.
+
+208
+00:12:19,183 --> 00:12:23,466
+Now, with that said that's... more error handling over there.
+
+209
+00:12:23,483 --> 00:12:26,466
+We can also, like I said we... can set up a WHILE loop. I showed
+
+210
+00:12:26,233 --> 00:12:28,466
+you an example of that. I didn't bring that back in. I should
+
+211
+00:12:28,483 --> 00:12:31,350
+have brought that in for us. But we have a WHILE loop. We saw
+
+212
+00:12:31,433 --> 00:12:35,333
+how that would work, and so this is just an example of how that
+
+213
+00:12:35,416 --> 00:12:38,200
+would work for us. And again, we'll make these available for
+
+214
+00:12:38,283 --> 00:12:41,466
+you, so you can take a peek at these babies at a later time.
+
+215
+00:12:43,166 --> 00:12:47,466
+So that's the idea of using control of flow options, using just
+
+216
+00:12:47,483 --> 00:12:50,466
+one example of those. We also have and... what we're going to
+
+217
+00:12:50,483 --> 00:12:55,383
+introduce next is error handling structured... exception handling.
+
+218
+00:12:55,466 --> 00:12:58,466
+So what we can do is use the TRY to run a block of commands,
+
+219
+00:12:58,483 --> 00:13:02,466
+and then we use the CATCH to catch any errors, so it's called
+
+220
+00:13:02,483 --> 00:13:04,466
+the TRY CATCH, obviously.
+
+221
+00:13:04,483 --> 00:13:11,466
+It won't work for everything, so syntax or compile errors won't
+
+222
+00:13:11,483 --> 00:13:15,466
+be caught. Some name resolution errors won't be caught. But what
+
+223
+00:13:15,483 --> 00:13:19,416
+this does, it executes and move to the CATCH block of commands
+
+224
+00:13:19,483 --> 00:13:22,466
+when an error does occur. So we're using the TRY, we're going
+
+225
+00:13:22,483 --> 00:13:25,466
+to the TRY. If there's an error, it jumps out and down to the
+
+226
+00:13:25,483 --> 00:13:30,466
+CATCH environment and it uses the syntax that's in the CATCH environment.
+
+227
+00:13:30,483 --> 00:13:32,466
+This one, you don't need to check every statement to see if an
+
+228
+00:13:32,483 --> 00:13:35,466
+error will occur. If an error does occur, you have to decide
+
+229
+00:13:35,483 --> 00:13:38,466
+when we introduce transactions if an... error does occur, do
+
+230
+00:13:38,483 --> 00:13:42,466
+we want to roll back the transaction and how we want to respond
+
+231
+00:13:42,483 --> 00:13:45,200
+to that transaction, and we'll introduce transactions here in
+
+232
+00:13:45,283 --> 00:13:49,250
+just a little bit. But this does some of the error checking for me.
+
+233
+00:13:49,333 --> 00:13:54,466
+Now, we could also query the error object, so common error object
+
+234
+00:13:54,166 --> 00:13:58,466
+properties that you'll find are ERROR_NUMBER, ERROR_MESSAGE,
+
+235
+00:13:58,483 --> 00:14:02,466
+ERROR_SEVERITY, ERROR_PROCEDURE and ERROR_LINE. Those are functions
+
+236
+00:14:02,483 --> 00:14:05,466
+that we can query, and the properties associated with them are
+
+237
+00:14:05,483 --> 00:14:08,466
+on the left-hand side and the descriptions on the right-hand side.
+
+238
+00:14:08,483 --> 00:14:11,466
+And if you remember that raised error message that you saw earlier,
+
+239
+00:14:11,483 --> 00:14:13,466
+there was a couple of numbers associated with it. There was
+
+240
+00:14:13,483 --> 00:14:18,466
+a severity level number and there was an error number a severity...
+
+241
+00:14:18,200 --> 00:14:21,200
+level and a state number that was associated with that. So these
+
+242
+00:14:21,283 --> 00:14:24,466
+are parts of the error message that you can create to generate
+
+243
+00:14:24,483 --> 00:14:29,466
+your own messages. Values respond or returned correspond to those
+
+244
+00:14:29,483 --> 00:14:33,466
+in that information that's in the sys.messages view that's available
+
+245
+00:14:34,483 --> 00:14:38,466
+here as an object, as a table here a system... table available
+
+246
+00:14:38,483 --> 00:14:39,466
+to us.
+
+247
+00:14:40,483 --> 00:14:43,466
+So this is an example of a TRY block. What we're doing, we're
+
+248
+00:14:43,483 --> 00:14:45,466
+going to begin the TRY, and we're going to force an error.
+
+249
+00:14:45,483 --> 00:14:49,333
+We're going to try to perform a division by zero, which we know
+
+250
+00:14:49,416 --> 00:14:52,466
+will error out. So we're going to do a BEGIN TRY and then SELECT 1/0.
+
+251
+00:14:55,483 --> 00:14:57,466
+If there's an error, we're going to jump down into this BEGIN
+
+252
+00:14:57,483 --> 00:15:00,466
+CATCH, and what this is going to do is it's going to report information.
+
+253
+00:15:00,483 --> 00:15:03,466
+So the ERROR_NUMBER is, and so what it define is, in the CATCH,
+
+254
+00:15:03,483 --> 00:15:06,466
+we define what we want returned to us. Well, I want to know
+
+255
+00:15:06,483 --> 00:15:09,466
+the ERROR_NUMBER. That's one of the items in that table I showed
+
+256
+00:15:09,483 --> 00:15:12,466
+you previously. I want to know the severity of that error.
+
+257
+00:15:13,166 --> 00:15:15,466
+That's right here. I want to know the error state.
+
+258
+00:15:16,250 --> 00:15:19,266
+If there's a procedure, I want to know if there's an error procedure.
+
+259
+00:15:19,350 --> 00:15:22,466
+I want to know what line number that error occurred on, and lastly,
+
+260
+00:15:23,300 --> 00:15:26,300
+if there's an error message that's returned, I want to see what
+
+261
+00:15:26,383 --> 00:15:30,466
+the error message is that's returned so I have an idea of what
+
+262
+00:15:30,483 --> 00:15:34,466
+I need to try to troubleshoot. So this is fairly straightforward.
+
+263
+00:15:34,483 --> 00:15:37,333
+You know it's going to generate an error, because we're trying
+
+264
+00:15:37,483 --> 00:15:40,466
+to divide by zero, which for some reason it doesn't work, whether
+
+265
+00:15:40,483 --> 00:15:43,466
+it's Celsius or Fahrenheit. So the TRY and CATCH blocks won't
+
+266
+00:15:43,483 --> 00:15:46,466
+catch everything, just to let you know. So this is an example,
+
+267
+00:15:46,483 --> 00:15:50,466
+we get a BEGIN TRY up here, table does not exist. We're going
+
+268
+00:15:50,200 --> 00:15:54,283
+to do a SELECT * FROM * IDontExist table, and we're going to
+
+269
+00:15:54,366 --> 00:15:57,466
+END TRY. The CATCH is going to be BEGIN CATCH, SELECT ERROR_NUMBER
+
+270
+00:15:57,483 --> 00:16:01,466
+and ERROR_MESSAGE. The bad news is, we're not going to use this here.
+
+271
+00:16:01,483 --> 00:16:04,266
+We're going to just jump out, and it's not going to pick this
+
+272
+00:16:04,350 --> 00:16:09,466
+up, because some name resolution, like it can't find this IDontExist,
+
+273
+00:16:09,483 --> 00:16:14,466
+the TRY CATCH won't work for that. So not all errors can be
+
+274
+00:16:14,483 --> 00:16:18,466
+caught by TRY CATCH. Some syntax, some compilation errors and
+
+275
+00:16:18,483 --> 00:16:22,466
+some name resolution errors won't be picked up by the TRY CATCH.
+
+276
+00:16:22,483 --> 00:16:26,466
+So what you need to do is make sure you test everything and not
+
+277
+00:16:26,483 --> 00:16:29,466
+assume that's going to catch the fact if there's an error.
+
+278
+00:16:29,483 --> 00:16:34,466
+Cause an error on purpose that you would want to be thrown over
+
+279
+00:16:34,483 --> 00:16:38,466
+into the CATCH area so it would execute and display the message
+
+280
+00:16:38,483 --> 00:16:42,0
+that's associated with that. Speaking of THROW, here's the using
+
+281
+00:16:42,483 --> 00:16:44,466
+the THROW statement. Tobias talked about that earlier, where
+
+282
+00:16:44,483 --> 00:16:48,200
+he said instead of using the RAISERROR, you might want to use
+
+283
+00:16:48,283 --> 00:16:51,333
+the new SQL Server 2012 THROW statement.
+
+284
+00:16:51,483 --> 00:16:55,0
+It's kind of replacing and I'll use replacing... in quotes, here.
+
+285
+00:16:55,483 --> 00:16:58,466
+The THROW allows choices when handling your errors, so we're
+
+286
+00:16:58,483 --> 00:17:01,216
+going to perform that BEGIN TRY and the SELECT. We're going
+
+287
+00:17:01,300 --> 00:17:05,466
+to divide by 100 100 divided by zero,... and we're going to
+
+288
+00:17:05,483 --> 00:17:08,466
+set that up as a problem. And then at the end of the TRY, we're
+
+289
+00:17:08,483 --> 00:17:12,433
+going to BEGIN a CATCH, and the PRINT, Code inside CATCH is beginning.
+
+290
+00:17:12,483 --> 00:17:14,466
+The MyError is going to CAST an ERROR_NUMBER as VARCHAR, and
+
+291
+00:17:14,483 --> 00:17:21,466
+then we're going to THROW that. So THROW was introduced in 2012,
+
+292
+00:17:22,333 --> 00:17:25,400
+and we're going to use that THROW that's going to give me some
+
+293
+00:17:25,483 --> 00:17:29,466
+choices for what happens and how I respond to an error that occurs
+
+294
+00:17:30,483 --> 00:17:34,466
+in this case here, in that TRY section. So we can use the THROW
+
+295
+00:17:34,483 --> 00:17:39,466
+for passing parameters to a user-defined error, or without parameters
+
+296
+00:17:39,483 --> 00:17:43,466
+to reraise an original error, the error that was caused originally
+
+297
+00:17:43,483 --> 00:17:47,466
+by that. Now, you said, are you ready do you want to... go show
+
+298
+00:17:47,483 --> 00:17:51,466
+this cool demo, error handling. Yes. I'm not so >> sure
+
+299
+00:17:51,483 --> 00:17:54,466
+about the cool part. But we will I'm absolutely confident it's...
+
+300
+00:17:54,483 --> 00:17:56,466
+>> going to be cool. We'll show something. Yes, >> let's
+
+301
+00:17:57,333 --> 00:18:00,466
+do that. So, first of all, just mentioning a little bit more
+
+302
+00:18:00,483 --> 00:18:04,466
+details around this whole what we catch and what we don't catch.
+
+303
+00:18:06,483 --> 00:18:11,466
+The big thing here is really around what type of error it is,
+
+304
+00:18:11,483 --> 00:18:17,466
+so just like Brian mentioned, if it's a syntax error, we won't
+
+305
+00:18:17,483 --> 00:18:21,266
+be able to catch it, as well as if it's a name resolution error,
+
+306
+00:18:21,350 --> 00:18:24,316
+and that's due to the fact that we haven't started executing yet.
+
+307
+00:18:24,400 --> 00:18:27,466
+So when you send a batch to the server, what we start with is
+
+308
+00:18:27,483 --> 00:18:30,466
+just we get a bunch of text, right? So we look at the text and
+
+309
+00:18:31,166 --> 00:18:33,466
+say what's in this text? And if I can't figure out what's the
+
+310
+00:18:33,483 --> 00:18:38,466
+text, I don't know that there is a TRY, CATCH, etc. hiding in
+
+311
+00:18:38,483 --> 00:18:41,466
+there, so the error happens before the TRY block is actually started.
+
+312
+00:18:41,483 --> 00:18:43,466
+Same goes for name resolution. If you're trying to reference
+
+313
+00:18:44,166 --> 00:18:48,466
+a table, when I try to compile the statement, I don't know what
+
+314
+00:18:48,166 --> 00:18:48,466
+it is.
+
+315
+00:18:49,400 --> 00:18:51,466
+But you can get around these things if you're generating SQL
+
+316
+00:18:51,483 --> 00:18:55,466
+statements automatically or manually, rather. Then... you can
+
+317
+00:18:55,483 --> 00:18:58,466
+catch it. So I'll just show an example of that, and we'll show
+
+318
+00:18:58,483 --> 00:19:02,466
+some other examples that are interesting, especially with regards
+
+319
+00:19:02,483 --> 00:19:04,333
+to THROW.
+
+320
+00:19:05,216 --> 00:19:09,466
+So starting out, we'll just do BEGIN TRY,
+
+321
+00:19:10,483 --> 00:19:12,466
+just SELECT 1/0, as
+
+322
+00:19:15,483 --> 00:19:18,466
+Brian likes. That seems to be his favorite error,
+
+323
+00:19:20,183 --> 00:19:23,466
+and CATCH. So let's just start with this. If I just execute
+
+324
+00:19:23,483 --> 00:19:26,466
+this, aha, clearly, divide by zero.
+
+325
+00:19:27,483 --> 00:19:29,466
+Now, the point of the CATCH clause is always if anything happens
+
+326
+00:19:29,483 --> 00:19:33,466
+within the TRY block, provided I get to start executing, I'll
+
+327
+00:19:33,483 --> 00:19:36,466
+move to the CATCH block. So if I just execute this, you can see
+
+328
+00:19:37,483 --> 00:19:38,466
+I didn't get any result back.
+
+329
+00:19:40,250 --> 00:19:44,466
+Now, we can just put an empty THROW in here just to see that
+
+330
+00:19:44,483 --> 00:19:48,466
+with THROW it just throws whatever we caught in the CATCH block,
+
+331
+00:19:48,483 --> 00:19:52,316
+so we get the actual error message back.
+
+332
+00:19:53,216 --> 00:19:59,433
+So now, with regards to this syntax error, so let's say I do
+
+333
+00:19:59,483 --> 00:20:02,466
+hey in between here, you can see it didn't catch it, because
+
+334
+00:20:02,483 --> 00:20:05,466
+we didn't manage to parse this. So this text that came to us
+
+335
+00:20:05,483 --> 00:20:09,283
+didn't make sense. But what I could do is I could say, well,
+
+336
+00:20:09,366 --> 00:20:14,466
+I want to execute. So you can execute stored procedures, as Brian
+
+337
+00:20:14,483 --> 00:20:17,466
+already showed. You can also execute what's called dynamic SQL,
+
+338
+00:20:18,433 --> 00:20:21,466
+which means I pass a string in, the server compiles it and tries
+
+339
+00:20:21,483 --> 00:20:25,466
+to run it. Now, that thing actually happens within the TRY block.
+
+340
+00:20:26,483 --> 00:20:27,466
+So I'll say here,
+
+341
+00:20:28,483 --> 00:20:30,466
+_BEGIN scoobidoo.
+
+342
+00:20:32,483 --> 00:20:36,466
+There we go.
+
+343
+00:20:37,483 --> 00:20:41,466
+And now you can see incorrect syntax near scoobidoo, and let
+
+344
+00:20:41,216 --> 00:20:44,216
+me just add a SELECT 1 in front of this. We see
+
+345
+00:20:46,200 --> 00:20:49,466
+clearly the SELECT 1 happens. So you can see how in this case
+
+346
+00:20:49,483 --> 00:20:52,466
+we catch name resolution error or,
+
+347
+00:20:53,483 --> 00:20:56,466
+for example in this case, the syntax errors. So that kind of
+
+348
+00:20:56,483 --> 00:20:57,366
+makes sense.
+
+349
+00:20:57,483 --> 00:21:01,466
+Now, the other thing I wanted to mention, which is more somewhat
+
+350
+00:21:02,416 --> 00:21:08,466
+less clear is this RAISERROR, why you should look at using THROW instead.
+
+351
+00:21:09,266 --> 00:21:14,466
+And let's just try it quickly. So RAISERROR, and why I say RAISERROR
+
+352
+00:21:14,166 --> 00:21:18,466
+and not RAISEERROR is there is only one E. Definitely, yes.
+
+353
+00:21:18,483 --> 00:21:20,433
+And I >> look
+
+354
+00:21:20,450 --> 00:21:20,466
+at >> this
+
+355
+00:21:21,333 --> 00:21:23,466
+as the intelli-sense of the '80s, right?
+
+356
+00:21:24,483 --> 00:21:25,466
+So it's a little bit shorter.
+
+357
+00:21:26,483 --> 00:21:31,466
+And I say okay. The error message will pass an error here, and
+
+358
+00:21:31,483 --> 00:21:32,466
+16, 1.
+
+359
+00:21:33,483 --> 00:21:36,466
+So this is the message we're going to send to the client.
+
+360
+00:21:37,483 --> 00:21:42,266
+This is the severity level. It can be zero to 25 16 means miscellaneous user...
+
+361
+00:21:42,350 --> 00:21:47,466
+error. The more important thing is, if it's below 11, the client,
+
+362
+00:21:47,483 --> 00:21:52,466
+like .NET, ODBC and whatever, won't raise an error on the client
+
+363
+00:21:52,483 --> 00:21:55,466
+side, so it's considered an informational message. If it's above
+
+364
+00:21:55,483 --> 00:22:01,466
+10, it's an error message. If it's above 19 in SQL Server, so
+
+365
+00:22:01,483 --> 00:22:04,466
+in 20 and up, it's considered a fatal error, and we'll go and
+
+366
+00:22:05,483 --> 00:22:08,466
+cut your connection when we see that. So that's obviously, you
+
+367
+00:22:08,483 --> 00:22:13,216
+then can't... go and handle those errors. So RAISERROR 16, and
+
+368
+00:22:13,300 --> 00:22:15,333
+then after that I'll just put the SELECT 1.
+
+369
+00:22:15,483 --> 00:22:20,250
+And as you can see, both of these happen, right? So by default
+
+370
+00:22:20,333 --> 00:22:23,466
+with RAISERROR, the only thing we actually do is send the error
+
+371
+00:22:23,483 --> 00:22:25,466
+message to the client, but we continue processing. Okay, so
+
+372
+00:22:25,483 --> 00:22:26,466
+that's all fine.
+
+373
+00:22:27,483 --> 00:22:31,216
+Let's now say we create a procedure that's called sp1,
+
+374
+00:22:34,183 --> 00:22:36,466
+and all it does is RAISERROR 61,
+
+375
+00:22:38,483 --> 00:22:40,466
+and then we create a procedure sp2
+
+376
+00:22:42,483 --> 00:22:47,466
+let's just have sp1.... That's going to be enough, probably.
+
+377
+00:22:48,483 --> 00:22:52,400
+Okay, good. So someone has been using sp1 for a long time, right?
+
+378
+00:22:52,483 --> 00:22:56,466
+So let's say that they do BEGIN transaction, and we'll go into
+
+379
+00:22:56,483 --> 00:22:58,466
+transactions a little more later, but then they do a bunch of
+
+380
+00:22:58,483 --> 00:23:03,466
+stuff here, so SELECT 1 is super-important. And they do COMMIT
+
+381
+00:23:05,166 --> 00:23:06,266
+transaction after.
+
+382
+00:23:09,483 --> 00:23:12,466
+And this clearly works fine, right? So we sent there error message
+
+383
+00:23:12,483 --> 00:23:15,466
+to the client, and then you go continue to SELECT 1, and then
+
+384
+00:23:15,483 --> 00:23:19,450
+you go continue to complete your transaction. Now, someone,
+
+385
+00:23:19,483 --> 00:23:22,466
+and this procedure has been there since the beginning of the
+
+386
+00:23:22,233 --> 00:23:26,466
+ages, which is very common with databases, right? So I'll go
+
+387
+00:23:26,483 --> 00:23:29,466
+ahead and say, well, I want to use this in a TRY block.
+
+388
+00:23:32,483 --> 00:23:36,416
+And then I'll have BEGIN CATCH, END CATCH,
+
+389
+00:23:37,483 --> 00:23:43,466
+and let's just do a THROW in here to re-throw the error. So the
+
+390
+00:23:44,483 --> 00:23:47,466
+procedure looks exactly the same as before. I didn't change this.
+
+391
+00:23:47,483 --> 00:23:50,466
+I just changed where I'm calling it from, and now when I run
+
+392
+00:23:50,483 --> 00:23:54,466
+this, you notice that SELECT 1 doesn't happen, right? And COMMIT
+
+393
+00:23:54,483 --> 00:23:56,466
+didn't happen, either, so the transaction is still open, and
+
+394
+00:23:57,483 --> 00:24:01,350
+I have to go and COMMIT it after, right? So this is a pretty
+
+395
+00:24:01,433 --> 00:24:05,466
+big problem, right? This means that, depending on how the procedure
+
+396
+00:24:05,483 --> 00:24:06,466
+is dynamically
+
+397
+00:24:09,483 --> 00:24:12,466
+executed what's the word?
+
+398
+00:24:12,483 --> 00:24:13,450
+Sorry....
+
+399
+00:24:14,350 --> 00:24:20,466
+How it's called, how it's nested so if it's nested...
+
+400
+00:24:20,483 --> 00:24:25,466
+inside a TRY block, it behaves differently than if it's nested
+
+401
+00:24:25,483 --> 00:24:30,466
+not with inside a TRY block, which control flow now depends on
+
+402
+00:24:30,483 --> 00:24:35,233
+how the caller calls the procedure, which can be a huge cause
+
+403
+00:24:35,316 --> 00:24:39,316
+of errors. So this means that RAISERROR can sometimes change
+
+404
+00:24:39,400 --> 00:24:42,466
+your control flow and sometimes not. So that's a big reason
+
+405
+00:24:42,483 --> 00:24:46,466
+why you would like to avoid using it. So THROW, the difference
+
+406
+00:24:46,483 --> 00:24:50,466
+is just that THROW always breaks. It always aborts. So if I
+
+407
+00:24:50,483 --> 00:24:53,466
+just try this exact same thing,
+
+408
+00:24:55,333 --> 00:24:58,466
+I'll just copy this,
+
+409
+00:25:00,383 --> 00:25:03,350
+and instead of this, I'll say THROW, and I have to say the error numbers.
+
+410
+00:25:03,433 --> 00:25:06,466
+I'll just say 50,000, which is the lowest that you can throw
+
+411
+00:25:06,483 --> 00:25:10,466
+yourself, the message, severity level sorry, severity level is...
+
+412
+00:25:11,0 --> 00:25:14,466
+always 16 with THROW, and then SELECT 1.
+
+413
+00:25:15,483 --> 00:25:19,466
+Now you can see we never got to SELECT 1, because THROW automatically
+
+414
+00:25:19,483 --> 00:25:20,466
+aborted the batch.
+
+415
+00:25:21,233 --> 00:25:24,450
+So now sp2, we'll just do the THROW here.
+
+416
+00:25:25,483 --> 00:25:27,300
+I will do EXEC sp2,
+
+417
+00:25:29,433 --> 00:25:33,450
+and we can see that it never got to SELECT 1 or COMMIT, so we
+
+418
+00:25:33,483 --> 00:25:35,283
+would find this bug immediately, right?
+
+419
+00:25:35,483 --> 00:25:40,400
+It always behaves the same, meaning that now when I run this
+
+420
+00:25:40,483 --> 00:25:44,466
+sp2 in the TRY block, it behaves just as if I ran sp2
+
+421
+00:25:45,483 --> 00:25:50,350
+outside the TRY block, so THROW is just more consistent than
+
+422
+00:25:50,433 --> 00:25:54,466
+RAISERROR, and that's why we recommend using THROW instead of RAISERROR.
+
+423
+00:25:56,450 --> 00:25:56,466
+Very nice.
+
+424
+00:25:57,483 --> 00:25:59,166
+Okay, so >> speaking
+
+425
+00:25:59,483 --> 00:26:02,233
+of transactions, great segue for transactions for us. We're going
+
+426
+00:26:02,316 --> 00:26:05,466
+to talk about transactions in this next piece here. I got a
+
+427
+00:26:05,483 --> 00:26:09,466
+little ahead of myself. Let's talk about there we go, transactions,...
+
+428
+00:26:09,483 --> 00:26:12,466
+that baby right there. So we're going to talk about transactions,
+
+429
+00:26:12,483 --> 00:26:16,416
+because a very important part of our especially for programming, we...
+
+430
+00:26:16,483 --> 00:26:22,333
+want to make sure that certain transactions or statements are
+
+431
+00:26:22,483 --> 00:26:25,466
+handled consistently, or if you have multiple statements that
+
+432
+00:26:25,483 --> 00:26:28,466
+need to happen all at once, and if one doesn't work, then none
+
+433
+00:26:28,483 --> 00:26:30,466
+of them should work. That's pretty much where you're going to
+
+434
+00:26:30,483 --> 00:26:33,466
+want to use a transaction. So let's say you're in the banking
+
+435
+00:26:33,483 --> 00:26:36,466
+industry, and you want to move some money from your savings to
+
+436
+00:26:36,483 --> 00:26:39,466
+checking account. Well, there's going to be an update statement,
+
+437
+00:26:39,483 --> 00:26:42,466
+and the update statement is going to so we're going to...
+
+438
+00:26:42,483 --> 00:26:44,466
+move from savings to checking. We're going to update the statement
+
+439
+00:26:44,483 --> 00:26:48,466
+to say deduct $500 from my savings account. I'm going to have
+
+440
+00:26:48,483 --> 00:26:53,466
+another statement update statement that says... add $500 to
+
+441
+00:26:53,483 --> 00:26:56,466
+my checking account. Now, if I can put that inside a transaction,
+
+442
+00:26:56,483 --> 00:27:01,250
+I could update $500 update, run the statement... that goes against
+
+443
+00:27:01,333 --> 00:27:05,466
+my savings that deducts the $500, but if the system happens to
+
+444
+00:27:05,483 --> 00:27:08,466
+bail on me at that point, it never gets to that second statement
+
+445
+00:27:08,483 --> 00:27:12,350
+that says, oh, yeah, you're supposed to deduct $500 from savings,
+
+446
+00:27:12,433 --> 00:27:16,466
+but oh, by the way, you're also supposed to add $500 to the checking.
+
+447
+00:27:16,483 --> 00:27:19,466
+If I don't have that in a transaction where it's handled as a
+
+448
+00:27:19,483 --> 00:27:22,466
+single unit of work, I'm not going to have that $500. I'm going
+
+449
+00:27:22,483 --> 00:27:25,466
+to lose $500. I'm pretty sure my bank doesn't use transactions,
+
+450
+00:27:25,483 --> 00:27:28,466
+and I'm losing money all the time, so it's got to be because
+
+451
+00:27:28,483 --> 00:27:31,350
+you're not using transactions. I don't know. It seems like money
+
+452
+00:27:31,433 --> 00:27:34,466
+just seems to disappear. But, anyway, we'll look into that.
+
+453
+00:27:34,483 --> 00:27:38,166
+So information like that, where it has to be handled as a unit
+
+454
+00:27:38,250 --> 00:27:42,466
+of work, if one fails, then everything has to fail, we can surround
+
+455
+00:27:42,216 --> 00:27:46,466
+that as Tobias just pointed... out, we use a BEGIN TRAN and a
+
+456
+00:27:46,483 --> 00:27:50,466
+COMMIT TRAN to say, hey, look, this is not just a single statement
+
+457
+00:27:50,483 --> 00:27:53,466
+that needs to execute. This is a series of statements that need
+
+458
+00:27:53,483 --> 00:27:57,350
+to execute, and if you can't complete, get down to that bottom
+
+459
+00:27:57,433 --> 00:28:00,216
+piece where it says END TRAN, then we don't want anything to
+
+460
+00:28:00,300 --> 00:28:04,466
+occur in that transaction. We want to roll that back. So that's
+
+461
+00:28:04,200 --> 00:28:06,466
+what we're looking at, that's what a transaction is all about here.
+
+462
+00:28:06,483 --> 00:28:09,466
+So this is an example. It's a group of tasks defined as a unit
+
+463
+00:28:09,483 --> 00:28:13,466
+of work. These two tasks make up a unit of work. INSERT INTO SalesOrderHeader.
+
+464
+00:28:13,483 --> 00:28:17,466
+We have a new order that came in. Well, this is the general
+
+465
+00:28:17,483 --> 00:28:21,0
+information about the order in the OrderHeader table, but the
+
+466
+00:28:21,483 --> 00:28:24,466
+details are in the OrderDetail table. So we want to make sure
+
+467
+00:28:24,483 --> 00:28:28,450
+if we're adding content in the SalesOrderHeader table, that the
+
+468
+00:28:28,483 --> 00:28:33,433
+content or the details about that also get added into the details table.
+
+469
+00:28:33,483 --> 00:28:35,466
+So we want to make sure we can do that. And if we can't do that,
+
+470
+00:28:35,483 --> 00:28:38,466
+then we're going to have a problem, so we need to make sure that
+
+471
+00:28:38,483 --> 00:28:42,166
+we have a way to resolve that problem or how we're going to manage
+
+472
+00:28:42,450 --> 00:28:42,466
+that problem.
+
+473
+00:28:44,483 --> 00:28:47,466
+So the need for transactions or issues with batches. So we have
+
+474
+00:28:47,483 --> 00:28:50,333
+a batch with transaction management. We're going to do that
+
+475
+00:28:50,483 --> 00:28:53,466
+insert into this one succeeds, this... one fails.
+
+476
+00:28:54,483 --> 00:28:57,466
+We have the idea of catching the error, but the problem with
+
+477
+00:28:57,483 --> 00:29:00,466
+this is this is simple error... handling, but it's not going
+
+478
+00:29:00,483 --> 00:29:02,466
+to repair the fact that this already got inserted.
+
+479
+00:29:03,316 --> 00:29:06,466
+The information in the SalesOrderHeader was added, but this wasn't.
+
+480
+00:29:06,483 --> 00:29:09,466
+Hey, by the way, we had a problem, but we still have inconsistency
+
+481
+00:29:10,483 --> 00:29:13,466
+in our data, because we have information in the header table
+
+482
+00:29:13,483 --> 00:29:16,466
+but we don't have information in the detail table. So what we're
+
+483
+00:29:16,483 --> 00:29:20,216
+going to want to do is we're going to want to introduce, as we
+
+484
+00:29:20,300 --> 00:29:23,333
+were just seeing just a little bit ago, the BEGIN TRANSACTION.
+
+485
+00:29:23,483 --> 00:29:27,466
+Hey, what I want to do as a whole entire unit of work is I want
+
+486
+00:29:27,483 --> 00:29:32,466
+to include this in the TRY CATCH, but what I want to do is begin
+
+487
+00:29:33,483 --> 00:29:36,466
+a transaction, and I want to insert into the header table.
+
+488
+00:29:36,483 --> 00:29:41,466
+I also want to need to insert the details about that into the
+
+489
+00:29:41,483 --> 00:29:44,466
+details table. And then if nothing happens, if both of these
+
+490
+00:29:45,333 --> 00:29:48,283
+are successful, meaning there's no errors, then we're going to
+
+491
+00:29:48,366 --> 00:29:51,466
+commit that transaction. But oh, by the way, if there's a problem,
+
+492
+00:29:51,483 --> 00:29:55,233
+what we want to do is get into the BEGIN CATCH, and what we're
+
+493
+00:29:55,316 --> 00:29:57,466
+going to do is we want to clean that up. And what we're going
+
+494
+00:29:57,166 --> 00:30:01,466
+to do is say, hey, if you threw me down in here from the TRY,
+
+495
+00:30:01,483 --> 00:30:04,466
+there must have been a problem with that unit of work.
+
+496
+00:30:04,483 --> 00:30:08,450
+Something or everything didn't execute. It could be two commands,
+
+497
+00:30:08,483 --> 00:30:11,466
+it could be 200 commands, statements.
+
+498
+00:30:11,483 --> 00:30:15,466
+If they all 200 I don't care if 199 executed.... If all 200
+
+499
+00:30:15,483 --> 00:30:18,466
+of them didn't execute, then we want to, instead of committing
+
+500
+00:30:18,483 --> 00:30:22,466
+that transaction, we want to roll back that transaction, which
+
+501
+00:30:23,483 --> 00:30:26,466
+means it's going to back up to the SalesOrderHeader table, it's
+
+502
+00:30:26,483 --> 00:30:32,466
+going to roll back that and not apply or insert this record into
+
+503
+00:30:32,183 --> 00:30:35,466
+that SalesOrderHeader information. So we talked about briefly
+
+504
+00:30:35,483 --> 00:30:38,216
+earlier today, we talked about the... idea of items get written
+
+505
+00:30:38,300 --> 00:30:41,466
+into the transaction log and then eventually they're written
+
+506
+00:30:41,483 --> 00:30:45,466
+to the MDF file or to the data file. This is what's going to
+
+507
+00:30:46,333 --> 00:30:49,350
+happen, is it's going to see when we roll back that transaction.
+
+508
+00:30:49,433 --> 00:30:52,466
+It will never commit that or write that to that MDF file, to
+
+509
+00:30:52,483 --> 00:30:55,466
+kind of say it in an easier term here.
+
+510
+00:30:56,483 --> 00:31:00,166
+So we create a unit of work by indicating that we want to use
+
+511
+00:31:00,483 --> 00:31:03,466
+the BEGIN TRANSACTION statement. That marks that starting point
+
+512
+00:31:03,483 --> 00:31:07,466
+of an explicit user-defined transaction, and then we wait and
+
+513
+00:31:07,483 --> 00:31:13,183
+we apply all these in order, and we wait for that COMMIT TRANSACTION.
+
+514
+00:31:13,266 --> 00:31:15,466
+If we never see that COMMIT TRANSACTION, then we know there's
+
+515
+00:31:16,0 --> 00:31:19,466
+an error. If we have a BEGIN, we need to have a COMMIT TRANSACTION
+
+516
+00:31:20,483 --> 00:31:22,466
+or we need to have a ROLLBACK TRANSACTION in order for that.
+
+517
+00:31:23,166 --> 00:31:26,466
+So a BEGIN TRANSACTION and then an END TRANSACTION, and we can
+
+518
+00:31:26,483 --> 00:31:29,466
+have a COMMIT or a ROLLBACK associated with those, to make sure
+
+519
+00:31:29,483 --> 00:31:34,466
+that we have that content associated with that information is
+
+520
+00:31:34,483 --> 00:31:39,466
+updated, like I... talked about with my checking and my savings accounts.
+
+521
+00:31:39,483 --> 00:31:43,233
+So here's my BEGIN TRAN. All right, we're going to insert in
+
+522
+00:31:43,316 --> 00:31:46,466
+the SalesOrderHeader table. Here's my SalesOrderDetail table.
+
+523
+00:31:46,483 --> 00:31:49,466
+If we make it down to the COMMIT TRAN, everything's beauteous.
+
+524
+00:31:49,483 --> 00:31:52,466
+We don't need to worry about throwing anything into the CATCH
+
+525
+00:31:52,183 --> 00:31:56,466
+block, and we're going to be able to make sure our content is
+
+526
+00:31:56,483 --> 00:32:00,466
+added in both tables. In my case here, is added to both my savings
+
+527
+00:32:00,483 --> 00:32:03,466
+and my checking account were updated appropriately. As this
+
+528
+00:32:03,483 --> 00:32:06,466
+is alluding to, this is updating. It's adding content into my
+
+529
+00:32:06,483 --> 00:32:11,466
+header table and to my details table to make sure that content
+
+530
+00:32:11,183 --> 00:32:15,466
+remains in sync with each other here. So in your T-SQL code,
+
+531
+00:32:15,483 --> 00:32:18,466
+if a transaction is successful, we want to make sure that we
+
+532
+00:32:18,483 --> 00:32:22,466
+commit that transaction. If we have any issues, we want to roll
+
+533
+00:32:22,483 --> 00:32:25,466
+that transaction back, so this is where we begin the CATCH.
+
+534
+00:32:25,483 --> 00:32:30,466
+Now, the TRY failed. It's going to push us down into the CATCH block.
+
+535
+00:32:30,483 --> 00:32:33,466
+We're going to select the error number, and we're going to ROLLBACK
+
+536
+00:32:33,483 --> 00:32:36,466
+that transaction, which means anything that was supposed to be
+
+537
+00:32:36,483 --> 00:32:40,466
+applied up top into the TRY block, supposed to be applied to
+
+538
+00:32:40,483 --> 00:32:43,466
+that header table, don't apply it to the header table, because
+
+539
+00:32:43,483 --> 00:32:47,466
+we never made it down to the details table. That content was
+
+540
+00:32:47,483 --> 00:32:50,466
+never added. We got thrown down into this CATCH block, which
+
+541
+00:32:50,483 --> 00:32:53,383
+means something happened up top and we want to make sure that
+
+542
+00:32:53,466 --> 00:32:56,466
+nothing gets applied to those tables, because otherwise we'll
+
+543
+00:32:56,483 --> 00:32:58,466
+have a header
+
+544
+00:33:01,483 --> 00:33:04,466
+a row in the header table,... and we won't have any details about
+
+545
+00:33:04,183 --> 00:33:06,466
+that row that's in the header table. So if that error occurs,
+
+546
+00:33:07,483 --> 00:33:09,466
+we're going to ROLLBACK that transaction, and we'll have to retry
+
+547
+00:33:10,333 --> 00:33:14,466
+that transaction to see if we can get that transaction to be successful.
+
+548
+00:33:14,483 --> 00:33:18,466
+So we'll just come back around and try that transaction again.
+
+549
+00:33:18,483 --> 00:33:21,466
+Now, by default, SQL Server doesn't automatically ROLLBACK transaction
+
+550
+00:33:21,483 --> 00:33:22,466
+when errors occur.
+
+551
+00:33:23,483 --> 00:33:27,416
+To roll them back, you can use the ROLLBACK statements in error
+
+552
+00:33:27,483 --> 00:33:32,433
+handling, as we just talked about, or enable this exact oh, back
+
+553
+00:33:32,450 --> 00:33:32,466
+to one.
+
+554
+00:33:33,483 --> 00:33:37,466
+I call... it XACT_ABORT, but specifies whether SQL Server is
+
+555
+00:33:37,483 --> 00:33:40,466
+going to automatically roll that back. When this is on, your
+
+556
+00:33:40,483 --> 00:33:43,416
+entire transaction is terminated and the ROLLBACK on the error
+
+557
+00:33:43,483 --> 00:33:46,466
+will occur, unless it's occurring within a TRY block. If it's
+
+558
+00:33:47,483 --> 00:33:50,466
+off, which is your default setting, you should decide how you're
+
+559
+00:33:50,483 --> 00:33:54,466
+going to handle the error handling for transactions, and it's
+
+560
+00:33:54,483 --> 00:33:57,466
+easy to turn on using this statement here if you want to turn
+
+561
+00:33:57,483 --> 00:34:02,466
+that on. So demo on this, do you have anything lined up for us?
+
+562
+00:34:02,483 --> 00:34:04,233
+Yes, yes. I thought you'd have >> something
+
+563
+00:34:04,316 --> 00:34:04,466
+slick >> for
+
+564
+00:34:04,483 --> 00:34:07,466
+this one. I was thinking of that, yes.
+
+565
+00:34:07,200 --> 00:34:12,466
+>> No, so we'll this is one of these pretty... important things, right?
+
+566
+00:34:12,183 --> 00:34:17,466
+So show the kind of standard example and just what you need to
+
+567
+00:34:17,200 --> 00:34:22,466
+think about, and then we'll show that sometimes rewriting what
+
+568
+00:34:22,483 --> 00:34:26,433
+you're doing and rethinking it may get you a more efficient solution.
+
+569
+00:34:26,483 --> 00:34:29,466
+So I'll just do this common example that Brian mentioned, which
+
+570
+00:34:29,483 --> 00:34:33,466
+is I want to take out money from one account and I want to add
+
+571
+00:34:33,483 --> 00:34:35,183
+it to another account.
+
+572
+00:34:36,483 --> 00:34:40,466
+Or, rather, in this case, I'll just say you want to withdraw
+
+573
+00:34:40,483 --> 00:34:43,466
+X amount of money from the account and I want to double-check
+
+574
+00:34:43,483 --> 00:34:45,466
+that the money is actually there and then do the withdrawal.
+
+575
+00:34:46,483 --> 00:34:48,466
+Okay, so let's take a look here. You can put it in my >> account
+
+576
+00:34:48,483 --> 00:34:51,466
+after you withdraw, if you want to. I can give you that number.
+
+577
+00:34:51,483 --> 00:34:54,466
+I'm okay with that, totally. Thank you, Brian. That's so kind
+
+578
+00:34:54,483 --> 00:34:56,466
+>> of you. Yes, just trying to be a >> team
+
+579
+00:34:56,483 --> 00:34:58,466
+player. It's all good.
+
+580
+00:34:58,233 --> 00:35:00,466
+So let's take >> a
+
+581
+00:35:00,483 --> 00:35:04,466
+look here. So let's just start by creating the Accounts table,
+
+582
+00:35:04,483 --> 00:35:06,466
+and I'm pretty sure that people work at banks I'm sure some of
+
+583
+00:35:06,483 --> 00:35:09,466
+you are... listening. That's what you guys do all day. I need
+
+584
+00:35:09,483 --> 00:35:11,466
+a new Accounts table, so I'll add it and then you can start taking
+
+585
+00:35:11,483 --> 00:35:15,466
+your money in and out. So just do this.
+
+586
+00:35:15,483 --> 00:35:22,233
+AccountID and Balance, and this is a very simple bank, so all
+
+587
+00:35:22,316 --> 00:35:26,266
+we do are integers. This decimal stuff we don't really care for.
+
+588
+00:35:26,350 --> 00:35:27,466
+Nice, just round it up.
+
+589
+00:35:27,483 --> 00:35:28,466
+Rounding.
+
+590
+00:35:31,316 --> 00:35:33,166
+>> Okay, so that's our Accounts >> table,
+
+591
+00:35:33,483 --> 00:35:38,466
+and then I'll just insert a row into it, so INSERT Accounts VALUES,
+
+592
+00:35:41,483 --> 00:35:45,466
+this is my account number, and I have 500 pirate money in my account.
+
+593
+00:35:46,483 --> 00:35:50,466
+So now, in order to be able to show this, I need to use two connections
+
+594
+00:35:50,483 --> 00:35:53,466
+to the server to kind of show the problem, because it's a timing-related
+
+595
+00:35:53,483 --> 00:35:59,466
+issue, obviously. So I'll say BEGIN TRANSACTION, and what I want
+
+596
+00:35:59,483 --> 00:36:02,466
+to do here is, I want to check if there is enough money in the
+
+597
+00:36:02,483 --> 00:36:06,466
+account, and if there isn't, I want to abort, right? So IF, let's
+
+598
+00:36:06,483 --> 00:36:07,466
+say, EXISTS,
+
+599
+00:36:11,216 --> 00:36:14,466
+SELECT * FROM the Accounts table and * by the way, there...
+
+600
+00:36:14,483 --> 00:36:18,216
+is no benefit in using SELECT 1 or anything like that, so SELECT *.
+
+601
+00:36:18,300 --> 00:36:20,466
+We're just checking for the existence here. As soon as we find
+
+602
+00:36:20,483 --> 00:36:26,466
+at least one, we'll abort the query. WHERE AccountID is equal
+
+603
+00:36:26,483 --> 00:36:34,466
+to Scooby Doo and balance is at least let's say I want to...
+
+604
+00:36:34,483 --> 00:36:36,466
+take out 400.
+
+605
+00:36:38,483 --> 00:36:41,200
+So as long as rather, if this doesn't exist,... then there is
+
+606
+00:36:41,283 --> 00:36:43,466
+something wrong, right? You don't have enough money in the account
+
+607
+00:36:43,483 --> 00:36:46,466
+or the account doesn't exist. So, in that case, what I want to
+
+608
+00:36:46,483 --> 00:36:50,466
+do is I want to ROLLBACK the transaction.
+
+609
+00:36:52,250 --> 00:36:54,466
+And you may argue, why do I start the transaction at all.
+
+610
+00:36:54,483 --> 00:36:58,466
+We'll look at why I want to do this. And then I want to THROW,
+
+611
+00:36:58,483 --> 00:37:03,316
+which will abort the execution and exit, the error and say,
+
+612
+00:37:05,483 --> 00:37:09,466
+"Tobias is too poor."
+
+613
+00:37:10,483 --> 00:37:13,316
+And then state 1. I guess I'm not getting >> any
+
+614
+00:37:13,400 --> 00:37:16,433
+money from you. Correct. Okay. And then I >> want
+
+615
+00:37:16,450 --> 00:37:16,466
+>> to >> actually
+
+616
+00:37:16,483 --> 00:37:19,466
+do the withdrawal. So if I get down here, that means THROW didn't
+
+617
+00:37:20,0 --> 00:37:26,466
+abort, so then we want to take out the amount, so UPDATE Accounts,
+
+618
+00:37:27,183 --> 00:37:28,466
+SET Balance,
+
+619
+00:37:30,166 --> 00:37:33,466
+and now we'll this kind of in stages. So now I'll do the calculation
+
+620
+00:37:33,483 --> 00:37:39,300
+in the app, so what I pass in is I want to take out 400, and
+
+621
+00:37:39,383 --> 00:37:43,466
+I did the calculation in the app here and say, well, it's currently 500.
+
+622
+00:37:43,483 --> 00:37:46,466
+The app happens to know, so I want to set the Balance to 100,
+
+623
+00:37:49,483 --> 00:37:50,466
+which is obviously a problem.
+
+624
+00:37:50,483 --> 00:37:55,466
+So just do this and COMMIT TRANSACTION.
+
+625
+00:37:56,366 --> 00:38:00,466
+So this is kind of V1 of our banking app, and presumably we'll
+
+626
+00:38:00,483 --> 00:38:02,466
+be fired for this at some point if we were actually working at
+
+627
+00:38:02,483 --> 00:38:07,450
+a bank, right? But now this because this is a timing...
+
+628
+00:38:07,483 --> 00:38:10,466
+issue, I will have to kind of manually execute this and pretend
+
+629
+00:38:10,483 --> 00:38:13,466
+that I am the control flow statement, so we'll say that this
+
+630
+00:38:13,483 --> 00:38:21,183
+is basically Connection 1, and this is since you probably figured out...
+
+631
+00:38:21,266 --> 00:38:23,466
+that myself and Brian are underpaid
+
+632
+00:38:24,483 --> 00:38:31,466
+young people that run around trying to afford what is we are trying...
+
+633
+00:38:31,483 --> 00:38:34,233
+to afford? Going to Disneyland. Disneyland, that sounds good.
+
+634
+00:38:34,316 --> 00:38:34,466
+We >> like
+
+635
+00:38:34,483 --> 00:38:37,466
+Disneyland. So we >> have
+
+636
+00:38:37,483 --> 00:38:40,466
+this scheme, now. We know the bank is new, which means they have
+
+637
+00:38:40,483 --> 00:38:44,416
+new software, and new software, potentially there are bugs.
+
+638
+00:38:45,483 --> 00:38:50,466
+Because it has been run for a fewer amount of time, fewer time
+
+639
+00:38:50,483 --> 00:38:55,466
+than older software. Hasn't been thoroughly tested or >> debugged.
+
+640
+00:38:56,483 --> 00:38:58,466
+So the plan is, Tobias >> is
+
+641
+00:38:59,166 --> 00:39:02,466
+going to go into the bank and try to withdraw money from his account.
+
+642
+00:39:03,200 --> 00:39:07,466
+Brian is going to exactly at the same time go to the ATM and
+
+643
+00:39:07,483 --> 00:39:09,466
+withdraw money from Tobias' account with Tobias' card, so I use
+
+644
+00:39:10,483 --> 00:39:15,250
+my ID and he'll use my debit card. Then, hopefully, we get some
+
+645
+00:39:15,333 --> 00:39:19,466
+extra cash for our Disneyland trip. And we have synchronized
+
+646
+00:39:19,483 --> 00:39:22,466
+our watches. Are you ready? Yes, ready. Good, so there >> we
+
+647
+00:39:22,483 --> 00:39:23,333
+go.
+
+648
+00:39:24,483 --> 00:39:29,466
+>> Now we're at exactly whatever time it is where you are watching from.
+
+649
+00:39:30,483 --> 00:39:37,250
+We'll see us doing this. So this is Tobias in the bank, Connection,
+
+650
+00:39:37,483 --> 00:39:41,466
+and then we have the Connection which is Brian
+
+651
+00:39:43,483 --> 00:39:44,466
+at ATM.
+
+652
+00:39:46,466 --> 00:39:50,466
+They tell me it's automatic teller machine. Automatic teller
+
+653
+00:39:50,483 --> 00:39:51,466
+machine, I think, >> was
+
+654
+00:39:51,483 --> 00:39:54,466
+the last time I knew what it was. This is so simple to >> understand.
+
+655
+00:39:55,333 --> 00:40:02,466
+So we sync. I am standing at the cashier and trying to hold his
+
+656
+00:40:02,166 --> 00:40:06,466
+or her hand so that they press the withdraw button exactly when
+
+657
+00:40:06,483 --> 00:40:11,466
+Brian is going to punch in start on the ATM. So okay, what happens?
+
+658
+00:40:11,483 --> 00:40:15,0
+Tobias' transaction starts, Brian's transaction starts.
+
+659
+00:40:16,483 --> 00:40:20,416
+Bank checks does Tobias have enough money in the account?
+
+660
+00:40:20,483 --> 00:40:24,466
+Yes. We get the row back. Clearly, there is enough in the account.
+
+661
+00:40:24,483 --> 00:40:28,466
+The ATM checks, is there enough money in Tobias' account?
+
+662
+00:40:28,483 --> 00:40:32,466
+Yes, there is. Great. Now you start wondering what kind of locks
+
+663
+00:40:32,483 --> 00:40:36,466
+are being held in the table right now? Well, by default, in SQL
+
+664
+00:40:36,483 --> 00:40:38,466
+Server we use read
+
+665
+00:40:39,483 --> 00:40:44,166
+committed isolation, which means we take a look on the row to
+
+666
+00:40:44,250 --> 00:40:47,466
+make sure there is no write-exclusive locks already being held
+
+667
+00:40:48,333 --> 00:40:50,466
+on the row, and then we release the lock. So that guarantees
+
+668
+00:40:50,483 --> 00:40:52,466
+we did a committed read.
+
+669
+00:40:53,233 --> 00:40:58,466
+There is no uncommitted data there. So this means if I go to
+
+670
+00:40:58,233 --> 00:41:01,466
+a third connection and just check what locks are being held,
+
+671
+00:41:02,483 --> 00:41:08,300
+we can see there are currently no row locks or any locks of that kind.
+
+672
+00:41:08,383 --> 00:41:11,466
+Just trust me, there are no locks on this table right now.
+
+673
+00:41:11,483 --> 00:41:12,466
+So the
+
+674
+00:41:14,300 --> 00:41:17,433
+bank computer continues. Obviously, this didn't happen, so it
+
+675
+00:41:17,483 --> 00:41:21,466
+goes and withdraws the money from my account and sets the new balance.
+
+676
+00:41:22,483 --> 00:41:25,466
+Done. We don't commit yet, so now if I go back and check the
+
+677
+00:41:25,483 --> 00:41:31,450
+locks, now we have an exclusive lock on that row in that table,
+
+678
+00:41:31,483 --> 00:41:32,466
+so the row is locked.
+
+679
+00:41:33,466 --> 00:41:36,466
+At the same time, Brian's ATM also goes on because it found that
+
+680
+00:41:36,483 --> 00:41:40,466
+there was enough money in the account. It tries to do the update.
+
+681
+00:41:40,200 --> 00:41:43,466
+It has to wait, because the row is locked, right? We go back
+
+682
+00:41:43,483 --> 00:41:47,466
+and check, and now we have, yes, Tobias has a grant on the lock
+
+683
+00:41:47,483 --> 00:41:51,466
+on the row and Brian is waiting to get an update lock on the row.
+
+684
+00:41:52,483 --> 00:41:57,466
+So what happens? Well, Brian is waiting, or rather the ATM is waiting.
+
+685
+00:41:57,483 --> 00:42:01,466
+The bank machine commits, I get the money from the cashier, thank
+
+686
+00:42:01,483 --> 00:42:06,466
+you, 400 pirate money. At the same time, ATM works fine, ATM
+
+687
+00:42:06,483 --> 00:42:09,200
+commits, and Brian gets the money.
+
+688
+00:42:09,483 --> 00:42:14,466
+I say goodbye to the cashier and then exit the bank, and we meet
+
+689
+00:42:14,483 --> 00:42:19,300
+outside, and now we have 800 pirate money versus having just 400.
+
+690
+00:42:19,383 --> 00:42:24,466
+And the bank at the same time checks what is the balance on the account?
+
+691
+00:42:24,483 --> 00:42:25,466
+Well, it's 100.
+
+692
+00:42:26,383 --> 00:42:30,466
+Okay, so this is an example of where we actually lost data.
+
+693
+00:42:30,483 --> 00:42:34,466
+So this is great for me and Brian. We go, oh, okay, perfect.
+
+694
+00:42:34,483 --> 00:42:35,466
+We're off to Disneyland. Disneyland >> trip
+
+695
+00:42:35,483 --> 00:42:37,466
+is looking good.
+
+696
+00:42:37,483 --> 00:42:42,466
+>> And hence, a little bit later, maybe we'll do this again.
+
+697
+00:42:42,483 --> 00:42:48,166
+And this is very hypothetical. Very, very, very hypothetical.
+
+698
+00:42:48,483 --> 00:42:51,466
+By the way, my name is not Tobias, and this is not Brian.
+
+699
+00:42:51,483 --> 00:42:53,466
+My name is Frank.
+
+700
+00:42:54,366 --> 00:42:54,466
+Shhh.
+
+701
+00:42:56,483 --> 00:42:57,466
+>> Okay, so next time, >> the
+
+702
+00:42:57,483 --> 00:43:00,466
+bank doesn't do too well, because me and Brian obviously tell
+
+703
+00:43:00,483 --> 00:43:03,466
+our friends that, oh, there is this scheme you can do. You just
+
+704
+00:43:03,483 --> 00:43:06,466
+have to have synchronized watches. So bank upgrades. Now, the
+
+705
+00:43:06,483 --> 00:43:13,466
+system is going to do Balance -= 400, so we're going to actually
+
+706
+00:43:13,483 --> 00:43:17,416
+do the subtraction at the data layer, rather than up in the app,
+
+707
+00:43:17,483 --> 00:43:24,466
+so the upgrade obviously happens at the ATM and the Teller.
+
+708
+00:43:24,483 --> 00:43:26,383
+Yes, teller thingy. So...
+
+709
+00:43:26,450 --> 00:43:26,466
+>> I >> just
+
+710
+00:43:26,483 --> 00:43:30,466
+do a quick let's say I get my... salary again, my 500 pirate money.
+
+711
+00:43:30,483 --> 00:43:35,450
+We come back, we want to do the same thing, so I begin the transaction
+
+712
+00:43:36,483 --> 00:43:40,466
+inside with the teller. It checks, it has money.
+
+713
+00:43:41,483 --> 00:43:42,466
+At the same time,
+
+714
+00:43:44,483 --> 00:43:47,466
+Brian starts. The ATM checks, there is money.
+
+715
+00:43:48,483 --> 00:43:51,166
+The update happens.
+
+716
+00:43:53,216 --> 00:43:56,466
+Brian's update happens or rather, it queues now,...
+
+717
+00:43:57,233 --> 00:44:00,466
+commits. I get the money from the cashier or from the teller,
+
+718
+00:44:01,483 --> 00:44:04,466
+and Brian gets the money from the ATM. So this is all good.
+
+719
+00:44:04,483 --> 00:44:08,466
+We managed to get 800, but if we now check the balance on the
+
+720
+00:44:08,483 --> 00:44:13,233
+account, wherever we did that, V2
+
+721
+00:44:15,483 --> 00:44:21,466
+of the bank software is way better, because at least now they
+
+722
+00:44:21,216 --> 00:44:24,466
+know we're over. Two separate transactions of 400 >> each.
+
+723
+00:44:24,483 --> 00:44:27,466
+Now we're minus 300. Yes. So now they'll probably >> charge
+
+724
+00:44:27,483 --> 00:44:30,466
+me some overdraft thing, but then you could obviously they don't
+
+725
+00:44:30,483 --> 00:44:33,466
+have limits on... how much you can take out, so I'd take out
+
+726
+00:44:33,483 --> 00:44:34,466
+a lot.
+
+727
+00:44:35,483 --> 00:44:39,233
+So let's say that the bank doesn't really like
+
+728
+00:44:40,483 --> 00:44:44,433
+giving me this loan without having approved my credit limit,
+
+729
+00:44:44,483 --> 00:44:45,466
+so let's look at V3
+
+730
+00:44:46,483 --> 00:44:50,466
+of the banking app. So now instead, what it's really about is
+
+731
+00:44:50,483 --> 00:44:54,233
+when the SELECT happens, I want it to keep the lock on the row.
+
+732
+00:44:54,316 --> 00:44:55,466
+That is the problem that we're seeing.
+
+733
+00:44:56,483 --> 00:44:59,466
+Because the check doesn't keep the lock on the row, the update
+
+734
+00:44:59,483 --> 00:45:03,466
+can succeed. So I'll say what I want is obviously Brian's or
+
+735
+00:45:03,483 --> 00:45:06,466
+whatever transaction comes in second, wants it to queue already
+
+736
+00:45:06,483 --> 00:45:09,183
+up in the SELECT. So I'll say WITH(UPDLOCK).
+
+737
+00:45:11,483 --> 00:45:15,333
+And this is there was someone in the... chat that asked about
+
+738
+00:45:15,416 --> 00:45:19,466
+FOR UPDATE. This is basically the same thing. So there are three
+
+739
+00:45:19,483 --> 00:45:22,466
+basic lock types in SQL Server. There's shared locks, which means
+
+740
+00:45:22,483 --> 00:45:26,400
+two shared you can have on the same resource, often called read locks.
+
+741
+00:45:26,483 --> 00:45:30,466
+Exclusive lock, you hear on the name, only one can have an exclusive
+
+742
+00:45:30,200 --> 00:45:33,466
+lock on any resource. Update lock is basically compatible with
+
+743
+00:45:33,483 --> 00:45:36,450
+shared, but not other updates or
+
+744
+00:45:37,483 --> 00:45:40,466
+exclusive locks, obviously. And what this means is, while I have
+
+745
+00:45:41,333 --> 00:45:45,266
+an update lock, no one else can take another update lock, but
+
+746
+00:45:45,350 --> 00:45:48,466
+other people can read at the same time. So it improves concurrency,
+
+747
+00:45:48,483 --> 00:45:52,466
+and what it means is it means I'm reading now, but I have an
+
+748
+00:45:52,483 --> 00:45:55,466
+intent to update later. So as long as you're reading and not
+
+749
+00:45:55,483 --> 00:45:59,183
+intending to update later, go ahead. If you're also intending
+
+750
+00:45:59,266 --> 00:46:03,200
+to update later, then no, not good. So V3 of the software, let's
+
+751
+00:46:03,283 --> 00:46:04,466
+look at what happens.
+
+752
+00:46:06,483 --> 00:46:09,466
+I get my salary again
+
+753
+00:46:11,483 --> 00:46:13,466
+and have to wait a little bit extra because I was negative on
+
+754
+00:46:13,483 --> 00:46:16,466
+the account. It begins the transaction, it checks and there is
+
+755
+00:46:17,333 --> 00:46:17,466
+enough money.
+
+756
+00:46:18,483 --> 00:46:22,466
+And now, when we check the locks, we can say, aha, the SELECT
+
+757
+00:46:22,483 --> 00:46:27,466
+made it so that I got an update lock on the row. And now, when
+
+758
+00:46:27,483 --> 00:46:31,200
+Brian's ATM goes and starts, begins the transaction, you can
+
+759
+00:46:31,283 --> 00:46:35,466
+see how it queues on the select. So it waits here, and if we
+
+760
+00:46:35,483 --> 00:46:39,466
+now check the locks, we can see that I have my grant on the update
+
+761
+00:46:39,483 --> 00:46:43,333
+lock, on the row, and Brian is waiting. So now,
+
+762
+00:46:44,483 --> 00:46:48,466
+obviously, my transaction then continues, withdraws the money
+
+763
+00:46:49,483 --> 00:46:54,400
+and you can see Brian is still waiting. And then commits.
+
+764
+00:46:54,483 --> 00:46:58,466
+I got the money from the cashier in the bank, and now Brian got
+
+765
+00:46:58,483 --> 00:47:03,466
+no rows back, because this wasn't true anymore, so what he gets
+
+766
+00:47:03,483 --> 00:47:08,466
+is this, Tobias is too poor. So now in V3 of the app, we fixed
+
+767
+00:47:08,483 --> 00:47:09,466
+the issue.
+
+768
+00:47:10,266 --> 00:47:13,466
+So you can see how it's not actually very complicated, but it's
+
+769
+00:47:13,483 --> 00:47:17,466
+important to know exactly what goes on and not think of transaction
+
+770
+00:47:17,483 --> 00:47:21,300
+as something magical or weird. It's just very logical.
+
+771
+00:47:21,483 --> 00:47:25,466
+Now let's just look at how we could make this just more efficient,
+
+772
+00:47:25,183 --> 00:47:28,466
+so V4 of the app, just for performance reasons now, what we could
+
+773
+00:47:28,483 --> 00:47:32,466
+do is this.
+
+774
+00:47:35,400 --> 00:47:39,366
+And we don't actually need the transaction BEGIN and the COMMIT TRANSACTION...
+
+775
+00:47:39,450 --> 00:47:42,466
+statements anymore, but I'll just leave them in there, or I can
+
+776
+00:47:42,483 --> 00:47:45,466
+remove them just to be clear that I don't need them. So what
+
+777
+00:47:45,483 --> 00:47:50,466
+I do instead is I'll just take this WHERE clause and put it here.
+
+778
+00:47:50,483 --> 00:47:56,466
+So on the update, if I have enough money, right, let's add the
+
+779
+00:47:58,483 --> 00:48:03,466
+give me the money again.... I've got another salary. And then
+
+780
+00:48:07,483 --> 00:48:11,366
+I just check. IF ROWCOUNT we have you could also use the...
+
+781
+00:48:11,450 --> 00:48:15,466
+OUTPUT clause, but ROWCOUNT is practical here. So IF ROWCOUNT
+
+782
+00:48:15,483 --> 00:48:20,466
+is basically not 1, right, then something is wrong. So let's
+
+783
+00:48:20,483 --> 00:48:23,466
+add BEGIN TRANSACITON. We know it shouldn't update anything,
+
+784
+00:48:23,483 --> 00:48:27,466
+but let's just to be extra clear.
+
+785
+00:48:27,483 --> 00:48:32,466
+So do the update, take out the money if there is money, and then
+
+786
+00:48:32,483 --> 00:48:35,466
+we say, well, if it didn't update one row, that means there wasn't
+
+787
+00:48:35,483 --> 00:48:38,466
+enough money, so then we roll back and throw out the error.
+
+788
+00:48:39,483 --> 00:48:42,466
+And now you can clearly see, I don't have to think about this
+
+789
+00:48:42,483 --> 00:48:46,466
+with UDP lock or anything. I'm getting better performance because
+
+790
+00:48:46,483 --> 00:48:50,300
+I'm only executing one statement instead of SELECT and UPDATE.
+
+791
+00:48:50,483 --> 00:48:52,466
+So I'll try this, it works fine.
+
+792
+00:48:53,450 --> 00:48:53,466
+Run again.
+
+793
+00:48:54,483 --> 00:48:56,466
+Can't do it. Can't do >> it.
+
+794
+00:48:56,483 --> 00:48:57,466
+So that >> gives
+
+795
+00:48:57,216 --> 00:49:00,466
+you kind of an intro into transactions and what you need to think about.
+
+796
+00:49:01,216 --> 00:49:02,466
+And you don't need to >> use
+
+797
+00:49:02,483 --> 00:49:04,466
+them all the time, but definitely when there are certain things
+
+798
+00:49:04,483 --> 00:49:08,466
+that you need to work, use as a single unit of work as we introduced earlier.
+
+799
+00:49:09,166 --> 00:49:12,383
+Batches are just a series of SQL statements. Maybe they're fine
+
+800
+00:49:12,466 --> 00:49:15,466
+running sequentially, but there may be situations where you need
+
+801
+00:49:15,216 --> 00:49:18,333
+them to run as a unit of work. Then you're going to need to BEGIN
+
+802
+00:49:18,483 --> 00:49:22,400
+and a COMMIT transaction with some error handling on that to
+
+803
+00:49:22,483 --> 00:49:25,466
+do a ROLLBACK in the event you need to a ROLLBACK. You'll be
+
+804
+00:49:25,483 --> 00:49:28,316
+using variables. There's a way for us to pass parameters into
+
+805
+00:49:28,400 --> 00:49:32,466
+procedures to allow us to reuse that procedure multiple times,
+
+806
+00:49:32,483 --> 00:49:37,350
+procedure as one example, to reuse that stored procedure multiple
+
+807
+00:49:37,433 --> 00:49:40,466
+times, just by passing a different value in with that parameter.
+
+808
+00:49:41,166 --> 00:49:43,466
+Synonyms we looked at for making a shorter names for us to be
+
+809
+00:49:43,483 --> 00:49:47,333
+able to access content, whether it be local content or content
+
+810
+00:49:47,416 --> 00:49:50,466
+on a LINQ server. These are some of the control flow options
+
+811
+00:49:50,483 --> 00:49:53,466
+that we saw earlier on slides. We go the IF, we got the IF OUT,
+
+812
+00:49:53,483 --> 00:49:59,316
+and we saw a really good demo on the BEGIN and the TRY and the
+
+813
+00:49:59,400 --> 00:50:02,466
+CATCH and how that can be very helpful with error handling.
+
+814
+00:50:02,483 --> 00:50:05,466
+And we kind of wrapped up with talking about transactions and
+
+815
+00:50:05,483 --> 00:50:09,466
+the series of transactions and how that block of code has to
+
+816
+00:50:09,483 --> 00:50:12,466
+all be successful. All the statements have to be successful.
+
+817
+00:50:12,483 --> 00:50:15,333
+Otherwise, we're going to roll that back so that nothing gets
+
+818
+00:50:15,483 --> 00:50:18,466
+applied to the database. And we looked at using the BEGIN, COMMIT,
+
+819
+00:50:19,483 --> 00:50:22,250
+ROLLBACK transactions, and we can also set something at the system
+
+820
+00:50:22,333 --> 00:50:28,216
+level for the aborting on a transaction if... it shouldn't be committed.
+
+821
+00:50:28,300 --> 00:50:30,466
+So that's what we did in this module. What we're going to do
+
+822
+00:50:30,483 --> 00:50:34,466
+is we're going to take a 10-minute break, and when we go take
+
+823
+00:50:34,483 --> 00:50:38,433
+the 10-minute break, we are going to come back and we're going
+
+824
+00:50:39,483 --> 00:50:41,466
+to in our final chapter, we're... going to wrap up by talking
+
+825
+00:50:41,183 --> 00:50:44,366
+about querying information. What kind of information do I have
+
+826
+00:50:44,450 --> 00:50:46,466
+readily available to me to see how my system's running.
+
+827
+00:50:46,483 --> 00:50:49,166
+We're going to look at dynamic management views, we're going
+
+828
+00:50:49,250 --> 00:50:51,466
+to look at some of the system tables available to us. We're going
+
+829
+00:50:51,483 --> 00:50:54,466
+to look at ways to look at our queries to see if they're running
+
+830
+00:50:54,483 --> 00:50:57,350
+as optimal as possible, and if not, some ways that we can try
+
+831
+00:50:57,433 --> 00:51:00,466
+to optimize those queries. So we'll see you back here in 10 minutes.
+
+832
+00:51:00,483 --> 00:51:01,466
+Enjoy your break.
+

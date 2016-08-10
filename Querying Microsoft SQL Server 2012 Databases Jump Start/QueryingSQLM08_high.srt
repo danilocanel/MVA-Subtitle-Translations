@@ -1,0 +1,3324 @@
+1
+00:00:00,333 --> 00:00:06,333
+[Music]
+
+2
+00:00:17,483 --> 00:00:20,466
+>> Well, welcome back to Module 8,  the final module.
+
+3
+00:00:20,483 --> 00:00:22,466
+It's kind of sad. We've been... we spent all day
+
+4
+00:00:22,483 --> 00:00:25,400
+with you and... or evening, depending where you are in the world,
+
+5
+00:00:25,483 --> 00:00:29,466
+and we've enjoyed our time with you. We, by the way, Tobias
+
+6
+00:00:29,483 --> 00:00:32,466
+and I, both shout out to the local bank, and we were not able
+
+7
+00:00:32,483 --> 00:00:36,466
+pull off what we... so apparently they're running V4 at the local
+
+8
+00:00:36,233 --> 00:00:39,466
+bank at least, so just to let you know. Most banks aren't V4.
+
+9
+00:00:39,483 --> 00:00:41,466
+So we don't want to plant any bad seeds, like I'm going to go
+
+10
+00:00:41,483 --> 00:00:45,166
+try this tonight. So we just tested it. It's all quite good.
+
+11
+00:00:45,250 --> 00:00:47,466
+V4 is out there for most banks, so you probably don't want to
+
+12
+00:00:47,483 --> 00:00:50,466
+try what we were talking about earlier on. So what we're going
+
+13
+00:00:50,483 --> 00:00:54,466
+to focus on now, folks, is retrieving SQL Server metadata.
+
+14
+00:00:54,483 --> 00:00:57,466
+And we're going to look at a couple different ways we can do that.
+
+15
+00:00:57,483 --> 00:00:59,466
+And then we're going to look at query, performance, ways to monitor
+
+16
+00:00:59,483 --> 00:01:03,466
+query performance and ways for us to improve query performance.
+
+17
+00:01:03,483 --> 00:01:07,466
+So this is the final module, and, again, it's kind of sad, but
+
+18
+00:01:07,483 --> 00:01:10,466
+we're going to talk also about store procedures. We talked a
+
+19
+00:01:10,483 --> 00:01:13,466
+little bit about how to use them and where they come into play
+
+20
+00:01:13,483 --> 00:01:16,466
+and everything, but we talk about creating and executing store
+
+21
+00:01:16,483 --> 00:01:20,0
+procedures in this final module as well. So let's go ahead and
+
+22
+00:01:20,483 --> 00:01:24,466
+move into system catalogs in DMV, Dynamic Management Views.
+
+23
+00:01:24,483 --> 00:01:28,216
+And system catalog views are built-in views that give you information
+
+24
+00:01:28,300 --> 00:01:31,466
+about the system catalog, oddly enough, right? You can use any
+
+25
+00:01:31,483 --> 00:01:35,466
+standard query method to return metadata. You can look at column
+
+26
+00:01:35,483 --> 00:01:39,466
+list, you can use joins, wheres, order bys. And some of these
+
+27
+00:01:39,483 --> 00:01:42,466
+views are filtered, that's going to display only certain objects
+
+28
+00:01:42,483 --> 00:01:45,466
+for you. So what we're seeing here as an example is select a
+
+29
+00:01:45,483 --> 00:01:52,266
+name, object ID, schema ID, type, and type description from sys.tables.
+
+30
+00:01:53,483 --> 00:01:56,466
+And this is going to be... it's going to include display content
+
+31
+00:01:56,483 --> 00:01:59,466
+for us that's going to include information about the system objects.
+
+32
+00:02:00,483 --> 00:02:03,466
+Now, with that said, because we want the sys.table, we also have
+
+33
+00:02:03,483 --> 00:02:05,250
+another thing called sys.objects.
+
+34
+00:02:05,483 --> 00:02:10,400
+So the first command returns information pretty much about user
+
+35
+00:02:10,483 --> 00:02:13,466
+tables, but the second command returns information about user
+
+36
+00:02:13,483 --> 00:02:17,283
+objects and system objects. So you'll get more information, but
+
+37
+00:02:17,366 --> 00:02:20,466
+maybe not want all that information about the system information
+
+38
+00:02:20,483 --> 00:02:23,466
+or the system objects that are available out there. Another way
+
+39
+00:02:23,483 --> 00:02:26,383
+that you can retrieve information is using what's called information
+
+40
+00:02:26,466 --> 00:02:31,316
+schema views. These return system metadata according to the ISO
+
+41
+00:02:31,400 --> 00:02:35,466
+standards, so they can be used by third-party tools. They map
+
+42
+00:02:35,483 --> 00:02:39,466
+to standard names or to catalog in your domain to your SQL Server
+
+43
+00:02:39,483 --> 00:02:42,450
+names like your database use find data type. And as you can
+
+44
+00:02:42,483 --> 00:02:46,466
+see here, I can retrieve information from these information schema.
+
+45
+00:02:46,483 --> 00:02:49,466
+So the first one that we show here is .tables. I can retrieve
+
+46
+00:02:49,483 --> 00:02:52,466
+information about the different tables that are being used by
+
+47
+00:02:52,483 --> 00:02:56,466
+SQL Server, how the columns are being used by SQL Server.
+
+48
+00:02:57,233 --> 00:02:59,466
+And, again, here I can get a little bit more specific. This would
+
+49
+00:02:59,483 --> 00:03:02,466
+return everything about every column. I want to find out where
+
+50
+00:03:02,483 --> 00:03:06,333
+business entity ID is being used. What table in the schema or
+
+51
+00:03:06,416 --> 00:03:10,183
+in the database is business entity ID stored in. So if I need
+
+52
+00:03:10,266 --> 00:03:12,466
+to make a change to that, I'll understand the repercussions or
+
+53
+00:03:12,483 --> 00:03:16,466
+the impact if I need to change that as an example. So I can
+
+54
+00:03:16,483 --> 00:03:20,350
+actually go in and throw a where clause on this and return that.
+
+55
+00:03:20,433 --> 00:03:22,466
+And of course you can throw an order by in here and sort it,
+
+56
+00:03:22,483 --> 00:03:26,466
+so you can see how... you know, where the business entity ID
+
+57
+00:03:26,483 --> 00:03:30,466
+is sorted by a table, if you wanted to. So it's just a way for
+
+58
+00:03:30,483 --> 00:03:34,466
+us to retrieve metadata about the system or about how SQL Server
+
+59
+00:03:35,0 --> 00:03:36,0
+is functioning.
+
+60
+00:03:36,483 --> 00:03:39,350
+We also have functions that we can use. We've seen a couple
+
+61
+00:03:39,433 --> 00:03:43,466
+functions here. We've got the select version and we have the
+
+62
+00:03:43,483 --> 00:03:47,466
+two at signs. And this is like a version for that that returns
+
+63
+00:03:47,483 --> 00:03:50,466
+the SQL version. We can also look at the product version.
+
+64
+00:03:50,483 --> 00:03:53,466
+One will show you the version name and the other one will show
+
+65
+00:03:53,483 --> 00:03:56,466
+the version name and the number associated with the version,
+
+66
+00:03:56,483 --> 00:04:00,466
+was it version 11 dot whatever it might be for SQL Server 2012.
+
+67
+00:04:00,483 --> 00:04:03,466
+You may be concerned about the collation that you're using with
+
+68
+00:04:03,483 --> 00:04:06,466
+your SQL Server environment. SharePoint requires a unique collation.
+
+69
+00:04:06,483 --> 00:04:08,266
+It involved collation of the box.
+
+70
+00:04:09,483 --> 00:04:12,466
+It's not used by SharePoint. So I may want to determine what
+
+71
+00:04:12,483 --> 00:04:14,466
+the collation is for our SQL Server instance before I install
+
+72
+00:04:14,483 --> 00:04:18,466
+SharePoint before it starts communicating with that. So I can
+
+73
+00:04:18,483 --> 00:04:22,216
+use a server property called a collation to determine what collation
+
+74
+00:04:22,300 --> 00:04:26,300
+is being utilized for this instance of SQL Server that's installed.
+
+75
+00:04:26,383 --> 00:04:29,466
+>> And we can just mention that this... at that something...
+
+76
+00:04:30,483 --> 00:04:31,466
+-inaudible- functions
+
+77
+00:04:33,366 --> 00:04:35,466
+called global variables but they have nothing to do with variables.
+
+78
+00:04:35,483 --> 00:04:37,466
+They're just functions that don't text up parameters.
+
+79
+00:04:38,483 --> 00:04:42,350
+And these are mostly there for backwards compatibility. So typically
+
+80
+00:04:42,433 --> 00:04:45,466
+they're replaced by database property, database property X, column
+
+81
+00:04:45,483 --> 00:04:48,466
+property, server property, and so on.
+
+82
+00:04:48,483 --> 00:04:51,466
+>> So, yeah, so again what we had talked about earlier about the
+
+83
+00:04:51,483 --> 00:04:54,466
+idea of like some of the functionality you've seen for several
+
+84
+00:04:54,483 --> 00:04:57,466
+versions and it just kind of hangs out for this because we're
+
+85
+00:04:58,483 --> 00:05:00,466
+kind of used to it and we want you to be able to continue to
+
+86
+00:05:00,483 --> 00:05:04,183
+use that. But as you're looking around and working with SQL Server,
+
+87
+00:05:04,266 --> 00:05:08,466
+see if there is a better, more... maybe more improved way performance-wise
+
+88
+00:05:08,483 --> 00:05:13,466
+that may have another option for you to retrieve that information
+
+89
+00:05:13,483 --> 00:05:16,466
+or perform the tasks that you're trying to perform here.
+
+90
+00:05:17,0 --> 00:05:20,466
+We can query DMVs and functions. Here's a dynamic view that
+
+91
+00:05:20,483 --> 00:05:23,466
+we're looking at here, select session ID, login time, and program name.
+
+92
+00:05:23,483 --> 00:05:29,466
+And we're going to retrieve that from this assist.DM underscore
+
+93
+00:05:29,483 --> 00:05:32,466
+exec sessions. And that can specify, like I said, with a where
+
+94
+00:05:33,166 --> 00:05:35,466
+clause in there what I want to be able to do with that.
+
+95
+00:05:35,483 --> 00:05:38,466
+Same with the dynamic management functions that when their query
+
+96
+00:05:38,216 --> 00:05:41,466
+does table valued functions, we mentioned those earlier on, we
+
+97
+00:05:42,0 --> 00:05:44,466
+can just go ahead and do a select statement on that, specify
+
+98
+00:05:44,483 --> 00:05:49,466
+what exactly... what type of view I wanted to reference and specifically
+
+99
+00:05:49,483 --> 00:05:53,0
+a specific object. In this case here we're looking for that sales
+
+100
+00:05:53,483 --> 00:05:57,183
+order header object to find out or retrieve information about that.
+
+101
+00:05:57,266 --> 00:06:01,466
+>> And we have a charge number of DMVs and DMFs, so dynamic management
+
+102
+00:06:01,483 --> 00:06:05,466
+functions and views. So it's definitely useful to spend some
+
+103
+00:06:05,483 --> 00:06:07,466
+time in going through what they are.
+
+104
+00:06:08,483 --> 00:06:12,333
+And as this will help you with either debugging issues in the
+
+105
+00:06:12,416 --> 00:06:15,433
+server that you're finding to make your app faster, whatever
+
+106
+00:06:15,483 --> 00:06:19,250
+it is, or maybe you want to build some automated monitoring.
+
+107
+00:06:19,333 --> 00:06:21,466
+So it's worth spending some time going through all of these,
+
+108
+00:06:21,483 --> 00:06:24,466
+just till you get at least a hunch of what you can actually see.
+
+109
+00:06:24,483 --> 00:06:28,0
+And it's one of SQL Server's strengths is really the amount of
+
+110
+00:06:28,483 --> 00:06:32,466
+monitoring we allow you to do. It's actually quite impressive.
+
+111
+00:06:33,250 --> 00:06:36,466
+>> Yeah. And so yeah. We'll take some time to understand those,
+
+112
+00:06:36,483 --> 00:06:40,416
+but they are very powerful and worth doing it. And there's nearly
+
+113
+00:06:40,483 --> 00:06:44,466
+200 dynamic views, or DMVs, in SQL Server 2012. Again, they
+
+114
+00:06:44,483 --> 00:06:47,466
+include information about catalog information, administrative
+
+115
+00:06:47,483 --> 00:06:48,466
+status information.
+
+116
+00:06:49,483 --> 00:06:53,200
+The DMVs are server scope at the instance level or database scope,
+
+117
+00:06:53,283 --> 00:06:54,466
+depending on what you're looking for.
+
+118
+00:06:55,400 --> 00:06:57,466
+The underlying structures may change, so a lot of people...
+
+119
+00:06:58,483 --> 00:07:00,183
+what you don't want to do is write a select statement against
+
+120
+00:07:00,266 --> 00:07:04,466
+a specific DMV and keep that and think that's going to good forever,
+
+121
+00:07:04,483 --> 00:07:07,466
+because they do tend to change. So it's good to understand what's
+
+122
+00:07:07,483 --> 00:07:12,466
+available out there and be able to understand that you can query them.
+
+123
+00:07:12,483 --> 00:07:14,466
+But be careful about writing procedures that's going to go out
+
+124
+00:07:14,483 --> 00:07:18,466
+and execute against them in the event that they do change.
+
+125
+00:07:18,483 --> 00:07:22,416
+And there's a different categories of these DMVs. There's database category.
+
+126
+00:07:22,483 --> 00:07:26,466
+There's a query execution related categories. There's I/O statistics
+
+127
+00:07:26,483 --> 00:07:30,466
+categories for your input/output. There's operating system or
+
+128
+00:07:30,483 --> 00:07:33,466
+SQL Server operating system information that's available to you.
+
+129
+00:07:33,483 --> 00:07:36,466
+And there's a category on transactions. And we saw how powerful
+
+130
+00:07:36,483 --> 00:07:39,466
+transactions are and how important they are for us as well.
+
+131
+00:07:39,483 --> 00:07:43,466
+So these are all types of views, are categories of views that
+
+132
+00:07:43,483 --> 00:07:46,466
+are available out there, and there's a slew of them to go through...
+
+133
+00:07:46,483 --> 00:07:48,466
+I already used plethora, so I can't use that again. I'm going
+
+134
+00:07:48,483 --> 00:07:53,266
+to switch to slew now... a slew of them out there to go out and view.
+
+135
+00:07:53,350 --> 00:07:55,466
+So you want to go ahead and peek at those.
+
+136
+00:07:57,483 --> 00:08:00,350
+All right. So system catalogs and DMVs. Are there any special
+
+137
+00:08:00,433 --> 00:08:03,283
+ones that you like to show when you do demos or...
+
+138
+00:08:04,0 --> 00:08:05,466
+>> No, there's plenty of them.
+
+139
+00:08:05,483 --> 00:08:07,466
+>> There's so many of them, I just...
+
+140
+00:08:07,483 --> 00:08:11,0
+>> Yeah. But DM exec overall is one of ones that you use quite
+
+141
+00:08:11,483 --> 00:08:16,183
+frequently as well as DMOS to look at different wait stats in
+
+142
+00:08:16,266 --> 00:08:18,466
+the engine. So typically when you're... overall when you're
+
+143
+00:08:18,483 --> 00:08:22,250
+looking for... to improve performance, a big thing for you is
+
+144
+00:08:22,333 --> 00:08:25,300
+to look what is the server actually doing.
+
+145
+00:08:25,483 --> 00:08:28,466
+And if it's waiting for something, what is it waiting for.
+
+146
+00:08:28,483 --> 00:08:32,466
+So it may be waiting for I/O, for example, it's waiting for the disk.
+
+147
+00:08:32,483 --> 00:08:35,466
+If it's waiting a lot for disk, you may want faster disk or more
+
+148
+00:08:35,233 --> 00:08:40,0
+memory or things like this. So there is... it's really like
+
+149
+00:08:40,483 --> 00:08:46,466
+a pretty huge subject. But overall definitely DM exec, DMIO...
+
+150
+00:08:46,483 --> 00:08:51,466
+or, sorry, DMOSDMIO are useful to start looking more deeply into.
+
+151
+00:08:51,483 --> 00:08:55,466
+>> Is there a class available just on performance with SQL Server?
+
+152
+00:08:55,483 --> 00:08:57,466
+>> No, that's basically all of these are performance related.
+
+153
+00:08:57,483 --> 00:09:01,466
+>> Okay. All right. Stored procedures. We could also use stored procedures.
+
+154
+00:09:01,483 --> 00:09:04,466
+And with stored procedures we reference those a few times.
+
+155
+00:09:04,483 --> 00:09:07,466
+We have system stored procedures, we have user-defined stored
+
+156
+00:09:07,483 --> 00:09:10,466
+procedures that can be created. So with stored procedures, what
+
+157
+00:09:10,483 --> 00:09:15,466
+we can do here is we can execute them. And a sample here, example
+
+158
+00:09:15,483 --> 00:09:18,466
+here is we just want to execute SP databases. We're not going
+
+159
+00:09:18,483 --> 00:09:21,466
+to pass any parameters. I want a list of all the databases that
+
+160
+00:09:21,483 --> 00:09:24,350
+are available. Of course I could pass a database, a specific
+
+161
+00:09:24,433 --> 00:09:28,333
+database name. It would give me information about that particular database.
+
+162
+00:09:28,483 --> 00:09:31,316
+Same with the SP help. I just want general information about
+
+163
+00:09:31,400 --> 00:09:34,466
+the table. I can actually get that information by typing SP help.
+
+164
+00:09:34,483 --> 00:09:37,466
+If there's a specific table, in this case here sales.customer,
+
+165
+00:09:38,266 --> 00:09:41,316
+I could supply a parameter for that and get specific information
+
+166
+00:09:41,400 --> 00:09:44,216
+about that single table. So depends what you're looking for.
+
+167
+00:09:44,300 --> 00:09:47,466
+I can get information about every database, about every table
+
+168
+00:09:47,483 --> 00:09:51,316
+if I want to, about the system if I want to, about a specific
+
+169
+00:09:51,400 --> 00:09:55,266
+table using SP underscore tables. It depends what I'm looking for.
+
+170
+00:09:55,350 --> 00:09:59,466
+I can decide to just give me information about everything or
+
+171
+00:10:00,483 --> 00:10:03,366
+specific objects if I'm focussing only a particular object that
+
+172
+00:10:03,450 --> 00:10:06,466
+I'm trying to fix or optimize.
+
+173
+00:10:07,483 --> 00:10:08,366
+>> And typically
+
+174
+00:10:09,483 --> 00:10:12,266
+there are some exceptions. SP underscore help is very useful
+
+175
+00:10:12,350 --> 00:10:14,466
+because it just gives you a lot of information about an object.
+
+176
+00:10:15,483 --> 00:10:20,383
+But typically you're better off looking at catalog view, so selecting
+
+177
+00:10:20,466 --> 00:10:21,333
+from sys.databases
+
+178
+00:10:22,483 --> 00:10:26,466
+or sys.objects, sys.tables, sys.procedures and so on sis.-inaudible-
+
+179
+00:10:26,483 --> 00:10:30,466
+and so on, rather than using these legacy stored procedures.
+
+180
+00:10:30,483 --> 00:10:34,466
+A lot of them are the way you used to retrieve metadata back
+
+181
+00:10:34,483 --> 00:10:37,200
+in the day, and we're keeping them for backwards compatibility,
+
+182
+00:10:37,283 --> 00:10:41,466
+but the richness that you get from querying catalog views and
+
+183
+00:10:41,483 --> 00:10:44,466
+DMVs are typically way greater.
+
+184
+00:10:46,483 --> 00:10:48,466
+>> So common system stored procedures, we just look at a few of
+
+185
+00:10:48,483 --> 00:10:52,466
+these, SP databases, SP tables, SP columns, again, we're going
+
+186
+00:10:52,483 --> 00:10:55,466
+to look at the use of the dynamic management viewers, or DMVs,
+
+187
+00:10:55,483 --> 00:11:01,466
+or system catalogs, are ways for us to access this similar information.
+
+188
+00:11:01,483 --> 00:11:04,466
+Unlike the system views, there's not an option to select which
+
+189
+00:11:04,483 --> 00:11:08,216
+column returns. So if I want some information about SP databases,
+
+190
+00:11:08,300 --> 00:11:12,466
+I type in SP databases. If I supply a database name, I get all
+
+191
+00:11:12,483 --> 00:11:14,466
+the information about that database name. I can't be picking
+
+192
+00:11:14,483 --> 00:11:17,466
+and choosing what information I want about that database or about
+
+193
+00:11:17,483 --> 00:11:21,433
+that table or about the columns. But we have a little bit more
+
+194
+00:11:21,483 --> 00:11:26,366
+flexibility when we're using the system catalogs or the views
+
+195
+00:11:26,450 --> 00:11:28,466
+and the functions that are available to us.
+
+196
+00:11:30,333 --> 00:11:32,466
+We can execute a system stored procedure. Most of these are
+
+197
+00:11:32,483 --> 00:11:35,466
+marked with... they are marked with SP underscore as the prefix.
+
+198
+00:11:36,483 --> 00:11:39,466
+They're stored... the system store procedures are stored in a
+
+199
+00:11:39,483 --> 00:11:43,466
+fifth system database that's a hidden database. This does not
+
+200
+00:11:44,483 --> 00:11:47,433
+display when you go into the SQL Server Management Studio.
+
+201
+00:11:47,483 --> 00:11:52,466
+It appears in the schema of every user and system database.
+
+202
+00:11:53,283 --> 00:11:57,466
+The best practice for execution include using the exec or execute
+
+203
+00:11:57,483 --> 00:12:00,466
+statement rather than just typing in the stored procedure name.
+
+204
+00:12:00,483 --> 00:12:03,466
+You want to include the sys schema name so it knows exactly what
+
+205
+00:12:03,483 --> 00:12:06,466
+you're calling out so there's not any issues with a naming convention.
+
+206
+00:12:06,483 --> 00:12:11,216
+And you can name each parameter and specify the appropriate data type.
+
+207
+00:12:11,300 --> 00:12:14,466
+So they're showing again another stored procedure down here with
+
+208
+00:12:14,483 --> 00:12:18,466
+a parameter of object name, and we're calling out the table called customer.
+
+209
+00:12:18,483 --> 00:12:21,466
+So we're specifying what it is that we want to see here.
+
+210
+00:12:21,483 --> 00:12:26,383
+But we need, again, if I could execute this, SP help provides
+
+211
+00:12:26,466 --> 00:12:29,333
+a ton of information. But it will probably be overwhelming with
+
+212
+00:12:29,483 --> 00:12:31,466
+the type of information it's providing me and it's not going
+
+213
+00:12:31,483 --> 00:12:34,466
+to give you the detail that you want to... or it's going to
+
+214
+00:12:34,483 --> 00:12:37,466
+give you too much detail. It's not going to be the detail filtered
+
+215
+00:12:37,483 --> 00:12:40,466
+in a way for you to be able to access that content.
+
+216
+00:12:41,483 --> 00:12:45,433
+Your stored procedures can be wrappers for simple or more complex statements.
+
+217
+00:12:45,483 --> 00:12:49,466
+And we can use the create procedures statement for building these
+
+218
+00:12:49,483 --> 00:12:52,350
+if we want to create a new stored procedure.
+
+219
+00:12:53,483 --> 00:12:56,466
+And this is a way to create a procedure here.
+
+220
+00:12:57,216 --> 00:13:00,466
+We're creating one called products by product line. We're going
+
+221
+00:13:00,483 --> 00:13:04,300
+to use the at num rows as int, so we're going to create a couple variables.
+
+222
+00:13:04,383 --> 00:13:07,466
+We saw that earlier on how do so. We're going to select the
+
+223
+00:13:07,183 --> 00:13:09,466
+top number of rows based on the number of rows that were passed in.
+
+224
+00:13:09,483 --> 00:13:13,233
+And we're going to grab the product ID and list price from the
+
+225
+00:13:13,316 --> 00:13:18,283
+product table where the product line is equal the prod line which
+
+226
+00:13:18,366 --> 00:13:20,466
+is a variable that we actually passed in as well. So this procedure
+
+227
+00:13:20,483 --> 00:13:23,466
+is going to allow us to pass a couple parameters, plus limit
+
+228
+00:13:23,483 --> 00:13:27,466
+the number of rows, but we want to return information from the
+
+229
+00:13:27,483 --> 00:13:30,466
+products table based on a particular product line. But we have
+
+230
+00:13:31,166 --> 00:13:34,466
+some control over what's being returned to us. Even though,
+
+231
+00:13:34,483 --> 00:13:38,466
+you know, we're using a stored procedure, we can pass parameters.
+
+232
+00:13:38,483 --> 00:13:43,350
+This itself I would pass in this example here the production.products
+
+233
+00:13:43,483 --> 00:13:46,466
+by product line. I only want to see 50 rows. I want to look
+
+234
+00:13:46,483 --> 00:13:51,466
+at the product line with the M category. So I would pass that
+
+235
+00:13:51,483 --> 00:13:54,466
+and I would get a result set from that giving me information
+
+236
+00:13:54,483 --> 00:13:57,466
+specifically about that product line. But I don't want to see
+
+237
+00:13:57,483 --> 00:14:00,466
+everything, every product within that product line. I only want
+
+238
+00:14:00,483 --> 00:14:03,466
+to see 50 of them. So this gives us information about that.
+
+239
+00:14:03,483 --> 00:14:07,466
+So we're using a select top. We're going to get the top 50 with that.
+
+240
+00:14:07,483 --> 00:14:10,466
+And we can do an order by clause in here. That would give us
+
+241
+00:14:10,483 --> 00:14:12,466
+return that content in a specific order.
+
+242
+00:14:14,483 --> 00:14:16,466
+>> Okay. I can go ahead and just show an example of
+
+243
+00:14:18,483 --> 00:14:23,466
+using a stored procedure relating to just the banking app that
+
+244
+00:14:24,483 --> 00:14:25,166
+we did before.
+
+245
+00:14:25,483 --> 00:14:29,466
+So let me actually just grab that example that we already had.
+
+246
+00:14:29,483 --> 00:14:34,466
+And we are publishing these script examples that we do. So the
+
+247
+00:14:34,483 --> 00:14:40,466
+demos are online for you to download under the FAQ section of
+
+248
+00:14:40,483 --> 00:14:41,466
+the Web site.
+
+249
+00:14:42,333 --> 00:14:47,233
+So let me just grab the V4 of this thing. And let's say that
+
+250
+00:14:47,316 --> 00:14:50,166
+this is actually what we wanted to make into a stored procedure.
+
+251
+00:14:50,250 --> 00:14:53,466
+>> So that would make more sense. Stored procedures are good
+
+252
+00:14:53,483 --> 00:14:58,400
+for various reasons, one of which is just management of code.
+
+253
+00:14:58,483 --> 00:15:01,466
+Right? So it's also that you don't have to generate all of this
+
+254
+00:15:01,483 --> 00:15:03,466
+code on the client side, you can just send the procedure name
+
+255
+00:15:04,483 --> 00:15:07,466
+and the parameter values to the server and we'll go ahead and
+
+256
+00:15:07,483 --> 00:15:13,466
+execute that. So I'll call this greater procedure SP let's say
+
+257
+00:15:14,483 --> 00:15:17,466
+account withdraw.
+
+258
+00:15:18,483 --> 00:15:24,233
+And we'll have some bugs in it, but that we won't worry about.
+
+259
+00:15:24,316 --> 00:15:30,466
+So I have to pass in account ID and I have to pass in the amount.
+
+260
+00:15:30,483 --> 00:15:33,466
+And we remember these were... both of them for ints.
+
+261
+00:15:33,483 --> 00:15:34,466
+>> Right.
+
+262
+00:15:34,483 --> 00:15:37,466
+>> And you don't actually need begin/end in the beginning of the procedure.
+
+263
+00:15:37,483 --> 00:15:40,466
+But I typically put it there for... because it looks...
+
+264
+00:15:41,383 --> 00:15:42,200
+it looks nice.
+
+265
+00:15:42,283 --> 00:15:43,166
+>> Yes, it does.
+
+266
+00:15:43,250 --> 00:15:48,466
+>> Set no count on is fairly common to use. It just means that
+
+267
+00:15:48,483 --> 00:15:52,466
+after each statement we don't return number of rows affected
+
+268
+00:15:52,483 --> 00:15:55,466
+back to the client. There are some client drivers that will believe...
+
+269
+00:15:55,200 --> 00:15:58,433
+that will basically interpret that as an empty result set.
+
+270
+00:15:58,483 --> 00:16:01,466
+So it's fairly common that you do set no count on to also reduce
+
+271
+00:16:01,483 --> 00:16:04,466
+the amount of data sent back to the client. And then I just
+
+272
+00:16:04,483 --> 00:16:07,183
+go ahead and kind of replace here and say, well, this is actually
+
+273
+00:16:07,266 --> 00:16:13,333
+this guy, and that's this guy and account ID is this guy.
+
+274
+00:16:13,416 --> 00:16:17,233
+And then we're good. So now I've created this stored procedure
+
+275
+00:16:18,383 --> 00:16:23,333
+and we can go ahead and execute it. And it's definitely recommended
+
+276
+00:16:23,483 --> 00:16:30,466
+that you pass the values in by name. So that means I specify
+
+277
+00:16:30,483 --> 00:16:35,466
+this parameter name and I say, well, this is account ID, something,
+
+278
+00:16:36,0 --> 00:16:41,350
+and amount that I want to withdraw is let's say a hundred, and
+
+279
+00:16:41,433 --> 00:16:44,466
+this account doesn't exist so I'll get the error message back.
+
+280
+00:16:45,483 --> 00:16:50,333
+But obviously now it's way easier for you as the app runs, right,
+
+281
+00:16:50,483 --> 00:16:53,233
+you don't have to change the app if you need to optimize the procedure.
+
+282
+00:16:53,483 --> 00:16:56,466
+There are lots of discussions to be had with regards to where
+
+283
+00:16:56,483 --> 00:16:59,466
+the app code should lie and so on. But that's one of the reasons.
+
+284
+00:16:59,483 --> 00:17:03,466
+There's also reasons of we can cache the execution plan that
+
+285
+00:17:03,483 --> 00:17:06,466
+we have to build around this on the server side which minimizes
+
+286
+00:17:06,483 --> 00:17:10,466
+CPU that we have to go through in order to go and execute this.
+
+287
+00:17:10,483 --> 00:17:14,466
+And the other thing that's useful is also we don't have to go
+
+288
+00:17:14,483 --> 00:17:20,466
+and parse in order to do all that work when we get the call because
+
+289
+00:17:20,483 --> 00:17:23,216
+if you just use a remote procedure call, you'll just say use
+
+290
+00:17:23,300 --> 00:17:27,466
+this name with these values and go. And which definitely can save...
+
+291
+00:17:27,483 --> 00:17:31,466
+give you a performance boost. But that's basically how you simply
+
+292
+00:17:31,483 --> 00:17:33,466
+create the procedure and run it.
+
+293
+00:17:34,483 --> 00:17:37,466
+>> All right. And we get to expand on our example on the checking
+
+294
+00:17:37,483 --> 00:17:42,466
+account in our banking industry, or banking option that didn't
+
+295
+00:17:42,483 --> 00:17:45,216
+quite work out like we had opened because V4 was rolled out.
+
+296
+00:17:45,300 --> 00:17:46,466
+>> Yeah.
+
+297
+00:17:46,483 --> 00:17:49,333
+>> All right. So we've looked at the performance or we've been
+
+298
+00:17:49,416 --> 00:17:51,350
+looking at different types of queries, whether they be...
+
+299
+00:17:51,433 --> 00:17:54,433
+specifically spend a lot of time on select statements.
+
+300
+00:17:54,483 --> 00:17:57,466
+Let's take a look at improving SQL query performance.
+
+301
+00:17:58,483 --> 00:18:02,466
+Writing well performed queries. So let's... just some basic
+
+302
+00:18:02,483 --> 00:18:05,466
+ideas here. So only retrieve what you need. So in the select
+
+303
+00:18:05,216 --> 00:18:07,466
+clause, if you only need two or three columns, specify those
+
+304
+00:18:07,483 --> 00:18:11,466
+columns instead of doing... specifying, you know, the asterisk
+
+305
+00:18:11,483 --> 00:18:15,266
+which brings back or returns all the columns for you. If you
+
+306
+00:18:15,350 --> 00:18:18,466
+don't need all the rows, use the where clause. You're not causing
+
+307
+00:18:18,483 --> 00:18:21,466
+any additional performance on the server. So be very specific
+
+308
+00:18:21,483 --> 00:18:24,466
+about what you want retrieved. You can improve search performance
+
+309
+00:18:24,483 --> 00:18:27,400
+of the where clause. Avoid expressions that manipulate columns
+
+310
+00:18:27,483 --> 00:18:30,266
+in the predicate. So be fairly straightforward with the type
+
+311
+00:18:30,350 --> 00:18:32,466
+of information that you want returned to you.
+
+312
+00:18:33,483 --> 00:18:36,466
+Minimize the use of temporary tables or table variables.
+
+313
+00:18:36,483 --> 00:18:40,466
+Use windows functions or some of the set base operations that
+
+314
+00:18:40,483 --> 00:18:43,466
+we talked about earlier on in the class today.
+
+315
+00:18:44,483 --> 00:18:48,466
+Avoid cursors and any other iterative approaches. Those require
+
+316
+00:18:48,483 --> 00:18:53,466
+some extra overhead that would slow down your query performance.
+
+317
+00:18:54,483 --> 00:18:57,466
+Work with your DBA to arrange good indexes and to support the
+
+318
+00:18:57,483 --> 00:19:00,466
+filters and the joins and the orderings. So if you're coming
+
+319
+00:19:00,483 --> 00:19:04,183
+in new, maybe you're, you know, a SharePoint person and you want
+
+320
+00:19:04,266 --> 00:19:06,466
+to work with your DBA because you want to roll out SharePoint
+
+321
+00:19:06,483 --> 00:19:10,450
+which is installed on top of SQL Server, you and your DBA every now...
+
+322
+00:19:10,483 --> 00:19:12,466
+my recommendation is you and your DBA should have lunch once
+
+323
+00:19:12,483 --> 00:19:16,466
+a month. You should take your DBA to lunch once a month and spend
+
+324
+00:19:16,216 --> 00:19:18,466
+some time with them and understand what they're doing and why
+
+325
+00:19:18,483 --> 00:19:20,466
+they're doing it. If they're doing upgrades, you may be planning
+
+326
+00:19:21,483 --> 00:19:24,283
+on going on vacation at the end of October and you're finding
+
+327
+00:19:24,366 --> 00:19:26,283
+out, well, they're rolling out a... you know, they're upgrading
+
+328
+00:19:26,366 --> 00:19:31,466
+from 2008 of SQL Server to 2012. Well, that might cause you
+
+329
+00:19:31,183 --> 00:19:33,466
+to change your vacation plans. There's things like that that
+
+330
+00:19:33,483 --> 00:19:36,466
+you will learn by just having a conversation.
+
+331
+00:19:36,483 --> 00:19:38,466
+There's things you may learn about SharePoint that you can talk
+
+332
+00:19:38,483 --> 00:19:41,466
+to your DBA about and say, hey, look, you know, I understood...
+
+333
+00:19:41,483 --> 00:19:45,466
+I understand that if we do this in SQL Server it will help me
+
+334
+00:19:45,166 --> 00:19:48,466
+in my SharePoint world. So just getting to understand or know
+
+335
+00:19:48,483 --> 00:19:52,466
+your DBA or DBAs, your team of DBAs and having good camaraderie
+
+336
+00:19:52,483 --> 00:19:57,466
+with them will be important for you to help them and help you
+
+337
+00:19:57,483 --> 00:19:59,466
+improve the performance with some of your queries because you
+
+338
+00:19:59,483 --> 00:20:03,466
+can indicate to them what you're doing for joins and what you're
+
+339
+00:20:03,483 --> 00:20:06,466
+doing for sorts. It's like, oh, maybe we need to put an index
+
+340
+00:20:06,483 --> 00:20:10,466
+on that particular thing. Depends on how large of a shop that
+
+341
+00:20:10,483 --> 00:20:14,466
+you're running or a business that you're in. Those conversations
+
+342
+00:20:14,483 --> 00:20:18,466
+can be beneficial to both of you by spending some time with your DBAs.
+
+343
+00:20:19,483 --> 00:20:22,466
+Learn how to address different tasks with different query approaches.
+
+344
+00:20:22,483 --> 00:20:25,466
+We've looked at different ways for doing... there's a few things
+
+345
+00:20:25,483 --> 00:20:27,466
+that Tobias showed us today that were like, wow, we can do it
+
+346
+00:20:28,166 --> 00:20:30,300
+that way or we can do it this way or we can do it that way.
+
+347
+00:20:30,383 --> 00:20:33,416
+So there's so many... often different flavors or different ways
+
+348
+00:20:33,483 --> 00:20:37,166
+we can slice and dice the content, try to find out the best way
+
+349
+00:20:37,483 --> 00:20:39,466
+for us in performance-wise so you can improve performance by
+
+350
+00:20:40,166 --> 00:20:44,466
+using the most appropriate or the best way for us to do that
+
+351
+00:20:44,483 --> 00:20:47,466
+knowing that there's a little overhead involved with one way
+
+352
+00:20:48,333 --> 00:20:51,466
+versus another way. Indexing in SQL Server we talked about, a
+
+353
+00:20:51,483 --> 00:20:53,216
+little bit about indexes.
+
+354
+00:20:53,483 --> 00:20:57,466
+SQL Server can access. The query optimizer determines whether
+
+355
+00:20:57,483 --> 00:21:00,283
+it's going to retrieve content using a table scan which means
+
+356
+00:21:00,366 --> 00:21:03,466
+it's going to read everything in that table or it's going to
+
+357
+00:21:03,483 --> 00:21:06,283
+check to see, oh, wow, we've got an index on this or indexes
+
+358
+00:21:06,366 --> 00:21:10,466
+on that particular table. It may be faster for us to access this
+
+359
+00:21:10,483 --> 00:21:14,466
+content using an index. So index are often used. And if you're
+
+360
+00:21:14,200 --> 00:21:18,466
+grouping or joining or using that order by clause, and if it
+
+361
+00:21:18,483 --> 00:21:22,466
+will help you avoid the table scan, that would be beneficial
+
+362
+00:21:22,483 --> 00:21:26,166
+to when you're performing a query on your database that's stored
+
+363
+00:21:26,483 --> 00:21:27,466
+in SQL Server.
+
+364
+00:21:29,483 --> 00:21:32,466
+Index performance considerations. Check your query execution
+
+365
+00:21:32,483 --> 00:21:34,466
+plans so see if their indexes are present.
+
+366
+00:21:35,483 --> 00:21:38,466
+Make sure those are being used when you expect them being used.
+
+367
+00:21:38,483 --> 00:21:41,466
+You can overindex. You don't want people to think, oh, everything,
+
+368
+00:21:41,233 --> 00:21:44,466
+if I'm going to apply an index to every column because it improves performance...
+
+369
+00:21:44,483 --> 00:21:48,266
+well, if you have too many indexes, it doesn't improve performance.
+
+370
+00:21:48,350 --> 00:21:51,466
+And, remember, indexes are beneficial when you're retrieving
+
+371
+00:21:51,166 --> 00:21:54,450
+content, but there is a little bit of an issue or performance
+
+372
+00:21:54,483 --> 00:21:57,466
+concern when you're inserting update content. And so if you're
+
+373
+00:21:57,483 --> 00:22:00,466
+starting multiple indexes thinking everything's going to be,
+
+374
+00:22:00,483 --> 00:22:03,466
+you know, much faster if you have all these index, if you have
+
+375
+00:22:03,483 --> 00:22:07,466
+every column index, that's not true. It's nothing that you don't
+
+376
+00:22:07,483 --> 00:22:12,466
+want to do. So for those query writers who aren't DBAs or developers,
+
+377
+00:22:12,483 --> 00:22:15,466
+you need to understand the overhead involved with indexes and
+
+378
+00:22:15,483 --> 00:22:18,466
+not just focus on the idea that, oh, wow, indexes are going to
+
+379
+00:22:18,483 --> 00:22:21,466
+help me improve my performance when I retrieve content. You need
+
+380
+00:22:21,483 --> 00:22:24,466
+to understand that too many indexes is bad and there's some overhead
+
+381
+00:22:24,483 --> 00:22:29,466
+involved when you're inserting and updating content that's on
+
+382
+00:22:29,483 --> 00:22:31,466
+a table that has indexes.
+
+383
+00:22:33,483 --> 00:22:36,466
+Your distribution statistics describe the distribution and uniqueness
+
+384
+00:22:37,166 --> 00:22:40,466
+or selectivity of your data. By default your statistics are created
+
+385
+00:22:40,483 --> 00:22:43,466
+and updated automatically. You can update content if you just
+
+386
+00:22:43,483 --> 00:22:48,466
+did a bulk insert of your data and you want to... the query
+
+387
+00:22:48,483 --> 00:22:52,466
+optimizer to be able to take advantage of the index that's on
+
+388
+00:22:52,483 --> 00:22:57,466
+there, you can actually cause your... force your index or your
+
+389
+00:22:57,183 --> 00:23:00,466
+statistics to be updated. It's all driven by statistics and your
+
+390
+00:23:00,483 --> 00:23:03,466
+query optimizer looks at the statistics, start to determine which
+
+391
+00:23:03,483 --> 00:23:08,466
+index to use. So these are items that you may want to look at
+
+392
+00:23:09,483 --> 00:23:12,466
+and understand for the most part I don't need to be worried about
+
+393
+00:23:12,200 --> 00:23:15,466
+updating statistics. It's done for me. But there might be options
+
+394
+00:23:15,483 --> 00:23:19,466
+or a task that you perform which would require you to update
+
+395
+00:23:19,483 --> 00:23:23,300
+those statistics and give you a better performance with your indexes.
+
+396
+00:23:25,483 --> 00:23:28,466
+Cursors. Kind of... they contradict the relational model which
+
+397
+00:23:28,483 --> 00:23:30,400
+operates on sets of data.
+
+398
+00:23:31,0 --> 00:23:35,466
+It would typically require more code, more overhead. Some alternatives
+
+399
+00:23:35,483 --> 00:23:38,283
+to that are the aggregate functions that we introduce, windowing
+
+400
+00:23:38,366 --> 00:23:41,466
+functions that we've introduced. There are some unique situations.
+
+401
+00:23:41,483 --> 00:23:46,466
+More cursors, like generating dynamic SQL code and performing
+
+402
+00:23:46,483 --> 00:23:49,466
+some of the administrative tasks that we perform. Because, remember,
+
+403
+00:23:50,0 --> 00:23:52,333
+when we're looking... we've been looking at retrieving content
+
+404
+00:23:52,416 --> 00:23:56,466
+and more from an end user or developer or information worker,
+
+405
+00:23:56,483 --> 00:24:00,466
+remember, all the tasks the DBA performs for managing SQL Server
+
+406
+00:24:01,0 --> 00:24:05,466
+are done using stored procedures and DMVs and executing queries
+
+407
+00:24:05,483 --> 00:24:11,266
+similar to what we've executed. So these can be used as options
+
+408
+00:24:11,350 --> 00:24:11,466
+as well.
+
+409
+00:24:12,483 --> 00:24:15,466
+So improving query performance. Any suggestions on that?
+
+410
+00:24:15,483 --> 00:24:18,466
+>> So I would suggest we hold on the demo and then we can go...
+
+411
+00:24:19,483 --> 00:24:22,466
+once we go through the execution plan bit, I can show a bit more
+
+412
+00:24:22,233 --> 00:24:26,466
+demos around the query performance, indexing and looking at the
+
+413
+00:24:26,483 --> 00:24:27,466
+execution plan.
+
+414
+00:24:27,483 --> 00:24:29,466
+>> All right. Excellent. So we're going to come back to this
+
+415
+00:24:29,200 --> 00:24:31,466
+demo, because we're going to move into the next section, which
+
+416
+00:24:31,483 --> 00:24:37,166
+is monitoring SQL Server. And Tobias, he kind of just really
+
+417
+00:24:37,483 --> 00:24:40,466
+touched on a little bit when he actually was in a demo earlier,
+
+418
+00:24:40,483 --> 00:24:43,466
+he brought the execute plan. He showed you a couple of ideas.
+
+419
+00:24:43,483 --> 00:24:46,250
+So we're going to expand on that a little bit more here.
+
+420
+00:24:46,483 --> 00:24:50,466
+The execution plan is what's the process involved with executing
+
+421
+00:24:50,483 --> 00:24:54,466
+a query. There's the parsing, resolving any variables or any
+
+422
+00:24:55,483 --> 00:24:58,466
+components that need to be resolved, optimizing it, compiling
+
+423
+00:24:58,483 --> 00:25:01,466
+it, and then finally executing it. It sounds like a lot when
+
+424
+00:25:01,166 --> 00:25:05,466
+you say it that way. It's done in split second. But that's all
+
+425
+00:25:05,483 --> 00:25:07,466
+required when we're actually executing a query.
+
+426
+00:25:08,466 --> 00:25:11,333
+There's some tools that are available to us for accessing the
+
+427
+00:25:11,483 --> 00:25:14,466
+execution plans to show how the query was executed, how it could
+
+428
+00:25:14,183 --> 00:25:18,466
+be executed. We had a question in the chat earlier on, you know,
+
+429
+00:25:18,483 --> 00:25:21,183
+the query plans, what's the difference if you... the actual
+
+430
+00:25:21,266 --> 00:25:22,366
+or the X or the...
+
+431
+00:25:22,483 --> 00:25:24,466
+what's it... the actual... or what's the other one?
+
+432
+00:25:24,483 --> 00:25:28,466
+The... we'll see it when we go in there. I keep forgetting...
+
+433
+00:25:28,166 --> 00:25:30,316
+I just answered that question on the last break and I'm already
+
+434
+00:25:30,400 --> 00:25:34,466
+having a brain cramp. But estimate. The estimated. So the estimated
+
+435
+00:25:34,483 --> 00:25:38,333
+is like... it doesn't actually execute the query plan or the query.
+
+436
+00:25:38,416 --> 00:25:40,466
+It says if I did execute it, this is what I would use. This is
+
+437
+00:25:40,483 --> 00:25:44,466
+the results that you would see or this is how that query would
+
+438
+00:25:44,483 --> 00:25:48,466
+be executed. Where the actual would actually perform the query
+
+439
+00:25:48,483 --> 00:25:51,300
+that you're trying to execute and it gives the results as well.
+
+440
+00:25:51,383 --> 00:25:53,466
+That's the question I was thinking about. Oh. And there's a
+
+441
+00:25:53,483 --> 00:25:56,300
+slide on that which I didn't realize that was coming up. I thought
+
+442
+00:25:56,383 --> 00:25:59,466
+that was a few slides away. But here's an example of that.
+
+443
+00:25:59,483 --> 00:26:00,466
+>> Are you getting tired, Brian?
+
+444
+00:26:00,483 --> 00:26:02,466
+>> Apparently. It's like, wow, it's the next slide, all's I had
+
+445
+00:26:03,483 --> 00:26:06,333
+to do, hit the down arrow and the answer was in front of me.
+
+446
+00:26:06,483 --> 00:26:09,466
+So here's the estimated execution plan which does not execute
+
+447
+00:26:09,483 --> 00:26:12,466
+the query. Just displays how it would execute the plan.
+
+448
+00:26:12,483 --> 00:26:16,466
+Here's the actual. It's going to return the next on the queries executed.
+
+449
+00:26:16,483 --> 00:26:20,466
+And these are the plans that was actually used by the SQL Server
+
+450
+00:26:20,483 --> 00:26:24,466
+chosen by the optimizer when that query was executed.
+
+451
+00:26:25,483 --> 00:26:27,466
+All right. So now I'm going to look before I actually speak.
+
+452
+00:26:27,483 --> 00:26:32,166
+All right. Here's how I get access to the estimated execution plan.
+
+453
+00:26:32,483 --> 00:26:36,466
+I can display that here. And also include the actual execution plan.
+
+454
+00:26:36,483 --> 00:26:40,466
+So we'll be able to see Tobias is going to demo that for us when
+
+455
+00:26:40,483 --> 00:26:42,466
+we go into the demo here.
+
+456
+00:26:43,466 --> 00:26:46,200
+And he's also going to talk about how to interpret it. What does
+
+457
+00:26:46,283 --> 00:26:48,466
+this mean. Because you can hover over these icons as you're seeing that.
+
+458
+00:26:48,483 --> 00:26:51,216
+>> No, no, no. I was going to talk about the Disneyland trip.
+
+459
+00:26:51,300 --> 00:26:53,466
+>> Oh, the Disneyland... I thought we couldn't do that because the...
+
+460
+00:26:53,483 --> 00:26:55,183
+V4 fixed everything.
+
+461
+00:26:55,266 --> 00:26:56,466
+>> Well, we got two, three...
+
+462
+00:26:56,483 --> 00:26:58,466
+>> We've got a few... yeah, we've got a little bit of money.
+
+463
+00:26:58,483 --> 00:27:00,283
+That will get us through the weekend at least.
+
+464
+00:27:01,483 --> 00:27:04,366
+So read the plan right to left, top to bottom. Hover the mouse
+
+465
+00:27:04,450 --> 00:27:06,466
+pointer over. It's show you that when we get in there. The thickness
+
+466
+00:27:06,483 --> 00:27:10,233
+of lines between operators indicates the a relative number of
+
+467
+00:27:10,316 --> 00:27:13,466
+rows passing through. So, I mean, there's some visual items that
+
+468
+00:27:13,483 --> 00:27:16,466
+are going on that you should be familiar with because that will
+
+469
+00:27:16,483 --> 00:27:19,466
+give you an idea as to what's happening. So the visual is in
+
+470
+00:27:19,483 --> 00:27:23,466
+addition to the rollovers of detailed information, will be beneficial
+
+471
+00:27:23,483 --> 00:27:26,466
+when you're looking at the query plans and how to optimize or
+
+472
+00:27:27,333 --> 00:27:29,466
+how to interpret those query plans.
+
+473
+00:27:30,483 --> 00:27:35,466
+Again, here's statistics time on or set statistics I/O on.
+
+474
+00:27:35,483 --> 00:27:38,466
+This gives us information about the parsing and complying of
+
+475
+00:27:38,483 --> 00:27:42,216
+a query or the amount of disk activity generated by a query.
+
+476
+00:27:42,300 --> 00:27:46,450
+So these are... this is information that will give you additional
+
+477
+00:27:46,483 --> 00:27:48,466
+information, or these are commands that give you additional information
+
+478
+00:27:48,483 --> 00:27:51,466
+about how the query optimizer is working for us here.
+
+479
+00:27:52,233 --> 00:27:52,466
+All right.
+
+480
+00:27:53,483 --> 00:27:56,466
+You're off to a really cool demo, aren't you? You're smiling.
+
+481
+00:27:56,483 --> 00:27:59,466
+I can tell you've got something really groovy-gized up for you.
+
+482
+00:27:59,483 --> 00:28:01,0
+>> Well, we'll sneak around here and have a look.
+
+483
+00:28:01,450 --> 00:28:01,466
+>> All right.
+
+484
+00:28:01,483 --> 00:28:02,466
+>> So yeah.
+
+485
+00:28:03,483 --> 00:28:09,466
+Let's take a look at what we can do to, you know, improve query
+
+486
+00:28:09,166 --> 00:28:11,466
+performance and understand what's going on. And this topic is
+
+487
+00:28:11,483 --> 00:28:16,466
+obviously more than what you would fit in in a few minutes of
+
+488
+00:28:16,483 --> 00:28:19,466
+demo, but this is to give you kind of an insight of what you...
+
+489
+00:28:20,166 --> 00:28:23,466
+where to start and what there is to think about. So I'll just
+
+490
+00:28:23,483 --> 00:28:25,466
+start by stealing this
+
+491
+00:28:26,483 --> 00:28:30,250
+sales.sales order detail table and we'll use that as kind of
+
+492
+00:28:30,333 --> 00:28:35,466
+an example for the demo. So I'll just make a copy of that, sales.index
+
+493
+00:28:37,316 --> 00:28:41,466
+test just call it.
+
+494
+00:28:41,183 --> 00:28:43,466
+Okay. So now this table is
+
+495
+00:28:45,450 --> 00:28:46,466
+what's called a heap.
+
+496
+00:28:47,350 --> 00:28:52,466
+And that means it's... there's no clustered index on the table.
+
+497
+00:28:53,466 --> 00:28:57,466
+And okay. What's a clustered index? Well, a table can be of
+
+498
+00:28:59,483 --> 00:29:04,333
+three types in SQL Server 2014. In SQL Server 2012, which is
+
+499
+00:29:04,483 --> 00:29:07,250
+the current version, we can be two types. So it can either be
+
+500
+00:29:07,333 --> 00:29:09,466
+a heap, which is just
+
+501
+00:29:10,483 --> 00:29:13,466
+nonsorted bunch of rows, or it can be a clustered index which
+
+502
+00:29:13,483 --> 00:29:17,466
+means it's sorted on some row. So let me just use simple system
+
+503
+00:29:18,0 --> 00:29:20,466
+procedure here to just check what's the current indexes on this table.
+
+504
+00:29:20,483 --> 00:29:22,466
+>> Are you going to leave us dangling on the new... on index
+
+505
+00:29:23,166 --> 00:29:23,466
+in 2014?
+
+506
+00:29:23,483 --> 00:29:29,350
+>> Well, yeah, so it's... we already have the public betas out
+
+507
+00:29:29,433 --> 00:29:35,466
+there with it, but there's new types of indexes in SQL Server 2014.
+
+508
+00:29:35,483 --> 00:29:36,333
+>> Looking forward.
+
+509
+00:29:36,483 --> 00:29:39,200
+>> So that's seems pretty clear.
+
+510
+00:29:39,283 --> 00:29:39,466
+>> Uh-huh.
+
+511
+00:29:39,483 --> 00:29:42,466
+>> Testing does not have any indexes which means by definition
+
+512
+00:29:42,483 --> 00:29:46,316
+has to be also a heap. So let's just try and say, okay, let's...
+
+513
+00:29:46,400 --> 00:29:50,466
+we want to run our query on this. And we'll use just a bit of
+
+514
+00:29:50,483 --> 00:29:51,466
+a complex...
+
+515
+00:29:52,483 --> 00:29:53,466
+complex but...
+
+516
+00:29:53,483 --> 00:29:56,466
+a bit of a query with multiple parts to it so you get some insight
+
+517
+00:29:57,333 --> 00:29:59,466
+into what's going on. So let's say what I want here is
+
+518
+00:30:01,450 --> 00:30:09,0
+by sales order IT, so by order I would like the sum of unit price
+
+519
+00:30:09,483 --> 00:30:16,466
+multiplied by order quantity I think the column is, group by
+
+520
+00:30:16,216 --> 00:30:19,466
+sales order ID. And I want this only where
+
+521
+00:30:21,483 --> 00:30:24,466
+for a certain customer. So where customer ID...
+
+522
+00:30:26,483 --> 00:30:27,466
+and that's a bit too broad. Let's see.
+
+523
+00:30:31,300 --> 00:30:32,466
+Let's see if we can get something
+
+524
+00:30:34,483 --> 00:30:36,466
+that is a bit more interesting.
+
+525
+00:30:38,483 --> 00:30:43,450
+Special of variety. Let's use that as an example. So okay where
+
+526
+00:30:43,483 --> 00:30:44,466
+special offer ID
+
+527
+00:30:46,483 --> 00:30:48,216
+is 1.
+
+528
+00:30:49,483 --> 00:30:50,466
+Group by sales order ID.
+
+529
+00:30:51,483 --> 00:30:55,466
+So now... and then let's add also... finally we want this sorted
+
+530
+00:30:55,483 --> 00:30:59,466
+by the...
+
+531
+00:31:01,483 --> 00:31:03,466
+this total field.
+
+532
+00:31:05,0 --> 00:31:07,433
+So that's the full query that we have from start.
+
+533
+00:31:07,450 --> 00:31:07,466
+>> Okay.
+
+534
+00:31:07,483 --> 00:31:12,466
+>> Okay. And it's fast. So, you know, done. Heading home.
+
+535
+00:31:12,483 --> 00:31:15,466
+>> That's it. Right? Exactly. We've got to the bank...
+
+536
+00:31:15,483 --> 00:31:17,466
+>> So let's turn on this execution plan business.
+
+537
+00:31:17,483 --> 00:31:23,466
+So I'll click this one, include actual execution plan.
+
+538
+00:31:23,233 --> 00:31:25,466
+There's really no reason to go and look at the estimated execution
+
+539
+00:31:25,483 --> 00:31:30,166
+plan unless the query takes a long time to run or posts an update
+
+540
+00:31:30,483 --> 00:31:32,466
+statement and you don't want to run it, right, update delete
+
+541
+00:31:32,483 --> 00:31:35,466
+or something like this. So the... a nonselect statement.
+
+542
+00:31:35,483 --> 00:31:38,466
+So include the actual execution plan.
+
+543
+00:31:38,483 --> 00:31:42,166
+Run it again. And we'll see what SQL Server actually did.
+
+544
+00:31:42,483 --> 00:31:46,166
+We first apparently we did a table scan, okay, so we see there
+
+545
+00:31:46,483 --> 00:31:48,466
+the predicates that it employed during the table scan, it actually
+
+546
+00:31:48,483 --> 00:31:52,200
+looked for specific offer ID equals 1 when it scanned. So this
+
+547
+00:31:52,283 --> 00:31:54,466
+means it went through all of the rows in the table.
+
+548
+00:31:55,183 --> 00:31:57,466
+And the thickness of arrow is important like Brian mentioned,
+
+549
+00:31:57,483 --> 00:32:01,466
+so we see all of the rows that match this go to the next step
+
+550
+00:32:01,483 --> 00:32:05,466
+where there is a compute scaler. And you go and hit properties here.
+
+551
+00:32:05,483 --> 00:32:09,466
+You can see exactly what the definition of this computation is.
+
+552
+00:32:09,200 --> 00:32:14,250
+So the computation is apparently this which if you just look
+
+553
+00:32:14,333 --> 00:32:18,416
+at it it's going to take the unit price and multiply that by
+
+554
+00:32:18,483 --> 00:32:21,466
+the order quantity. Okay? So that's apparently what we do there.
+
+555
+00:32:21,483 --> 00:32:26,433
+Then we take that and move into a hash match aggregate. So that's
+
+556
+00:32:26,450 --> 00:32:26,466
+the grouping...
+
+557
+00:32:27,166 --> 00:32:28,466
+>> That's my favorite.
+
+558
+00:32:28,216 --> 00:32:31,466
+>> That's the grouping. And the grouping we can either do a sort
+
+559
+00:32:31,483 --> 00:32:36,383
+to group or we can use that hash operation in order to sort that.
+
+560
+00:32:38,250 --> 00:32:41,466
+And apparently we decided to use a hash match rather than a sort,
+
+561
+00:32:41,483 --> 00:32:42,466
+which is typically...
+
+562
+00:32:44,183 --> 00:32:48,466
+which is definitely more efficient. Now, when you see a hash
+
+563
+00:32:48,483 --> 00:32:51,466
+match aggregate, that's typically an indication that you don't
+
+564
+00:32:51,483 --> 00:32:53,466
+have the right index in place.
+
+565
+00:32:53,483 --> 00:32:56,466
+And just like Brian mentioned, if you create perfect indexes
+
+566
+00:32:56,483 --> 00:32:59,466
+for all queries, you'll end up with index sprawl. And if you
+
+567
+00:33:00,0 --> 00:33:03,300
+have a hundred indexes on a table, that means that table is actually
+
+568
+00:33:03,383 --> 00:33:08,333
+a 101 tables, right. So if you do an insert, it's 101 inserts.
+
+569
+00:33:08,416 --> 00:33:10,166
+So that can be costly, right?
+
+570
+00:33:10,483 --> 00:33:14,466
+>> And then we apparently do the sort, the order by total at the end.
+
+571
+00:33:14,200 --> 00:33:17,466
+So we even get a suggestion here from the engine saying, hey,
+
+572
+00:33:17,483 --> 00:33:20,466
+what if you create this index. And you can actually right click
+
+573
+00:33:20,483 --> 00:33:23,466
+and say give me the missing index details and we can just go
+
+574
+00:33:23,483 --> 00:33:24,466
+and create that. But let's...
+
+575
+00:33:25,483 --> 00:33:28,466
+let's look at this in a bit more detail. So we'll turn on the
+
+576
+00:33:28,483 --> 00:33:32,166
+statistics I/O. That's typically the most interesting one to
+
+577
+00:33:32,483 --> 00:33:36,400
+look at, because the I/O used is independent of the locks that
+
+578
+00:33:36,483 --> 00:33:40,466
+happened during the execution and how busy the server is.
+
+579
+00:33:40,233 --> 00:33:43,466
+And rather than statistics time which obviously depends a lot
+
+580
+00:33:43,483 --> 00:33:47,466
+on how busy CPU is and so on and locking all of that. So I'll
+
+581
+00:33:47,483 --> 00:33:51,433
+execute this again. We'll look at messages. And it tells me
+
+582
+00:33:51,483 --> 00:33:57,466
+per table how much work we did. And we can see here that we looked
+
+583
+00:33:57,483 --> 00:34:03,183
+at index 1 and we scanned it once. During those one scans, we
+
+584
+00:34:03,266 --> 00:34:09,466
+read 1494 pages, which are 8K units, from memory. So if it said,
+
+585
+00:34:09,483 --> 00:34:12,466
+you know, 10 here, that's during those 10 iterations through
+
+586
+00:34:12,483 --> 00:34:14,466
+the table, the total was 1494.
+
+587
+00:34:15,483 --> 00:34:19,466
+And then physical reads is out of those 1494 how many did I have
+
+588
+00:34:19,483 --> 00:34:22,466
+to go to disk to fetch. And it makes sense that these are in
+
+589
+00:34:22,483 --> 00:34:25,333
+memory since we just created the table, right?
+
+590
+00:34:25,483 --> 00:34:28,466
+And then we have some more detail later, which type of lookups
+
+591
+00:34:28,483 --> 00:34:29,466
+we did.
+
+592
+00:34:30,483 --> 00:34:33,466
+But basically the fewer of these the better. That's the general
+
+593
+00:34:33,483 --> 00:34:37,300
+rule of thumb. So let's say that, okay, this one was actually
+
+594
+00:34:37,483 --> 00:34:41,466
+this many pages and we had a table scan and we had a hash thing
+
+595
+00:34:41,483 --> 00:34:47,466
+give in there and hash aggregate and we also... that's enough.
+
+596
+00:34:47,483 --> 00:34:51,466
+We will indicate that this is not perfect, right? So what you're
+
+597
+00:34:51,483 --> 00:34:53,466
+interested in when you look at the execution plan is typically
+
+598
+00:34:53,483 --> 00:34:57,200
+a smaller plan is better, fewer steps, that kind of makes sense.
+
+599
+00:34:57,483 --> 00:35:01,466
+Thinner arrows are better, less values move between. And you
+
+600
+00:35:01,483 --> 00:35:04,466
+want to avoid things that seem to use...
+
+601
+00:35:05,483 --> 00:35:09,466
+touch a lot of data, so scans generally are not the best.
+
+602
+00:35:10,483 --> 00:35:13,183
+And this hash operations are costly because we're putting lots
+
+603
+00:35:13,266 --> 00:35:16,466
+of stuff into memory in order to probe the results, probe the
+
+604
+00:35:16,483 --> 00:35:21,466
+hash table. So let's say, okay, let's create an index on this database.
+
+605
+00:35:21,483 --> 00:35:27,416
+So we'll create a cluster index first, just to see what that
+
+606
+00:35:27,483 --> 00:35:28,466
+would happen.
+
+607
+00:35:29,483 --> 00:35:32,466
+So the
+
+608
+00:35:36,483 --> 00:35:40,466
+clustered index, I can specify up to 16 or always with indexes
+
+609
+00:35:40,483 --> 00:35:43,466
+I can specify up to 16 columns in the key. The key can't be
+
+610
+00:35:43,483 --> 00:35:48,466
+larger than 16 columns or 900 bytes wide. And the clustered
+
+611
+00:35:48,483 --> 00:35:52,433
+index is sorting the actual table. So you're basically sorting
+
+612
+00:35:52,483 --> 00:35:55,0
+the table and then you're adding a balanced tree structure on
+
+613
+00:35:55,483 --> 00:35:59,466
+top of the table. And the logical query processing is typically
+
+614
+00:35:59,483 --> 00:36:04,466
+what you're after. What has to happen first is where, so we probably
+
+615
+00:36:04,166 --> 00:36:08,466
+want to create... use the special offer ID as the first column
+
+616
+00:36:08,483 --> 00:36:09,466
+in the index.
+
+617
+00:36:09,483 --> 00:36:10,466
+Now, let's just
+
+618
+00:36:12,483 --> 00:36:15,466
+do this as the example.
+
+619
+00:36:16,483 --> 00:36:17,466
+Create the index
+
+620
+00:36:19,483 --> 00:36:23,466
+and then run the query and see if there is a difference. So now
+
+621
+00:36:23,483 --> 00:36:27,466
+we see, ah, there is a cluster index seek that happens instead.
+
+622
+00:36:27,483 --> 00:36:31,466
+It takes the rows goes to the next place, it calculates unit
+
+623
+00:36:31,483 --> 00:36:34,466
+price times order quantity. That's the hash match scale and then
+
+624
+00:36:34,483 --> 00:36:38,233
+the sort. And now we ended up touching, oh, more pages.
+
+625
+00:36:38,483 --> 00:36:41,466
+Well, what's going on. Well, apparently special offer ID is pretty
+
+626
+00:36:41,483 --> 00:36:45,466
+big right so when we restructured the table we were unlucky in
+
+627
+00:36:45,483 --> 00:36:48,466
+a sense that we actually ended up using more space.
+
+628
+00:36:49,483 --> 00:36:52,466
+So that was obviously perfectly rehearsed. Let's do special
+
+629
+00:36:52,483 --> 00:36:57,466
+offer ID 2 and let's drop the index and try again.
+
+630
+00:36:58,483 --> 00:36:59,466
+See if
+
+631
+00:37:00,483 --> 00:37:09,466
+Tobia's fat finger again... okay. So 1592. So dropping the
+
+632
+00:37:09,483 --> 00:37:12,466
+index obviously is not like we two and move everything around
+
+633
+00:37:12,233 --> 00:37:15,466
+again, we just drop that balanced tree structure. So okay.
+
+634
+00:37:15,483 --> 00:37:16,466
+Now... is it
+
+635
+00:37:19,483 --> 00:37:23,333
+the same amount of rows?
+
+636
+00:37:24,483 --> 00:37:25,466
+>> Yes, I think it was.
+
+637
+00:37:25,483 --> 00:37:27,466
+>> Oh, sorry, sorry. It's a table scan. I'm...
+
+638
+00:37:27,483 --> 00:37:28,466
+>> Yeah.
+
+639
+00:37:28,483 --> 00:37:32,466
+>> It's getting late here. Okay. 159 pages. Table scan hash
+
+640
+00:37:32,483 --> 00:37:33,466
+aggregate -inaudible-.
+
+641
+00:37:34,483 --> 00:37:36,466
+Okay, now we create the clustered index.
+
+642
+00:37:38,483 --> 00:37:41,466
+Do this again, special offer ID 2 is hopefully a little bit smaller
+
+643
+00:37:41,166 --> 00:37:41,466
+than 1.
+
+644
+00:37:42,483 --> 00:37:43,466
+And, yay.
+
+645
+00:37:43,483 --> 00:37:44,466
+>> Yeah, 48.
+
+646
+00:37:44,483 --> 00:37:45,433
+>> 48 logical reads.
+
+647
+00:37:45,450 --> 00:37:45,466
+>> Nice.
+
+648
+00:37:46,333 --> 00:37:46,466
+>> Now we can go home.
+
+649
+00:37:46,483 --> 00:37:48,466
+>> Yeah. Now we're up.
+
+650
+00:37:48,483 --> 00:37:54,466
+>> Okay. So 48 pages and we see this is an index seek. And that
+
+651
+00:37:54,483 --> 00:37:57,466
+basically means we're using the balanced tree structure to work
+
+652
+00:37:57,483 --> 00:38:00,466
+it down, to find the right place in the index and then just follow
+
+653
+00:38:00,483 --> 00:38:05,350
+the linked list until we find special offer ID not 2 anymore, 3.
+
+654
+00:38:05,483 --> 00:38:09,316
+But we still have a hash aggregate. So I'll probably say this
+
+655
+00:38:09,400 --> 00:38:12,466
+is great. But let's just say it's okay.
+
+656
+00:38:13,483 --> 00:38:17,250
+Now I want to show the problem with the clustered index is that
+
+657
+00:38:17,333 --> 00:38:21,466
+we can create only one, because we're structuring the table itself.
+
+658
+00:38:21,483 --> 00:38:25,283
+So let's say we already had a good clustered index and we can't
+
+659
+00:38:25,366 --> 00:38:28,466
+create another one. So let's say that there is already a clustered
+
+660
+00:38:28,483 --> 00:38:29,466
+index on...
+
+661
+00:38:31,483 --> 00:38:36,466
+let's say there
+
+662
+00:38:38,483 --> 00:38:40,466
+is already a clustered index on...
+
+663
+00:38:41,483 --> 00:38:42,466
+dadadada, okay.
+
+664
+00:38:42,483 --> 00:38:47,466
+On sales order ID which I'm not using in this query.
+
+665
+00:38:48,483 --> 00:38:50,466
+So that will... and this is the common thing that you'll find
+
+666
+00:38:51,483 --> 00:38:53,433
+when you optimize of course. There already is a clustered index
+
+667
+00:38:53,483 --> 00:38:58,166
+there and changing it you have to obviously look at what you're...
+
+668
+00:38:58,483 --> 00:39:01,333
+what problems you're creating. Okay. So this seems...
+
+669
+00:39:02,483 --> 00:39:06,466
+so now we're in this other space where we have to create nonclustered indexes.
+
+670
+00:39:06,483 --> 00:39:10,316
+And nonclustered index means basically take whatever columns
+
+671
+00:39:10,400 --> 00:39:13,466
+I ask to include, right, in the index and create a new table,
+
+672
+00:39:14,483 --> 00:39:17,466
+shove all of the data in there, but only those columns and add
+
+673
+00:39:17,200 --> 00:39:19,466
+a pointer back to the table. And they're a little bit different
+
+674
+00:39:19,483 --> 00:39:23,0
+types of pointers you can read up on later. But put those in
+
+675
+00:39:23,483 --> 00:39:26,466
+that separate table, build the balance tree structure, and now
+
+676
+00:39:26,483 --> 00:39:29,466
+you allow to query optimizer to pick that index as well.
+
+677
+00:39:29,483 --> 00:39:31,466
+And you can imagine if you create a hundred of those, you have
+
+678
+00:39:31,483 --> 00:39:34,466
+a 101 tables, right, like I mentioned before.
+
+679
+00:39:34,483 --> 00:39:39,466
+So we have the new... this new index.
+
+680
+00:39:39,483 --> 00:39:43,466
+And it's now clustered index, it's not on the right column anymore,
+
+681
+00:39:43,483 --> 00:39:47,466
+right, it's on not special offer ID. So we're back to having
+
+682
+00:39:47,483 --> 00:39:51,466
+a clustered index scan, which is the same as a table scan.
+
+683
+00:39:51,483 --> 00:39:54,466
+So I'm scanning the clustered index, which is the table, right,
+
+684
+00:39:54,483 --> 00:39:56,466
+it's just a sorted table. So and
+
+685
+00:39:58,283 --> 00:40:03,333
+we're getting to this 1574 pages. So let's just pretend it's
+
+686
+00:40:03,483 --> 00:40:06,383
+the same as this. So I want to improve on this. I'm go ahead
+
+687
+00:40:06,466 --> 00:40:07,466
+and create a known clustered index.
+
+688
+00:40:09,483 --> 00:40:12,466
+And you can have up to 249 known clustered indexes on a table.
+
+689
+00:40:12,483 --> 00:40:14,466
+But you probably don't want that.
+
+690
+00:40:15,300 --> 00:40:18,466
+And I want to have this index on special offer ID.
+
+691
+00:40:20,483 --> 00:40:23,250
+Which is basically the same as before. Now, what happens is
+
+692
+00:40:23,333 --> 00:40:26,466
+we take just special offer ID, copy that to a new table, sort
+
+693
+00:40:26,483 --> 00:40:29,466
+it, create this balance tree structure and have the pointers back.
+
+694
+00:40:30,433 --> 00:40:34,466
+Create that index. And let's run the query. Hmm. Still at 1574.
+
+695
+00:40:38,483 --> 00:40:40,466
+Well, that's odd. What's going on?
+
+696
+00:40:43,400 --> 00:40:49,366
+So aha. Still doing the clustered index scan. Oh. So the query
+
+697
+00:40:49,450 --> 00:40:52,466
+optimizer didn't notice it was this great index there. I can
+
+698
+00:40:53,166 --> 00:40:55,466
+go and force the index to be used instead.
+
+699
+00:40:55,483 --> 00:41:02,300
+So we'll say with index... and this is typically something that
+
+700
+00:41:02,383 --> 00:41:04,333
+you do mostly for testing
+
+701
+00:41:05,483 --> 00:41:08,466
+at the index hints. So basically when you access this table,
+
+702
+00:41:08,483 --> 00:41:10,466
+I want you to go through the physical structure
+
+703
+00:41:12,400 --> 00:41:14,466
+NC IDX, the nonclustered index I created.
+
+704
+00:41:16,483 --> 00:41:19,466
+So now I know better than the query optimizer, so I'm telling
+
+705
+00:41:19,483 --> 00:41:23,466
+it, boss, you have it all wrong, let's do it this way instead.
+
+706
+00:41:24,483 --> 00:41:28,333
+And now the execution plan looks like this. We seek the index.
+
+707
+00:41:28,416 --> 00:41:31,466
+So we go to this other structure. We find special offer ID 2.
+
+708
+00:41:31,483 --> 00:41:36,466
+But for every row I have to go and fetch unit price, order quantity,
+
+709
+00:41:37,250 --> 00:41:41,466
+and sales order ID because those don't exist in the table.
+
+710
+00:41:41,483 --> 00:41:44,466
+Actually, sales order ID happens to be the pointer in this case.
+
+711
+00:41:44,483 --> 00:41:47,416
+But at any rate, logically, you are to go and fetch this from
+
+712
+00:41:47,483 --> 00:41:51,283
+the base table. So now for every row in the... that we're returning,
+
+713
+00:41:51,366 --> 00:41:53,466
+you have to go and fetch from the base table which becomes a
+
+714
+00:41:54,483 --> 00:41:56,466
+lot of I/Os, right? So now
+
+715
+00:41:57,483 --> 00:42:02,466
+we're actually using 10570 I/Os. And you're doing a join here
+
+716
+00:42:02,483 --> 00:42:08,466
+between these two tables in essence behind the scenes. So, wow,
+
+717
+00:42:08,483 --> 00:42:13,466
+that's table... that's basically index seek plus lookup to get
+
+718
+00:42:14,483 --> 00:42:17,233
+the rest of the mid callers that were not in the index.
+
+719
+00:42:17,483 --> 00:42:21,466
+And then apparently we could do the aggregate immediately.
+
+720
+00:42:21,483 --> 00:42:27,466
+And then this is super bad obviously. We made it worse.
+
+721
+00:42:29,483 --> 00:42:32,466
+So let's see what could we do instead.
+
+722
+00:42:33,483 --> 00:42:37,333
+Well, we don't obviously want to have to do these lookups.
+
+723
+00:42:37,483 --> 00:42:40,466
+So I'll say, well, special offer ID I want in there and I want
+
+724
+00:42:40,483 --> 00:42:41,400
+to include...
+
+725
+00:42:42,483 --> 00:42:45,466
+and I'll just move the clustered index to another column to make
+
+726
+00:42:45,483 --> 00:42:49,466
+another point, so let's just put the clustered index on order quantity.
+
+727
+00:42:53,483 --> 00:42:55,466
+There we two. And obviously when I rebuilt the cluster index
+
+728
+00:42:56,483 --> 00:42:59,466
+I have to rebuild the noncluster index. So now we want to improve
+
+729
+00:42:59,483 --> 00:43:02,466
+on this, so we say special offer ID, it's the index, and I can
+
+730
+00:43:02,483 --> 00:43:06,466
+also choose to include additional columns in the index just to
+
+731
+00:43:06,483 --> 00:43:10,466
+avoid these lookup. So I say, well, I need sales order ID in
+
+732
+00:43:10,200 --> 00:43:13,466
+there because I group by sales order ID and I need unit price
+
+733
+00:43:13,483 --> 00:43:17,466
+and order quantity in there. If I have all of those, it shouldn't
+
+734
+00:43:17,483 --> 00:43:19,466
+need to do the join down back to the base table.
+
+735
+00:43:24,483 --> 00:43:27,366
+So I'll go ahead and recreate the table... the index.
+
+736
+00:43:28,200 --> 00:43:31,466
+So again it sorts based on special offer ID and just then adds
+
+737
+00:43:31,483 --> 00:43:34,466
+into the index these other columns.
+
+738
+00:43:35,183 --> 00:43:40,333
+Now, when I go execute that, I get 17 logical reads. It sounds
+
+739
+00:43:40,416 --> 00:43:41,466
+better, right?
+
+740
+00:43:44,183 --> 00:43:46,466
+And if you go and look in the execution plan now, it's clearly
+
+741
+00:43:46,483 --> 00:43:50,333
+just a seek, computes the scaler aggregate, then we have a sort.
+
+742
+00:43:50,416 --> 00:43:52,466
+And if you look at the coast estimate here, that's where we're
+
+743
+00:43:52,483 --> 00:43:56,466
+spending a lot of the cost of the query. So we're sorting on
+
+744
+00:43:56,483 --> 00:44:00,466
+sales order ID because of the grouping. So apparently the optimizer
+
+745
+00:44:00,483 --> 00:44:03,466
+came to the conclusion that this is a small enough set, it makes
+
+746
+00:44:03,483 --> 00:44:07,466
+sense to sort rather than hash aggregates. So we have index seek.
+
+747
+00:44:07,483 --> 00:44:12,466
+We have sort for group, grouping.
+
+748
+00:44:15,483 --> 00:44:20,466
+And this is already good. We went from 1,500 logical reads or
+
+749
+00:44:21,483 --> 00:44:23,466
+pages down to 17.
+
+750
+00:44:23,483 --> 00:44:29,466
+But let's see if we can do better. So what we can do is if we
+
+751
+00:44:29,483 --> 00:44:32,466
+wanted to sort this on special offer ID, that's the where clause,
+
+752
+00:44:32,483 --> 00:44:34,466
+the next thing that's going to happen is the grouping. So if
+
+753
+00:44:34,483 --> 00:44:39,466
+the index is already grouped or ordered on sales order ID, since
+
+754
+00:44:39,483 --> 00:44:42,350
+that's what I group on, I want...
+
+755
+00:44:44,483 --> 00:44:46,466
+I won't need to do the sort operation.
+
+756
+00:44:47,216 --> 00:44:50,166
+So I recreate the index.
+
+757
+00:44:52,483 --> 00:44:54,466
+And I go and run the query again.
+
+758
+00:44:55,483 --> 00:44:58,466
+And now still 17 logical reads because it's the same amount of
+
+759
+00:44:58,483 --> 00:45:01,466
+data I need to touch, but you can see that the sort operation
+
+760
+00:45:01,483 --> 00:45:05,466
+disappeared, the first one, right, because the grouping you can
+
+761
+00:45:05,233 --> 00:45:07,466
+just go and do the stream aggregate. We know that it's already
+
+762
+00:45:07,483 --> 00:45:11,183
+sorted, so we just go and do the calculation. And then we have
+
+763
+00:45:11,266 --> 00:45:14,466
+the last sort, which we need, because we want to sort...
+
+764
+00:45:14,483 --> 00:45:18,366
+the presentation to be ordered this way. So now you can argue
+
+765
+00:45:18,450 --> 00:45:20,466
+this is kind of the perfect plan for this particular query.
+
+766
+00:45:21,483 --> 00:45:25,466
+So 17 pages, index sort, and then no sort for the grouping, and
+
+767
+00:45:25,483 --> 00:45:30,466
+this is, wee, super, super happy. So obviously if the query
+
+768
+00:45:30,483 --> 00:45:34,466
+runs, you execute this all the time, it's a good idea to create
+
+769
+00:45:34,483 --> 00:45:38,466
+the right index. If you execute it some of the time, you know,
+
+770
+00:45:38,483 --> 00:45:41,466
+at some point you'll have to think about this index sprawl business.
+
+771
+00:45:41,483 --> 00:45:44,466
+But this kind of gives you an insight into what you need to do
+
+772
+00:45:44,483 --> 00:45:49,400
+in order to get the best performance out of your queries.
+
+773
+00:45:49,483 --> 00:45:52,466
+>> All right. Fantastic demo to wrap up this module here.
+
+774
+00:45:53,0 --> 00:45:56,466
+We're just going to do a little brief summary here. We talked
+
+775
+00:45:56,200 --> 00:45:59,466
+about system catalog views and way for us to review that content
+
+776
+00:45:59,483 --> 00:46:03,266
+or access that content. Information schema views. We also have
+
+777
+00:46:03,350 --> 00:46:05,466
+some store procedures, system stored procedures. But as we pointed
+
+778
+00:46:06,483 --> 00:46:08,466
+out, you want to try to take advantage of the system catalog
+
+779
+00:46:08,483 --> 00:46:13,466
+views as well as the information schema views to retrieve information
+
+780
+00:46:13,483 --> 00:46:17,250
+and the dynamic management views, or the DMVs. We told you...
+
+781
+00:46:17,333 --> 00:46:21,466
+showed you how to create a store procedure and how to include
+
+782
+00:46:21,483 --> 00:46:23,466
+passing the parameters into a stored procedure, so you can reuse
+
+783
+00:46:23,483 --> 00:46:28,466
+that stored procedure and be able to retrieve information based
+
+784
+00:46:28,483 --> 00:46:31,466
+on different value use that you're passing in. Writing...
+
+785
+00:46:31,483 --> 00:46:35,416
+we talked about ways to improve performance with your queries
+
+786
+00:46:35,483 --> 00:46:39,466
+by avoiding certain things like cursors and only specifying the
+
+787
+00:46:40,483 --> 00:46:43,316
+columns that you really want returned versus all the columns
+
+788
+00:46:43,400 --> 00:46:45,466
+using a where clause versus no where clause is going to return
+
+789
+00:46:45,483 --> 00:46:50,466
+all the rows. And we looked at the ways for us to monitor the
+
+790
+00:46:50,483 --> 00:46:55,466
+performance of a query and with the excellent demo that we did
+
+791
+00:46:55,216 --> 00:46:59,233
+with the Tobias did, actually, with the query plans, how we can
+
+792
+00:46:59,316 --> 00:47:03,400
+use those execution plans to view the content and understand
+
+793
+00:47:03,483 --> 00:47:08,266
+if to... if there's better ways for us to be able to access this content.
+
+794
+00:47:08,350 --> 00:47:12,466
+And as you saw, we tried three or four different iterative approaches
+
+795
+00:47:12,483 --> 00:47:17,466
+before we found the best solution for that query or for that index.
+
+796
+00:47:17,483 --> 00:47:21,466
+So what we did today is we went through an introduction to SQL
+
+797
+00:47:21,483 --> 00:47:24,400
+Server, we talked about the different types of statements and
+
+798
+00:47:24,483 --> 00:47:27,466
+introduced the basic select statement and other statement elements.
+
+799
+00:47:27,216 --> 00:47:31,466
+We went into advanced select statements. We introduced distinct,
+
+800
+00:47:31,166 --> 00:47:34,350
+aliases, scalar functions and case, talked about joins and merges,
+
+801
+00:47:34,433 --> 00:47:37,466
+how to filter and sort your data. Talked about the different
+
+802
+00:47:37,233 --> 00:47:40,466
+data types, the date time data type, the character data type.
+
+803
+00:47:40,483 --> 00:47:44,466
+Also understanding SQL Server function types are available to
+
+804
+00:47:44,483 --> 00:47:47,466
+provide information back to you. We looked at ways for grouping
+
+805
+00:47:47,483 --> 00:47:51,350
+and aggregating data. We used the group by and having clause.
+
+806
+00:47:51,433 --> 00:47:55,466
+We introduce subqueries and how those can be used, the exist clause.
+
+807
+00:47:55,483 --> 00:47:57,466
+We talked about the inline and the derived table tables that
+
+808
+00:47:58,333 --> 00:48:00,466
+are available to us. We actually broke for some food somewhere
+
+809
+00:48:00,483 --> 00:48:03,333
+in the middle, so we took a meal break today, which was good,
+
+810
+00:48:03,416 --> 00:48:06,466
+all needed. And then we talked about the set operators and how
+
+811
+00:48:06,483 --> 00:48:10,466
+we can use the grouping sets like pivot and cube and roll up.
+
+812
+00:48:10,483 --> 00:48:14,416
+We went into ways for inserting updating and deleting data.
+
+813
+00:48:14,483 --> 00:48:18,466
+Talked about the use of default constraints and triggers to ensure
+
+814
+00:48:18,483 --> 00:48:22,250
+that data we're adding is validated or good data we'll use and
+
+815
+00:48:22,333 --> 00:48:25,466
+to avoid the garbage in/garbage out. We talked about programming
+
+816
+00:48:25,483 --> 00:48:29,466
+with SQL Server and how to implement error handling and understood
+
+817
+00:48:29,483 --> 00:48:32,466
+and also introduced the idea of transactions, how beneficial
+
+818
+00:48:32,483 --> 00:48:35,466
+and how they could be required depending on the type of data.
+
+819
+00:48:35,483 --> 00:48:38,466
+Obviously the banking industry does require the use of transactions.
+
+820
+00:48:39,166 --> 00:48:42,466
+And we've wrapped up with retrieving SQL Server metadata, improving
+
+821
+00:48:43,316 --> 00:48:47,466
+query performance by querying system catalogs in DMVs and looking
+
+822
+00:48:47,483 --> 00:48:49,466
+at creating and executing stored procedures and then how you
+
+823
+00:48:49,483 --> 00:48:53,466
+can improve SQL Server query performance by using those execution plans.
+
+824
+00:48:53,483 --> 00:48:57,466
+So on behalf of everyone here at MVA as well as Tobias and myself,
+
+825
+00:48:57,483 --> 00:49:00,366
+it was a pleasure working with you. We would like to thank you
+
+826
+00:49:00,450 --> 00:49:03,466
+very much for joining us. We would like to ask you as well to
+
+827
+00:49:03,483 --> 00:49:05,466
+look at the poll at the bottom of the screen. If you take a
+
+828
+00:49:05,483 --> 00:49:07,466
+few moments to complete that, we would greatly appreciate it.
+
+829
+00:49:08,166 --> 00:49:10,466
+And we appreciate you joining us and we look forward to seeing
+
+830
+00:49:10,483 --> 00:49:13,466
+you in a future MVA class. Thanks very much.
+
+831
+00:49:13,233 --> 00:49:14,250
+>> Thanks a lot, everyone.
+

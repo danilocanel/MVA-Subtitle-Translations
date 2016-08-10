@@ -1,0 +1,2264 @@
+1
+00:00:00,333 --> 00:00:06,333
+[Music]
+
+2
+00:00:17,483 --> 00:00:18,466
+>> Welcome back, folks.
+
+3
+00:00:18,483 --> 00:00:21,466
+Thank you very much for joining us. We hope everyone enjoyed
+
+4
+00:00:21,483 --> 00:00:25,466
+your meal break and got rejuvenated and refreshed and ready to
+
+5
+00:00:25,183 --> 00:00:29,466
+go on with three to four more modules regarding query SQL Server 2012.
+
+6
+00:00:29,483 --> 00:00:33,466
+I'm still in the studio with Tobias. He didn't bail on me over
+
+7
+00:00:33,483 --> 00:00:36,466
+the meal break. Welcome back, sir. Thank you very much for staying
+
+8
+00:00:36,483 --> 00:00:37,466
+with us today.
+
+9
+00:00:38,483 --> 00:00:41,433
+>> Thank you. And especially thanks to everyone who is where it
+
+10
+00:00:41,483 --> 00:00:42,466
+is 2:00 a.m. right now.
+
+11
+00:00:42,483 --> 00:00:45,466
+>> Yeah, exactly. We have it easy where we are. So let's just
+
+12
+00:00:45,483 --> 00:00:48,466
+review what we've gone through so far. We went through kind
+
+13
+00:00:48,483 --> 00:00:51,466
+of just introduced some of the basic statements and elements
+
+14
+00:00:51,483 --> 00:00:54,466
+that are involved with SQL Server. Spent a little bit of time
+
+15
+00:00:54,483 --> 00:00:58,466
+on that and talked a little bit about the basic select statement.
+
+16
+00:00:59,0 --> 00:01:02,466
+We went into the module, looked at advanced select statements,
+
+17
+00:01:02,483 --> 00:01:05,466
+really just introduced some clauses in there like distinct and
+
+18
+00:01:05,483 --> 00:01:09,333
+scalar function case, the join, merge. Showed you how to filter
+
+19
+00:01:09,483 --> 00:01:12,250
+and sort data. Then we moved into data types. Talked about the
+
+20
+00:01:12,333 --> 00:01:14,466
+different types of data types, the time and date data types and
+
+21
+00:01:14,483 --> 00:01:17,466
+the character data types and some functions associated with those
+
+22
+00:01:17,483 --> 00:01:21,466
+data types allows us to get creative with how those are displayed
+
+23
+00:01:21,483 --> 00:01:24,466
+and what we can do with the data types. We then talked about
+
+24
+00:01:24,483 --> 00:01:28,333
+grouping and aggregating data. Not to be confused with aggravating.
+
+25
+00:01:28,416 --> 00:01:30,466
+And we talked about some of the aggregate functions like the
+
+26
+00:01:30,483 --> 00:01:34,466
+group by and having. Some of the sub queries available to us
+
+27
+00:01:34,483 --> 00:01:38,183
+and a couple of really neat demos from Tobias on the views, the
+
+28
+00:01:38,266 --> 00:01:41,316
+different tables, derived tables and different ways we could
+
+29
+00:01:41,400 --> 00:01:44,466
+work with that content. Then we took a 60-minute meal break which
+
+30
+00:01:44,483 --> 00:01:47,466
+is really nice but now we've got to move back into some content.
+
+31
+00:01:47,483 --> 00:01:51,466
+We're going to move into Module 5 where we'll discuss set operators
+
+32
+00:01:51,483 --> 00:01:55,266
+and talk about some additional windows functions and grouping
+
+33
+00:01:55,350 --> 00:01:59,350
+options ways for us to again summarize some data. We'll talk
+
+34
+00:01:59,433 --> 00:02:03,466
+about set operators, windows functions, grouping sets using things
+
+35
+00:02:03,483 --> 00:02:07,266
+like pivots and cubes and roll-ups that's what we'll dig into
+
+36
+00:02:07,350 --> 00:02:10,466
+in this section here. We've got some cool stuff left for us to
+
+37
+00:02:10,483 --> 00:02:14,466
+be discussing. So let's open up this section with set operators.
+
+38
+00:02:14,483 --> 00:02:18,466
+It's an interaction between sets. It's the result of two input
+
+39
+00:02:19,333 --> 00:02:23,466
+queries that can be either combined, operated against or even compared.
+
+40
+00:02:24,283 --> 00:02:29,466
+Both of them have to have compatible columns, same number of columns.
+
+41
+00:02:29,483 --> 00:02:32,466
+You can't use the order by clause there when you're looking at
+
+42
+00:02:32,483 --> 00:02:38,466
+these input queries. Those are considered equal when you're comparing sets.
+
+43
+00:02:38,483 --> 00:02:40,466
+And some of these set operations include unions and intersects,
+
+44
+00:02:40,483 --> 00:02:44,466
+intersect and except and apply.
+
+45
+00:02:44,483 --> 00:02:46,466
+The union operator didn't we talk a little bit about this Tobias
+
+46
+00:02:46,483 --> 00:02:47,466
+a little bit earlier.
+
+47
+00:02:48,333 --> 00:02:50,466
+>> I believe we did.
+
+48
+00:02:50,483 --> 00:02:53,466
+>> Nothing new here we had a great demo from Tobias on this.
+
+49
+00:02:53,483 --> 00:02:57,466
+Merge content from different tables and put it into a single
+
+50
+00:02:57,483 --> 00:02:58,466
+result set.
+
+51
+00:02:59,483 --> 00:03:02,466
+We'll just go by this because you've already seen a cool demo
+
+52
+00:03:02,483 --> 00:03:06,350
+on this. In fact he used a union all statement. He showed you
+
+53
+00:03:06,433 --> 00:03:10,466
+the difference between union, union all. Here's a sample statement
+
+54
+00:03:10,483 --> 00:03:14,466
+on how you would perform that in the event that you were not
+
+55
+00:03:14,483 --> 00:03:18,466
+able to follow that or had stepped away to the restroom.
+
+56
+00:03:18,483 --> 00:03:21,466
+Now we're going to introduce a new one called the intersect operator.
+
+57
+00:03:21,483 --> 00:03:27,216
+This returns only distinct rows that appear in both result sets.
+
+58
+00:03:27,300 --> 00:03:28,433
+What does that mean to me Tobias.
+
+59
+00:03:28,483 --> 00:03:34,466
+>> It means if you have a list of, for example, employees and
+
+60
+00:03:34,483 --> 00:03:38,466
+a list of customers by name you may want to see, well, who of
+
+61
+00:03:38,483 --> 00:03:40,466
+these people are both customers and employees.
+
+62
+00:03:41,450 --> 00:03:41,466
+>> Okay.
+
+63
+00:03:41,483 --> 00:03:44,466
+>> As an example. Then you would use intersects. Gives you the
+
+64
+00:03:44,183 --> 00:03:46,466
+intersection between the sets.
+
+65
+00:03:46,483 --> 00:03:48,466
+>> All right. Beautiful. So that's really good to be able to
+
+66
+00:03:48,483 --> 00:03:51,466
+take that content from two different tables and be able to bring
+
+67
+00:03:51,483 --> 00:03:55,466
+it back into a single result set. The except operator returns
+
+68
+00:03:55,483 --> 00:03:58,466
+only distinct roles that appear in the left set. Remember if
+
+69
+00:03:58,483 --> 00:04:00,466
+you talk left we're talking about the first part of the query
+
+70
+00:04:00,483 --> 00:04:02,466
+but not the right set. Does that make sense.
+
+71
+00:04:04,483 --> 00:04:08,466
+>> If you take the former example show me all customers that are
+
+72
+00:04:08,483 --> 00:04:09,466
+not also employees.
+
+73
+00:04:09,483 --> 00:04:13,466
+>> Not also employees. A little different spin on it. But we're
+
+74
+00:04:13,483 --> 00:04:17,466
+using the same tables. We're using possibly the same columns
+
+75
+00:04:17,483 --> 00:04:19,466
+but we're accessing same data but it's a different result set
+
+76
+00:04:19,483 --> 00:04:22,466
+that we want to work with.
+
+77
+00:04:22,483 --> 00:04:25,466
+We then introduced the apply operator, which is an operator used
+
+78
+00:04:25,483 --> 00:04:29,450
+in the from clause. It can be either cross apply or outer apply.
+
+79
+00:04:29,483 --> 00:04:32,433
+Your outer apply applies to the right table expression.
+
+80
+00:04:32,483 --> 00:04:36,466
+For each row in the left table. And the outer apply also adds
+
+81
+00:04:36,483 --> 00:04:40,466
+rows for those with no columns for right table. Is there an
+
+82
+00:04:40,483 --> 00:04:44,383
+example where we would want to use an apply operator when we
+
+83
+00:04:44,466 --> 00:04:48,466
+talk about the tables between the employee and customer or do
+
+84
+00:04:48,483 --> 00:04:51,466
+we have an example... I've got one here that's kind of listing
+
+85
+00:04:51,483 --> 00:04:55,450
+that we can select the column list from the left table.
+
+86
+00:04:55,483 --> 00:04:59,466
+Given it A list name we can do cross or outer apply then use
+
+87
+00:04:59,483 --> 00:05:04,200
+derived table expressions we talked about earlier or in line expressions.
+
+88
+00:05:04,283 --> 00:05:06,466
+>> Can show a simple demo.
+
+89
+00:05:08,483 --> 00:05:14,466
+So in this case let's just say what I want to show is each...
+
+90
+00:05:14,483 --> 00:05:18,466
+all customers and the five last orders for each customer.
+
+91
+00:05:18,483 --> 00:05:22,383
+And you can do this in many different ways, but one is using apply.
+
+92
+00:05:22,466 --> 00:05:25,466
+So let's just say we're selecting from sales.customer
+
+93
+00:05:27,483 --> 00:05:30,466
+as an example. We're grabbing customer ID.
+
+94
+00:05:30,483 --> 00:05:35,466
+And account number. Now I want to go ahead and grab the orders.
+
+95
+00:05:35,483 --> 00:05:40,316
+If I just do a join, there's no way for me to say just give me
+
+96
+00:05:40,400 --> 00:05:42,416
+the five latest orders.
+
+97
+00:05:42,483 --> 00:05:46,466
+No way is a strong statement. So you can go ahead and use the
+
+98
+00:05:46,483 --> 00:05:50,466
+row operator function to use, to basically accomplish similar things.
+
+99
+00:05:50,483 --> 00:05:52,466
+But let's just say I want to do the apply.
+
+100
+00:05:53,483 --> 00:05:57,466
+Want to use apply in this case. Now I can just say apply and
+
+101
+00:05:57,483 --> 00:06:00,466
+give me the five
+
+102
+00:06:01,483 --> 00:06:07,466
+top orders, sales order header here. Where... and the thing
+
+103
+00:06:07,483 --> 00:06:13,466
+with apply it's executed now once for each row in the outer set.
+
+104
+00:06:13,483 --> 00:06:17,466
+So now once for each customer that applies to whatever workloads
+
+105
+00:06:17,483 --> 00:06:23,466
+we have. So let's say we have territory ID is equal to three
+
+106
+00:06:23,483 --> 00:06:27,466
+as an example. So here now grab all orders where the customer
+
+107
+00:06:27,483 --> 00:06:33,466
+ID is the customer I'm on. Okay. And I can also say here order by...
+
+108
+00:06:34,166 --> 00:06:41,366
+I can use order by in this derived table just because I'm using
+
+109
+00:06:41,450 --> 00:06:45,466
+the top operator. So order by, order date, descending. I get
+
+110
+00:06:45,483 --> 00:06:49,466
+the five last orders. And let me just grab what I need.
+
+111
+00:06:49,483 --> 00:06:53,466
+Let's say I want order date and just order ID.
+
+112
+00:06:54,483 --> 00:06:58,466
+And I'll call this set O. So now I can just say give me this
+
+113
+00:06:58,483 --> 00:07:04,466
+from customer and these columns from order. And the difference
+
+114
+00:07:04,166 --> 00:07:07,466
+between cross apply and outer apply is roughly the same as between
+
+115
+00:07:07,483 --> 00:07:11,466
+their join and outer join, meaning cross apply I will only get
+
+116
+00:07:12,166 --> 00:07:16,166
+customers that now have at least one order. So where the inner
+
+117
+00:07:16,250 --> 00:07:19,466
+query returns at least one row and outer apply would give me
+
+118
+00:07:19,483 --> 00:07:21,466
+if they don't have any orders. So I'll go with that.
+
+119
+00:07:23,483 --> 00:07:26,466
+And there we go. So all of these first ones apparently don't
+
+120
+00:07:26,483 --> 00:07:29,466
+have any orders and as we scroll down we start finding a couple
+
+121
+00:07:29,483 --> 00:07:35,166
+of them with orders. As you can see here, I'm getting four rows
+
+122
+00:07:35,483 --> 00:07:38,333
+back for this same customer, because that customer apparently
+
+123
+00:07:38,483 --> 00:07:41,466
+happened to have five orders. So we're showing up to the five
+
+124
+00:07:41,483 --> 00:07:43,466
+latest orders for that customer.
+
+125
+00:07:43,166 --> 00:07:47,466
+>> Gotcha. Good. Awesome. So this is another use, another way
+
+126
+00:07:47,483 --> 00:07:51,466
+for us to slice and dice our content and come in with customized
+
+127
+00:07:51,483 --> 00:07:54,183
+result set that's what this has all been about, pretty much,
+
+128
+00:07:54,266 --> 00:07:57,466
+is what we've got all this data out there... there's so many
+
+129
+00:07:57,483 --> 00:08:01,466
+ways for me to that I want to slice and produce a results set
+
+130
+00:08:01,483 --> 00:08:04,466
+that's going to give me exactly what I need to generate is the
+
+131
+00:08:04,483 --> 00:08:07,466
+information and supply the information to management regarding
+
+132
+00:08:08,483 --> 00:08:13,466
+what's going on with a particular employee or customer or a salesperson.
+
+133
+00:08:13,483 --> 00:08:18,216
+So that's a way to slice and dice the content to be able to get
+
+134
+00:08:18,300 --> 00:08:22,200
+to that data and result a result set that reaches the needs that
+
+135
+00:08:22,283 --> 00:08:22,466
+you had.
+
+136
+00:08:23,483 --> 00:08:27,466
+So let's move into our next section which is windows functions.
+
+137
+00:08:27,483 --> 00:08:30,466
+We have some windows functions. We briefly introduced a couple already.
+
+138
+00:08:31,0 --> 00:08:34,466
+Tobias did a great demo on one earlier on, and within here we'll
+
+139
+00:08:34,483 --> 00:08:40,316
+look at SQL windowing which extends the T equals set-based approach.
+
+140
+00:08:40,400 --> 00:08:43,316
+We've been talking about set operators. They allow you to specify
+
+141
+00:08:43,400 --> 00:08:44,466
+an order as part of a calculation.
+
+142
+00:08:45,483 --> 00:08:48,466
+They allow partitioning and framing of rows to support certain
+
+143
+00:08:48,483 --> 00:08:54,466
+functions and they can simplify queries by running totals or
+
+144
+00:08:54,483 --> 00:08:57,466
+moving averages or maybe even gaps in data. We're trying to
+
+145
+00:08:57,483 --> 00:09:01,466
+find when there was a lull in a sales environment or something.
+
+146
+00:09:01,483 --> 00:09:05,466
+So the idea of partitioning windows or partitioning limits sets
+
+147
+00:09:05,483 --> 00:09:10,466
+to rows in the same values in what's called a partitioning column.
+
+148
+00:09:10,483 --> 00:09:14,466
+We use the partition by statement in the over clause and without
+
+149
+00:09:14,483 --> 00:09:18,466
+a partition by clause defined the over creates what's a single
+
+150
+00:09:18,483 --> 00:09:21,433
+partition of all these rows. As you can see here we have a select
+
+151
+00:09:21,483 --> 00:09:24,466
+customer ID order date total due, we're going to sum, get aggregate
+
+152
+00:09:24,483 --> 00:09:31,466
+function of sum, total due, create a total due for that particular customer.
+
+153
+00:09:31,483 --> 00:09:35,466
+Then we have the over partition by the customer ID. That's where
+
+154
+00:09:35,483 --> 00:09:39,466
+we're going to create this content on. As total... total due
+
+155
+00:09:39,483 --> 00:09:44,350
+by customer and grab this information from sales.salesorder header
+
+156
+00:09:44,433 --> 00:09:50,466
+and you'll see the customer ID 1100. Order date August 1st, 2007.
+
+157
+00:09:51,483 --> 00:09:52,466
+I was trying to read it the other way.
+
+158
+00:09:53,483 --> 00:09:59,233
+Has total due of 37.56. With a total due by the customer is 91.15.
+
+159
+00:09:59,316 --> 00:10:03,466
+If you look at there's three rows here for customer ID 1100.
+
+160
+00:10:04,333 --> 00:10:09,466
+If you look at total due it was 37.56. Then 25.87 and 27.70
+
+161
+00:10:09,483 --> 00:10:13,466
+and if you add it up you'll see those three values will come
+
+162
+00:10:13,216 --> 00:10:15,233
+pretty close to that 91.15.1341
+
+163
+00:10:16,483 --> 00:10:20,466
+if you want to get down to the nano pennies or whatever that
+
+164
+00:10:20,483 --> 00:10:23,466
+might be on the right side of that decimal point. Notice we
+
+165
+00:10:24,483 --> 00:10:27,466
+have the order date where we are just displaying the year.
+
+166
+00:10:27,483 --> 00:10:32,183
+We aren't displaying the actual, the time associated with that.
+
+167
+00:10:32,266 --> 00:10:36,416
+So this is an example of where we can retrieve information about
+
+168
+00:10:36,483 --> 00:10:40,433
+a particular customer on different orders, what the due date,
+
+169
+00:10:40,483 --> 00:10:43,466
+what the amount was due for each order and oh, by the way, what's
+
+170
+00:10:43,483 --> 00:10:48,266
+the customer owe me as a total for that order. So we had for
+
+171
+00:10:48,350 --> 00:10:50,466
+that particular customer. Not specific to that order but for
+
+172
+00:10:50,483 --> 00:10:53,466
+the different orders that they've submitted to us. This would
+
+173
+00:10:53,233 --> 00:10:55,466
+be a cool way for us to find out if anyone's kind of got this
+
+174
+00:10:55,483 --> 00:10:59,466
+outstanding or ginormous amount of money that's due to us, we
+
+175
+00:10:59,483 --> 00:11:03,383
+can actually sort this and set this up so we can see who owes
+
+176
+00:11:03,466 --> 00:11:06,466
+us the most money so we know who to send our accounts receivable
+
+177
+00:11:06,483 --> 00:11:11,466
+people afterwards. How do we use this, create a windows function
+
+178
+00:11:11,483 --> 00:11:16,466
+applied to a window or set of rows, as we can saw it can include
+
+179
+00:11:16,483 --> 00:11:20,466
+ranking and distribution offset function that we introduced earlier on.
+
+180
+00:11:20,483 --> 00:11:24,166
+These are similar to grouped aggregate functions such as your
+
+181
+00:11:24,483 --> 00:11:25,466
+sum and your min, your max.
+
+182
+00:11:26,300 --> 00:11:30,466
+They're applied to windows defined by the over clause. The O-V-E-R,
+
+183
+00:11:30,483 --> 00:11:36,466
+upper case, we can recognize that when we're working with windows functions.
+
+184
+00:11:36,483 --> 00:11:41,300
+And support partitioning, ordering and framing of content in
+
+185
+00:11:41,383 --> 00:11:44,466
+the windows world. Now, the ranking functions that are available
+
+186
+00:11:44,483 --> 00:11:48,466
+to us, we have rank, dense rank, row number and end title.
+
+187
+00:11:49,483 --> 00:11:52,466
+The rank returns a rank of each row and it may include ties and
+
+188
+00:11:52,483 --> 00:11:53,466
+it may include gaps.
+
+189
+00:11:54,483 --> 00:11:58,466
+The dense rank returns the rank of each row, but this also may
+
+190
+00:11:58,483 --> 00:12:01,466
+include ties but it will not include gaps. If there's any gaps
+
+191
+00:12:01,483 --> 00:12:06,450
+in the content. The row number returns unique sequential number
+
+192
+00:12:06,483 --> 00:12:10,466
+within that partition based on where it is in that current order.
+
+193
+00:12:10,483 --> 00:12:16,466
+And the tile distributes rows in ordered partition and this returns
+
+194
+00:12:16,216 --> 00:12:19,466
+a number of the group to which that row belongs to. So I can
+
+195
+00:12:19,233 --> 00:12:22,466
+kind of figure out how they're categorized and where these rows
+
+196
+00:12:22,483 --> 00:12:23,466
+belong to.
+
+197
+00:12:24,483 --> 00:12:27,466
+The windows offset function, I believe we looked at this earlier.
+
+198
+00:12:27,483 --> 00:12:29,466
+This actually looks at the lag, return an expression from the
+
+199
+00:12:29,483 --> 00:12:33,466
+previous row and it's defined in the offset from the current row.
+
+200
+00:12:33,483 --> 00:12:37,333
+The lead, again, returns expression from the lighter row instead
+
+201
+00:12:37,483 --> 00:12:41,466
+of a previous row. First value, last value, pretty self-explanatory
+
+202
+00:12:41,483 --> 00:12:44,466
+returns a first value in the current windows frame or returns
+
+203
+00:12:44,483 --> 00:12:46,466
+the last value in the current windows frame.
+
+204
+00:12:46,483 --> 00:12:49,466
+>> Let me go ahead and demo this a little bit. Because like I
+
+205
+00:12:49,483 --> 00:12:53,466
+mentioned earlier, this is one of these things where you need
+
+206
+00:12:53,483 --> 00:12:57,466
+to get into a Zen place and then you'll basically be happy.
+
+207
+00:12:57,483 --> 00:13:00,466
+This is one of these super use of functions.
+
+208
+00:13:00,483 --> 00:13:03,183
+>> After this demo I'm going to be happy for life, I'll be in
+
+209
+00:13:03,266 --> 00:13:04,466
+Xen, I'll be there forever.
+
+210
+00:13:04,483 --> 00:13:06,466
+>> I'm not sure about forever.
+
+211
+00:13:06,483 --> 00:13:08,466
+>> At least for the rest of this module.
+
+212
+00:13:08,483 --> 00:13:10,466
+>> And you still use Fahrenheit. So I'm not sure.
+
+213
+00:13:10,483 --> 00:13:11,283
+>> Okay.
+
+214
+00:13:12,0 --> 00:13:16,250
+>> Let's go ahead and have a look. So I've just created a table
+
+215
+00:13:16,333 --> 00:13:19,466
+I call transactions, because banking kind of transactions makes
+
+216
+00:13:19,483 --> 00:13:21,466
+a fairly useful example.
+
+217
+00:13:22,483 --> 00:13:27,466
+So in this table, and I just stole some columns from the customers
+
+218
+00:13:27,483 --> 00:13:31,466
+or from the save order and details and pretend they're transactions.
+
+219
+00:13:32,483 --> 00:13:35,466
+So I apparently have account number, account ID, transaction
+
+220
+00:13:35,483 --> 00:13:39,400
+ID, transaction date and how much money they use in this transaction.
+
+221
+00:13:39,483 --> 00:13:44,333
+So let's just start by looking at one account number. So where
+
+222
+00:13:44,483 --> 00:13:46,466
+account ID equals this one.
+
+223
+00:13:47,400 --> 00:13:50,416
+And let's say what I now want to calculate, which is a very common
+
+224
+00:13:50,483 --> 00:13:54,466
+thing, it was very problematic before SQL Server 2012, especially
+
+225
+00:13:54,483 --> 00:13:58,466
+with the performance, okay I have all of these transactions,
+
+226
+00:13:58,483 --> 00:14:02,466
+but what is the current balance of the account? Right? Per a
+
+227
+00:14:02,483 --> 00:14:07,183
+given row. So let's say we have this query now.
+
+228
+00:14:08,483 --> 00:14:13,466
+And I can start by just using this aggregate, it's a sum I want,
+
+229
+00:14:13,483 --> 00:14:17,350
+some over amount. And we know we just can't do this because we
+
+230
+00:14:17,433 --> 00:14:20,466
+need to group by but I want to show the details. I want to show
+
+231
+00:14:21,433 --> 00:14:25,383
+at this particular moment in time this transaction happened and
+
+232
+00:14:25,466 --> 00:14:28,466
+the balance after the transaction is the following. So we'll
+
+233
+00:14:28,483 --> 00:14:38,466
+start by just doing over partition by account ID as current balance.
+
+234
+00:14:39,483 --> 00:14:43,466
+Or let's just call it final balance. So this will give me is
+
+235
+00:14:43,483 --> 00:14:46,466
+the sum across the whole account, right.
+
+236
+00:14:46,483 --> 00:14:49,466
+So now you can see the balance of this account is apparently
+
+237
+00:14:49,483 --> 00:14:54,216
+422,000 whatever pirate currency we're using here.
+
+238
+00:14:54,300 --> 00:14:59,466
+And then what I can do now is, okay, that's fine that's the end
+
+239
+00:14:59,483 --> 00:15:04,466
+balance, right. If I tell it the server instead to say over per
+
+240
+00:15:04,483 --> 00:15:06,466
+account because I want this per account...
+
+241
+00:15:07,483 --> 00:15:10,466
+do this so it makes it a bit easier to read... I want to say
+
+242
+00:15:11,483 --> 00:15:14,466
+give me the balance up until the current transaction. And what
+
+243
+00:15:14,483 --> 00:15:18,383
+that means is I need an order in here. Order doesn't matter
+
+244
+00:15:18,466 --> 00:15:22,466
+when you group. Logically. But it does matter when you want
+
+245
+00:15:22,483 --> 00:15:26,466
+to do cumulative thing. So here I'll say, well, order this by,
+
+246
+00:15:29,483 --> 00:15:32,0
+sorry not order date, transaction date. And since transaction
+
+247
+00:15:32,483 --> 00:15:35,216
+date isn't unique for me to be sure that this makes sense, I'll
+
+248
+00:15:35,300 --> 00:15:37,466
+include transaction ID in there.
+
+249
+00:15:39,483 --> 00:15:42,466
+And then I'll also use the same order by in the query. So I'll
+
+250
+00:15:42,483 --> 00:15:45,466
+do this so we're sure we get the results in the same order.
+
+251
+00:15:45,483 --> 00:15:47,233
+And it's important to note that
+
+252
+00:15:48,483 --> 00:15:51,466
+if you put an order by clause here, you may get the result in
+
+253
+00:15:51,483 --> 00:15:53,466
+this order but that's just by accident.
+
+254
+00:15:54,483 --> 00:15:57,466
+So if you want to be sure to get the results in a certain order,
+
+255
+00:15:57,233 --> 00:16:00,466
+you have to put an order by at the end of the query. And the
+
+256
+00:16:00,483 --> 00:16:04,466
+very common bug you see in applications is like you even saw
+
+257
+00:16:04,483 --> 00:16:08,466
+me do earlier, or even saw me, but I also did that.
+
+258
+00:16:08,233 --> 00:16:09,466
+>> You did that, I didn't see it.
+
+259
+00:16:10,483 --> 00:16:14,266
+>> So often it's important that the order by is unique.
+
+260
+00:16:15,333 --> 00:16:17,466
+That's why I added this transaction ID in there. Let's go ahead
+
+261
+00:16:17,483 --> 00:16:18,466
+and run this query.
+
+262
+00:16:19,483 --> 00:16:23,466
+And now you can see that the balance is... I called that one
+
+263
+00:16:23,483 --> 00:16:27,466
+final balance. Let's call that one current balance. Just to
+
+264
+00:16:27,233 --> 00:16:27,466
+be clear.
+
+265
+00:16:30,483 --> 00:16:34,466
+Now you can see how the current balance is increasing as we go
+
+266
+00:16:34,483 --> 00:16:39,466
+because it's the sum of the current row and all rows preceding that.
+
+267
+00:16:39,483 --> 00:16:44,250
+And you may argue and say well does it do that it says order by.
+
+268
+00:16:44,333 --> 00:16:47,466
+Doesn't really make sense. That's the part of the ANSI specification
+
+269
+00:16:47,483 --> 00:16:53,416
+of the language if you say order by it's implicit you're using
+
+270
+00:16:53,483 --> 00:16:56,233
+a framing clause to say only include certain amount of rows.
+
+271
+00:16:56,316 --> 00:16:57,466
+So what's the
+
+272
+00:16:59,483 --> 00:17:03,466
+syntax for this. Can you show the PowerPoint slide again?
+
+273
+00:17:04,333 --> 00:17:04,466
+>> I certainly can.
+
+274
+00:17:06,400 --> 00:17:07,233
+Which one are we looking for?
+
+275
+00:17:08,483 --> 00:17:09,466
+>> Now I remember.
+
+276
+00:17:10,483 --> 00:17:13,466
+Rows between
+
+277
+00:17:15,483 --> 00:17:16,466
+current row...
+
+278
+00:17:20,483 --> 00:17:21,466
+rows unbounded
+
+279
+00:17:23,483 --> 00:17:30,466
+preceding and rows... we're seeing between unbounded preceding
+
+280
+00:17:30,483 --> 00:17:40,466
+and current row I think something like that. That makes sense. Okay.
+
+281
+00:17:40,483 --> 00:17:46,466
+Okay. So this is what this actually means implicitly. It is
+
+282
+00:17:46,483 --> 00:17:50,466
+values between current row and/or unbounded preceding and current row.
+
+283
+00:17:51,483 --> 00:17:54,466
+But you can read up a bit on the differences. But basically
+
+284
+00:17:54,483 --> 00:17:58,466
+now it makes more sense. Sort for each account sort the result
+
+285
+00:17:59,483 --> 00:18:03,450
+like this and now for this particular row include everything
+
+286
+00:18:03,483 --> 00:18:06,466
+from the beginning of the partition or the frame, i.e., for this
+
+287
+00:18:06,483 --> 00:18:09,466
+account, for the beginning of the transaction for the account,
+
+288
+00:18:09,483 --> 00:18:10,466
+up until this row.
+
+289
+00:18:11,483 --> 00:18:14,466
+And you can also say starting at this row between this row and
+
+290
+00:18:14,483 --> 00:18:18,283
+unbounded following, if you want to go forward instead.
+
+291
+00:18:18,483 --> 00:18:22,466
+But this is obviously super, super useful if you want to do calculations
+
+292
+00:18:22,483 --> 00:18:25,466
+like this. You can imagine just by looking at the result set
+
+293
+00:18:25,483 --> 00:18:27,466
+this is fairly common, the running total.
+
+294
+00:18:28,250 --> 00:18:32,466
+And this is super super efficient the way we implemented it.
+
+295
+00:18:32,483 --> 00:18:35,466
+The other thing that's very interesting is lag and lead. So I'll
+
+296
+00:18:35,483 --> 00:18:38,466
+show just a quick example of that.
+
+297
+00:18:39,483 --> 00:18:43,466
+So let's just say we have the production product table
+
+298
+00:18:47,483 --> 00:18:51,466
+and let's actually continue with this set since we have an example running.
+
+299
+00:18:51,483 --> 00:18:55,466
+So let's say okay this is all nice. But I want to see what is
+
+300
+00:18:55,216 --> 00:18:58,466
+the difference between the current transaction and the previous one.
+
+301
+00:18:58,483 --> 00:19:01,466
+Which is a very common thing that you want to say what's the
+
+302
+00:19:01,483 --> 00:19:04,200
+difference between this and the next row in the set or the previous
+
+303
+00:19:04,283 --> 00:19:08,233
+row in the set or the five rows back or whatever. This very
+
+304
+00:19:08,316 --> 00:19:09,466
+common calculation.
+
+305
+00:19:09,483 --> 00:19:14,466
+So what I can just say is okay please grab me lag. I want to
+
+306
+00:19:14,483 --> 00:19:15,466
+go backwards in the set.
+
+307
+00:19:16,483 --> 00:19:20,416
+And I want to grab the amount column and this is an expression,
+
+308
+00:19:20,483 --> 00:19:24,466
+the amount plus something whatever, amount. And default is to
+
+309
+00:19:24,483 --> 00:19:29,466
+go one step back. I want to go one back, and if there is no row
+
+310
+00:19:29,483 --> 00:19:33,466
+preceding what would I like to get. If there's no row preceding
+
+311
+00:19:33,483 --> 00:19:38,416
+I'll get null back. Then I say please give me zero instead.
+
+312
+00:19:38,483 --> 00:19:42,466
+Lag, obviously lag is the same thing. It requires an order.
+
+313
+00:19:42,483 --> 00:19:46,300
+So we say this is over for the account, within this account step
+
+314
+00:19:46,383 --> 00:19:51,466
+back, and give me based on the same order by clause. So order
+
+315
+00:19:51,483 --> 00:19:55,450
+by transaction date. Transaction ID. Now it knows go one step
+
+316
+00:19:55,483 --> 00:19:58,466
+back and grab me the previous amount. So we can just see
+
+317
+00:19:59,483 --> 00:20:02,466
+this query. Now we can see okay this is the previous amount we
+
+318
+00:20:02,483 --> 00:20:05,466
+see there's no one before. That's zero. You can see how these
+
+319
+00:20:05,483 --> 00:20:07,466
+match up as we go down.
+
+320
+00:20:08,483 --> 00:20:11,466
+Obviously I can say what is the difference now between amount
+
+321
+00:20:11,483 --> 00:20:15,466
+and previous amount. This amount is it bigger smaller than the
+
+322
+00:20:15,483 --> 00:20:16,183
+previous one.
+
+323
+00:20:21,216 --> 00:20:23,466
+And now we can see well this is obviously bigger than...
+
+324
+00:20:23,483 --> 00:20:26,466
+there were no previous one, this one is this much bigger and
+
+325
+00:20:27,333 --> 00:20:28,466
+this one this much smaller and so on.
+
+326
+00:20:29,483 --> 00:20:32,466
+And this is just kind of tickling your interest. But you can
+
+327
+00:20:32,483 --> 00:20:35,466
+imagine you can do a lot with these calculations. And it may
+
+328
+00:20:35,483 --> 00:20:38,466
+seem a bit intimidating if you're looking at it for the first time.
+
+329
+00:20:39,483 --> 00:20:41,466
+But this is really a recommendation, if there's anything that's
+
+330
+00:20:42,483 --> 00:20:45,466
+useful, it is this. Lots of calculations can be done.
+
+331
+00:20:47,483 --> 00:20:50,466
+It's actually... it's not very hard once you get to know it,
+
+332
+00:20:50,483 --> 00:20:53,466
+which is obviously common. English is not hard if you know it.
+
+333
+00:20:53,483 --> 00:20:57,466
+British is not hard if you know it. If you're interested in
+
+334
+00:20:57,483 --> 00:21:00,466
+SQL you should spend some time on windows functions and playing
+
+335
+00:21:00,483 --> 00:21:02,466
+around with it.
+
+336
+00:21:02,200 --> 00:21:05,466
+>> What's the calculation from Fahrenheit to Celsius, this is
+
+337
+00:21:05,483 --> 00:21:07,466
+easy compared to that, isn't it?
+
+338
+00:21:07,483 --> 00:21:10,466
+>> That's why who in the world uses Fahrenheit.
+
+339
+00:21:11,450 --> 00:21:12,333
+>> Canada.
+
+340
+00:21:13,483 --> 00:21:18,466
+>> I thought it was Celsius. We all know Celsius is Swedish, just
+
+341
+00:21:18,483 --> 00:21:19,466
+to be clear here.
+
+342
+00:21:19,483 --> 00:21:24,466
+>> That was good. Let's move into grouping sets. We'll talk about
+
+343
+00:21:24,483 --> 00:21:29,466
+grouping sets. Here we'll talk about pivoting. Pivoting is kind
+
+344
+00:21:29,483 --> 00:21:33,466
+of unique in the sense that what we do is we take the rows...
+
+345
+00:21:33,483 --> 00:21:37,466
+so we've got this category, quantity and order here that we have here.
+
+346
+00:21:37,483 --> 00:21:40,200
+And then under category we've got different items, different
+
+347
+00:21:40,283 --> 00:21:44,166
+products and quantity and good order year, excuse me. Now what
+
+348
+00:21:44,483 --> 00:21:48,466
+we can do is spin those and rotate the column so under category
+
+349
+00:21:48,483 --> 00:21:52,466
+we maintain, in this case, the beverages, now we've created a
+
+350
+00:21:52,483 --> 00:21:56,466
+column for each of the years that are available for beverages.
+
+351
+00:21:56,483 --> 00:22:00,466
+So this is called a pivoted table. We create distinct values
+
+352
+00:22:00,483 --> 00:22:05,466
+from a single column and we set up the headings for other columns.
+
+353
+00:22:05,483 --> 00:22:08,300
+And these headings can include or information in these columns
+
+354
+00:22:08,383 --> 00:22:12,400
+can include aggregation. So this is a pivoted table here.
+
+355
+00:22:12,483 --> 00:22:16,466
+So sample query of this would be select category. These are
+
+356
+00:22:16,483 --> 00:22:20,466
+years 2006, seven and eight. And you have a from statement, select
+
+357
+00:22:20,483 --> 00:22:22,466
+category, quantity and order year.
+
+358
+00:22:23,333 --> 00:22:27,466
+From sales category, quantity year, as D. And then we pivot
+
+359
+00:22:27,483 --> 00:22:32,416
+and we're going to sum the quantity for the order year in 2006,
+
+360
+00:22:32,483 --> 00:22:36,333
+seven and eight. So the grouping is the category as you can see here.
+
+361
+00:22:36,416 --> 00:22:39,466
+The aggregation is the sum quantity that we'll see, that we've seen.
+
+362
+00:22:39,483 --> 00:22:42,466
+And the spreading is how do we want to separate this out?
+
+363
+00:22:42,483 --> 00:22:46,466
+2006, seven, eight or by year. And we set it up, we give it a
+
+364
+00:22:46,483 --> 00:22:49,466
+name, as PBT. That way we can see that.
+
+365
+00:22:50,333 --> 00:22:52,466
+When we've done that, let me actually go back so you can see
+
+366
+00:22:52,483 --> 00:22:58,433
+what it's like here. So that's what this brings out for us, that query.
+
+367
+00:22:58,483 --> 00:23:01,466
+It gives us this information that was normally over here.
+
+368
+00:23:01,483 --> 00:23:05,466
+Dairy products 2006, and you'll see under 2006 there's a total
+
+369
+00:23:05,483 --> 00:23:09,466
+of 2,086. Here we see five. It's doing a calculation for us.
+
+370
+00:23:09,483 --> 00:23:13,466
+It's rotating the content that was in this table into this pivot
+
+371
+00:23:13,483 --> 00:23:18,466
+table and then storing that information in there using this type
+
+372
+00:23:18,166 --> 00:23:21,466
+of command. So the grouping determines the elements that get
+
+373
+00:23:23,483 --> 00:23:27,466
+populated in the result set. The spreading provides the distinct
+
+374
+00:23:27,483 --> 00:23:30,466
+value that we're going to use and then the aggregated function
+
+375
+00:23:30,483 --> 00:23:33,466
+in this case here is the sum that we're going to use. So we
+
+376
+00:23:33,483 --> 00:23:38,166
+get a sum instead of individual items that we have set up here.
+
+377
+00:23:38,250 --> 00:23:41,233
+I'm going the wrong way here. We've got to go back the other way.
+
+378
+00:23:41,316 --> 00:23:45,466
+Here we are. Here's another example of this. Select vendor ID.
+
+379
+00:23:46,333 --> 00:23:51,466
+And we're going to set this up 250 as employee one, 251 is employee two.
+
+380
+00:23:51,483 --> 00:23:54,466
+All the way through employee five. And then from, then we're
+
+381
+00:23:54,483 --> 00:23:57,466
+going to do a select statement from the purchase order ID with
+
+382
+00:23:57,483 --> 00:24:01,333
+these items, employee ID, vendor ID. We're going to grab this
+
+383
+00:24:01,416 --> 00:24:03,466
+information from the purchase order header information which
+
+384
+00:24:03,483 --> 00:24:08,166
+we're going to retitle or as our alias has P. And we're going
+
+385
+00:24:08,483 --> 00:24:11,466
+to say we want to pivot. Create a pivot. We'll count the purchase
+
+386
+00:24:11,483 --> 00:24:16,466
+order ID for the employee that's in these, in this table, columns
+
+387
+00:24:16,483 --> 00:24:20,466
+250, 51, 56, 57 and 60.
+
+388
+00:24:21,483 --> 00:24:25,466
+And as pivot. And order by pivot or PVAT.vendor.ID.
+
+389
+00:24:26,483 --> 00:24:30,233
+What we'll do is you see order by, you'll see these are 1492,
+
+390
+00:24:32,483 --> 00:24:36,466
+94 and 96. And for each employee employee, one, two, three, four,
+
+391
+00:24:36,483 --> 00:24:42,466
+five, which are associated with employees, 250, 51, 56, 57, 60.
+
+392
+00:24:42,483 --> 00:24:45,466
+This is the vendor ID or information associated with that.
+
+393
+00:24:46,333 --> 00:24:47,466
+>> This all sounds super simple.
+
+394
+00:24:48,483 --> 00:24:50,333
+>> Sounds super simple.
+
+395
+00:24:50,483 --> 00:24:55,466
+>> This is one of these clauses that always gets me confused myself.
+
+396
+00:24:57,483 --> 00:25:01,466
+But it's actually following the ANSI SQL standard. It's worth
+
+397
+00:25:01,483 --> 00:25:04,283
+noting that pivot and unpivot
+
+398
+00:25:06,483 --> 00:25:10,466
+or actually pivot especially is not super heavily used just because
+
+399
+00:25:10,483 --> 00:25:13,466
+it's very common that you do this type of pivoting in whatever
+
+400
+00:25:13,483 --> 00:25:16,466
+reporting type of application you're using, Excel or porting
+
+401
+00:25:16,483 --> 00:25:21,466
+services or you're building your own, rather than doing it directly
+
+402
+00:25:21,483 --> 00:25:25,466
+in the SQL statement. There are definitely reasons to go and
+
+403
+00:25:25,483 --> 00:25:29,466
+use this, but it's worth noting that typically you do this type
+
+404
+00:25:29,483 --> 00:25:31,466
+of pivoting up in the application layer.
+
+405
+00:25:32,483 --> 00:25:36,466
+>> You mentioned the unpivot. We won't get into this, but here's
+
+406
+00:25:36,483 --> 00:25:39,466
+an example of this so you'll have it. It's create a table.
+
+407
+00:25:39,483 --> 00:25:44,166
+This actually does the opposite. Unpivots. Insert values here
+
+408
+00:25:44,483 --> 00:25:46,466
+and then you generate something... and this is, down here I
+
+409
+00:25:46,483 --> 00:25:49,466
+just squeezed in just what the output would look like, vendor
+
+410
+00:25:49,483 --> 00:25:53,466
+ID one, employee one and the orders forms, kind of doing the reverse.
+
+411
+00:25:53,483 --> 00:25:58,466
+>> This is actually more interesting in a sense, or more common,
+
+412
+00:25:58,483 --> 00:26:02,466
+I'd say, because it's fairly common that you see just table structures
+
+413
+00:26:02,483 --> 00:26:05,466
+where it's basically not normalized in a reasonable way. So the
+
+414
+00:26:05,483 --> 00:26:09,466
+table actually includes whatever year and then employee one,
+
+415
+00:26:09,483 --> 00:26:12,466
+two, three, four, and you want to write a query on top of that.
+
+416
+00:26:13,416 --> 00:26:17,466
+Then you can use unpivot to actually get it into a more normalized
+
+417
+00:26:17,483 --> 00:26:21,466
+form and then you can query on top of the output of the unpivot.
+
+418
+00:26:21,483 --> 00:26:24,383
+Because obviously unpivot can be part of a common table expression
+
+419
+00:26:24,466 --> 00:26:30,466
+derived table view, et cetera. Unpivot is probably more common
+
+420
+00:26:30,483 --> 00:26:33,283
+that you would use than pivot in regular queries.
+
+421
+00:26:33,366 --> 00:26:36,466
+>> Especially in normalized data. Normalized data easier to get
+
+422
+00:26:37,483 --> 00:26:39,466
+that content out and slice and dice it the way you wanted to,
+
+423
+00:26:39,483 --> 00:26:42,466
+being it wasn't populated correctly in the first place.
+
+424
+00:26:43,333 --> 00:26:44,466
+Writing grouping sets.
+
+425
+00:26:45,483 --> 00:26:50,466
+Build on your T SQL group by clause and allows us to create multiple
+
+426
+00:26:50,483 --> 00:26:54,466
+groupings, and alternative uses, the union all which was demonstrated
+
+427
+00:26:54,483 --> 00:26:57,466
+earlier on. But this is an example, I don't know if I have an
+
+428
+00:26:57,483 --> 00:27:00,466
+example in here. I do. We do a select territory ID, customer ID.
+
+429
+00:27:00,483 --> 00:27:05,466
+Do an aggregate function of sum as total amount due and then
+
+430
+00:27:06,166 --> 00:27:09,466
+from the sales order table, header table excuse me we'll group
+
+431
+00:27:09,483 --> 00:27:12,466
+by then we'll use grouping sets. We'll have a group set of territory
+
+432
+00:27:12,483 --> 00:27:13,466
+ID and customer ID.
+
+433
+00:27:14,483 --> 00:27:18,466
+What I did is when I created this, there were several hundred
+
+434
+00:27:18,483 --> 00:27:21,466
+of rows and I took this information from towards the bottom because
+
+435
+00:27:21,483 --> 00:27:25,216
+a bunch of territory IDs were blank or null so down towards the
+
+436
+00:27:25,300 --> 00:27:27,466
+bottom where we've got some valid information you see the territory
+
+437
+00:27:27,483 --> 00:27:30,466
+IDs are grouped now and then we'll have the total amount for
+
+438
+00:27:30,483 --> 00:27:31,466
+each of the territories.
+
+439
+00:27:32,483 --> 00:27:36,466
+So this was a grouping set here provides this information per
+
+440
+00:27:36,483 --> 00:27:39,466
+customer ID. For each of the customer IDs here.
+
+441
+00:27:39,483 --> 00:27:43,216
+>> We go into a demo in a few slides and look a little more into
+
+442
+00:27:43,300 --> 00:27:44,433
+the details of this.
+
+443
+00:27:46,483 --> 00:27:50,466
+>> Cubes and roll-up or cube and roll-up. Provides shortcut for
+
+444
+00:27:50,483 --> 00:27:51,466
+defining these group sets.
+
+445
+00:27:52,483 --> 00:27:56,416
+Creates a cube, creates all possible combination of grouping sets.
+
+446
+00:27:56,483 --> 00:27:59,466
+In this case here we're doing a select territory ID and customer ID.
+
+447
+00:27:59,483 --> 00:28:05,166
+Again sum for total due and we're going to ping the sales order
+
+448
+00:28:05,483 --> 00:28:08,466
+header table. We're going to group by and throw the word cube
+
+449
+00:28:08,483 --> 00:28:11,466
+in there. Again territory ID, customer ID and we'll order it
+
+450
+00:28:11,483 --> 00:28:15,466
+by territory ID and customer ID. The roll-up is very similar
+
+451
+00:28:15,483 --> 00:28:19,400
+in the sense that it provides a shortcut for defining the group sets.
+
+452
+00:28:19,483 --> 00:28:23,466
+Creates combinations of assuming input columns from a hierarchy.
+
+453
+00:28:23,483 --> 00:28:27,466
+So this is more of a hierarchical approach than a cubing, when
+
+454
+00:28:27,483 --> 00:28:31,250
+we use the cube process, I should say. So we've got a couple
+
+455
+00:28:31,333 --> 00:28:34,466
+of these options that are available to us for summarizing our
+
+456
+00:28:34,483 --> 00:28:38,166
+data instead of looking at details of information giving us a
+
+457
+00:28:38,250 --> 00:28:39,466
+summary of data.
+
+458
+00:28:40,483 --> 00:28:43,466
+Working with pivot cube and roll-up. I say you may not want
+
+459
+00:28:43,483 --> 00:28:47,466
+to work with a pivot so much but whatever you feel like demoing.
+
+460
+00:28:48,483 --> 00:28:52,366
+>> I think we've just basically shown just a little bit of what's
+
+461
+00:28:52,450 --> 00:28:55,466
+going on here. And it's actually just simpler than what you would imagine.
+
+462
+00:28:56,166 --> 00:29:00,466
+So let's just say we want to say, we want to get total sales
+
+463
+00:29:00,483 --> 00:29:07,166
+by customer and territory, right? So we have customer ID, territory
+
+464
+00:29:07,483 --> 00:29:10,466
+ID, from sales customer.
+
+465
+00:29:16,483 --> 00:29:19,466
+And then I'll go ahead and just join this with
+
+466
+00:29:21,483 --> 00:29:22,466
+sales order header
+
+467
+00:29:28,483 --> 00:29:31,466
+and then go and join it with
+
+468
+00:29:32,483 --> 00:29:34,200
+sales order detail.
+
+469
+00:29:44,483 --> 00:29:47,466
+So there we go. We have the kind of the join. And let's just
+
+470
+00:29:47,483 --> 00:29:50,466
+say I want a total sales. So I want the sum of
+
+471
+00:29:51,483 --> 00:29:55,466
+sales order detail. I think it's unit or line total, I think,
+
+472
+00:29:56,450 --> 00:29:56,466
+we even have there.
+
+473
+00:29:58,483 --> 00:29:59,466
+As total sales.
+
+474
+00:30:02,166 --> 00:30:09,466
+And need to go in group by these two columns. Okay. So that's great.
+
+475
+00:30:09,483 --> 00:30:13,233
+I get now the total sales for this territory and this customer
+
+476
+00:30:13,316 --> 00:30:15,466
+and if you scroll down they're different customers.
+
+477
+00:30:15,483 --> 00:30:20,466
+And scroll down more, we get total sales for customers in different territories.
+
+478
+00:30:20,483 --> 00:30:23,466
+And if it happens to be a customer that are in multiple territories,
+
+479
+00:30:24,333 --> 00:30:27,233
+then which can't happen per the schema, right, but then you will
+
+480
+00:30:27,316 --> 00:30:30,283
+see obviously there. This is all
+
+481
+00:30:31,483 --> 00:30:35,200
+great but it's likely someone will ask the question, well, what
+
+482
+00:30:35,283 --> 00:30:38,466
+is the total sales for the customer independent of territory
+
+483
+00:30:38,483 --> 00:30:42,466
+or for the territory independent of the customer. And then without
+
+484
+00:30:42,483 --> 00:30:45,466
+these grouping sets and whatnot, what you would typically do
+
+485
+00:30:46,483 --> 00:30:50,466
+is you would add another query, separately,
+
+486
+00:30:52,233 --> 00:30:55,466
+and just have the sum there. Let's say we want the total sales.
+
+487
+00:30:57,483 --> 00:30:58,166
+And that would be this.
+
+488
+00:30:58,483 --> 00:31:01,0
+And then you say well I want this in one result set and I go
+
+489
+00:31:01,483 --> 00:31:06,283
+and put these both together, right? And I'll just say order by
+
+490
+00:31:07,483 --> 00:31:10,466
+customer ID in the result set.
+
+491
+00:31:11,216 --> 00:31:14,466
+Now, this won't work since I have three columns up here and one
+
+492
+00:31:14,483 --> 00:31:17,466
+column down here. I'll just say, well, this returns null for
+
+493
+00:31:19,316 --> 00:31:22,466
+these two columns and now the result sets match and I can put
+
+494
+00:31:22,483 --> 00:31:23,466
+them together.
+
+495
+00:31:25,483 --> 00:31:29,466
+But obviously there's a lot of writing that goes on here in order
+
+496
+00:31:29,166 --> 00:31:32,216
+to get this result set. And as we all know the more code you
+
+497
+00:31:32,300 --> 00:31:36,466
+write, the more bugs you will put in there, right? So less code
+
+498
+00:31:36,483 --> 00:31:37,466
+equals less bugs.
+
+499
+00:31:37,483 --> 00:31:38,466
+>> That's definitely true.
+
+500
+00:31:38,483 --> 00:31:44,466
+>> So if I instead do this, I'll just say, well, I want to group
+
+501
+00:31:44,200 --> 00:31:46,466
+by, and I want to create grouping sets.
+
+502
+00:31:47,483 --> 00:31:50,466
+So now I can say not just this is the final and only. I can
+
+503
+00:31:50,483 --> 00:31:55,466
+say, well, I want one set is please group by customer and territory
+
+504
+00:31:55,483 --> 00:31:59,466
+ID as a combination. This is exactly just running this exactly
+
+505
+00:31:59,483 --> 00:32:00,466
+the same as the first query.
+
+506
+00:32:02,483 --> 00:32:04,466
+Let's add the order by as well.
+
+507
+00:32:09,0 --> 00:32:11,466
+But now I can add other sets that interest me. So if I want
+
+508
+00:32:11,483 --> 00:32:14,466
+this total that I just showed. We can just add an empty set here,
+
+509
+00:32:14,483 --> 00:32:18,466
+which means that's the total across all the customers and all territories.
+
+510
+00:32:18,483 --> 00:32:22,466
+Now I have the same as the previous query but clearly less writing.
+
+511
+00:32:22,483 --> 00:32:24,350
+>> Less code, definitely.
+
+512
+00:32:24,433 --> 00:32:27,466
+>> Now I can go and say, well, I'm interested in actually the
+
+513
+00:32:27,483 --> 00:32:31,466
+total for the territories independent of customers as well.
+
+514
+00:32:32,483 --> 00:32:34,466
+So now I'm getting
+
+515
+00:32:35,483 --> 00:32:38,466
+first this is the total sales roll-up and then per territory
+
+516
+00:32:38,483 --> 00:32:42,466
+what's the sale, and then I get per customer.
+
+517
+00:32:43,383 --> 00:32:46,466
+So I can go with... I'm sorry... with grouping sets and basically
+
+518
+00:32:46,483 --> 00:32:49,466
+add the groupings that I'm interested in using.
+
+519
+00:32:51,383 --> 00:32:55,250
+Another thing that's interesting to note here is how do you know
+
+520
+00:32:55,333 --> 00:32:59,450
+if the null value returned is actually because there is a null
+
+521
+00:32:59,483 --> 00:33:03,466
+value that you are grouping together, or it's a null value generated
+
+522
+00:33:03,483 --> 00:33:08,466
+by these grouping sets. See the difference like here I just happen
+
+523
+00:33:08,483 --> 00:33:11,466
+to know that there is no customer with customer 80 null and no
+
+524
+00:33:11,483 --> 00:33:14,466
+territory ID null so I know this is the aggregate. But it could
+
+525
+00:33:14,483 --> 00:33:20,0
+also be the sum of all sales for customer null territory ID null.
+
+526
+00:33:20,483 --> 00:33:23,466
+So there's a function called grouping that you can use to find
+
+527
+00:33:23,483 --> 00:33:29,466
+out with a case expression if grouping for a column returns one,
+
+528
+00:33:29,483 --> 00:33:33,400
+that means it was a generated null because of the grouping.
+
+529
+00:33:33,483 --> 00:33:37,233
+And if it returns zero it means an actual real null value if
+
+530
+00:33:37,316 --> 00:33:40,466
+it happens to be null. So that's interesting you can then differentiate
+
+531
+00:33:40,483 --> 00:33:44,466
+between null values that you're actually grouping over versus
+
+532
+00:33:44,483 --> 00:33:46,183
+null values being generated.
+
+533
+00:33:48,483 --> 00:33:50,466
+>> Very nice. I like the fact there's less code, less chance of
+
+534
+00:33:50,483 --> 00:33:53,466
+undocumented feature. I versus to use that versus a bug.
+
+535
+00:33:53,483 --> 00:33:56,416
+Undocumented feature that we don't introduce that instead.
+
+536
+00:33:56,483 --> 00:33:58,466
+So that's good to have that.
+
+537
+00:33:59,483 --> 00:34:03,466
+So what we looked at here is working with sets, the interaction
+
+538
+00:34:03,483 --> 00:34:07,466
+between sets of data results can be combined, operated against.
+
+539
+00:34:07,483 --> 00:34:10,466
+Order by is not allowed in the input queries. Set operators
+
+540
+00:34:10,483 --> 00:34:14,200
+include the union, the intersection or the intersect and the
+
+541
+00:34:14,283 --> 00:34:18,466
+except and the apply. We have examples of the union, the union
+
+542
+00:34:18,483 --> 00:34:21,466
+all, intercept and except, and using they're using the Adventures
+
+543
+00:34:21,483 --> 00:34:25,466
+Works database. These will work within the Adventures Works database.
+
+544
+00:34:25,483 --> 00:34:28,466
+A couple of people chatted in and asked where do I get that,
+
+545
+00:34:28,483 --> 00:34:31,466
+a couple of people asked first off where do I get a free version
+
+546
+00:34:32,0 --> 00:34:35,466
+of SQL Server. So there's a SQL Server Express version you can
+
+547
+00:34:35,483 --> 00:34:38,216
+download and install. Then you can install the Adventure Works.
+
+548
+00:34:38,300 --> 00:34:41,0
+So what you're seeing here you want to dabble with, you've got
+
+549
+00:34:41,483 --> 00:34:46,216
+the ability to dabble without writing a big check. SQL Express version.
+
+550
+00:34:46,300 --> 00:34:49,466
+Actual limitation, we couldn't bring it out in a real world production,
+
+551
+00:34:49,483 --> 00:34:53,466
+big environment. But then you can use some of these queries you're
+
+552
+00:34:53,483 --> 00:34:57,466
+seeing and you can set up the Adventure Works database so that
+
+553
+00:34:57,483 --> 00:35:01,233
+way you can execute these queries against that database.
+
+554
+00:35:01,483 --> 00:35:04,266
+We also introduced some windows function, the rank, dense rank,
+
+555
+00:35:04,350 --> 00:35:07,466
+the row number, the end tile. And we set a cool demo in the lag
+
+556
+00:35:07,483 --> 00:35:10,466
+and some other offset functions like the first value and the
+
+557
+00:35:11,483 --> 00:35:15,466
+last value that we looked at. Pivoting, probably not something
+
+558
+00:35:15,483 --> 00:35:17,466
+you want to spend a lot of time or lose any sleep over.
+
+559
+00:35:17,483 --> 00:35:21,466
+But the nonpivoting for unnormalized data would be beneficial
+
+560
+00:35:21,483 --> 00:35:25,466
+for you. Grouping set was really helpful and then we had the
+
+561
+00:35:25,483 --> 00:35:29,316
+cube and the roll-up that are available for us for grouping sets
+
+562
+00:35:29,400 --> 00:35:32,466
+of content. So that's going to wrap up this section here.
+
+563
+00:35:32,483 --> 00:35:35,466
+So what we'll do at this point is we're going to take a ten-minute break.
+
+564
+00:35:35,483 --> 00:35:40,416
+We're going to get prepared for our next section in Module 6
+
+565
+00:35:40,483 --> 00:35:43,466
+is coming up. So we'll ask you to step back, take a breather,
+
+566
+00:35:43,483 --> 00:35:46,466
+take a ten-minute break and we'll be back with you shortly.
+
