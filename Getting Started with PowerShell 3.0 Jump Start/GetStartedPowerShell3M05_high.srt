@@ -1,0 +1,3164 @@
+1
+00:00:01,400 --> 00:00:07,466
+[Music]
+
+2
+00:00:17,483 --> 00:00:18,466
+>> Here we go. Let me start you out with
+
+3
+00:00:19,166 --> 00:00:21,300
+a concept. And Jeffrey and I are going to work through this.
+
+4
+00:00:21,466 --> 00:00:24,466
+We're going to talk about how the pipeline works and how things...
+
+5
+00:00:24,483 --> 00:00:28,216
+when objects get passed, how does the receiving commandlet know
+
+6
+00:00:28,300 --> 00:00:32,316
+what to do with them, if anything at all. I'm not a good guy
+
+7
+00:00:32,400 --> 00:00:35,366
+with sports analogies because I don't know anything about sports,
+
+8
+00:00:35,450 --> 00:00:38,466
+but as I understand it, there's this thing with the small white
+
+9
+00:00:38,483 --> 00:00:42,466
+balls where they have catcher's mitts. So, you know, the sending
+
+10
+00:00:42,483 --> 00:00:45,466
+commandlet is going to send some baseballs and we have to see
+
+11
+00:00:45,166 --> 00:00:48,466
+what catcher's mitts they get caught on the receiving commandlet.
+
+12
+00:00:48,483 --> 00:00:52,333
+You'll see what I mean. We have a process of by value and by
+
+13
+00:00:52,416 --> 00:00:56,466
+property name. And if those don't work, we have a last line of resort.
+
+14
+00:00:57,333 --> 00:00:59,466
+So I'm just going to, first of all, point out that all of this
+
+15
+00:01:00,166 --> 00:01:03,266
+is in the slides, but I'm not going to use the slides. So here
+
+16
+00:01:03,350 --> 00:01:05,433
+we go. Let's get rid of the sides.
+
+17
+00:01:06,483 --> 00:01:10,466
+Let's start with an idea. Get service, if I can spell it,
+
+18
+00:01:11,483 --> 00:01:15,300
+stop service. Okay. Guys, we showed you this earlier, and we
+
+19
+00:01:15,383 --> 00:01:17,466
+did dash what if. You know that it's going to work.
+
+20
+00:01:18,483 --> 00:01:22,466
+But the question that I have in my head is why. Well, here's
+
+21
+00:01:22,483 --> 00:01:26,466
+what's happening. Get service has... is getting a bunch of services,
+
+22
+00:01:26,483 --> 00:01:28,466
+a bunch of objects, and we're going to send one object at a time
+
+23
+00:01:29,0 --> 00:01:33,0
+across the pipeline. My question is is the receiving commandlet,
+
+24
+00:01:33,483 --> 00:01:37,466
+which in this case is stop service, how is it grabbing hold of
+
+25
+00:01:37,483 --> 00:01:40,333
+this object and how does it know what to do with it? And as it
+
+26
+00:01:40,483 --> 00:01:45,466
+turns out, it has lot to do with the parameters on the receiving commandlet.
+
+27
+00:01:45,483 --> 00:01:49,466
+And that's what I want to show you. First of all, one of the
+
+28
+00:01:49,483 --> 00:01:52,466
+first things we need to know when we're looking at this is when
+
+29
+00:01:52,483 --> 00:01:53,466
+we send...
+
+30
+00:01:54,483 --> 00:01:58,466
+we're sending objects, we need to know what kind of objects they are.
+
+31
+00:01:59,166 --> 00:02:02,466
+So I piped it to get member. Because get member shows me what
+
+32
+00:02:02,483 --> 00:02:03,466
+type of object
+
+33
+00:02:05,483 --> 00:02:08,466
+is being sent across the pipeline. This is a service controller object.
+
+34
+00:02:08,483 --> 00:02:12,466
+I need to know that right now. Now what I want to do is I want
+
+35
+00:02:12,483 --> 00:02:16,466
+to see what the receiving commandlet is capable of receiving.
+
+36
+00:02:17,483 --> 00:02:21,466
+To do that we look at the help file for it, the receiving commandlet.
+
+37
+00:02:21,483 --> 00:02:25,183
+In this process you have a tendency to get confused between piping
+
+38
+00:02:25,266 --> 00:02:28,466
+to get member and get help, but it's pipe to get member to see
+
+39
+00:02:28,483 --> 00:02:31,466
+the object, what kind it is, and then we look at the help file
+
+40
+00:02:31,483 --> 00:02:35,466
+on the receiving commandlet. So let me show you. Get help on
+
+41
+00:02:35,483 --> 00:02:38,466
+stop service. Now, I'm going to use dash full because I want
+
+42
+00:02:38,483 --> 00:02:40,466
+you to see everything, but Jeffrey will show you a trick here
+
+43
+00:02:40,483 --> 00:02:41,466
+in a second.
+
+44
+00:02:41,483 --> 00:02:46,466
+Let me go in here and show you. Inside we now are very concerned
+
+45
+00:02:46,483 --> 00:02:49,466
+with this information. We already know how to look at the syntax.
+
+46
+00:02:49,483 --> 00:02:52,466
+I want to go down here and look at the parameters. The parameters
+
+47
+00:02:52,483 --> 00:02:58,400
+have a capability sometimes and that capability is do they accept
+
+48
+00:02:58,483 --> 00:02:59,416
+pipeline input.
+
+49
+00:02:59,483 --> 00:03:03,466
+Now, think of these guys as the parameters are the things with
+
+50
+00:03:03,483 --> 00:03:06,466
+or without the catcher's mitt. So what we're asking is do you
+
+51
+00:03:06,483 --> 00:03:09,466
+have a catcher's mitt or not where you could catch this object
+
+52
+00:03:09,483 --> 00:03:12,466
+and do something with it. Well, a lot of times you'll see like
+
+53
+00:03:12,483 --> 00:03:16,466
+display name, it doesn't accept pipeline input. So there's nothing
+
+54
+00:03:16,483 --> 00:03:19,466
+going to cross. But let's go down this list. I often start at
+
+55
+00:03:19,483 --> 00:03:21,466
+the bottom, but let's go down this list.
+
+56
+00:03:22,466 --> 00:03:25,466
+And this is stop service. So let's see here. Dash what if.
+
+57
+00:03:25,483 --> 00:03:28,466
+Well, dash what if, it doesn't even make sense to the accept
+
+58
+00:03:28,483 --> 00:03:32,350
+pipeline input. Dash confirm. No, that doesn't accept it.
+
+59
+00:03:32,433 --> 00:03:37,466
+PassThru, that doesn't accept it. Dash name. That does accept it.
+
+60
+00:03:37,483 --> 00:03:41,466
+Now here's what we're concerned about. We have two ways of accepting
+
+61
+00:03:41,483 --> 00:03:45,350
+pipeline input by value and by property name. And if you're
+
+62
+00:03:45,433 --> 00:03:47,466
+a dev out there, we're not talking about by vowel, by ref, this
+
+63
+00:03:47,483 --> 00:03:52,266
+is different. But by value and by property name. The first way
+
+64
+00:03:52,350 --> 00:03:54,466
+we're going to try it is by value. And what you're going to
+
+65
+00:03:54,483 --> 00:03:59,466
+notice here is dash name supports accepting pipeline input by value.
+
+66
+00:04:00,183 --> 00:04:03,466
+And you would like some kind of string. Well, wait a second,
+
+67
+00:04:03,483 --> 00:04:06,466
+let me show this to you, let me go up a little bit further.
+
+68
+00:04:06,483 --> 00:04:09,300
+See this parameter called input object? I'm not exactly sure
+
+69
+00:04:09,383 --> 00:04:13,466
+what it does, but it accepts true by value. Look at the kind
+
+70
+00:04:13,483 --> 00:04:17,466
+of object it would like, a service controller. Wait a minute,
+
+71
+00:04:17,483 --> 00:04:20,466
+wait a minute, wait a minute. When I did get service, what kind
+
+72
+00:04:20,183 --> 00:04:21,466
+of object was I sending it?
+
+73
+00:04:22,483 --> 00:04:25,466
+I was sending a service controller. So when a service controller
+
+74
+00:04:25,483 --> 00:04:30,466
+comes cruising across that pipeline to stop service, the catcher's
+
+75
+00:04:31,0 --> 00:04:35,300
+mitt that's going to grab it is the input parameter catcher's
+
+76
+00:04:35,383 --> 00:04:41,466
+mitt because this name is spelled exactly like service controller
+
+77
+00:04:41,200 --> 00:04:45,466
+of the object type that I sent. I know this is weird, but they're
+
+78
+00:04:45,483 --> 00:04:46,466
+spelled the same.
+
+79
+00:04:47,333 --> 00:04:49,466
+So since they're spelled the same, this means we're actually
+
+80
+00:04:49,483 --> 00:04:53,466
+passing it by value. And this is one of the most efficient ways
+
+81
+00:04:53,483 --> 00:04:58,466
+to pass. So that's how get service and stop service actually work.
+
+82
+00:04:58,483 --> 00:05:04,466
+We're passing by value into the parameter input object because
+
+83
+00:05:04,483 --> 00:05:08,466
+the names match, the type of object along with what the parameter expects.
+
+84
+00:05:11,483 --> 00:05:15,466
+Here's where it gets a little tricky. And please jump in as
+
+85
+00:05:15,483 --> 00:05:16,466
+soon as you want to yell at me about something.
+
+86
+00:05:17,450 --> 00:05:17,466
+>> You're doing great.
+
+87
+00:05:17,483 --> 00:05:20,466
+>> You think so? Because, man, this was hard on me at first.
+
+88
+00:05:20,483 --> 00:05:22,433
+But as soon as I got this, this is...
+
+89
+00:05:22,450 --> 00:05:22,466
+>> You got it....
+
+90
+00:05:22,483 --> 00:05:24,466
+>> what made the world rock.
+
+91
+00:05:25,483 --> 00:05:28,466
+Let's try this. Notice that I did get service stop service.
+
+92
+00:05:28,483 --> 00:05:31,466
+And I want to point something out to you. Notice how the nouns match.
+
+93
+00:05:31,483 --> 00:05:35,466
+Well, if the nouns match, it's likely that they're going to work
+
+94
+00:05:35,483 --> 00:05:39,466
+together on a pipeline. It's also likely that they'll probably
+
+95
+00:05:39,483 --> 00:05:43,350
+pass by value. But it's not always the case. So you always want
+
+96
+00:05:43,433 --> 00:05:45,466
+to check to make sure. Let me show you something where the nouns
+
+97
+00:05:45,483 --> 00:05:46,466
+don't match.
+
+98
+00:05:48,483 --> 00:05:53,166
+Get service stop process. Well, these are two totally different things.
+
+99
+00:05:53,483 --> 00:05:56,350
+Services, processes. They're not the same thing.
+
+100
+00:05:56,483 --> 00:05:59,466
+So I'll bet most of you are thinking the same thing that I am.
+
+101
+00:05:59,483 --> 00:06:01,466
+This isn't going to work.
+
+102
+00:06:01,483 --> 00:06:04,466
+It can't possibly work. Services, processes.
+
+103
+00:06:05,483 --> 00:06:08,466
+Let's go through this process and take a look.
+
+104
+00:06:09,483 --> 00:06:12,216
+I'm going to do get service and I'm going to pipe it to get member.
+
+105
+00:06:12,300 --> 00:06:14,416
+I know we know the answer to this, but I just want to go through
+
+106
+00:06:14,483 --> 00:06:15,466
+the process again.
+
+107
+00:06:15,483 --> 00:06:18,466
+What kind of object are we sending, we're sending a service controller
+
+108
+00:06:18,483 --> 00:06:21,266
+object across. Now, the first thing I want to check is to see
+
+109
+00:06:21,350 --> 00:06:26,183
+if there's something in stop process that supports pipeline input
+
+110
+00:06:26,266 --> 00:06:29,466
+by value for this object. That would be the first way we would
+
+111
+00:06:30,166 --> 00:06:33,466
+hook up. So I'm going to do get help on the receiving commandlet,
+
+112
+00:06:33,200 --> 00:06:35,283
+which in this case is stop process,
+
+113
+00:06:38,483 --> 00:06:40,466
+and let's take a quick look.
+
+114
+00:06:41,483 --> 00:06:44,466
+Let me get up to the parameters. Now, guys, I'm going to shorten
+
+115
+00:06:44,483 --> 00:06:46,466
+this down a little bit because I know some of these parameters
+
+116
+00:06:46,483 --> 00:06:49,466
+just don't accept pipeline input, like what if it doesn't accept
+
+117
+00:06:49,483 --> 00:06:51,466
+pipeline input. So I don't even need to look at it. So every
+
+118
+00:06:51,483 --> 00:06:55,466
+time it says false, I'm not really interested in it.
+
+119
+00:06:55,483 --> 00:06:58,333
+PassThru, doesn't support it, dash name, it does support it but
+
+120
+00:06:58,483 --> 00:07:01,466
+right now I'm checking for by value. This is by property name.
+
+121
+00:07:01,216 --> 00:07:02,466
+So I'm looking for things by value.
+
+122
+00:07:03,450 --> 00:07:06,466
+Ah, there we go. Input object. It supports pipeline input.
+
+123
+00:07:06,483 --> 00:07:09,466
+It will catch it. And it's doing it by value the first way we're
+
+124
+00:07:09,483 --> 00:07:14,333
+going to do it, but look at what it wants, a process object.
+
+125
+00:07:14,483 --> 00:07:18,283
+Well, I'm not sending it. Process isn't spelled the same way
+
+126
+00:07:18,366 --> 00:07:19,466
+as service controller.
+
+127
+00:07:21,300 --> 00:07:22,400
+Not even close.
+
+128
+00:07:22,483 --> 00:07:28,466
+So there's not going to be a hookup here, so by value fails.
+
+129
+00:07:30,483 --> 00:07:32,466
+Well, now at this point you kind of go, well, if it fails, it's
+
+130
+00:07:32,483 --> 00:07:33,333
+just not going to work.
+
+131
+00:07:33,416 --> 00:07:38,216
+No. Now we move on to the next process which is by property name.
+
+132
+00:07:38,300 --> 00:07:41,466
+And this gets a little bit confusing. I want you to notice while
+
+133
+00:07:41,216 --> 00:07:42,466
+I'm in this help file.
+
+134
+00:07:43,483 --> 00:07:49,466
+See how the parameter dash name takes pipeline input by property name?
+
+135
+00:07:50,483 --> 00:07:54,466
+Here's what that's saying. The object that you're sending to
+
+136
+00:07:54,483 --> 00:08:01,183
+me, does it have a property that is spelled exactly like the
+
+137
+00:08:01,266 --> 00:08:04,466
+parameter name. That's what we mean by property name, is it's
+
+138
+00:08:04,483 --> 00:08:08,250
+spelled the same. And if so, I might be able to hook up that way.
+
+139
+00:08:08,333 --> 00:08:12,466
+If my vowel fails, I'll try this. So here's what I'm going to do.
+
+140
+00:08:13,350 --> 00:08:16,316
+Here's the catch phrase. Whenever you want to know everything
+
+141
+00:08:16,400 --> 00:08:19,416
+there is to know about an object, you pipe it to get member.
+
+142
+00:08:19,483 --> 00:08:20,466
+So get service.
+
+143
+00:08:22,483 --> 00:08:25,433
+And I'm going to pipe it to get member.
+
+144
+00:08:26,483 --> 00:08:28,166
+Take a look at this list.
+
+145
+00:08:28,483 --> 00:08:32,0
+Is there a property... and remember we don't... alls we need
+
+146
+00:08:32,483 --> 00:08:35,466
+is the word property... is there a property that is spelled the
+
+147
+00:08:35,483 --> 00:08:38,466
+same way as the parameter name. And if you look at the list,
+
+148
+00:08:39,483 --> 00:08:44,466
+la-la, there is. If they're spelled the same, we're going to
+
+149
+00:08:44,483 --> 00:08:47,300
+have a hookup by property name. And if you look at the list,
+
+150
+00:08:47,383 --> 00:08:50,466
+la-la, there is. If they're spelled the same, we're going to
+
+151
+00:08:50,483 --> 00:08:53,183
+have a hookup by property name. But watch what's going to happen here.
+
+152
+00:08:53,266 --> 00:08:56,466
+So let's look. I'm only going to take one service here.
+
+153
+00:08:56,483 --> 00:08:58,466
+Service. Look at what its name is. It's the name of the service.
+
+154
+00:08:58,483 --> 00:09:01,466
+Okay. Wait a second. When you look at processes,
+
+155
+00:09:02,483 --> 00:09:04,466
+let's look at processes,
+
+156
+00:09:07,483 --> 00:09:09,466
+process name is also name.
+
+157
+00:09:10,483 --> 00:09:15,300
+These are process names. So when you use the commandlet...
+
+158
+00:09:15,383 --> 00:09:17,216
+oops. Clear the screen. When you use the commandlet...
+
+159
+00:09:17,300 --> 00:09:19,166
+hello, clear the screen. There we go.
+
+160
+00:09:19,483 --> 00:09:23,466
+When you use the commandlet stop process, what it wants for its
+
+161
+00:09:23,483 --> 00:09:26,466
+dash name is the name of a process.
+
+162
+00:09:27,416 --> 00:09:31,466
+What I'm sending it is the name of a service.
+
+163
+00:09:32,483 --> 00:09:33,466
+But here's the thing.
+
+164
+00:09:34,350 --> 00:09:38,466
+We do have a hookup. This is going to work, it's just your results
+
+165
+00:09:38,483 --> 00:09:42,300
+may be a little unusual. So let's try it. Get service.
+
+166
+00:09:42,483 --> 00:09:46,350
+Pipe to stop process. This should work. And, yeah, I'm going
+
+167
+00:09:46,433 --> 00:09:49,216
+to do a dash what if because... you know why I'm doing a dash
+
+168
+00:09:49,300 --> 00:09:51,466
+what if? Because it does actually work.
+
+169
+00:09:52,250 --> 00:09:55,466
+Notice there's a lot of blood on my screen. Now, what this means
+
+170
+00:09:55,483 --> 00:09:59,466
+is is that, yeah, look, cannot find the process with the name.
+
+171
+00:09:59,483 --> 00:10:01,466
+Well, yeah, because that's a service name. Of course you can't
+
+172
+00:10:01,483 --> 00:10:05,466
+find that. But if you look here, did you see anything white fly by?
+
+173
+00:10:06,283 --> 00:10:10,0
+Because that means it worked. Let me see if I can find something.
+
+174
+00:10:10,483 --> 00:10:11,466
+Oh, there's always something.
+
+175
+00:10:12,483 --> 00:10:13,333
+>> I didn't see anything.
+
+176
+00:10:13,416 --> 00:10:13,433
+>> Really?
+
+177
+00:10:13,450 --> 00:10:13,466
+>> No.
+
+178
+00:10:13,483 --> 00:10:15,466
+>> Don't embarrass me in front of my friends.
+
+179
+00:10:15,483 --> 00:10:17,466
+>> It's only 5,000 or 2.
+
+180
+00:10:17,483 --> 00:10:20,466
+>> I know. There's... there's almost always something in here
+
+181
+00:10:20,483 --> 00:10:21,333
+that's in white.
+
+182
+00:10:21,416 --> 00:10:23,466
+>> Go to mine. Let me show you.
+
+183
+00:10:23,483 --> 00:10:24,283
+>> Go to his.
+
+184
+00:10:25,483 --> 00:10:28,466
+>> Okay. So here's... I'll do a different set.
+
+185
+00:10:28,483 --> 00:10:29,400
+>> Okay. Cool.
+
+186
+00:10:29,483 --> 00:10:32,466
+>> Okay? So notice I started up calculator here.
+
+187
+00:10:33,483 --> 00:10:35,466
+And so I can do get process.
+
+188
+00:10:37,483 --> 00:10:42,166
+Calc and get calculator. And I can pipe that to dir.
+
+189
+00:10:43,483 --> 00:10:50,466
+And we see that calc is in this. And why is that? Because dir takes...
+
+190
+00:10:50,483 --> 00:10:54,466
+binds by name, and so you take a look. And, well, does dir take
+
+191
+00:10:54,483 --> 00:11:00,200
+a process, you know, system.diagnostics.process? No. And it
+
+192
+00:11:00,283 --> 00:11:04,200
+says, oh, well, I bind anything by name. Do you have a name?
+
+193
+00:11:04,283 --> 00:11:07,466
+And get process does have a name, and therefore it works.
+
+194
+00:11:07,483 --> 00:11:11,466
+>> And that's an excellent example. And so between his example
+
+195
+00:11:11,483 --> 00:11:15,466
+and mine, you get what's happening here, is that the commandlets
+
+196
+00:11:15,483 --> 00:11:19,266
+are working together, but you have to look at what you're giving
+
+197
+00:11:19,350 --> 00:11:21,466
+it, the information that you're giving and what it's expecting.
+
+198
+00:11:21,483 --> 00:11:26,466
+In the case of my get service stop process, if you have a process
+
+199
+00:11:26,483 --> 00:11:29,466
+running that happens to have the same name as a service, it's
+
+200
+00:11:29,483 --> 00:11:30,466
+going to get killed off.
+
+201
+00:11:31,483 --> 00:11:34,466
+Most of the time that's not the case. In Jeffrey's example,
+
+202
+00:11:34,483 --> 00:11:38,466
+I got a process name that happens to be actually a file I could
+
+203
+00:11:38,483 --> 00:11:42,466
+go looking for. So that is a good result that works out.
+
+204
+00:11:42,483 --> 00:11:44,466
+>> Can I show them... actually, you know what, I said that wrong.
+
+205
+00:11:44,483 --> 00:11:45,466
+It was actually the path...
+
+206
+00:11:46,333 --> 00:11:46,466
+>> The path that put it......
+
+207
+00:11:46,483 --> 00:11:51,466
+>> is the dir. Yeah. So dir takes a path, and process object has
+
+208
+00:11:51,483 --> 00:11:56,466
+a path. Now, notice in my screen we said, oh, you know, by name.
+
+209
+00:11:57,0 --> 00:11:58,433
+Well, you were doing it by name, right?
+
+210
+00:11:58,450 --> 00:11:58,466
+>> Right.
+
+211
+00:12:00,483 --> 00:12:02,466
+>> GSWB. And notice here's a name.
+
+212
+00:12:03,483 --> 00:12:07,466
+What was it I wanted to show you? Through...
+
+213
+00:12:09,200 --> 00:12:14,433
+okay. So notice this thing here.
+
+214
+00:12:14,450 --> 00:12:14,466
+>> Yeah.
+
+215
+00:12:14,483 --> 00:12:19,466
+>> Okay. Name, alias property service name. So unlike...
+
+216
+00:12:19,483 --> 00:12:23,466
+remember, I said that PowerShell, we're focused in on making
+
+217
+00:12:23,483 --> 00:12:27,466
+your life good because those people aren't focused in on that,
+
+218
+00:12:27,483 --> 00:12:30,466
+right, they're focused in on I'm writing this for myself, it's
+
+219
+00:12:30,483 --> 00:12:33,350
+going to be cool, or, hey, you're my developer buddy and we're
+
+220
+00:12:33,433 --> 00:12:35,466
+going to talk developer talk to each other, blah, blah, blah.
+
+221
+00:12:35,483 --> 00:12:39,433
+And so it's pretty inconsistent world. We're responsible for
+
+222
+00:12:39,483 --> 00:12:42,466
+trying to make it a consistent world for you. So whereas
+
+223
+00:12:44,166 --> 00:12:49,466
+you say service name and process was process name, we want to
+
+224
+00:12:49,200 --> 00:12:52,300
+say, no, you don't care about all that crap, you just want the name.
+
+225
+00:12:52,383 --> 00:12:52,466
+>> Name.
+
+226
+00:12:52,483 --> 00:12:56,200
+>> Okay. And so what we do is we take the type system, and remember
+
+227
+00:12:56,283 --> 00:12:59,466
+how I showed you XML, we tweaked the XML and we present it to
+
+228
+00:12:59,483 --> 00:13:02,466
+you simpler. One of the techniques we do for that is something
+
+229
+00:13:02,483 --> 00:13:06,466
+called an alias property. An alias property is something here,
+
+230
+00:13:06,483 --> 00:13:13,466
+we say, hey, we have this property name which is aliased to service name.
+
+231
+00:13:13,483 --> 00:13:16,466
+So the property... the object itself really only has this thing
+
+232
+00:13:16,483 --> 00:13:19,466
+called service name, but we say, hey, treat it as though it has
+
+233
+00:13:19,483 --> 00:13:24,266
+a name which... and when you ask for it, give them the service name.
+
+234
+00:13:24,350 --> 00:13:28,466
+And that makes it... that gives you a simplified consistent view
+
+235
+00:13:28,483 --> 00:13:32,250
+of the world, and it makes this interoperability stuff work.
+
+236
+00:13:32,333 --> 00:13:35,166
+Because if it turns out that, hey, I want to send something to
+
+237
+00:13:35,250 --> 00:13:39,466
+some command and it's accepting things by goo jar [Phonetic] and...
+
+238
+00:13:39,483 --> 00:13:40,166
+>> Right....
+
+239
+00:13:40,483 --> 00:13:43,433
+>> and I have one of those, but I call it a foo [Phonetic].
+
+240
+00:13:43,450 --> 00:13:43,466
+>> Right.
+
+241
+00:13:43,483 --> 00:13:46,466
+>> I just go and I say, okay, well, on my foo, you know, I'm going
+
+242
+00:13:46,483 --> 00:13:51,466
+to map its name to goo jar, I do that once, and then I can send
+
+243
+00:13:51,483 --> 00:13:52,366
+it to you.
+
+244
+00:13:52,450 --> 00:13:55,466
+>> As a matter of fact, this is a perfect setup for the first
+
+245
+00:13:55,483 --> 00:13:58,466
+stage in this. And so understand what he's... he's shown you
+
+246
+00:13:58,483 --> 00:14:01,300
+is that they've done a lot of work to make
+
+247
+00:14:02,483 --> 00:14:05,466
+PowerShell commands consistent. In other words, we had a service
+
+248
+00:14:05,483 --> 00:14:09,466
+name on the object, but they created an alias property called
+
+249
+00:14:09,483 --> 00:14:15,466
+name so it could work with other commandlets that accept by property name.
+
+250
+00:14:16,483 --> 00:14:19,466
+So they they're making it consistent for us. But there are times
+
+251
+00:14:20,400 --> 00:14:24,333
+when the greatest minds all think alike but just haven't had
+
+252
+00:14:24,416 --> 00:14:27,333
+a chance to get everything consistent yet. Let me give you an
+
+253
+00:14:27,416 --> 00:14:29,466
+example where this is going to break down.
+
+254
+00:14:29,483 --> 00:14:31,466
+This is one of my favorite commandlets, is get AD computer.
+
+255
+00:14:32,483 --> 00:14:34,0
+And I need to tell you that one of the things you need to be
+
+256
+00:14:34,483 --> 00:14:37,466
+kind of careful with is Microsoft, especially the product teams
+
+257
+00:14:37,483 --> 00:14:41,466
+when they work with this, they try to help you by not doing dangerous
+
+258
+00:14:41,483 --> 00:14:44,466
+things to yourself. Think about the technology underneath what
+
+259
+00:14:44,483 --> 00:14:48,466
+this commandlet's going to do. If I run this, who has this information?
+
+260
+00:14:48,483 --> 00:14:51,466
+Domain controller does. So this commandlet has to go out to a
+
+261
+00:14:51,483 --> 00:14:54,466
+domain controller, ask the domain controller for this information
+
+262
+00:14:55,483 --> 00:14:56,466
+and then spit this information back.
+
+263
+00:14:57,483 --> 00:15:01,466
+Look, quite honestly, if you only have a couple dozen computers,
+
+264
+00:15:01,483 --> 00:15:05,466
+that's not a big deal. But if you have 30,000 computers, this
+
+265
+00:15:05,483 --> 00:15:08,466
+could be a big deal. This could make your domain controller not
+
+266
+00:15:08,483 --> 00:15:11,466
+a domain controller for a while. And then when it spits the
+
+267
+00:15:11,483 --> 00:15:14,466
+data back, you could have some performance issues for a while.
+
+268
+00:15:14,483 --> 00:15:17,466
+So when you're running commandlets, you will notice, you know,
+
+269
+00:15:18,333 --> 00:15:20,466
+a lot of times you'll do a get commandlet and it will just run.
+
+270
+00:15:21,483 --> 00:15:23,466
+Commandlets that might be a little bit more dangerous, that's
+
+271
+00:15:23,483 --> 00:15:27,466
+not the case. What they do is they put things in them that are mandatory.
+
+272
+00:15:27,483 --> 00:15:30,416
+We mentioned this with get event log earlier. This is another
+
+273
+00:15:30,483 --> 00:15:32,466
+great commandlet that has an example. So let me show you.
+
+274
+00:15:32,483 --> 00:15:36,466
+If I just strike enter on get AD computer, huh-uh, bro, you got
+
+275
+00:15:36,483 --> 00:15:40,416
+to give me a little bit more information about this. You've got
+
+276
+00:15:40,483 --> 00:15:43,466
+to be... I don't want to get you everything. Really? So I'm
+
+277
+00:15:44,0 --> 00:15:45,466
+just going to put in a star.
+
+278
+00:15:46,483 --> 00:15:48,466
+This will work and it will get me everything. But notice what
+
+279
+00:15:48,483 --> 00:15:52,366
+I've done. I'm the one now that's made the decision to actually
+
+280
+00:15:52,450 --> 00:15:54,466
+get everything. So this is the commandlet that I'm going to use
+
+281
+00:15:54,483 --> 00:15:57,466
+for a second. So let me do this. Get AD computer.
+
+282
+00:15:58,483 --> 00:16:01,466
+And I'm just going to put in the filter, star, which means I'm
+
+283
+00:16:01,483 --> 00:16:03,216
+going to grab everything.
+
+284
+00:16:03,483 --> 00:16:05,466
+And I want to... here's my business problem. What I would like
+
+285
+00:16:06,0 --> 00:16:09,466
+to do is get the status of the bit service on every computer
+
+286
+00:16:09,483 --> 00:16:12,466
+in the network. I know it doesn't sound that creative, but it
+
+287
+00:16:12,483 --> 00:16:16,183
+gets better later. So get service name bits.
+
+288
+00:16:16,483 --> 00:16:19,466
+Understand what I'm trying to do. I'm trying to get a list of
+
+289
+00:16:19,483 --> 00:16:23,466
+all the computers from active directory, and I want them piped
+
+290
+00:16:23,483 --> 00:16:27,466
+to get service and so that get service will then grab the bit
+
+291
+00:16:27,483 --> 00:16:30,466
+service from all of them. Well, here's the thing. Let's see
+
+292
+00:16:30,483 --> 00:16:35,466
+if we can figure out how this is going to work or not work.
+
+293
+00:16:36,483 --> 00:16:38,466
+So first thing is that we do is I go through the whole process,
+
+294
+00:16:38,483 --> 00:16:41,466
+first of all, pipe to GMs to find out what kind of object am
+
+295
+00:16:41,183 --> 00:16:44,466
+I working with. I need to know this for by value in case it works
+
+296
+00:16:44,483 --> 00:16:48,300
+for by value. So AD computer object. Sounds great.
+
+297
+00:16:48,383 --> 00:16:50,400
+Probably ain't gonna happen because the nouns don't match, but
+
+298
+00:16:50,483 --> 00:16:52,466
+AD computer object, great.
+
+299
+00:16:53,183 --> 00:16:57,466
+Next thing I'm going to do is get help on get service and see
+
+300
+00:16:57,483 --> 00:17:02,466
+if it... dadadadada... see it if supports AD
+
+301
+00:17:03,483 --> 00:17:07,466
+computer object by value. And, guys, I'm going to make this a
+
+302
+00:17:07,483 --> 00:17:11,466
+little bit briefer. So rather than scrolling through every...
+
+303
+00:17:11,183 --> 00:17:13,466
+and stopping at every single one of them, let me just scroll
+
+304
+00:17:13,483 --> 00:17:15,466
+up to the things that say by value.
+
+305
+00:17:15,483 --> 00:17:16,466
+>> Can I show them a trick?
+
+306
+00:17:16,483 --> 00:17:17,466
+>> Yeah, sure.
+
+307
+00:17:17,483 --> 00:17:19,466
+>> Do that again and do minus show window.
+
+308
+00:17:20,483 --> 00:17:21,466
+>> So do show window, okay.
+
+309
+00:17:21,483 --> 00:17:26,466
+>> Yeah, show window. Okay. And so if you have... now search
+
+310
+00:17:26,483 --> 00:17:27,466
+by by value.
+
+311
+00:17:28,483 --> 00:17:31,466
+>> Oh. Man, see, this whole... this whole show... this whole
+
+312
+00:17:31,483 --> 00:17:33,466
+show window thing is just awesome.
+
+313
+00:17:33,483 --> 00:17:34,466
+>> Yeah. And then hit next.
+
+314
+00:17:34,483 --> 00:17:37,433
+>> Oh, wait a minute. I have to hit next. There we go. Oh, boy,
+
+315
+00:17:37,450 --> 00:17:37,466
+an object.
+
+316
+00:17:37,483 --> 00:17:39,466
+>> That's an object. Was that easy or what see?
+
+317
+00:17:40,0 --> 00:17:44,166
+>> See? So now look, look, look, we got it. Accept pipeline input.
+
+318
+00:17:44,250 --> 00:17:48,350
+You may have to watch me scroll, true, by value, we're looking good.
+
+319
+00:17:48,433 --> 00:17:51,466
+What kind of object does input object want? It wants a...
+
+320
+00:17:51,483 --> 00:17:57,466
+is that spelled exactly the same way as AD computer? No. So no
+
+321
+00:17:57,483 --> 00:17:58,466
+hookup by value.
+
+322
+00:17:58,483 --> 00:17:59,466
+>> So close.
+
+323
+00:17:59,483 --> 00:18:01,316
+>> Yeah, so close.
+
+324
+00:18:01,333 --> 00:18:01,466
+[Laughter]
+
+325
+00:18:02,483 --> 00:18:06,466
+>> So what we're going to do, then, is check for by property name.
+
+326
+00:18:06,483 --> 00:18:09,466
+Well, I have to take a look at what the properties are. And really
+
+327
+00:18:09,483 --> 00:18:13,466
+the only property I care about that I'm trying to send across
+
+328
+00:18:13,483 --> 00:18:16,466
+is whatever holds the computer name. So let's take a look at
+
+329
+00:18:16,483 --> 00:18:25,466
+that real quick. Get AD computer, filter star, well, gee, whiz,
+
+330
+00:18:25,483 --> 00:18:28,216
+just take one of them. There's a whole bunch of stuff that's
+
+331
+00:18:28,300 --> 00:18:31,233
+being sent across the pipe. The only thing I care about, though,
+
+332
+00:18:31,316 --> 00:18:35,450
+is where the computer name is. And that property is called name.
+
+333
+00:18:35,483 --> 00:18:39,466
+So let's go back to the show window and see if we have something
+
+334
+00:18:39,483 --> 00:18:45,466
+that supports name. So pipeline, by property name, and so let's
+
+335
+00:18:45,483 --> 00:18:51,166
+do this trick, by property name, and watch what happens. So we'll
+
+336
+00:18:51,250 --> 00:18:51,466
+find them.
+
+337
+00:18:52,483 --> 00:18:56,466
+Dash computer name. Hey, that supports by property name.
+
+338
+00:18:56,483 --> 00:19:02,466
+But remember what the rule is. This has to be spelled exactly
+
+339
+00:19:02,483 --> 00:19:07,466
+like this for by property to hook up. And it's not. In fact,
+
+340
+00:19:07,483 --> 00:19:11,400
+it's not spelled the same. But you know what is spelled the same
+
+341
+00:19:11,483 --> 00:19:14,466
+if I go down here? Oops. Wait. Which way? Looky.
+
+342
+00:19:15,483 --> 00:19:16,466
+>> Aim.
+
+343
+00:19:17,483 --> 00:19:20,466
+>> We do support by property name on something spelled exactly
+
+344
+00:19:20,483 --> 00:19:24,466
+the same. But look at what it says. It wants a service name.
+
+345
+00:19:24,483 --> 00:19:27,466
+So here's what's going to happen. If I try to run this, I'm
+
+346
+00:19:27,483 --> 00:19:30,466
+going to take a bunch of computer names and it's going to think
+
+347
+00:19:30,483 --> 00:19:33,466
+that I'm giving it service names. And unless you named your
+
+348
+00:19:33,483 --> 00:19:38,0
+computers after services, which would never be a good idea, this
+
+349
+00:19:38,483 --> 00:19:43,466
+is not going to work. The thing is... that really gets me is,
+
+350
+00:19:43,216 --> 00:19:46,466
+God, if there was only a way, if there only was a way where I
+
+351
+00:19:46,483 --> 00:19:51,466
+don't want this to be called name, I want it to be called computer
+
+352
+00:19:51,483 --> 00:19:54,466
+name, because if it's called computer name then it would match
+
+353
+00:19:55,166 --> 00:19:58,466
+in everything we're work... if there was only a way I could change
+
+354
+00:19:58,483 --> 00:20:01,466
+this property to say computer name.
+
+355
+00:20:01,483 --> 00:20:04,466
+>> And yet there is.
+
+356
+00:20:06,316 --> 00:20:07,166
+Do you want to show them?
+
+357
+00:20:07,250 --> 00:20:08,216
+>> You want to show them?
+
+358
+00:20:08,300 --> 00:20:09,333
+>> I don't have AD computer.
+
+359
+00:20:09,416 --> 00:20:11,0
+>> Oh. That's... you don't have AD computer. Well, let me show
+
+360
+00:20:11,450 --> 00:20:11,466
+them then.
+
+361
+00:20:11,483 --> 00:20:15,466
+So let's do the concept. So watch, guys.
+
+362
+00:20:16,366 --> 00:20:16,466
+Take a look.
+
+363
+00:20:17,483 --> 00:20:20,466
+Get service. And I'm just going to show you a quick concept.
+
+364
+00:20:20,483 --> 00:20:22,466
+I want you to see, I'm just going to work with one service to
+
+365
+00:20:22,483 --> 00:20:26,466
+keep it simple. You guys have seen a select properties before...
+
+366
+00:20:26,483 --> 00:20:29,466
+>> By the way, I don't think you've shown them computer name.
+
+367
+00:20:29,216 --> 00:20:31,466
+Have you shown them computer name? So, you know, get service
+
+368
+00:20:31,483 --> 00:20:33,466
+works against [Inaudible] computers.
+
+369
+00:20:33,483 --> 00:20:36,250
+>> Yes. Oh, yeah. Yeah, I should have shown you in the help file.
+
+370
+00:20:36,333 --> 00:20:39,466
+You'll see it has dash computer name. So I could use this against
+
+371
+00:20:39,483 --> 00:20:42,466
+remote computers, which is what I'm trying to get the active
+
+372
+00:20:42,483 --> 00:20:43,433
+directory commandlet to do.
+
+373
+00:20:43,450 --> 00:20:43,466
+>> Yeah.
+
+374
+00:20:43,483 --> 00:20:46,466
+>> I'm going to grab name and status, and I want you guys to see something.
+
+375
+00:20:46,483 --> 00:20:49,316
+Yeah, it's going to give me the name in the status. That's what
+
+376
+00:20:49,400 --> 00:20:52,466
+you would expect. But how many of you would expect to get an
+
+377
+00:20:52,166 --> 00:20:54,466
+error if this occurred? And usually when I'm at a conference,
+
+378
+00:20:54,483 --> 00:20:57,466
+this is exactly what I type. Because I can't type very well.
+
+379
+00:20:57,483 --> 00:21:00,466
+So it usually comes naem stitus.
+
+380
+00:21:01,483 --> 00:21:04,466
+Watch what happens.
+
+381
+00:21:05,483 --> 00:21:06,466
+See that?
+
+382
+00:21:07,483 --> 00:21:08,466
+Do you get what's going on here?
+
+383
+00:21:09,400 --> 00:21:11,466
+Wait a minute. A lot of people think that that should generate
+
+384
+00:21:11,483 --> 00:21:13,466
+an error. That shouldn't generate an error. That's a feature.
+
+385
+00:21:14,483 --> 00:21:16,466
+Let me show you. I'm going to pipe that to get member.
+
+386
+00:21:19,483 --> 00:21:21,466
+Look. It just created
+
+387
+00:21:23,433 --> 00:21:26,466
+new properties called naem and stitus.
+
+388
+00:21:26,483 --> 00:21:27,466
+[Laughter]
+
+389
+00:21:28,450 --> 00:21:32,300
+>> So here's the idea. I want you to think about this. I wonder
+
+390
+00:21:32,383 --> 00:21:37,216
+if I could take the existing property for AD computer called
+
+391
+00:21:37,300 --> 00:21:41,466
+name and change it to computer name. And the answer is yes.
+
+392
+00:21:41,483 --> 00:21:44,466
+However, the answer is yes,
+
+393
+00:21:47,483 --> 00:21:48,466
+but let me show you how this is going to work.
+
+394
+00:21:49,483 --> 00:21:53,466
+First of all, I'm going to select the property name
+
+395
+00:21:55,300 --> 00:21:58,466
+just so you can see I'm not cheating, and then I'm going to show
+
+396
+00:21:59,483 --> 00:22:02,466
+you some special syntax. And this syntax at first is a little
+
+397
+00:22:02,483 --> 00:22:06,466
+chewy, but it's in the help file for the select dash object.
+
+398
+00:22:06,483 --> 00:22:08,466
+And it's in the example.
+
+399
+00:22:08,233 --> 00:22:09,466
+>> That's going to be one of the things you want to learn.
+
+400
+00:22:09,483 --> 00:22:11,433
+It's a hash table syntax.
+
+401
+00:22:11,450 --> 00:22:11,466
+>> Yes.
+
+402
+00:22:11,483 --> 00:22:14,283
+>> And we use hash tables everywhere. So you're going to spend
+
+403
+00:22:14,366 --> 00:22:15,466
+the time, you're going to learn the syntax.
+
+404
+00:22:16,166 --> 00:22:19,283
+>> This syntax you must... you must... you're just going to have
+
+405
+00:22:19,366 --> 00:22:21,383
+keep typing it till you learn it. This is something you're going
+
+406
+00:22:21,466 --> 00:22:24,466
+to have to keep in. So it's an at sign with an open squiggly.
+
+407
+00:22:24,483 --> 00:22:27,466
+And what we have is the word called name equals and now you get
+
+408
+00:22:27,483 --> 00:22:32,433
+to create your own property name. What would I like this to
+
+409
+00:22:32,483 --> 00:22:34,466
+be called? I want it to be called computer name. So I'm going
+
+410
+00:22:34,483 --> 00:22:36,466
+to put in computer name.
+
+411
+00:22:38,483 --> 00:22:43,466
+And at this point, semicolon, and then you specify the expression
+
+412
+00:22:43,483 --> 00:22:46,333
+that will fill that column with data.
+
+413
+00:22:46,483 --> 00:22:49,466
+Well, let's do this. Expression equals.
+
+414
+00:22:50,483 --> 00:22:53,466
+And you're going to put that inside of squigglies. And there's
+
+415
+00:22:53,483 --> 00:22:57,466
+one squiggly left over. So inside here we want the current object
+
+416
+00:22:57,483 --> 00:23:00,466
+on the pipeline dollar sign underscore or you can use dollar
+
+417
+00:23:00,483 --> 00:23:03,466
+sign PS item with Version 3.
+
+418
+00:23:03,483 --> 00:23:08,466
+And what do I want from the object that's coming from get AD computer?
+
+419
+00:23:08,216 --> 00:23:13,466
+I want the original name property. So watch. Name. I'm going
+
+420
+00:23:13,166 --> 00:23:15,266
+to strike enter, and watch what happens.
+
+421
+00:23:17,233 --> 00:23:17,466
+>> Oohhh.
+
+422
+00:23:17,483 --> 00:23:23,350
+>> Dudes, dudettes, dudesses, oh, I've got myself a computer name
+
+423
+00:23:23,433 --> 00:23:26,466
+now property. Now, let me just show you how you're going to see
+
+424
+00:23:26,483 --> 00:23:29,466
+this on the Internet. A couple of just quicky things. This is a...
+
+425
+00:23:30,333 --> 00:23:33,466
+you'll hear this custom columns, calculated properties, people
+
+426
+00:23:33,483 --> 00:23:37,466
+use all these terms for this. But you almost never see anybody
+
+427
+00:23:37,483 --> 00:23:40,466
+type in this full syntax. They're going to shorten this up to
+
+428
+00:23:40,483 --> 00:23:44,466
+just an E, then they're going to shorten this up to just an N.
+
+429
+00:23:45,450 --> 00:23:45,466
+>> And why?
+
+430
+00:23:47,483 --> 00:23:48,466
+>> Because it's short.
+
+431
+00:23:48,483 --> 00:23:50,200
+>> Because I'm a fun person.
+
+432
+00:23:50,283 --> 00:23:50,466
+>> I can't type.
+
+433
+00:23:50,483 --> 00:23:51,466
+>> I can't type at all.
+
+434
+00:23:51,483 --> 00:23:54,216
+>> There's no way I'm going to figure out how to spell expression.
+
+435
+00:23:54,300 --> 00:23:56,466
+>> Expression? I know. I know. But, watch, guys, I want you to
+
+436
+00:23:57,483 --> 00:24:00,466
+see that this still works. So I've changed it. One other thing
+
+437
+00:24:00,483 --> 00:24:02,466
+I want show you, you're going to see this a lot on the Internet,
+
+438
+00:24:02,483 --> 00:24:06,466
+and you need to watch out for it. Used to be instead of name
+
+439
+00:24:06,483 --> 00:24:12,166
+this was called label. And everybody would abbreviate this as
+
+440
+00:24:12,250 --> 00:24:15,466
+an L. Well, I don't know about you, but when you see this on
+
+441
+00:24:15,200 --> 00:24:18,466
+a blog post or in a book, you can't tell the difference between
+
+442
+00:24:18,483 --> 00:24:20,466
+an L and the number 1.
+
+443
+00:24:21,483 --> 00:24:24,266
+So a lot of times you'll type it in wrong and you'll go, It just
+
+444
+00:24:24,350 --> 00:24:24,466
+doesn't work.
+
+445
+00:24:24,483 --> 00:24:29,466
+No. If you ever see an L or what looks to be a 1, always replace
+
+446
+00:24:29,166 --> 00:24:33,466
+it with an N; that way you get rid of all of those little ambigu-...
+
+447
+00:24:33,483 --> 00:24:36,466
+I can't say that word, but all those little problems, ambig-...
+
+448
+00:24:36,483 --> 00:24:37,466
+yeah, all those little problems.
+
+449
+00:24:37,483 --> 00:24:39,433
+>> Need wild cards for speech.
+
+450
+00:24:39,450 --> 00:24:40,433
+[Laughter]
+
+451
+00:24:40,483 --> 00:24:42,466
+>> So let's do this.
+
+452
+00:24:43,483 --> 00:24:47,466
+I don't really need this name in here anymore because I've managed
+
+453
+00:24:47,483 --> 00:24:50,466
+to create my own version. And I want to show you if you pipe
+
+454
+00:24:50,483 --> 00:24:55,466
+it to get member, see it says computer name. So looky.
+
+455
+00:24:56,483 --> 00:25:00,466
+When we pass it to the receiving commandlet, computer name is
+
+456
+00:25:00,483 --> 00:25:05,466
+going to match with computer name, by property name, and, lo
+
+457
+00:25:06,483 --> 00:25:09,466
+and behold, dununa-dununa-dununa, drum roll, drum roll, drum
+
+458
+00:25:09,483 --> 00:25:14,466
+roll, and the command was get service name bits.
+
+459
+00:25:15,416 --> 00:25:15,466
+>> Woooo.
+
+460
+00:25:17,483 --> 00:25:21,466
+>> Oh, come on, that is so wickedly cool.
+
+461
+00:25:22,483 --> 00:25:23,466
+>> Whoo.
+
+462
+00:25:23,483 --> 00:25:24,333
+[Laughter]
+
+463
+00:25:24,450 --> 00:25:26,250
+>> The guys in the back are going I don't know what the hell he
+
+464
+00:25:26,333 --> 00:25:28,466
+just did, but, okay, we'll go with it.
+
+465
+00:25:28,483 --> 00:25:29,383
+>> Woohoo.
+
+466
+00:25:29,466 --> 00:25:30,466
+>> Begging for the applause.
+
+467
+00:25:30,483 --> 00:25:34,450
+>> Yeah, pity applause. Golf clap. Here's the thing, is that,
+
+468
+00:25:35,483 --> 00:25:38,466
+you know, they're working to try to, you know, give you alias
+
+469
+00:25:38,483 --> 00:25:42,466
+properties to make some consistencies, but that's not always
+
+470
+00:25:42,483 --> 00:25:44,466
+going to be the case. Sometimes you're the one that has to do
+
+471
+00:25:44,483 --> 00:25:49,233
+it in-flight to make the consistency using a custom column or
+
+472
+00:25:49,316 --> 00:25:53,466
+calculated property. We use these a ton because there's so much
+
+473
+00:25:53,483 --> 00:25:54,466
+we can do with this.
+
+474
+00:25:55,483 --> 00:25:58,466
+So much we can do with this. And you'll see some more examples
+
+475
+00:25:58,483 --> 00:26:00,250
+of us using it in here.
+
+476
+00:26:00,483 --> 00:26:02,466
+But we do have the last...
+
+477
+00:26:04,483 --> 00:26:06,183
+the last possibility.
+
+478
+00:26:08,316 --> 00:26:09,466
+It's my favorite one.
+
+479
+00:26:10,483 --> 00:26:12,466
+Because everybody yells at me when I do this.
+
+480
+00:26:12,483 --> 00:26:15,466
+>> By the way, it's really worth spending time on this stuff.
+
+481
+00:26:15,233 --> 00:26:20,466
+This is the heart of PowerShell. This is the core concept, it's
+
+482
+00:26:20,483 --> 00:26:25,466
+the core power, it's where you get all your magic, so learning
+
+483
+00:26:25,183 --> 00:26:27,466
+this stuff, like spending some time, understanding how it really
+
+484
+00:26:27,483 --> 00:26:31,466
+works, getting familiar with the where, the pipelining, is the
+
+485
+00:26:31,483 --> 00:26:33,466
+heart of it. It's the investment.
+
+486
+00:26:33,483 --> 00:26:37,466
+>> Well, and I just have to say, and this is definitely...
+
+487
+00:26:38,483 --> 00:26:43,466
+for me, guys, this is what changed my ability to be productive
+
+488
+00:26:43,166 --> 00:26:47,466
+with PowerShell. When I learned this, this is what suddenly made
+
+489
+00:26:47,483 --> 00:26:50,466
+PowerShell, oh, I got this. Because I could discover whatever
+
+490
+00:26:51,0 --> 00:26:54,466
+it is I was looking for and now I knew how to put it together.
+
+491
+00:26:54,483 --> 00:26:56,466
+And if it didn't work, I knew how to troubleshoot it.
+
+492
+00:26:56,483 --> 00:26:59,466
+That's the important thing. I know we're going through it quickly
+
+493
+00:26:59,483 --> 00:27:04,466
+here, but, again, this is the most important thing and it does...
+
+494
+00:27:04,483 --> 00:27:07,466
+it changes... it makes you totally productive. Now, I've shown
+
+495
+00:27:07,216 --> 00:27:08,466
+you three ways so far...
+
+496
+00:27:08,483 --> 00:27:10,466
+>> By the way, and this... getting the stuff to work on multiple
+
+497
+00:27:11,483 --> 00:27:13,466
+machines, we're going to talk more about remoting, but that's
+
+498
+00:27:13,483 --> 00:27:16,433
+where you just become so productive. The number of people who
+
+499
+00:27:16,483 --> 00:27:19,466
+have come up to me at TechEd and had stories like... there's one...
+
+500
+00:27:19,483 --> 00:27:22,466
+I remember this one guy who said, oh, well, you know, his boss
+
+501
+00:27:22,483 --> 00:27:24,466
+brings everybody in on like a Tuesday and is like, oh, we got
+
+502
+00:27:25,483 --> 00:27:27,466
+to get this information from every single one of our servers,
+
+503
+00:27:27,483 --> 00:27:31,366
+it's top priority, got to have it by the end of the week, call
+
+504
+00:27:31,450 --> 00:27:33,466
+home, tell the folks you're going to be working late, doesn't
+
+505
+00:27:33,483 --> 00:27:36,466
+matter, we got to get this done. It's like uh, uh, everybody's
+
+506
+00:27:36,483 --> 00:27:39,466
+like uh, uh, uh. And so he goes back to his office and he's like,
+
+507
+00:27:39,483 --> 00:27:43,466
+wait a minute, I can do that with PowerShell. He says, Ten minutes
+
+508
+00:27:43,483 --> 00:27:46,466
+later, I had all the information. He said, It took a couple
+
+509
+00:27:46,483 --> 00:27:48,433
+more minutes to put it in an Excel spreadsheet.
+
+510
+00:27:48,450 --> 00:27:48,466
+>> Yeah.
+
+511
+00:27:48,483 --> 00:27:52,0
+>> So like 15 minutes I was done. I said, That's awesome.
+
+512
+00:27:52,483 --> 00:27:54,466
+What did you do? He says, Well, I went home, I took the rest
+
+513
+00:27:54,483 --> 00:27:56,466
+of the afternoon off.
+
+514
+00:27:56,483 --> 00:27:59,466
+>> And then he came back in the morning, showed his boss this
+
+515
+00:27:59,166 --> 00:28:01,466
+awesome report, he's like, Oh, you're a god.
+
+516
+00:28:01,483 --> 00:28:04,466
+>> And that's kind of the point, is I want to go home, so I want
+
+517
+00:28:04,483 --> 00:28:08,383
+to get this stuff done, right? And this is a primary way for
+
+518
+00:28:08,466 --> 00:28:11,466
+you to figure out how things work. So three ways we've done
+
+519
+00:28:11,483 --> 00:28:12,200
+it so far.
+
+520
+00:28:12,483 --> 00:28:15,466
+Get service to stop service. We matched by value. And that's
+
+521
+00:28:15,483 --> 00:28:18,466
+how we're going to try at the very beginning. When the nouns
+
+522
+00:28:19,483 --> 00:28:22,466
+don't match, by value probably isn't going to happen. Not always,
+
+523
+00:28:22,483 --> 00:28:25,466
+but probably is not going to happen. And we did get service
+
+524
+00:28:25,483 --> 00:28:28,466
+stop process where we had to start to match by property name,
+
+525
+00:28:28,483 --> 00:28:31,466
+which means the name of the
+
+526
+00:28:33,483 --> 00:28:36,466
+property coming across has to match the name of the parameter
+
+527
+00:28:36,483 --> 00:28:38,466
+of the receiving commandlet.
+
+528
+00:28:38,183 --> 00:28:41,466
+>> By the way, whenever you do that, that's where what if is your friend.
+
+529
+00:28:41,483 --> 00:28:44,466
+>> Oh, yeah. That is where what if is definitely your friend.
+
+530
+00:28:45,400 --> 00:28:51,416
+The third way is, well, there's a parameter that supports pipeline
+
+531
+00:28:51,483 --> 00:28:53,466
+input and you want to use that parameter, but what... the property
+
+532
+00:28:53,483 --> 00:28:57,466
+you're sending it doesn't have the right name. So you can change
+
+533
+00:28:57,483 --> 00:28:59,466
+it in flight using this syntax.
+
+534
+00:29:00,483 --> 00:29:04,166
+Here's the fourth and final. And, believe me, then we're ready
+
+535
+00:29:04,250 --> 00:29:06,466
+for a break here in just a second.
+
+536
+00:29:07,483 --> 00:29:12,466
+So get AD computer. I want you to understand my business problem,
+
+537
+00:29:12,483 --> 00:29:14,466
+first of all, to show you there's a commandlet... we're not
+
+538
+00:29:14,483 --> 00:29:18,466
+going to get a lot of time today to spend with this, with the
+
+539
+00:29:18,483 --> 00:29:21,466
+concept of WMI, but WMI is one of the greatest things. WMI and
+
+540
+00:29:21,483 --> 00:29:23,466
+SIM are one of the greatest things in the world. And I'm hoping
+
+541
+00:29:23,483 --> 00:29:25,466
+that a little bit later on Jeffrey will be able to have a chance
+
+542
+00:29:25,483 --> 00:29:26,466
+to talk about it.
+
+543
+00:29:27,483 --> 00:29:30,466
+But I just want to show you WMI is great for grabbing all kinds
+
+544
+00:29:30,483 --> 00:29:34,433
+of wonderful information. Here's an example of WMI grabbing just
+
+545
+00:29:34,483 --> 00:29:38,466
+some BIOS information. I also want to point out that this commandlet
+
+546
+00:29:38,483 --> 00:29:42,166
+supports computer name, which means I could get it from multiple computers.
+
+547
+00:29:42,483 --> 00:29:44,0
+If I could spell them correctly.
+
+548
+00:29:45,483 --> 00:29:48,466
+So understand that this the could be really useful to me. I might
+
+549
+00:29:48,483 --> 00:29:52,466
+want to do a whole hardware inventory, but I'm not going to want
+
+550
+00:29:52,183 --> 00:29:54,466
+to sit here and hand type in a bunch of computer names.
+
+551
+00:29:54,483 --> 00:29:57,466
+Instead I'm going to want to pipe a bunch of computer names from
+
+552
+00:29:57,483 --> 00:30:00,183
+an active directory. So what I'm doing is is I'm going to say
+
+553
+00:30:00,266 --> 00:30:03,466
+get AD computer, filter star,
+
+554
+00:30:06,283 --> 00:30:11,466
+pipe to get WMI object. And I want the class for BIOS.
+
+555
+00:30:13,400 --> 00:30:14,466
+Well, here's the thing.
+
+556
+00:30:15,483 --> 00:30:18,466
+You can spend the next two days
+
+557
+00:30:19,483 --> 00:30:21,383
+trying to get this to work.
+
+558
+00:30:23,366 --> 00:30:25,466
+Ain't gonna happen. If you know how to work this process that
+
+559
+00:30:25,483 --> 00:30:29,466
+we're showing you right here, here's what you would do, and you're
+
+560
+00:30:29,483 --> 00:30:32,466
+going to solve this in seconds rather than days.
+
+561
+00:30:33,166 --> 00:30:35,183
+First of all, you're going to pipe to GM to see what the object
+
+562
+00:30:35,266 --> 00:30:37,466
+type is because we want to check for by value. And I'm just
+
+563
+00:30:37,483 --> 00:30:40,300
+going to tell you right now by value is not going to work.
+
+564
+00:30:40,383 --> 00:30:42,466
+I got AD computer, but by value is not going to work. You know
+
+565
+00:30:42,483 --> 00:30:45,466
+how I know that? Because the next thing we do is we go look at
+
+566
+00:30:45,483 --> 00:30:48,466
+parameters that support pipeline input.
+
+567
+00:30:49,433 --> 00:30:50,466
+Well, let's do that. Get help.
+
+568
+00:30:52,483 --> 00:30:56,233
+Get WMI object dash full.
+
+569
+00:30:58,483 --> 00:31:02,466
+And, guys, I know we could do this with the show window, but
+
+570
+00:31:02,483 --> 00:31:06,466
+I just want you to see the beauty of this. Watch as it scrolls
+
+571
+00:31:06,233 --> 00:31:07,466
+by when I get to the parameters.
+
+572
+00:31:09,483 --> 00:31:11,466
+Throttle limit, no.
+
+573
+00:31:13,450 --> 00:31:13,466
+Recurse, no.
+
+574
+00:31:14,483 --> 00:31:17,433
+Query, no. Property, no.
+
+575
+00:31:17,450 --> 00:31:17,466
+>> Denied.
+
+576
+00:31:17,483 --> 00:31:22,466
+>> Name space, no. Locale, yeah, denied. List, no.
+
+577
+00:31:24,183 --> 00:31:28,466
+Impersonation, fun on a Friday night, but, no. It's filter,
+
+578
+00:31:28,483 --> 00:31:34,466
+no, computer says no. Every parameter says no.
+
+579
+00:31:36,250 --> 00:31:41,266
+No pipeline input. It will not take any pipeline input. Stop trying.
+
+580
+00:31:41,350 --> 00:31:43,466
+It won't take any pipeline input. So I see guys all the time
+
+581
+00:31:43,483 --> 00:31:48,400
+that go, okay, well then you can't do it. It's broke. They need
+
+582
+00:31:48,483 --> 00:31:52,466
+to fix that with PowerShell. Well, no, you can do it, just have
+
+583
+00:31:52,483 --> 00:31:55,466
+to know how. Let me show you. You know, I was showing you that...
+
+584
+00:31:56,483 --> 00:32:00,466
+how this commandlet get help... and I'm going to do the short
+
+585
+00:32:00,483 --> 00:32:01,316
+help for it.
+
+586
+00:32:02,483 --> 00:32:05,466
+This guy supports dash computer name. Well, here I want you
+
+587
+00:32:05,200 --> 00:32:07,466
+to take notice here. Let's look at dash computer name. See, dash
+
+588
+00:32:07,483 --> 00:32:11,450
+computer name and what he wants is a bunch of strings.
+
+589
+00:32:11,483 --> 00:32:13,466
+That's what he wants as an object, strings.
+
+590
+00:32:14,483 --> 00:32:17,466
+He'll take dash computer name, I just have to figure out how
+
+591
+00:32:17,200 --> 00:32:21,466
+to get it in there, get those computer names in there. So here's
+
+592
+00:32:21,483 --> 00:32:22,466
+what I'd like to do.
+
+593
+00:32:23,483 --> 00:32:25,466
+Get WMI object.
+
+594
+00:32:26,483 --> 00:32:28,466
+Whatever class I want.
+
+595
+00:32:30,350 --> 00:32:34,466
+And I would like to do dash computer name and get the computer
+
+596
+00:32:34,183 --> 00:32:38,466
+names in there. I'd like to do get like AD computer, filter, star.
+
+597
+00:32:39,483 --> 00:32:42,466
+Well, you can't do that because it screws up the argument, so
+
+598
+00:32:42,483 --> 00:32:45,466
+you have to put them in parentheses. Because remember what parentheses means.
+
+599
+00:32:45,483 --> 00:32:50,466
+I wasn't a big math fan, but those things are like order of operands or...
+
+600
+00:32:51,483 --> 00:32:54,466
+you're a smart guy, you know all that stuff. It's... it means
+
+601
+00:32:54,483 --> 00:32:58,366
+do this first before we do anything else. So what's going to
+
+602
+00:32:58,450 --> 00:33:00,466
+happen is what's ever in those parens, this parenthetical, it's
+
+603
+00:33:00,483 --> 00:33:05,466
+going to do that first, and that becomes the argument on this
+
+604
+00:33:05,483 --> 00:33:09,466
+dash computer name. But there's a small problem. Remember dash
+
+605
+00:33:09,483 --> 00:33:13,466
+computer name wants a bunch of string objects. I wonder what
+
+606
+00:33:13,483 --> 00:33:16,466
+this is providing me. As a matter of fact, let me show you.
+
+607
+00:33:16,483 --> 00:33:20,466
+Get AD computer. And you know how to do this now. Filter star.
+
+608
+00:33:20,483 --> 00:33:23,466
+What kind of object is this producing? Pipe it to GM.
+
+609
+00:33:24,483 --> 00:33:26,466
+It's giving me AD computer.
+
+610
+00:33:27,483 --> 00:33:28,466
+That doesn't say string.
+
+611
+00:33:29,483 --> 00:33:34,200
+Watch. Also it's giving me way too much information.
+
+612
+00:33:35,400 --> 00:33:38,316
+This is giving me all kinds of stuff I don't want... I just
+
+613
+00:33:38,400 --> 00:33:40,466
+want name. I just want to select...
+
+614
+00:33:40,483 --> 00:33:44,466
+I just want to select name. So get AD computer.
+
+615
+00:33:48,483 --> 00:33:54,466
+Filter star. Select the property name. Awesome. I've got the names.
+
+616
+00:33:55,233 --> 00:33:58,466
+This is what I want to throw into dash computer. But before
+
+617
+00:33:58,483 --> 00:34:02,283
+we try this, check it with get member.
+
+618
+00:34:02,483 --> 00:34:04,466
+Look at what the object type is.
+
+619
+00:34:05,483 --> 00:34:10,466
+AD computer. It doesn't say string here. So it's going to break.
+
+620
+00:34:10,483 --> 00:34:13,466
+Well, they thought of this. They solved this. What I really
+
+621
+00:34:13,483 --> 00:34:16,466
+want is I want
+
+622
+00:34:17,483 --> 00:34:22,466
+to extract those names and put them in that dash computer name argument.
+
+623
+00:34:22,483 --> 00:34:25,466
+In between the [Inaudible] I want to extract...
+
+624
+00:34:26,483 --> 00:34:28,466
+extract isn't the right word. I want to
+
+625
+00:34:30,483 --> 00:34:35,266
+expand this property. Now, you can only expand one. But look
+
+626
+00:34:35,350 --> 00:34:37,466
+at the difference on my screen how this looks.
+
+627
+00:34:38,233 --> 00:34:44,466
+See how you don't have this anymore? It's just the names of the computers?
+
+628
+00:34:45,483 --> 00:34:54,466
+Let's pipe it to get member. Looky. String. String.
+
+629
+00:34:54,483 --> 00:34:55,200
+>> Happy, happy.
+
+630
+00:34:55,283 --> 00:34:55,466
+>> Happy, happy.
+
+631
+00:34:56,483 --> 00:35:00,466
+So what we do is we... and I'm going to try to do this. I'm going
+
+632
+00:35:00,483 --> 00:35:02,466
+to try to right click on this.
+
+633
+00:35:03,483 --> 00:35:04,466
+And here's what we're going to do.
+
+634
+00:35:04,483 --> 00:35:05,466
+>> Right click.
+
+635
+00:35:06,483 --> 00:35:11,350
+>> Yeah, right click. I think I did that right. So get WMI object.
+
+636
+00:35:12,483 --> 00:35:16,466
+Whatever class I want in Win32 underscore BIOS dash computer name.
+
+637
+00:35:17,333 --> 00:35:20,466
+And here's what I want to put inside of the parentheses.
+
+638
+00:35:20,233 --> 00:35:21,183
+That whole thing.
+
+639
+00:35:22,250 --> 00:35:25,466
+Now, you might be saying, gee, whiz, that's an awful lot of work.
+
+640
+00:35:25,483 --> 00:35:28,466
+But as soon as you do this like two or three times, it's not
+
+641
+00:35:28,483 --> 00:35:32,466
+a lot of work. Because now what you couldn't solve before or
+
+642
+00:35:32,483 --> 00:35:36,466
+you were spending days banging your head on now just works.
+
+643
+00:35:36,483 --> 00:35:40,466
+And it just works because we couldn't pipeline to this commandlet,
+
+644
+00:35:40,483 --> 00:35:43,433
+darn, okay, forget about it, that's fine.
+
+645
+00:35:43,483 --> 00:35:46,333
+What do you want to use? I want to use dash computer name.
+
+646
+00:35:46,483 --> 00:35:48,416
+What does it want? It wants a string. So I want to grab all
+
+647
+00:35:48,483 --> 00:35:51,466
+the AD computers. I just want the property name. I don't want
+
+648
+00:35:51,483 --> 00:35:55,200
+all the other properties. I just want name. Send it to get member.
+
+649
+00:35:55,283 --> 00:35:58,250
+It's not a string. Oh, I need to expand that...
+
+650
+00:35:58,483 --> 00:36:03,466
+think extract that... those values out, and I get the string.
+
+651
+00:36:04,250 --> 00:36:08,216
+Now it's going to work. This is your last line of resort.
+
+652
+00:36:08,300 --> 00:36:10,466
+Now, don't use this as your first line of resort. That's not
+
+653
+00:36:11,333 --> 00:36:14,466
+the point. Because you want the power of the pipeline. So don't
+
+654
+00:36:14,483 --> 00:36:15,466
+do this first.
+
+655
+00:36:16,166 --> 00:36:18,466
+Do this last. And let me show you, and we're going to let Jeffrey
+
+656
+00:36:18,483 --> 00:36:22,166
+talk about this for a second, is that before we take a break
+
+657
+00:36:22,250 --> 00:36:24,466
+let me show you what I found out Microsoft's kind of doing to
+
+658
+00:36:25,483 --> 00:36:27,233
+help us out. You know how the
+
+659
+00:36:28,483 --> 00:36:34,466
+get WMI thing, it doesn't take any pipeline input? Well, I happen
+
+660
+00:36:34,483 --> 00:36:35,466
+to know that there's...
+
+661
+00:36:35,483 --> 00:36:36,466
+>> Wait, before you go there...
+
+662
+00:36:36,483 --> 00:36:37,433
+>> Oh, yeah. Yeah.
+
+663
+00:36:37,450 --> 00:36:37,466
+>> Up arrow.
+
+664
+00:36:38,333 --> 00:36:39,466
+>> Up arrow.
+
+665
+00:36:39,483 --> 00:36:43,183
+>> Because this works perfectly. This works perfectly. But this
+
+666
+00:36:43,266 --> 00:36:44,466
+works in PowerShell Version 2.
+
+667
+00:36:45,483 --> 00:36:48,466
+PowerShell Version 3 we made it simpler.
+
+668
+00:36:49,483 --> 00:36:50,466
+>> Oh, let's make it simpler.
+
+669
+00:36:50,483 --> 00:36:54,466
+>> Okay. Hit delete, delete the select.
+
+670
+00:36:55,483 --> 00:36:59,466
+Oh, no, no, no, all the way from the end of the line to the select.
+
+671
+00:36:59,483 --> 00:37:01,466
+>> Oh, all the way from the end of the line to the select.
+
+672
+00:37:01,483 --> 00:37:02,400
+>> Yeah. Get rid of all that.
+
+673
+00:37:02,483 --> 00:37:03,350
+>> Oh, get rid of all that.
+
+674
+00:37:03,433 --> 00:37:04,183
+>> Yeah. More.
+
+675
+00:37:04,266 --> 00:37:04,466
+>> More?
+
+676
+00:37:04,483 --> 00:37:09,166
+>> More line. Okay. Now end paren. End parenthesis.
+
+677
+00:37:11,0 --> 00:37:12,466
+That's begin paren.
+
+678
+00:37:12,483 --> 00:37:13,466
+>> Oh, end paren.
+
+679
+00:37:13,483 --> 00:37:14,466
+>> Yeah. Okay. Space.
+
+680
+00:37:15,333 --> 00:37:16,433
+>> Oh, I see what you did. Oh.
+
+681
+00:37:16,450 --> 00:37:16,466
+>> Dot name.
+
+682
+00:37:16,483 --> 00:37:19,466
+>> Oh, I see what you're doing. Dot name. Yeah. Yeah.
+
+683
+00:37:19,483 --> 00:37:23,466
+>> See, that's the deal. That's... that dot name basically is
+
+684
+00:37:24,283 --> 00:37:27,466
+shorthand syntax to do that command line.
+
+685
+00:37:27,483 --> 00:37:29,366
+>> Which is what you were showing earlier with...
+
+686
+00:37:29,450 --> 00:37:29,466
+>> Exactly....
+
+687
+00:37:29,483 --> 00:37:32,466
+>> casting to XML. And, guys, one of the things is we're going
+
+688
+00:37:32,483 --> 00:37:35,333
+to start showing you... as we get close to scripting, we're going
+
+689
+00:37:35,483 --> 00:37:38,466
+to be showing you working with variables and using this dot syn-...
+
+690
+00:37:39,333 --> 00:37:42,250
+this dot syntax so you get more and more comfortable with it,
+
+691
+00:37:42,333 --> 00:37:45,466
+because now that was lot a lot easier to type as soon as you
+
+692
+00:37:45,483 --> 00:37:49,250
+know more about that dot syntax. So this is awesome. See, it
+
+693
+00:37:49,333 --> 00:37:50,366
+still worked.
+
+694
+00:37:50,483 --> 00:37:54,466
+And as I just showed... oh, let me show you again because I don't
+
+695
+00:37:54,483 --> 00:37:58,466
+think the thing was on there. Let me show you. Oh, what's going on?
+
+696
+00:37:58,483 --> 00:38:04,466
+>> Is this hard for you? I could go over there.
+
+697
+00:38:04,483 --> 00:38:07,466
+>> Well, no, it's... it's... it's something has gone awry, and
+
+698
+00:38:07,483 --> 00:38:08,466
+I think my...
+
+699
+00:38:09,483 --> 00:38:12,466
+ah, there we go. Something... the computer we were waiting on.
+
+700
+00:38:12,483 --> 00:38:15,466
+So this syntax, if you can see it, is... it works the exact
+
+701
+00:38:15,483 --> 00:38:19,166
+same way. So I can execute it. But I don't want to do it again
+
+702
+00:38:19,250 --> 00:38:20,466
+because it was holding up on one of the machines.
+
+703
+00:38:20,483 --> 00:38:21,466
+>> Oh, was it?
+
+704
+00:38:21,483 --> 00:38:24,466
+>> One last thing to show you, and then we'll take a break, is
+
+705
+00:38:26,200 --> 00:38:29,466
+get WMI object doesn't support any input, but there's a...
+
+706
+00:38:29,483 --> 00:38:33,416
+if you're working with WMI, there's a whole new way of doing this.
+
+707
+00:38:33,483 --> 00:38:38,466
+And if you were to do get help on something called get SIM instance,
+
+708
+00:38:38,483 --> 00:38:42,316
+and you were to take a look at the parameters and what they...
+
+709
+00:38:42,400 --> 00:38:46,466
+what parameters accepted pipeline input, you would see that this
+
+710
+00:38:46,483 --> 00:38:53,466
+is now the replacement for this. Because the new one now supports
+
+711
+00:38:53,483 --> 00:38:56,466
+pipeline input in the places where you want it to support pipeline input.
+
+712
+00:38:56,483 --> 00:39:01,333
+So the idea is that going forward some of the commands that you
+
+713
+00:39:01,483 --> 00:39:03,466
+may run across, especially if they're four or five years old
+
+714
+00:39:03,483 --> 00:39:06,466
+that did need support line input, may start to support it.
+
+715
+00:39:06,483 --> 00:39:10,466
+But if it doesn't, you do have this last line of resort.
+
+716
+00:39:10,483 --> 00:39:14,466
+Now, as a final note, make sure... this is so very important,
+
+717
+00:39:14,483 --> 00:39:15,466
+well, you get...
+
+718
+00:39:15,483 --> 00:39:16,466
+>> I was going to show them one more thing.
+
+719
+00:39:16,483 --> 00:39:17,466
+>> Oh, go ahead. Show them one more thing.
+
+720
+00:39:18,333 --> 00:39:19,466
+>> Okay. I'm going to take over your machine.
+
+721
+00:39:19,483 --> 00:39:21,466
+>> Okay. It's all yours, man.
+
+722
+00:39:21,483 --> 00:39:23,466
+>> Okay. This did not work. Yeah, right. Of course. Okay.
+
+723
+00:39:23,483 --> 00:39:24,466
+Here we go.
+
+724
+00:39:25,483 --> 00:39:28,166
+Okay. I'm taking over his machine.
+
+725
+00:39:28,483 --> 00:39:30,466
+>> He's going to take over my machine. While he's taking it over,
+
+726
+00:39:31,483 --> 00:39:32,466
+get Don Jones' book,
+
+727
+00:39:33,483 --> 00:39:37,466
+Learn Windows PowerShell in a Month of Lunches, chapter 9.
+
+728
+00:39:37,483 --> 00:39:39,466
+You've got to know that. That's the most important thing.
+
+729
+00:39:39,483 --> 00:39:41,466
+That's what we just did in here.
+
+730
+00:39:42,483 --> 00:39:46,466
+>> Okay. So now I'm going to show you something crazy freaky,
+
+731
+00:39:46,483 --> 00:39:48,166
+freaky, freaky, freaky powerful.
+
+732
+00:39:48,250 --> 00:39:49,300
+>> Oh, let's get freaky.
+
+733
+00:39:49,383 --> 00:39:50,216
+>> Yeah, we're going to get freaky.
+
+734
+00:39:50,300 --> 00:39:51,466
+>> Freaky, freaky, freaky.
+
+735
+00:39:52,400 --> 00:39:52,466
+Okay, sorry.
+
+736
+00:39:52,483 --> 00:39:54,466
+>> Settle down.
+
+737
+00:39:55,483 --> 00:39:59,466
+>> [Laugher] Okay. So this is pretty advanced stuff.
+
+738
+00:40:00,483 --> 00:40:04,466
+But why not end on something really powerful. Okay? And this
+
+739
+00:40:04,483 --> 00:40:05,466
+is something called...
+
+740
+00:40:06,483 --> 00:40:09,466
+what do we call these? We call these script parameters, I think
+
+741
+00:40:09,483 --> 00:40:13,216
+is the term for them. So now what we're going to do is, remember,
+
+742
+00:40:13,300 --> 00:40:20,466
+the original problem was get AD computer minus filter star pipe
+
+743
+00:40:20,483 --> 00:40:23,466
+to get WMI object
+
+744
+00:40:24,483 --> 00:40:29,466
+Win32 BIOS, and it was this computer name that we couldn't get
+
+745
+00:40:29,483 --> 00:40:30,433
+a value for.
+
+746
+00:40:30,450 --> 00:40:30,466
+>> Right.
+
+747
+00:40:31,483 --> 00:40:33,466
+>> Darn. Okay. So here's the deal.
+
+748
+00:40:34,483 --> 00:40:37,466
+Script block. Whenever you see the... what do you call them?
+
+749
+00:40:37,483 --> 00:40:38,466
+>> The squigglies?
+
+750
+00:40:38,483 --> 00:40:39,450
+>> Squigglies.
+
+751
+00:40:39,483 --> 00:40:42,216
+>> Yeah, I like to do my hips myself, but for the squigglies.
+
+752
+00:40:42,300 --> 00:40:44,466
+>> Whenever you see the squigglies, that's called a script block.
+
+753
+00:40:44,483 --> 00:40:46,333
+That represents code.
+
+754
+00:40:46,483 --> 00:40:52,466
+If you give a script block to a property, to a parameter which
+
+755
+00:40:52,483 --> 00:40:57,433
+doesn't take a script block, then what it is is, oh, you must
+
+756
+00:40:57,483 --> 00:40:59,466
+be asking for a script parameter.
+
+757
+00:41:00,283 --> 00:41:05,316
+And what it does is it takes the value of the current object,
+
+758
+00:41:05,483 --> 00:41:10,466
+assigns it to dollar sign underbar and runs the script and takes
+
+759
+00:41:10,483 --> 00:41:12,466
+the value and puts it in there.
+
+760
+00:41:12,483 --> 00:41:14,183
+>> Oh, this could be totally awesome.
+
+761
+00:41:14,266 --> 00:41:17,466
+>> And so what you say is you say dollar sign underbar dot...
+
+762
+00:41:17,216 --> 00:41:18,266
+was it name?
+
+763
+00:41:18,350 --> 00:41:18,466
+>> It was name.
+
+764
+00:41:18,483 --> 00:41:20,466
+>> Name. Okay. By the way, you can do anything you want here.
+
+765
+00:41:21,483 --> 00:41:25,466
+You could say to upper, you know, anything. But here we just
+
+766
+00:41:25,483 --> 00:41:28,466
+do this. So, again, what's going to happen is you're going to
+
+767
+00:41:28,483 --> 00:41:32,466
+run this, you're going to take the current object, you're going
+
+768
+00:41:32,183 --> 00:41:36,366
+to assign it to this, and then you're going to run this code.
+
+769
+00:41:36,450 --> 00:41:39,466
+And so each object you're going to get the value of the name,
+
+770
+00:41:39,483 --> 00:41:43,466
+and then you're going to run this with the value.
+
+771
+00:41:44,250 --> 00:41:45,466
+Is that crazy powerful or what?
+
+772
+00:41:45,483 --> 00:41:48,266
+>> You know, you realize that you've made that so much easier
+
+773
+00:41:48,350 --> 00:41:51,216
+that everybody's going to like you better than they like me now.
+
+774
+00:41:51,300 --> 00:41:51,466
+>> Yeah, I know.
+
+775
+00:41:51,483 --> 00:41:52,466
+>> Because I drug them through that long...
+
+776
+00:41:52,483 --> 00:41:53,466
+>> That's the plan.
+
+777
+00:41:53,483 --> 00:41:56,333
+>> Okay, well, it worked because I took them through that long
+
+778
+00:41:56,416 --> 00:41:59,466
+thing and then you just made it really short and sweet.
+
+779
+00:41:59,216 --> 00:41:59,466
+>> Yeah.
+
+780
+00:41:59,483 --> 00:42:01,466
+>> Congratulations. Very nice job.
+
+781
+00:42:01,483 --> 00:42:03,466
+>> There you go. So have fun with that.
+
+782
+00:42:03,483 --> 00:42:06,333
+>> So, folks, we're going to go ahead and take a ten-minute break.
+
+783
+00:42:06,416 --> 00:42:07,466
+When we come back, we get into...
+
+784
+00:42:07,483 --> 00:42:08,466
+>> Get him some coffee.
+
+785
+00:42:08,483 --> 00:42:11,466
+>> Yeah, yeah, get me some coffee because I need more. And we're
+
+786
+00:42:11,483 --> 00:42:15,400
+going to go into something that is going to change the way you manage.
+
+787
+00:42:15,483 --> 00:42:17,466
+Now you're going to take the tools that you started to learn
+
+788
+00:42:17,483 --> 00:42:20,466
+today and we're going to get into one of the most powerful things
+
+789
+00:42:20,483 --> 00:42:23,466
+in the world, remoting. And we want to talk to Jeffrey about
+
+790
+00:42:23,483 --> 00:42:26,466
+remoting before we get into it. This is totally awesome stuff.
+
+791
+00:42:26,483 --> 00:42:30,433
+So see you guys in ten minutes.
+

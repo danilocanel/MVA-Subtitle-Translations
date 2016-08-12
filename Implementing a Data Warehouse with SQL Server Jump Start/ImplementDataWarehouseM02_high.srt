@@ -1,0 +1,2908 @@
+1
+00:00:00,0 --> 00:00:07,0
+[Music]
+
+2
+00:00:18,200 --> 00:00:19,466
+Welcome back everyone to implementing a data
+
+3
+00:00:19,483 --> 00:00:20,466
+warehouse with SQL
+
+4
+00:00:20,483 --> 00:00:25,466
+Server 2012 Jumpstart. I'm George Squillace and my colleague
+
+5
+00:00:25,483 --> 00:00:28,466
+Rich Currey. Rich, what do we have up for this module?
+
+6
+00:00:28,483 --> 00:00:33,466
+>> This module we are going to be talking about data flow, how
+
+7
+00:00:33,483 --> 00:00:35,466
+to extract data.
+
+8
+00:00:36,183 --> 00:00:39,466
+The topics that we are going to be concerned with here are going
+
+9
+00:00:39,483 --> 00:00:43,466
+to be connection managers, a connection manager, what it is,
+
+10
+00:00:43,483 --> 00:00:48,466
+what it means to a project, how to get data out of a data source
+
+11
+00:00:48,483 --> 00:00:50,466
+and into a data destination.
+
+12
+00:00:50,483 --> 00:00:51,466
+>> Got to load the warehouse.
+
+13
+00:00:51,483 --> 00:00:55,466
+>> Oh. That's the next topic, data sources and data destinations.
+
+14
+00:00:56,483 --> 00:00:59,466
+What they are, how they work, we're going to talk about change
+
+15
+00:00:59,483 --> 00:01:03,466
+data capture and change tracking, which are two technologies
+
+16
+00:01:04,0 --> 00:01:07,466
+that are now available that can help us to extract information
+
+17
+00:01:08,483 --> 00:01:10,466
+out of our production systems.
+
+18
+00:01:11,333 --> 00:01:12,183
+>> And you've got to start somewhere.
+
+19
+00:01:12,266 --> 00:01:17,466
+>> You do, so let's talk about connection managers. What is a
+
+20
+00:01:17,183 --> 00:01:20,466
+connection manager? We're going to talk about package connection
+
+21
+00:01:20,483 --> 00:01:22,466
+managers and project connection managers.
+
+22
+00:01:23,166 --> 00:01:24,333
+>> Some new stuff.
+
+23
+00:01:24,416 --> 00:01:29,466
+>> And parameterization of connection strings, which is very cool,
+
+24
+00:01:29,483 --> 00:01:34,466
+very cool. A connection manager is
+
+25
+00:01:35,483 --> 00:01:42,466
+a definition to SSIS of the technology that we are going to use
+
+26
+00:01:43,483 --> 00:01:51,466
+as well as the location where the data is. It has a data source
+
+27
+00:01:51,483 --> 00:01:56,466
+in SQL Server. It has a data source; it has an initial catalog
+
+28
+00:01:56,483 --> 00:01:57,466
+and it has
+
+29
+00:01:59,300 --> 00:02:03,466
+an authentication, the authentication being the identity that's
+
+30
+00:02:03,483 --> 00:02:07,466
+going to be used to connect it. Now, other technologies have
+
+31
+00:02:07,483 --> 00:02:11,466
+other properties because we can use connection managers to go
+
+32
+00:02:11,483 --> 00:02:15,466
+out and go to Oracle, to
+
+33
+00:02:17,483 --> 00:02:20,466
+Informix, to a text file, to an Access database.
+
+34
+00:02:21,483 --> 00:02:28,466
+If there is a driver out there for either OLE DB or ODBC we can
+
+35
+00:02:29,483 --> 00:02:33,466
+use the connection manager to connect to that data source, so
+
+36
+00:02:33,483 --> 00:02:39,466
+the authentication, the connection string, all the information
+
+37
+00:02:40,483 --> 00:02:41,466
+that's necessary.
+
+38
+00:02:42,333 --> 00:02:48,466
+Package and project connection managers refer to the level of
+
+39
+00:02:48,483 --> 00:02:53,416
+availability that that connection manager has to a package.
+
+40
+00:02:54,200 --> 00:02:58,433
+Let me back up a minute here. I haven't used package yet, have I?
+
+41
+00:02:58,450 --> 00:02:58,466
+>> Nope.
+
+42
+00:02:59,483 --> 00:03:02,466
+>> So when I create an SSIS project
+
+43
+00:03:04,400 --> 00:03:09,0
+a project is a development effort and there might be several
+
+44
+00:03:09,483 --> 00:03:13,466
+different pieces and each of those pieces could be encapsulated
+
+45
+00:03:13,483 --> 00:03:19,466
+in a package. A package is a unit of execution, a unit of deployment,
+
+46
+00:03:20,483 --> 00:03:26,466
+to SQL Server integration services, so projects contain packages.
+
+47
+00:03:26,483 --> 00:03:31,466
+A project connection manager is available to be used by all of
+
+48
+00:03:31,483 --> 00:03:35,466
+the packages in the project. A package level connection manager
+
+49
+00:03:35,483 --> 00:03:38,466
+is specific to just that package.
+
+50
+00:03:39,483 --> 00:03:44,250
+Now, how do I know where I want to create it? It's actually pretty straightforward.
+
+51
+00:03:44,416 --> 00:03:47,466
+If I've got lots of packages inside my project that are going
+
+52
+00:03:48,483 --> 00:03:52,466
+to be accessing the same data from the same place, that would
+
+53
+00:03:52,483 --> 00:03:56,466
+be a spot where it would make sense to create a project level
+
+54
+00:03:56,216 --> 00:04:01,466
+connection manager. If, however, I'm only going to be creating,
+
+55
+00:04:02,483 --> 00:04:07,466
+going to be accessing the data for that one package then I probably
+
+56
+00:04:07,233 --> 00:04:10,466
+am going to want to do a package level connection manager.
+
+57
+00:04:11,166 --> 00:04:15,433
+It's a matter of determining how reusable you want it to be and
+
+58
+00:04:15,483 --> 00:04:18,466
+how many times you're going to need to maintain it. Now one
+
+59
+00:04:18,483 --> 00:04:23,466
+of the things that can truly, truly, truly help you in your deployment
+
+60
+00:04:23,483 --> 00:04:30,466
+effort in creating flexibility within your packages is the ability
+
+61
+00:04:30,483 --> 00:04:36,300
+to create connection strings that are parameterized. What that
+
+62
+00:04:36,383 --> 00:04:40,466
+means is that there may be parts of the connection that are dependent
+
+63
+00:04:40,483 --> 00:04:45,466
+on an environment or a machine that you're located on or something
+
+64
+00:04:45,483 --> 00:04:49,466
+of that nature. I don't want to have to go in and manually edit
+
+65
+00:04:49,483 --> 00:04:54,466
+that connection manager every time I put the package in a different
+
+66
+00:04:55,0 --> 00:05:02,466
+spot, so maybe I want to have the ability to dynamically assign...
+
+67
+00:05:02,483 --> 00:05:03,466
+>> Abstraction.
+
+68
+00:05:04,483 --> 00:05:06,466
+>> Yeah, abstraction's fun, all right?
+
+69
+00:05:06,483 --> 00:05:13,466
+Now we have two possibilities for how we can do this. The first
+
+70
+00:05:13,483 --> 00:05:18,466
+one is called the configuration; the second is called an environment
+
+71
+00:05:19,400 --> 00:05:24,466
+and they are different based on how you deploy them. We're going
+
+72
+00:05:24,483 --> 00:05:28,466
+to be talking a lot more about that later on today in a later module.
+
+73
+00:05:29,483 --> 00:05:34,466
+Property expressions are how you physically manipulate the value
+
+74
+00:05:34,483 --> 00:05:38,466
+in the connection string. A property expression gives you the
+
+75
+00:05:38,483 --> 00:05:43,466
+ability to calculate the value dynamically at runtime that is
+
+76
+00:05:43,483 --> 00:05:50,466
+going to be used for that property of that object within the package.
+
+77
+00:05:51,483 --> 00:05:55,466
+For a connection string, sorry, for a connection manager...
+
+78
+00:05:55,483 --> 00:05:56,233
+>> There you go.
+
+79
+00:05:56,316 --> 00:06:00,466
+>> Yeah, I know, too many connection words. For a connection
+
+80
+00:06:00,483 --> 00:06:05,466
+manager the property that frequently is modified is the connection
+
+81
+00:06:05,483 --> 00:06:09,466
+string property or the server name property.
+
+82
+00:06:10,483 --> 00:06:16,0
+Now one other cool thing is along with configurations with connection
+
+83
+00:06:16,483 --> 00:06:20,466
+strings and with server properties, the computer named property,
+
+84
+00:06:20,483 --> 00:06:25,333
+you do have the ability to also dynamically assign the value
+
+85
+00:06:25,483 --> 00:06:27,466
+when you execute the package.
+
+86
+00:06:29,300 --> 00:06:36,466
+Now, let's go and take a look at how you create a connection manager.
+
+87
+00:06:36,483 --> 00:06:37,466
+>> Sounds good.
+
+88
+00:06:38,483 --> 00:06:45,466
+>> What I've got here is I need to go in and I need to actually
+
+89
+00:06:45,183 --> 00:06:48,466
+create an integration services project. I'm going to go into
+
+90
+00:06:48,483 --> 00:06:50,466
+the SQL Server 2012.
+
+91
+00:06:51,0 --> 00:06:52,283
+>> We have a new name here, don't we?
+
+92
+00:06:52,366 --> 00:06:56,466
+>> Yeah, we do, and don't be surprised if you hear me use the
+
+93
+00:06:56,233 --> 00:06:59,466
+old one. The old one was business intelligence development studio,
+
+94
+00:06:59,483 --> 00:07:02,316
+BIDS, the new one...
+
+95
+00:07:02,400 --> 00:07:04,466
+>> Old habits die hard, don't they?
+
+96
+00:07:04,483 --> 00:07:09,466
+>> SQL Server Data Tool, so I open up Data Tools which is a Visual
+
+97
+00:07:09,483 --> 00:07:13,466
+Studio application just like all the other Visual Studio applications
+
+98
+00:07:13,483 --> 00:07:17,366
+out there, I'm going to create a new project. It's going to
+
+99
+00:07:17,450 --> 00:07:21,466
+be an integration services project and honestly, for purposes
+
+100
+00:07:21,483 --> 00:07:24,466
+of the demo I'm not really worried about the project name or
+
+101
+00:07:24,483 --> 00:07:27,466
+the location, though it is something that you should be concerned
+
+102
+00:07:27,483 --> 00:07:29,466
+about when you're doing this for real.
+
+103
+00:07:30,483 --> 00:07:35,466
+Oops. I don't want to hit that. I wanted to hit the okay button.
+
+104
+00:07:35,483 --> 00:07:40,450
+Now I have a package and if you look down here at the bottom
+
+105
+00:07:40,483 --> 00:07:44,466
+I have a connection manager section, but that's not the only
+
+106
+00:07:44,483 --> 00:07:45,466
+place it shows up.
+
+107
+00:07:46,483 --> 00:07:53,250
+I also have a connection managers folder up in solution explorer.
+
+108
+00:07:53,483 --> 00:07:56,466
+The difference between the two is pretty straightforward.
+
+109
+00:07:57,483 --> 00:08:01,466
+If it's in the folder in connection managers then it's available
+
+110
+00:08:01,483 --> 00:08:07,466
+to every package in the packages folder. If, however, it is
+
+111
+00:08:07,483 --> 00:08:13,466
+in the package itself down at the bottom of the screen, that's
+
+112
+00:08:13,483 --> 00:08:16,466
+when it's going to be specific to the package.
+
+113
+00:08:16,483 --> 00:08:17,466
+>> Well put.
+
+114
+00:08:18,366 --> 00:08:24,466
+>> Project level connection managers will also show up in the
+
+115
+00:08:24,483 --> 00:08:30,366
+package when you are working. So let's go create one real quick.
+
+116
+00:08:30,450 --> 00:08:34,466
+I'm going to right-click on connection managers, choose new connection
+
+117
+00:08:34,483 --> 00:08:39,466
+manager and the first thing that it asks me is what the technology
+
+118
+00:08:40,333 --> 00:08:41,466
+is that we are going to be connecting to.
+
+119
+00:08:42,483 --> 00:08:48,466
+I've got the standard technologies of ADO.net and if I scroll
+
+120
+00:08:48,483 --> 00:08:53,466
+down a little bit, OLE DB. You can connect to an SMTP server.
+
+121
+00:08:53,483 --> 00:08:58,466
+You can connect to a SQL mobile instance. You can connect to
+
+122
+00:08:58,483 --> 00:09:04,466
+FTP, Flat File, HTTP; I'm telling you the choices are endless.
+
+123
+00:09:05,483 --> 00:09:07,466
+And even better, do you want to hear something really cool?
+
+124
+00:09:07,483 --> 00:09:08,466
+>> Definitely.
+
+125
+00:09:08,483 --> 00:09:13,166
+>> They're not all there. You can actually go out and select others
+
+126
+00:09:13,483 --> 00:09:17,266
+and load them in and connect to other technologies adding another
+
+127
+00:09:17,350 --> 00:09:21,0
+OLE DB or ODBC drivers as well.
+
+128
+00:09:21,483 --> 00:09:25,333
+Now what I'm going to do here is I'm going to choose an OLE DB
+
+129
+00:09:25,483 --> 00:09:29,466
+draw connection manager. When you hit add it now asks you to
+
+130
+00:09:29,483 --> 00:09:34,166
+configure or to choose an existing connection. Now I've been
+
+131
+00:09:34,250 --> 00:09:37,400
+playing on this virtual server for a while, so I've got some
+
+132
+00:09:37,483 --> 00:09:38,466
+connections out there already.
+
+133
+00:09:38,483 --> 00:09:40,283
+>> You can just make a new one.
+
+134
+00:09:40,366 --> 00:09:43,466
+>> Ah, I think I'm going to, so I can show you how to do it George.
+
+135
+00:09:43,483 --> 00:09:49,466
+You click on new and, again, now that I've chosen OLE it gives
+
+136
+00:09:49,483 --> 00:09:53,466
+me a list of all of the OLE providers that are available.
+
+137
+00:09:53,483 --> 00:09:58,333
+OLE DB for SQL Server, I've got the SQL Server native client
+
+138
+00:09:58,416 --> 00:10:04,466
+which is the way all .net applications talk. I've got the Microsoft Jet.
+
+139
+00:10:04,483 --> 00:10:06,466
+Anybody remember what that belongs to?
+
+140
+00:10:06,483 --> 00:10:07,466
+>> Uh-huh.
+
+141
+00:10:07,483 --> 00:10:14,316
+>> That would be Access. I've got Office; I think it's Office 2013.
+
+142
+00:10:15,483 --> 00:10:20,466
+For the Office 12 Access database engine. I've got OLE DB providers
+
+143
+00:10:20,483 --> 00:10:25,466
+for Oracle, for SQL, for DataShape; I mean it's all there.
+
+144
+00:10:25,483 --> 00:10:29,200
+Let's stick with what we have in there, the native client and
+
+145
+00:10:29,283 --> 00:10:31,466
+then you need to specify the location.
+
+146
+00:10:32,333 --> 00:10:38,466
+I have several of them out there, so I'm going to say local right here.
+
+147
+00:10:39,483 --> 00:10:43,400
+Local specifies I'm going to be working on that local machine.
+
+148
+00:10:43,483 --> 00:10:48,466
+If it is a network-based machine, you could specify it in terms
+
+149
+00:10:48,483 --> 00:10:54,466
+of the instance name, so this is the instance in SQL Server that
+
+150
+00:10:54,483 --> 00:10:58,466
+contains the database. Once you've indicated it, you come down here.
+
+151
+00:10:58,483 --> 00:11:02,466
+It gives you the list of databases that are available. You choose
+
+152
+00:11:03,0 --> 00:11:04,266
+the one that you want.
+
+153
+00:11:05,433 --> 00:11:11,250
+Hopefully, I name it correctly. You test the connection. Connection succeeds.
+
+154
+00:11:11,333 --> 00:11:12,466
+I hit okay.
+
+155
+00:11:13,250 --> 00:11:15,433
+Bada bing bada bang bada boom.
+
+156
+00:11:15,450 --> 00:11:15,466
+>> Bada boom.
+
+157
+00:11:15,483 --> 00:11:21,466
+>> There you go. We have ourselves a new connection and we have
+
+158
+00:11:21,483 --> 00:11:25,466
+our connection manager. And again, I want you to notice, it's
+
+159
+00:11:26,166 --> 00:11:30,466
+up here in the connection manager at the project level. It occurs
+
+160
+00:11:30,483 --> 00:11:35,466
+down here in the connection manager at the package level as well.
+
+161
+00:11:36,483 --> 00:11:39,466
+To do a package only, the only difference is where you right-click.
+
+162
+00:11:40,483 --> 00:11:42,433
+If I right-click down here,
+
+163
+00:11:43,483 --> 00:11:44,466
+there you go.
+
+164
+00:11:45,450 --> 00:11:48,466
+I've got my new connection that I can create and I go through
+
+165
+00:11:48,483 --> 00:11:50,216
+the process down here.
+
+166
+00:11:51,450 --> 00:11:54,200
+>> Excellent. That's a great starting point, but you have some
+
+167
+00:11:54,283 --> 00:11:57,233
+other things to show us to. After I make connections managers,
+
+168
+00:11:57,316 --> 00:11:58,466
+what would I do?
+
+169
+00:11:58,483 --> 00:12:02,416
+>> After connection manager, let's go back to the slides here.
+
+170
+00:12:04,400 --> 00:12:09,466
+We need to create data sources and data destinations.
+
+171
+00:12:10,483 --> 00:12:14,466
+The process data sources and data destinations, what are they?
+
+172
+00:12:14,483 --> 00:12:17,466
+What are the different technologies that are available? How do
+
+173
+00:12:17,483 --> 00:12:21,466
+we actually go through and create them is what I want to talk about.
+
+174
+00:12:21,483 --> 00:12:26,466
+So let's start off with the definition of what they are.
+
+175
+00:12:26,183 --> 00:12:29,466
+And it's pretty straightforward. A data source is a place where
+
+176
+00:12:29,483 --> 00:12:30,466
+you get data from.
+
+177
+00:12:30,483 --> 00:12:32,466
+>> Sounds straightforward to me.
+
+178
+00:12:32,483 --> 00:12:36,466
+>> So using that, George, would you care to take a guess at what
+
+179
+00:12:36,483 --> 00:12:38,466
+a data destination is?
+
+180
+00:12:38,483 --> 00:12:41,466
+>> I think I see where the train is going here.
+
+181
+00:12:41,483 --> 00:12:42,466
+>> Are right. Let's not get derailed then.
+
+182
+00:12:43,483 --> 00:12:49,350
+We are going to do a data destination has where the data is going
+
+183
+00:12:49,433 --> 00:12:53,466
+to end up. Now data sources and data destinations are particular
+
+184
+00:12:53,483 --> 00:12:58,466
+and are only available when you're inside a data flow.
+
+185
+00:12:59,483 --> 00:13:02,466
+A data flow is a particular control flow task.
+
+186
+00:13:03,483 --> 00:13:09,466
+It is the part of SSIS that does the actual physical ETL.
+
+187
+00:13:10,300 --> 00:13:14,466
+It extracts the data from the data source. It has transformations
+
+188
+00:13:15,483 --> 00:13:19,466
+which manipulate the data while it's en route and it has destinations
+
+189
+00:13:20,466 --> 00:13:23,466
+where it can put it when it's done with it. One of the cool
+
+190
+00:13:23,483 --> 00:13:29,366
+things is that an individual data flow can have multiple data
+
+191
+00:13:29,450 --> 00:13:34,466
+sources, each of them with a different technology, and can then
+
+192
+00:13:34,483 --> 00:13:40,466
+also have multiple destinations that are going to have a copy
+
+193
+00:13:40,483 --> 00:13:45,466
+of the same data at every destination or even different copies
+
+194
+00:13:45,483 --> 00:13:47,466
+of the data on the destination.
+
+195
+00:13:48,483 --> 00:13:53,466
+When we're dealing with these technologies, the technologies
+
+196
+00:13:53,483 --> 00:13:57,466
+that are available include things like ADO.net
+
+197
+00:13:58,483 --> 00:14:02,466
+which is our standard technology for .net data access.
+
+198
+00:14:02,483 --> 00:14:07,466
+We've got OLE DB and we've got a fun one, a CDC sourse.
+
+199
+00:14:07,483 --> 00:14:08,466
+>> That's coming up later.
+
+200
+00:14:08,483 --> 00:14:10,466
+>> Yeah. We're going to look at that one a little bit.
+
+201
+00:14:10,483 --> 00:14:12,466
+That's change data capture.
+
+202
+00:14:13,483 --> 00:14:18,250
+We also have some filed technologies, like an Excel file, a Flat
+
+203
+00:14:18,333 --> 00:14:22,466
+File, an XML file and the one that's kind of cool is the raw
+
+204
+00:14:22,483 --> 00:14:28,466
+file, George. A raw file is a special file that's a part of SSIS
+
+205
+00:14:28,483 --> 00:14:34,383
+that is highly optimized for I/O, so that you can have a temporary
+
+206
+00:14:34,466 --> 00:14:39,466
+storage spot that if you need to drop stuff temporarily as part
+
+207
+00:14:39,483 --> 00:14:43,466
+of a data flow, you have a good technology to make it very efficient
+
+208
+00:14:44,166 --> 00:14:48,316
+to do the drop and the retrieval. We also have some technologies
+
+209
+00:14:48,400 --> 00:14:52,466
+that are destination only and those include SQL Server analysis
+
+210
+00:14:52,483 --> 00:14:56,466
+services with the ability to have a data mining model training
+
+211
+00:14:56,483 --> 00:15:00,466
+destination, a dimension processing and a partition processing.
+
+212
+00:15:01,216 --> 00:15:05,233
+Those are all tasks that are specific to analysis services.
+
+213
+00:15:05,316 --> 00:15:08,183
+I don't want to get into the details about what they are, but
+
+214
+00:15:08,266 --> 00:15:11,466
+it's kind of cool that you can drop it directly into there.
+
+215
+00:15:11,483 --> 00:15:15,466
+It saves you some steps on the analysis services side. And we
+
+216
+00:15:15,483 --> 00:15:21,466
+also have some Rowset destinations which allow us to drive records
+
+217
+00:15:21,483 --> 00:15:26,383
+that are going to go out to an external technology like ADO.net
+
+218
+00:15:27,216 --> 00:15:31,466
+for a .net application or something along those lines.
+
+219
+00:15:33,266 --> 00:15:38,466
+Data sources and data destinations have to communicate with an
+
+220
+00:15:38,483 --> 00:15:41,466
+external data sync.
+
+221
+00:15:41,483 --> 00:15:46,466
+It might be SQL Server or FlatFile or Excel or anything else,
+
+222
+00:15:46,483 --> 00:15:51,366
+but those sources and destinations rely on connection managers
+
+223
+00:15:51,450 --> 00:15:55,466
+to define their location. It is another level of that word that
+
+224
+00:15:55,483 --> 00:15:58,166
+you like so much, abstraction.
+
+225
+00:15:58,483 --> 00:15:59,466
+>> Abstraction.
+
+226
+00:15:59,483 --> 00:16:04,450
+>> So by putting that connection manager there, I can change the
+
+227
+00:16:04,483 --> 00:16:09,266
+details of where the data is coming from without affecting the
+
+228
+00:16:09,350 --> 00:16:14,416
+definition of the data flow as long as the technologies are compatible.
+
+229
+00:16:14,483 --> 00:16:19,450
+When you're building those data sources they are typically dependent
+
+230
+00:16:19,483 --> 00:16:25,466
+on either a source table or a source query. You are not, at
+
+231
+00:16:25,483 --> 00:16:30,183
+least in SQL Server in the data RDMS technologies, you are not
+
+232
+00:16:30,266 --> 00:16:35,466
+limited to grabbing the entire contents of the table as where
+
+233
+00:16:35,483 --> 00:16:39,466
+your data is coming from. You can define it with queries using
+
+234
+00:16:39,483 --> 00:16:45,466
+joins, aggregations so you can leverage the power, the resources
+
+235
+00:16:45,483 --> 00:16:50,383
+of that RDMS engine to do as much of the work as possible for you.
+
+236
+00:16:50,450 --> 00:16:50,466
+>> Very clever.
+
+237
+00:16:51,0 --> 00:16:57,466
+>> On the destination side, you do have to have a table as the destination.
+
+238
+00:16:57,483 --> 00:17:02,466
+You can't, and I hope this is kind of obvious to everybody, but
+
+239
+00:17:02,483 --> 00:17:05,466
+you cannot define a query
+
+240
+00:17:06,483 --> 00:17:11,0
+as the destination of data. There's got to be something physical there.
+
+241
+00:17:11,483 --> 00:17:14,466
+>> So you have some things to show and this is within the data
+
+242
+00:17:14,483 --> 00:17:18,466
+flow task and I'd like to call that the star of the opera.
+
+243
+00:17:19,483 --> 00:17:21,466
+>> The star of the opera, I like that.
+
+244
+00:17:21,483 --> 00:17:22,466
+>> The start of the SSIS Opera.
+
+245
+00:17:22,483 --> 00:17:23,466
+>> There we go.
+
+246
+00:17:24,483 --> 00:17:27,466
+If we can cut over to the virtual machine, what I mean to do
+
+247
+00:17:27,483 --> 00:17:32,466
+in this package at this point is I need to actually put a data
+
+248
+00:17:32,483 --> 00:17:38,466
+flow task in place, because again, this is where my destinations
+
+249
+00:17:38,483 --> 00:17:43,466
+and my sources and my transformations are applicable. They don't
+
+250
+00:17:43,483 --> 00:17:47,466
+happen in the control flow, so I'm going to open up that data flow.
+
+251
+00:17:48,483 --> 00:17:52,466
+At least I thought I was. My double-click doesn't seem to be
+
+252
+00:17:52,483 --> 00:17:55,350
+working, so we will do it the other way. We'll go up to the
+
+253
+00:17:55,433 --> 00:17:56,466
+tab and just go in there.
+
+254
+00:17:56,483 --> 00:17:58,166
+>> There you go.
+
+255
+00:17:58,483 --> 00:18:00,466
+>> And now what I've got is first off
+
+256
+00:18:02,233 --> 00:18:04,466
+everything is easier with a wizard, right?
+
+257
+00:18:04,483 --> 00:18:05,466
+>> Absolutely.
+
+258
+00:18:06,483 --> 00:18:09,466
+>> If you are not 100 percent sure of the steps or if you want
+
+259
+00:18:09,483 --> 00:18:13,466
+some prompting, you can use a wizard to go through and do sources
+
+260
+00:18:13,483 --> 00:18:18,466
+and destinations, but also as you scroll down to the bottom of
+
+261
+00:18:19,333 --> 00:18:24,233
+the toolbox, we do have the different types of sources and destinations
+
+262
+00:18:24,316 --> 00:18:25,466
+available right here.
+
+263
+00:18:26,0 --> 00:18:29,466
+I created an OLE DB connection manager.
+
+264
+00:18:31,200 --> 00:18:35,466
+I am going to grab an OLE DB source to match that.
+
+265
+00:18:36,483 --> 00:18:39,466
+I drop it onto my workspace.
+
+266
+00:18:41,483 --> 00:18:44,400
+What do you see on there that makes you kind of raise your eyebrows
+
+267
+00:18:44,483 --> 00:18:45,250
+a little bit, George?
+
+268
+00:18:45,333 --> 00:18:47,333
+>> I see the red circle with a white x.
+
+269
+00:18:47,416 --> 00:18:50,466
+>> Yeah. You know what that means? That means...
+
+270
+00:18:50,483 --> 00:18:51,466
+>> Missing.
+
+271
+00:18:51,483 --> 00:18:56,466
+>> Yep, gotta be configured. SSIS is drag, drop and configure
+
+272
+00:18:56,483 --> 00:19:00,466
+for the most part, so we're going to double-click and open up
+
+273
+00:19:00,483 --> 00:19:06,466
+the configuration box for the SSIS OLE DB source.
+
+274
+00:19:08,300 --> 00:19:11,466
+First thing we need to do is specify our connection manager.
+
+275
+00:19:11,483 --> 00:19:15,466
+Again, we've got choices here. Any connection manager that's
+
+276
+00:19:15,483 --> 00:19:17,466
+in the project is available.
+
+277
+00:19:18,483 --> 00:19:21,466
+It has to be in the project.
+
+278
+00:19:22,483 --> 00:19:27,316
+Now what's cool is... George, I forgot to create a connection manager.
+
+279
+00:19:27,483 --> 00:19:29,466
+>> Well, maybe you can do it on the fly.
+
+280
+00:19:29,483 --> 00:19:34,466
+>> Absolutely, you can do it on the fly. When you're in the source
+
+281
+00:19:34,483 --> 00:19:38,466
+editor, there is a button right next to
+
+282
+00:19:39,483 --> 00:19:44,166
+the OLE DB connection manager, the new button that I can use
+
+283
+00:19:44,483 --> 00:19:47,466
+to drive the creation of a new connection manager.
+
+284
+00:19:47,483 --> 00:19:48,466
+>> Very convenient.
+
+285
+00:19:48,483 --> 00:19:51,466
+>> When you get down to the bottom of the wizard after you've
+
+286
+00:19:51,483 --> 00:19:56,216
+gotten it, you hit the okay button, but the one thing I forgot
+
+287
+00:19:56,483 --> 00:19:59,466
+is to specify where the data is actually coming from.
+
+288
+00:19:59,483 --> 00:20:03,466
+You've got choices. You can do it from a table or view, or you
+
+289
+00:20:03,483 --> 00:20:09,466
+can define a SQL command, a query, or a stored procedure or a
+
+290
+00:20:09,483 --> 00:20:14,466
+function that is going to bring data back again. I'm going to
+
+291
+00:20:14,200 --> 00:20:18,466
+leave it at table or view and when I click on the name or table
+
+292
+00:20:18,483 --> 00:20:22,366
+or view, it goes out and it grabs. I say you know what? I want
+
+293
+00:20:22,450 --> 00:20:23,466
+the product table.
+
+294
+00:20:24,483 --> 00:20:28,466
+We come over here to our columns page where all of the columns
+
+295
+00:20:29,483 --> 00:20:34,466
+in the product table are selected and I have the ability to deselect
+
+296
+00:20:35,0 --> 00:20:39,466
+columns at which point they no longer become a part of the data flow.
+
+297
+00:20:40,383 --> 00:20:43,466
+It kind of drives what's going to be there and what's not going
+
+298
+00:20:43,483 --> 00:20:44,466
+to be there.
+
+299
+00:20:45,483 --> 00:20:47,466
+Once I've got that all configured, I hit okay.
+
+300
+00:20:48,483 --> 00:20:53,333
+Notice the x is gone and the things are good to go. So there's
+
+301
+00:20:53,483 --> 00:20:57,383
+a source, but a source is no good unless you've got somewhere
+
+302
+00:20:57,466 --> 00:21:02,466
+to put it, so the next thing we need to do is drive a data destination.
+
+303
+00:21:04,483 --> 00:21:08,466
+Back on the virtual machine, we are going to come down to our
+
+304
+00:21:08,483 --> 00:21:09,466
+other destinations.
+
+305
+00:21:10,250 --> 00:21:13,466
+We are going to grab a Flat File destination.
+
+306
+00:21:14,483 --> 00:21:17,466
+Again I've got my red x; I need to configure it. But before
+
+307
+00:21:17,483 --> 00:21:21,466
+I configure, this is something you really need to remember, you
+
+308
+00:21:21,483 --> 00:21:26,433
+need to connect to the flow elements together. You need to create
+
+309
+00:21:26,483 --> 00:21:30,466
+that pipeline where the data is going to flow through from one
+
+310
+00:21:30,483 --> 00:21:31,466
+to the next.
+
+311
+00:21:31,483 --> 00:21:35,466
+I'm going to click and hold on the arrow, drag it down, drop
+
+312
+00:21:35,183 --> 00:21:39,466
+it, connect them. I've now created the flow between the two which
+
+313
+00:21:39,483 --> 00:21:43,466
+means my Flat File is now aware of what's going to be coming
+
+314
+00:21:43,483 --> 00:21:46,433
+into it. If I don't connect them it doesn't know what it's going
+
+315
+00:21:46,450 --> 00:21:46,466
+to get.
+
+316
+00:21:47,483 --> 00:21:50,466
+I don't have my connection manager, so here I go. I create a
+
+317
+00:21:50,483 --> 00:21:51,466
+new one.
+
+318
+00:21:52,433 --> 00:21:55,466
+I'm going to choose the format of the file, which in this case
+
+319
+00:21:55,483 --> 00:21:57,466
+is delimited. God bless you there boys.
+
+320
+00:21:59,483 --> 00:22:02,466
+We are going to give it a name. I'm real inventive, George, so
+
+321
+00:22:02,483 --> 00:22:03,466
+I'm going to choose the default.
+
+322
+00:22:03,483 --> 00:22:04,466
+>> There you go.
+
+323
+00:22:04,483 --> 00:22:07,0
+>> Normally, you would want to give it a name that actually tells
+
+324
+00:22:07,483 --> 00:22:09,316
+you the destination of what it is.
+
+325
+00:22:09,400 --> 00:22:09,466
+>> That's detail.
+
+326
+00:22:10,483 --> 00:22:13,466
+>> Yeah, it is, but it's a good practice to have. I choose the location.
+
+327
+00:22:14,483 --> 00:22:17,466
+I'm going to put it on my desktop so we can find it real quick.
+
+328
+00:22:17,483 --> 00:22:20,466
+I give it a name which is going to be products.text.
+
+329
+00:22:22,483 --> 00:22:25,466
+I hit the open button. I've now defined a location.
+
+330
+00:22:26,333 --> 00:22:30,466
+I choose whether I want text to be quoted or none, what I want
+
+331
+00:22:30,483 --> 00:22:34,366
+my header row delimiter to be, whether I want column names.
+
+332
+00:22:35,166 --> 00:22:38,466
+I go to the columns page and it allows me to choose row delimiter
+
+333
+00:22:38,483 --> 00:22:45,466
+and column delimiters and when I'm all done I hit okay.
+
+334
+00:22:46,483 --> 00:22:50,466
+That now creates my connection manager. Again, a little something
+
+335
+00:22:51,483 --> 00:22:55,466
+you need to know, the mappings aren't done unless you click on
+
+336
+00:22:55,483 --> 00:22:56,466
+the mappings page.
+
+337
+00:22:57,483 --> 00:23:01,466
+It'll give you a red x if you don't, so remember to go over to there.
+
+338
+00:23:02,483 --> 00:23:07,466
+It gives me the matchings of columns that are going to. I can
+
+339
+00:23:07,483 --> 00:23:11,466
+change those mappings. I can delete a mapping.
+
+340
+00:23:12,366 --> 00:23:13,383
+I hit okay.
+
+341
+00:23:13,483 --> 00:23:18,250
+I've now made my connection. When I execute this simple data
+
+342
+00:23:18,333 --> 00:23:23,466
+flow from a source to a destination, we go out to the desktop...
+
+343
+00:23:23,483 --> 00:23:25,466
+>> Ba, da, da, da da.
+
+344
+00:23:25,166 --> 00:23:26,466
+>> There is products.text.
+
+345
+00:23:27,483 --> 00:23:29,466
+I open it up and voila.
+
+346
+00:23:30,450 --> 00:23:30,466
+>> Products.
+
+347
+00:23:31,483 --> 00:23:34,466
+>> Products. All right.
+
+348
+00:23:35,483 --> 00:23:39,466
+Data sources, data destinations define the starting and ending
+
+349
+00:23:39,483 --> 00:23:41,466
+point of a data flow.
+
+350
+00:23:42,483 --> 00:23:44,466
+Now what do we got, George?
+
+351
+00:23:44,483 --> 00:23:48,466
+>> Next up is using change data capture to extract information.
+
+352
+00:23:49,483 --> 00:23:54,366
+>> In change data capture what we're going to talk about here
+
+353
+00:23:54,450 --> 00:23:59,466
+is really a definition of what change data capture is, how to
+
+354
+00:23:59,483 --> 00:24:04,466
+turn it on in the database and then how to use it to extract data.
+
+355
+00:24:06,483 --> 00:24:10,466
+Change data capture was first introduced in SQL Server 2008.
+
+356
+00:24:10,483 --> 00:24:15,466
+It is a technology that is available in Enterprise edition only.
+
+357
+00:24:16,333 --> 00:24:17,466
+>> Some restrictions apply.
+
+358
+00:24:17,483 --> 00:24:21,466
+>> Yeah. It's one of those things that really does drive though.
+
+359
+00:24:21,483 --> 00:24:26,466
+When you've got an enterprise that is doing a lot of operational
+
+360
+00:24:26,483 --> 00:24:30,466
+systems, a lot of transactional updates change data capture is
+
+361
+00:24:30,483 --> 00:24:33,466
+going to make your life a lot easier and there's a real good
+
+362
+00:24:33,483 --> 00:24:36,266
+reason to be running Enterprise edition.
+
+363
+00:24:36,483 --> 00:24:42,466
+What change data capture does is use log sequence numbers correlated
+
+364
+00:24:42,483 --> 00:24:44,466
+to times
+
+365
+00:24:45,483 --> 00:24:50,466
+to determine whether or not a change in data happened during
+
+366
+00:24:50,483 --> 00:24:53,466
+a particular time frame.
+
+367
+00:24:54,233 --> 00:24:59,466
+When you enable change data capture on a table, it keeps track
+
+368
+00:24:59,483 --> 00:25:04,466
+of when those changes occurred so that you can define a specific
+
+369
+00:25:04,483 --> 00:25:08,466
+timeframe and grab all the changes that happened to that table
+
+370
+00:25:08,483 --> 00:25:14,466
+within that time frame. It tracks a full history of the changed data.
+
+371
+00:25:17,483 --> 00:25:22,466
+To turn change data capture on, the first thing you have to do
+
+372
+00:25:23,216 --> 00:25:26,466
+in any of this stuff is figure it out. You've got to figure
+
+373
+00:25:26,483 --> 00:25:29,466
+out what you need to track those changes on.
+
+374
+00:25:29,483 --> 00:25:32,466
+>> So I don't want to turn this on every single table?
+
+375
+00:25:32,483 --> 00:25:36,466
+>> Absolutely not. The only time you really want to use change
+
+376
+00:25:37,483 --> 00:25:41,466
+data capture is for the information that is critical to your
+
+377
+00:25:41,483 --> 00:25:46,466
+data warehouse, the stuff that is used in slowly changing dimensions,
+
+378
+00:25:46,483 --> 00:25:51,466
+in primary definitions of dimensions and things of that nature.
+
+379
+00:25:51,483 --> 00:25:55,383
+Once you've gone through that design process, you run a stored
+
+380
+00:25:55,466 --> 00:25:58,466
+procedure called sts,so_cdc_enable_db.
+
+381
+00:26:02,483 --> 00:26:06,466
+Just for your information, George, in the future I don't like
+
+382
+00:26:06,483 --> 00:26:09,466
+saying under score every three seconds so don't be surprised
+
+383
+00:26:09,483 --> 00:26:11,433
+if you don't hear the under score from here on out.
+
+384
+00:26:11,450 --> 00:26:11,466
+>> Just skip it.
+
+385
+00:26:11,483 --> 00:26:14,466
+>> Know that it's going to be there most times though.
+
+386
+00:26:14,483 --> 00:26:19,466
+Sts,so_cdc_enable_db then turns the technology on for the database
+
+387
+00:26:20,483 --> 00:26:24,383
+and then for each table that you want that technology set up
+
+388
+00:26:24,466 --> 00:26:30,466
+for, you are going to run the CDC enable table and you need to
+
+389
+00:26:30,483 --> 00:26:35,466
+give it as parameter values the schema name, the table name,
+
+390
+00:26:35,483 --> 00:26:39,466
+the role name and whether or not it supports net changes.
+
+391
+00:26:39,483 --> 00:26:42,466
+Many times, George, the role is going to be a null value.
+
+392
+00:26:43,483 --> 00:26:48,466
+To extract the data I've got some transforms
+
+393
+00:26:49,483 --> 00:26:56,466
+in SSIS that I can use to build an extraction process that is time-based.
+
+394
+00:26:57,483 --> 00:27:00,366
+Now it's not free. You do need to have a table set up in your
+
+395
+00:27:00,450 --> 00:27:06,466
+data warehouse to track the times when a load has started and
+
+396
+00:27:07,483 --> 00:27:10,466
+a load has ended, but then you've got a couple of transforms,
+
+397
+00:27:10,483 --> 00:27:12,466
+the CDC control transform.
+
+398
+00:27:13,400 --> 00:27:18,466
+You've got the CDC source transform and the CDC splitter transform.
+
+399
+00:27:18,483 --> 00:27:24,466
+You use those to mark and pull the data out. The CDC control
+
+400
+00:27:25,166 --> 00:27:29,466
+is used to mark when an extract process starts, when an extract
+
+401
+00:27:29,483 --> 00:27:31,200
+process ends.
+
+402
+00:27:31,283 --> 00:27:32,466
+>> Your high watermark.
+
+403
+00:27:32,483 --> 00:27:37,466
+>> Yeah. And then you've got CDC source which defines where the
+
+404
+00:27:37,483 --> 00:27:43,466
+extracted data is coming from and the splitter to separate the
+
+405
+00:27:43,216 --> 00:27:49,466
+different kinds of updates, inserts, updates and deletes, so
+
+406
+00:27:49,483 --> 00:27:53,466
+that you can set up different data flows to deal with each one.
+
+407
+00:27:53,483 --> 00:27:57,333
+>> This looks like typical with a Microsoft product. You have
+
+408
+00:27:57,483 --> 00:28:01,450
+a very high degree of control over how you want to process your changes.
+
+409
+00:28:01,483 --> 00:28:03,466
+>> Very much so. Very much so.
+
+410
+00:28:03,483 --> 00:28:06,200
+>> So why don't you give us a spin here, Rich?
+
+411
+00:28:06,483 --> 00:28:09,466
+>> So what I'm going to do first off is
+
+412
+00:28:10,483 --> 00:28:16,200
+close out my SSIS package. Da, da, da ta, da.
+
+413
+00:28:16,283 --> 00:28:24,0
+And we are going to go back over to management studio where I've
+
+414
+00:28:24,483 --> 00:28:29,466
+got a script that is going to turn on change data capture.
+
+415
+00:28:29,183 --> 00:28:34,466
+I've got demo DW, which is the database that we are playing in
+
+416
+00:28:34,483 --> 00:28:41,266
+and I'm going to enable demo DW to support change data capture.
+
+417
+00:28:41,350 --> 00:28:42,466
+>> There's the on switch.
+
+418
+00:28:43,250 --> 00:28:45,166
+>> Done. Boy, that was tough.
+
+419
+00:28:45,250 --> 00:28:45,466
+>> Not tough.
+
+420
+00:28:45,483 --> 00:28:50,450
+>> That's actually one of the easiest steps in the entire process, George.
+
+421
+00:28:50,483 --> 00:28:54,466
+Now I need to define the tables that are going to be involved.
+
+422
+00:28:54,483 --> 00:28:58,466
+In our design we've identified customers and shippers as two
+
+423
+00:28:58,483 --> 00:29:03,466
+tables that are going to be the targets of our change data capture process.
+
+424
+00:29:04,266 --> 00:29:09,466
+I enable that for both of those and they are going to support
+
+425
+00:29:09,483 --> 00:29:10,466
+net changes.
+
+426
+00:29:12,483 --> 00:29:18,466
+Now net changes means they are going to keep track of all of
+
+427
+00:29:18,483 --> 00:29:23,200
+the individual changes that occurred during a time period rather
+
+428
+00:29:23,283 --> 00:29:28,466
+than just the original value and the ending value of the time period.
+
+429
+00:29:28,483 --> 00:29:30,466
+>> So interim changes along the way.
+
+430
+00:29:30,483 --> 00:29:34,466
+>> So if there were six updates to an attribute value during the
+
+431
+00:29:34,483 --> 00:29:37,466
+extraction period, it would have all six in there.
+
+432
+00:29:38,483 --> 00:29:45,283
+The next thing I'm going to do here is show how we pull data
+
+433
+00:29:45,366 --> 00:29:51,466
+out of that change data capture window. I use here, first off
+
+434
+00:29:51,483 --> 00:29:58,466
+I need to get a mapping of what times correspond to what log
+
+435
+00:29:58,483 --> 00:30:02,466
+sequence numbers, so SQL can look inside the transaction log.
+
+436
+00:30:02,483 --> 00:30:06,466
+That function is called CDC
+
+437
+00:30:07,483 --> 00:30:09,466
+map time 2LSN.
+
+438
+00:30:11,250 --> 00:30:13,466
+You give it the
+
+439
+00:30:14,483 --> 00:30:18,466
+qualification of the time period. I've got to be careful here.
+
+440
+00:30:18,483 --> 00:30:23,466
+There we go. And the starting date, so smallest greater than
+
+441
+00:30:23,483 --> 00:30:27,466
+the from date is going to get me the first log serial number
+
+442
+00:30:27,483 --> 00:30:34,466
+of the period largest less than or greater sorry. Largest less
+
+443
+00:30:34,483 --> 00:30:41,433
+than or equal says give me the last time period, the last LSN
+
+444
+00:30:41,483 --> 00:30:47,466
+for the to date, and then I'm going to use get net changes, SRC
+
+445
+00:30:47,483 --> 00:30:53,466
+customers because that get net changes gets generated for each table.
+
+446
+00:30:53,483 --> 00:30:59,166
+There will be another function for SRC shippers because that's
+
+447
+00:30:59,250 --> 00:31:00,466
+the other one I turned on.
+
+448
+00:31:01,316 --> 00:31:05,466
+When I take this script and run it in its entirety, it's going
+
+449
+00:31:05,483 --> 00:31:09,466
+to return all of the records that were changed. How about that George?
+
+450
+00:31:09,483 --> 00:31:10,466
+>> No records.
+
+451
+00:31:10,216 --> 00:31:11,466
+>> We haven't changed anything yet.
+
+452
+00:31:12,483 --> 00:31:15,466
+We're going to do a couple of updates here. We're going to create
+
+453
+00:31:15,483 --> 00:31:20,400
+a new customer and we are going to update an existing customer.
+
+454
+00:31:21,483 --> 00:31:25,300
+Now we go out and we run that grab again
+
+455
+00:31:27,416 --> 00:31:30,333
+and we get our two changes.
+
+456
+00:31:31,383 --> 00:31:35,466
+If you look, I happen to know that if we inserted customer ID
+
+457
+00:31:35,483 --> 00:31:38,466
+6 and we modified customer ID 2.
+
+458
+00:31:39,483 --> 00:31:44,466
+Dollar operation tells you which operation was done. Was it
+
+459
+00:31:44,483 --> 00:31:47,466
+an insert? Was it an update? Was it a delete?
+
+460
+00:31:48,483 --> 00:31:51,466
+Okay? If I run this again,
+
+461
+00:31:55,316 --> 00:31:59,466
+I'm getting exactly the same results because it's the same period,
+
+462
+00:32:00,483 --> 00:32:05,466
+but if I use a different period, so I'm going to move the date
+
+463
+00:32:05,483 --> 00:32:10,466
+time forward, it shows me that no changes have happened.
+
+464
+00:32:10,483 --> 00:32:11,466
+>> There's your print message.
+
+465
+00:32:14,483 --> 00:32:19,466
+>> Coming back to the slides, what have we got next?
+
+466
+00:32:19,483 --> 00:32:22,466
+>> Now we have another technology we can use to populate because
+
+467
+00:32:22,483 --> 00:32:25,466
+change data tracking isn't going to always work. I'm sorry.
+
+468
+00:32:25,483 --> 00:32:28,466
+Change data capture isn't always going to be appropriate, so
+
+469
+00:32:28,483 --> 00:32:30,466
+we have something else to look at two, Rich.
+
+470
+00:32:30,483 --> 00:32:36,466
+>> That is very true. We have change tracking and change tracking
+
+471
+00:32:37,483 --> 00:32:45,183
+is a technology that is going to allow us to capture the changes
+
+472
+00:32:45,266 --> 00:32:51,466
+of data with a little bit less overhead and a little bit less work.
+
+473
+00:32:52,483 --> 00:32:57,466
+Of course, with that comes a little bit less detail, so change
+
+474
+00:32:57,483 --> 00:33:01,466
+tracking is, again, a new technology over the last generation
+
+475
+00:33:01,483 --> 00:33:05,466
+of SQL Server. We're going to talk about what it is. We're going
+
+476
+00:33:05,200 --> 00:33:09,466
+to talk about how to turn it on. We're going to talk about using
+
+477
+00:33:09,483 --> 00:33:11,466
+it to extract data.
+
+478
+00:33:13,483 --> 00:33:20,466
+Change tracking is a lightweight technology that first came out
+
+479
+00:33:20,216 --> 00:33:25,300
+in SQL Server 2008, just like with CDC,
+
+480
+00:33:26,483 --> 00:33:32,466
+the change tracking tracks only the fact that a row has changed.
+
+481
+00:33:32,483 --> 00:33:38,466
+It doesn't have when it changed. It doesn't have what kind of
+
+482
+00:33:38,483 --> 00:33:43,466
+change it was. It only goes through and keeps track of, hey,
+
+483
+00:33:43,483 --> 00:33:46,466
+the record changed. You might want to go through and bring the
+
+484
+00:33:46,483 --> 00:33:50,466
+new one into your data warehouse.
+
+485
+00:33:51,483 --> 00:33:57,466
+It is designed to be an intermediate solution between fully automated
+
+486
+00:33:57,183 --> 00:34:00,216
+CDC and fully programmed
+
+487
+00:34:01,483 --> 00:34:02,466
+change tracking.
+
+488
+00:34:02,483 --> 00:34:07,466
+>> So maybe a little easier than writing your own entirely custom solution.
+
+489
+00:34:07,483 --> 00:34:11,466
+>> Absolutely. If you were to try to implement change tracking
+
+490
+00:34:12,333 --> 00:34:14,466
+all by yourself, you would be writing stored procedures.
+
+491
+00:34:14,483 --> 00:34:19,466
+You'd be putting tables in. I mean, it would be a fully manual process.
+
+492
+00:34:19,483 --> 00:34:23,466
+Change tracking allows you to get the bulk of it done
+
+493
+00:34:25,316 --> 00:34:30,466
+to give you an easily implementable solution to populate your warehouse.
+
+494
+00:34:30,483 --> 00:34:35,466
+Now just like with CDC, change tracking has to be enabled.
+
+495
+00:34:36,200 --> 00:34:40,466
+You have to identify the tables that are targeted for change
+
+496
+00:34:40,483 --> 00:34:45,200
+tracking and you have to enable the individual tables that are
+
+497
+00:34:45,283 --> 00:34:50,466
+going on as well. Altered database, there's no store procedures.
+
+498
+00:34:50,483 --> 00:34:52,166
+There's no functions.
+
+499
+00:34:52,483 --> 00:34:57,466
+It is truly an altered database statement, George. You set
+
+500
+00:34:58,483 --> 00:35:01,466
+change_tracking equal to on to turn it on for the database and
+
+501
+00:35:01,483 --> 00:35:06,466
+you enable change_tracking to enable it for the table.
+
+502
+00:35:07,483 --> 00:35:12,466
+Then to pull change tracking out, you have a data source; you
+
+503
+00:35:12,483 --> 00:35:17,466
+have a staging database. You have to have an extraction log which
+
+504
+00:35:17,483 --> 00:35:21,466
+is going to keep track of what you grabbed and when you grabbed it.
+
+505
+00:35:21,483 --> 00:35:26,166
+You have to get the last version number because that's how this works.
+
+506
+00:35:26,250 --> 00:35:26,466
+>> All right.
+
+507
+00:35:26,483 --> 00:35:32,166
+>> It keeps track of version numbers for a record, so you grabbed
+
+508
+00:35:32,483 --> 00:35:38,433
+that last version number. You extract any records that were higher
+
+509
+00:35:38,483 --> 00:35:40,450
+than that last version number.
+
+510
+00:35:40,483 --> 00:35:41,466
+>> That's your high water mark.
+
+511
+00:35:41,483 --> 00:35:43,466
+>> And then what do you have to do?
+
+512
+00:35:44,483 --> 00:35:45,466
+>> Update.
+
+513
+00:35:45,483 --> 00:35:50,300
+>> You've got to write that new high water mark back to your extraction
+
+514
+00:35:50,383 --> 00:35:56,466
+log so that you know what version of data you actually grabbed.
+
+515
+00:35:56,483 --> 00:35:59,416
+>> And you have some stuff to show us related to implementing
+
+516
+00:35:59,483 --> 00:36:00,400
+change tracking.
+
+517
+00:36:00,483 --> 00:36:01,466
+>> I do. I do.
+
+518
+00:36:02,483 --> 00:36:04,333
+Going into change tracking...
+
+519
+00:36:05,483 --> 00:36:08,466
+I need to get my virtual machine up here. There we go.
+
+520
+00:36:10,483 --> 00:36:12,466
+So in change tracking
+
+521
+00:36:13,483 --> 00:36:17,466
+first thing I'm going to do is enable the database.
+
+522
+00:36:18,183 --> 00:36:23,466
+I alter database, set change tracking on and then I have a couple
+
+523
+00:36:23,483 --> 00:36:24,466
+of switches I can set.
+
+524
+00:36:25,483 --> 00:36:26,466
+Change retention,
+
+525
+00:36:28,450 --> 00:36:30,200
+I'm going to set it for seven days.
+
+526
+00:36:31,483 --> 00:36:32,466
+Auto cleanup,
+
+527
+00:36:33,483 --> 00:36:38,366
+do I want it to keep track and get rid of old versions after
+
+528
+00:36:38,450 --> 00:36:39,466
+they've been retrieved?
+
+529
+00:36:40,283 --> 00:36:43,466
+So I alter the database. I set change tracking on. We're good
+
+530
+00:36:43,483 --> 00:36:44,466
+to go.
+
+531
+00:36:46,483 --> 00:36:52,466
+Now I'm going to set snapshot isolation. That allows the database
+
+532
+00:36:52,483 --> 00:36:56,466
+to look at the data and manipulate the data without other users
+
+533
+00:36:57,483 --> 00:37:00,466
+being blocked from doing their work.
+
+534
+00:37:01,166 --> 00:37:06,466
+I alter database demo DW. I allow snapshot isolation so that
+
+535
+00:37:06,483 --> 00:37:10,466
+when change tracking goes out to retrieve the data, it's not
+
+536
+00:37:10,483 --> 00:37:14,466
+going to block the operational, the business users from being
+
+537
+00:37:14,483 --> 00:37:15,466
+able to do their jobs.
+
+538
+00:37:16,483 --> 00:37:20,466
+I go into sales people, which is the table I'm going to set it
+
+539
+00:37:20,483 --> 00:37:26,466
+up on, and I enable the change tracking. I put track update,
+
+540
+00:37:26,483 --> 00:37:31,466
+columns updated to on, which then allows the individual columns
+
+541
+00:37:31,483 --> 00:37:32,466
+to have versions.
+
+542
+00:37:33,483 --> 00:37:38,466
+Now I'm going to go get the current version and I'm going to
+
+543
+00:37:39,483 --> 00:37:42,466
+pull out from salespeople. I've got an extract log.
+
+544
+00:37:43,483 --> 00:37:46,316
+I'm going to get the current version of
+
+545
+00:37:47,483 --> 00:37:49,466
+the salespeople. I'm going to put it into
+
+546
+00:37:51,450 --> 00:37:52,466
+my extract log.
+
+547
+00:37:54,166 --> 00:37:58,466
+You can see here is the latest version of all of the sales reps.
+
+548
+00:37:58,483 --> 00:38:02,466
+I've got Wendy. I've got Andy. I've got Matt; they're all there.
+
+549
+00:38:03,483 --> 00:38:06,416
+I'm going to make some changes to the table.
+
+550
+00:38:08,0 --> 00:38:10,466
+Put in a new salesperson,
+
+551
+00:38:12,483 --> 00:38:14,250
+update a salesperson,
+
+552
+00:38:17,166 --> 00:38:23,466
+now here's where that isolation level, the snapshot comes in
+
+553
+00:38:23,483 --> 00:38:28,466
+because SQL Server does have to go out to the database to grab
+
+554
+00:38:28,483 --> 00:38:33,400
+the data and retrieve it and we don't want that to block any
+
+555
+00:38:33,483 --> 00:38:37,466
+transactions that are being done when the business users are
+
+556
+00:38:37,483 --> 00:38:38,466
+doing their job.
+
+557
+00:38:39,483 --> 00:38:42,466
+Change tracking populating the data warehouse, typically you
+
+558
+00:38:42,483 --> 00:38:46,466
+are dealing with pretty significant data sizes, so these queries
+
+559
+00:38:46,483 --> 00:38:51,466
+can take time. Snapshot isolation can allow that work to be isolated
+
+560
+00:38:51,483 --> 00:38:57,466
+away from the work that's ongoing, with transactions, so that
+
+561
+00:38:57,483 --> 00:39:00,466
+the business can continue to operate freely.
+
+562
+00:39:01,483 --> 00:39:05,466
+Now I set my isolation level to snapshot.
+
+563
+00:39:06,483 --> 00:39:13,466
+I go out and grab the previous version from the extract log for
+
+564
+00:39:13,483 --> 00:39:14,466
+the table I'm targeting.
+
+565
+00:39:15,483 --> 00:39:21,466
+And then I go out and I retrieve the data from the table.
+
+566
+00:39:22,483 --> 00:39:27,466
+But I'm using a change table function. The change table function
+
+567
+00:39:27,483 --> 00:39:30,466
+specifies that I want the changes for the SRC
+
+568
+00:39:31,483 --> 00:39:34,466
+salespeople since this version.
+
+569
+00:39:36,483 --> 00:39:41,466
+It's going to inter-join to the salespeople table, so I can grab
+
+570
+00:39:42,483 --> 00:39:45,466
+original and new.
+
+571
+00:39:45,483 --> 00:39:53,333
+I am going to highlight that entire script and when I run it
+
+572
+00:39:53,416 --> 00:39:57,466
+you can see here is my previous version, my current version,
+
+573
+00:39:57,483 --> 00:40:04,466
+the salesperson ID a name, the information is available to you,
+
+574
+00:40:05,483 --> 00:40:10,416
+but you don't know what the old ones are. You just know that
+
+575
+00:40:10,483 --> 00:40:14,466
+this is what the record looked like, looks like now and that
+
+576
+00:40:14,483 --> 00:40:19,433
+it changed since the last time. Cool?
+
+577
+00:40:19,450 --> 00:40:19,466
+>> Very cool.
+
+578
+00:40:19,483 --> 00:40:23,466
+>> All right. I need to back up, because I had a little bit of
+
+579
+00:40:23,483 --> 00:40:26,466
+a faux pas on my CDC demo.
+
+580
+00:40:26,483 --> 00:40:27,466
+>> What's that, Rich?
+
+581
+00:40:27,483 --> 00:40:30,466
+>> I forgot to show the whole SSIS side.
+
+582
+00:40:30,483 --> 00:40:33,466
+>> There we go.
+
+583
+00:40:33,483 --> 00:40:37,466
+>> Let's back up a little bit and, luckily all of this stuff is
+
+584
+00:40:37,483 --> 00:40:42,466
+there and I can get it going. I'm going to go back over to my
+
+585
+00:40:43,366 --> 00:40:48,266
+SIIS projects and I am going to open up a project that we've
+
+586
+00:40:48,350 --> 00:40:57,0
+already, that we have already set up and that project is I believe,
+
+587
+00:40:57,483 --> 00:40:59,283
+there it is.
+
+588
+00:40:59,366 --> 00:41:01,466
+>> That's some of the glitzy stuff about CDC.
+
+589
+00:41:02,266 --> 00:41:06,466
+>> Oh yeah. This is the fun stuff. This is the fun stuff.
+
+590
+00:41:06,483 --> 00:41:10,383
+What I'm going to do is we have a package here called extract
+
+591
+00:41:10,466 --> 00:41:12,466
+initial shippers.
+
+592
+00:41:12,483 --> 00:41:13,466
+>> Uh oh, I see red circles there.
+
+593
+00:41:13,483 --> 00:41:17,300
+>> Yeah. Red circles means we need to configure it, but the cool
+
+594
+00:41:17,383 --> 00:41:23,466
+part is we've already got our transforms in here, so these two.
+
+595
+00:41:23,483 --> 00:41:29,466
+I've got the mark initial load which is a CDC control task and
+
+596
+00:41:29,483 --> 00:41:33,466
+it's telling me that I'm missing a variable.
+
+597
+00:41:33,483 --> 00:41:39,450
+So in my variable I need to have, when I create and I pull out
+
+598
+00:41:39,483 --> 00:41:44,466
+when CDC last ran, this is where it's going to store, so I'm
+
+599
+00:41:44,483 --> 00:41:48,466
+going to create a variable called CDC state.
+
+600
+00:41:49,483 --> 00:41:54,466
+And then I also need a place to store that in the data warehouse,
+
+601
+00:41:54,483 --> 00:41:59,350
+so that it's available the next time CDC needs it.
+
+602
+00:41:59,483 --> 00:42:05,466
+I'm going to create a table in there called DBO.CDC states, and
+
+603
+00:42:05,483 --> 00:42:11,466
+the state name is going to be in the state name. Now it's cool
+
+604
+00:42:11,483 --> 00:42:16,433
+because it creates the create script when you click on new, so
+
+605
+00:42:16,483 --> 00:42:19,466
+you can modify that if you want to or need to.
+
+606
+00:42:20,483 --> 00:42:24,466
+I'm going to run that and I've now created my CDC states.
+
+607
+00:42:24,483 --> 00:42:26,466
+Now the thing you have to be careful of when you're configuring
+
+608
+00:42:26,483 --> 00:42:30,466
+these control tasks is this control operation.
+
+609
+00:42:31,483 --> 00:42:36,166
+Notice that there are different kinds of values. An initial
+
+610
+00:42:36,250 --> 00:42:41,466
+load start, an initial loads and a get processing range, mark
+
+611
+00:42:41,483 --> 00:42:47,466
+processed range, mark CDC start, they all have their use.
+
+612
+00:42:48,483 --> 00:42:53,450
+Because I am doing an initial load, I need this control operation
+
+613
+00:42:53,483 --> 00:42:55,466
+to do an initial load start.
+
+614
+00:42:55,483 --> 00:43:02,466
+I hit okay, and now I've got extract all shippers. That's the
+
+615
+00:43:02,483 --> 00:43:06,216
+process that's going to go out. It's just a straight data flow
+
+616
+00:43:06,300 --> 00:43:10,466
+task that's going to go out and it's going to grab data from
+
+617
+00:43:10,183 --> 00:43:14,466
+SQL and load it into the staging table for shipper inserts.
+
+618
+00:43:15,483 --> 00:43:20,466
+The last thing I'm going to do is mark my initial load end.
+
+619
+00:43:20,483 --> 00:43:23,466
+The control operation is set to load end.
+
+620
+00:43:24,483 --> 00:43:26,466
+Here's my variable, CDC state.
+
+621
+00:43:27,483 --> 00:43:32,200
+Here's the table, the state name. Everything's good to go >> Perfect.
+
+622
+00:43:32,283 --> 00:43:34,466
+>> Now when I run this
+
+623
+00:43:36,483 --> 00:43:40,233
+it goes through. It grabs all of the records. Now we're going
+
+624
+00:43:40,316 --> 00:43:41,466
+to go back over to
+
+625
+00:43:43,400 --> 00:43:47,466
+management studio for just a minute, because I really want to
+
+626
+00:43:47,483 --> 00:43:50,466
+show you what that looks like.
+
+627
+00:43:50,483 --> 00:43:55,333
+In the demo DW in the tables here's my CDC state table.
+
+628
+00:43:55,483 --> 00:43:57,466
+When I go out and grab the records
+
+629
+00:43:59,483 --> 00:44:03,466
+there is the state variable that gets written. Isn't that a
+
+630
+00:44:04,166 --> 00:44:08,466
+wonderfully descriptive and highly user friendly value?
+
+631
+00:44:08,483 --> 00:44:10,416
+>> Yeah, that's a little spooky.
+
+632
+00:44:10,483 --> 00:44:14,466
+>> Okay. The one thing I will tell you, see that mark right there,
+
+633
+00:44:14,483 --> 00:44:16,466
+right at the beginning IL end?
+
+634
+00:44:16,483 --> 00:44:17,466
+>> Yep.
+
+635
+00:44:17,483 --> 00:44:20,466
+>> IL start, IL end, initial load.
+
+636
+00:44:20,483 --> 00:44:21,466
+>> There you go.
+
+637
+00:44:21,483 --> 00:44:25,466
+>> Okay? And there are other values that go in there as well.
+
+638
+00:44:25,483 --> 00:44:30,466
+So there's the initial load process, but the other thing that
+
+639
+00:44:30,216 --> 00:44:32,466
+we have is the ongoing updates.
+
+640
+00:44:33,483 --> 00:44:37,466
+We have an extract changed shippers.
+
+641
+00:44:40,483 --> 00:44:43,466
+When I open it up, George, we have some configuration to do.
+
+642
+00:44:44,0 --> 00:44:46,166
+>> That's right. Work to do.
+
+643
+00:44:46,250 --> 00:44:49,466
+>> First thing I have my starting.
+
+644
+00:44:51,416 --> 00:44:52,466
+I have a,
+
+645
+00:44:54,383 --> 00:44:56,466
+I don't have a variable, so guess what?
+
+646
+00:44:57,483 --> 00:45:01,166
+We create our variable because it's a package level variable.
+
+647
+00:45:01,483 --> 00:45:03,350
+We're going to get into that more later on today.
+
+648
+00:45:03,483 --> 00:45:07,466
+And again, now I want to choose the table. I don't need to create
+
+649
+00:45:07,483 --> 00:45:12,250
+it this time because I created it last time. The control operation,
+
+650
+00:45:12,333 --> 00:45:13,466
+get processing range.
+
+651
+00:45:14,483 --> 00:45:19,366
+And again, down here at the bottom, mark processed, the control
+
+652
+00:45:19,450 --> 00:45:24,466
+operation, everything is set up correctly. I've got to clean.
+
+653
+00:45:24,483 --> 00:45:26,433
+I go into my data flow.
+
+654
+00:45:27,483 --> 00:45:30,466
+Here is my CDC source.
+
+655
+00:45:31,483 --> 00:45:34,466
+CDC source, remember we talked about that, back with data sources?
+
+656
+00:45:34,483 --> 00:45:35,466
+>> Yep, one of the sources.
+
+657
+00:45:35,483 --> 00:45:39,466
+>> Absolutely. I need to identify the table that I'm grabbing
+
+658
+00:45:39,483 --> 00:45:45,466
+it from, which is the CDC enabled table in the operational system
+
+659
+00:45:45,483 --> 00:45:49,466
+that contains the data I'm loading into my warehouse.
+
+660
+00:45:50,483 --> 00:45:51,366
+I also
+
+661
+00:45:52,483 --> 00:45:56,466
+need to give it the processing mode and the state variable.
+
+662
+00:45:57,250 --> 00:46:01,466
+That then is going to tell me the columns that are going to be available.
+
+663
+00:46:01,483 --> 00:46:05,466
+Now these are the columns from the table itself. The shippers
+
+664
+00:46:05,483 --> 00:46:08,466
+table is not a real big one, George.
+
+665
+00:46:08,483 --> 00:46:13,216
+Just an example. It gives me the starting LSN, the operation
+
+666
+00:46:13,300 --> 00:46:17,466
+and the update mask. Now that operation is going to be critical
+
+667
+00:46:17,483 --> 00:46:19,383
+a little bit later on.
+
+668
+00:46:19,466 --> 00:46:20,333
+>> Very much.
+
+669
+00:46:21,483 --> 00:46:28,316
+>> There is my get records, my CDC source. That drops into my splitter.
+
+670
+00:46:28,483 --> 00:46:32,466
+In the splitter I give it a name and then I come over here to
+
+671
+00:46:32,483 --> 00:46:36,466
+my input columns. There or all of my input columns, the output
+
+672
+00:46:36,483 --> 00:46:41,200
+alias and now I've got my input and output properties. This is
+
+673
+00:46:41,283 --> 00:46:46,466
+usually a very, very easy configuration. You don't really have
+
+674
+00:46:46,483 --> 00:46:51,466
+to do much except drop it in, hook it up, check all of your tabs
+
+675
+00:46:51,483 --> 00:46:57,416
+to make sure that they are good and then we go to our output.
+
+676
+00:46:57,483 --> 00:47:01,466
+Now the cool thing here, notice, I've got an insert output.
+
+677
+00:47:02,466 --> 00:47:05,466
+I've got an update output. I've got a delete output.
+
+678
+00:47:06,483 --> 00:47:11,466
+The splitter will read that operation variable and will then
+
+679
+00:47:12,166 --> 00:47:18,300
+automatically put each record to the data flow that it needs
+
+680
+00:47:18,383 --> 00:47:21,466
+to go to, because I'm going to have a different operation to
+
+681
+00:47:21,483 --> 00:47:26,466
+do on records that have been inserted versus records that have
+
+682
+00:47:26,483 --> 00:47:32,466
+been updated versus records that have been deleted. Cool?
+
+683
+00:47:32,483 --> 00:47:33,466
+>> Very cool.
+
+684
+00:47:33,483 --> 00:47:36,466
+>> Are right. So let's go and update some data.
+
+685
+00:47:36,483 --> 00:47:40,466
+I'm going to go back in. I have
+
+686
+00:47:42,0 --> 00:47:45,466
+an update shippers, which is going to create a new shipper.
+
+687
+00:47:45,483 --> 00:47:48,466
+It's going to delete a shipper. It's going to change the value.
+
+688
+00:47:48,483 --> 00:47:55,366
+I run it and now when we go back to integration services,
+
+689
+00:47:56,483 --> 00:47:59,466
+I'm going to cancel that. I'm not sure why it wanted to close.
+
+690
+00:47:59,483 --> 00:48:01,216
+I'm going to execute
+
+691
+00:48:04,166 --> 00:48:09,466
+and I have records that have gone through. Everything is good
+
+692
+00:48:09,483 --> 00:48:10,300
+to go.
+
+693
+00:48:10,483 --> 00:48:15,466
+We head back over to management studio and now if I look at my
+
+694
+00:48:15,483 --> 00:48:22,466
+staging shipper deletes, staging shipper deletes which is the
+
+695
+00:48:22,483 --> 00:48:29,466
+destination, staging
+
+696
+00:48:30,483 --> 00:48:31,466
+shipper inserts.
+
+697
+00:48:32,483 --> 00:48:35,416
+They're empty. I'm not quite sure why they're empty. I might
+
+698
+00:48:35,483 --> 00:48:37,433
+have had a connection manager issue there.
+
+699
+00:48:37,483 --> 00:48:40,466
+>> No. Actually, entertain me Rich. Just go run the package again.
+
+700
+00:48:40,183 --> 00:48:43,466
+Once in a while, there's a little delay with that, so go ahead
+
+701
+00:48:43,183 --> 00:48:44,466
+and run the package again.
+
+702
+00:48:44,483 --> 00:48:45,433
+>> Yeah.
+
+703
+00:48:45,483 --> 00:48:47,466
+Oh. It did not update.
+
+704
+00:48:48,483 --> 00:48:50,466
+If you look at my, let's see.
+
+705
+00:48:53,483 --> 00:48:57,466
+We're going to run that package again. This is an interesting one.
+
+706
+00:49:02,483 --> 00:49:06,466
+It might have been a time period issue because the transaction
+
+707
+00:49:06,483 --> 00:49:08,466
+log hadn't changed sequence numbers.
+
+708
+00:49:08,483 --> 00:49:09,466
+>> There you go.
+
+709
+00:49:09,483 --> 00:49:13,466
+>> So here we go. Now we've got the output in there and that's
+
+710
+00:49:13,483 --> 00:49:17,416
+what it is. There is a delay sometimes because checkpointing,
+
+711
+00:49:17,483 --> 00:49:21,466
+transaction log sequence numbers don't always update right away,
+
+712
+00:49:21,483 --> 00:49:24,466
+so when you make a change and then three seconds later you run
+
+713
+00:49:24,483 --> 00:49:29,466
+a transfer package, well guess what? The log serial number that
+
+714
+00:49:30,0 --> 00:49:34,466
+CDC is going to grab is the one previous to where the change occurred.
+
+715
+00:49:35,483 --> 00:49:38,466
+Once that log serial number updates, the change goes through.
+
+716
+00:49:38,483 --> 00:49:41,466
+Ba da bing ba da bang. Good catch George. I forgot about that one.
+
+717
+00:49:42,483 --> 00:49:43,466
+>> That's what happens.
+
+718
+00:49:43,483 --> 00:49:47,466
+>> That then is where we have been today. We've talked about
+
+719
+00:49:48,0 --> 00:49:52,466
+on this module data sources, connection managers. We've talked
+
+720
+00:49:52,483 --> 00:49:56,466
+about change data capture. We've talked about change tracking,
+
+721
+00:49:56,483 --> 00:49:58,466
+the different things that are going in.
+
+722
+00:49:58,483 --> 00:50:01,466
+>> That was a full module. There's a lot more to come.
+
+723
+00:50:02,283 --> 00:50:05,466
+Thanks for attending the implementing and data warehouse with
+
+724
+00:50:05,483 --> 00:50:09,466
+SQL Server 2012 Jumpstart. Let's get up, move around, take a
+
+725
+00:50:09,483 --> 00:50:13,466
+ten minute stretch and we will see you back for lots of gymnastics
+
+726
+00:50:13,483 --> 00:50:15,466
+with SSIS coming up.
+
+727
+00:50:15,483 --> 00:50:16,466
+>> See you in a few.
+

@@ -1,0 +1,4152 @@
+1
+00:00:00,483 --> 00:00:08,466
+[Music]
+
+2
+00:00:18,266 --> 00:00:21,466
+>> So you ready to do a little Help and help me out and...
+
+3
+00:00:21,483 --> 00:00:23,466
+>> Yeah, do a little help, help, help?
+
+4
+00:00:23,483 --> 00:00:24,466
+>> Yeah, yeah.
+
+5
+00:00:24,483 --> 00:00:29,466
+>> Because guys, this is probably the most important section of
+
+6
+00:00:29,483 --> 00:00:32,466
+the entire day, and it may not even seem like it at first, but
+
+7
+00:00:32,483 --> 00:00:36,466
+I swear to God that this is the most important thing. And here's
+
+8
+00:00:36,483 --> 00:00:37,466
+why it's so important.
+
+9
+00:00:38,483 --> 00:00:41,466
+When you go to PowerShell, you're going to stare at that console
+
+10
+00:00:41,483 --> 00:00:45,433
+and go now what do I do? This is the answer.
+
+11
+00:00:45,450 --> 00:00:45,466
+So...
+
+12
+00:00:46,483 --> 00:00:49,466
+>> Kierkegaard called that the dizziness of freedom. You look
+
+13
+00:00:49,483 --> 00:00:52,466
+at that prompt and you can do anything. You're like uh, what
+
+14
+00:00:52,483 --> 00:00:53,466
+do I do?
+
+15
+00:00:53,483 --> 00:00:57,300
+>> And it is, a lot... it affects all of us. And a lot of us,
+
+16
+00:00:57,383 --> 00:01:00,433
+you get past that with what we're going to do now.
+
+17
+00:01:00,450 --> 00:01:00,466
+>> Yeah, exactly.
+
+18
+00:01:00,483 --> 00:01:01,466
+>> The Help system.
+
+19
+00:01:02,483 --> 00:01:06,466
+But I think for a lot of folks, I see it all the time, okay,
+
+20
+00:01:06,483 --> 00:01:09,466
+it made sense when you were doing it, but now I'm staring at
+
+21
+00:01:09,483 --> 00:01:13,466
+that console and I just don't know what to do. And I don't know
+
+22
+00:01:13,200 --> 00:01:13,466
+where to go.
+
+23
+00:01:14,483 --> 00:01:17,466
+And they create a solution for you. This is a beautiful solution.
+
+24
+00:01:17,483 --> 00:01:20,366
+So what we're going to start off with is looking at the Help
+
+25
+00:01:20,450 --> 00:01:23,466
+system, showing you how to get it updated, and this is actually
+
+26
+00:01:23,483 --> 00:01:26,0
+a fascinating feature in V3. Remember I was saying you're going
+
+27
+00:01:26,483 --> 00:01:28,466
+to want to be using V3, and this is going to be one of them.
+
+28
+00:01:28,483 --> 00:01:31,466
+The most important thing is the discoverability that the Help
+
+29
+00:01:31,483 --> 00:01:35,466
+system provides you. Basically, it is your... it is your Bing
+
+30
+00:01:35,483 --> 00:01:40,466
+for PowerShell. It is... it answers all of your needs and all
+
+31
+00:01:40,233 --> 00:01:43,466
+of your questions. And also, we're going to show you how to read
+
+32
+00:01:43,483 --> 00:01:47,333
+syntax and so forth. So let's get started with the Help stuff.
+
+33
+00:01:47,416 --> 00:01:49,466
+And here in about ten minutes we'll take a break and then we'll
+
+34
+00:01:49,483 --> 00:01:53,466
+come back in and look at all the syntax and start getting into it.
+
+35
+00:01:53,216 --> 00:01:57,466
+So first of all, why you need Help. Well, I just want to go
+
+36
+00:01:57,483 --> 00:01:58,466
+to bullet number two.
+
+37
+00:01:59,483 --> 00:02:00,466
+>> Exactly.
+
+38
+00:02:00,483 --> 00:02:06,400
+>> Can we talk about this? I'm a smart guy, but I'm not smart
+
+39
+00:02:06,483 --> 00:02:07,466
+enough to just know everything.
+
+40
+00:02:07,483 --> 00:02:08,466
+>> Absolutely.
+
+41
+00:02:08,483 --> 00:02:10,466
+>> So tell me what the idea here is.
+
+42
+00:02:10,483 --> 00:02:13,466
+>> Yeah, so one of my jokes, although it's actually true, that
+
+43
+00:02:13,483 --> 00:02:16,466
+is PowerShell is such a great product because I'm such a deeply
+
+44
+00:02:16,483 --> 00:02:17,466
+flawed human.
+
+45
+00:02:20,483 --> 00:02:23,283
+It's true. I'm a deeply flawed human, and I was in a position
+
+46
+00:02:23,366 --> 00:02:26,433
+to say, hey, let's build a tool that helps me, right?
+
+47
+00:02:26,450 --> 00:02:26,466
+>> Right.
+
+48
+00:02:26,483 --> 00:02:30,466
+>> So concretely, you know, I can't remember all that stuff either.
+
+49
+00:02:30,483 --> 00:02:33,466
+I'm a terrible typist, et cetera. So you'll see there's a ton
+
+50
+00:02:33,483 --> 00:02:37,466
+of stuff in PowerShell that helps with those things. So really
+
+51
+00:02:37,483 --> 00:02:40,466
+is a goal to not be able to memorize things. Actually, there's
+
+52
+00:02:41,483 --> 00:02:45,466
+a great story. They recently did a study of Unix admins and came
+
+53
+00:02:45,483 --> 00:02:48,466
+up with the support, and I was really amused by this, because
+
+54
+00:02:48,483 --> 00:02:53,400
+basically about 25, 30 years ago they had done exactly the same
+
+55
+00:02:53,483 --> 00:02:56,466
+study and produced exactly the same results. And here's what
+
+56
+00:02:56,483 --> 00:03:00,466
+they did. They took a bunch of beginner Unix admins and expert
+
+57
+00:03:01,483 --> 00:03:04,466
+Unix admins, and they said, hey, here's a test. If you wanted
+
+58
+00:03:04,483 --> 00:03:07,466
+to do this, how do you do it? A written test. And what was interesting
+
+59
+00:03:07,483 --> 00:03:12,466
+was that we scored these, there wasn't very much of a difference
+
+60
+00:03:12,483 --> 00:03:16,466
+between the expert Unix admins and the beginning Unix admins.
+
+61
+00:03:16,483 --> 00:03:19,466
+And so then it's like, oh, why are we paying these experts so
+
+62
+00:03:19,483 --> 00:03:20,466
+much money, you know. They can't...
+
+63
+00:03:21,483 --> 00:03:26,466
+objectively, they're not that much better than just some beginner, right?
+
+64
+00:03:26,483 --> 00:03:29,466
+And so then they said, okay, well now let's put them in front
+
+65
+00:03:29,483 --> 00:03:33,466
+of a machine and give them a set of tasks. And what you saw
+
+66
+00:03:33,483 --> 00:03:37,466
+was this huge difference in performance, that the experts were
+
+67
+00:03:37,483 --> 00:03:41,466
+able to perform amazing things that the beginners struggled with.
+
+68
+00:03:41,483 --> 00:03:45,466
+And the conclusion was that what expert Unix guys are great at
+
+69
+00:03:45,483 --> 00:03:50,466
+is not knowing things, but in figuring things out, okay?
+
+70
+00:03:50,483 --> 00:03:54,466
+And so that's the deal. This is not about you sitting there saying,
+
+71
+00:03:54,483 --> 00:03:58,466
+hey, it should work this way, right. No, no, no, that's not
+
+72
+00:03:58,483 --> 00:04:03,466
+the deal. The deal is, hey, let me figure out how to do things.
+
+73
+00:04:03,233 --> 00:04:05,466
+And so that's what 's all about. What you're going to learn
+
+74
+00:04:05,483 --> 00:04:08,466
+is a schema, right you're going to learn a set of things.
+
+75
+00:04:08,483 --> 00:04:10,466
+You're going to learn how to learn, and then you're going to
+
+76
+00:04:10,483 --> 00:04:14,316
+use those techniques over and over again. And that's why, once
+
+77
+00:04:14,400 --> 00:04:17,466
+you learn how to use PowerShell, and you're managing, say, Exchange,
+
+78
+00:04:18,316 --> 00:04:21,183
+then when someone says, oh, we got this link server, it's like
+
+79
+00:04:21,266 --> 00:04:23,466
+well, let me have at it. And you'll be able to go and you'll
+
+80
+00:04:23,483 --> 00:04:27,366
+be able to learn and learn and learn and just figure stuff out.
+
+81
+00:04:27,450 --> 00:04:30,466
+>> So basically, what you're telling me is that the first time
+
+82
+00:04:30,183 --> 00:04:32,466
+I walked up to a Unix guy and I said hey, how did you do that,
+
+83
+00:04:32,483 --> 00:04:38,466
+and he turned around and usually barked at me going, RTFM, he
+
+84
+00:04:38,483 --> 00:04:43,466
+was actually trying to educate me. He wasn't just being a terrible person?
+
+85
+00:04:43,483 --> 00:04:44,466
+>> No. Both.
+
+86
+00:04:44,483 --> 00:04:48,183
+>> Oh, okay. He was being both. And I think this is really the
+
+87
+00:04:48,266 --> 00:04:50,466
+moral of the story is you're not going to be able to memorize
+
+88
+00:04:50,483 --> 00:04:55,466
+stuff, guys. PowerShell V2 had, like, 236 core commandlets.
+
+89
+00:04:56,383 --> 00:04:59,466
+Okay. I might be able to memorize those. When you start working
+
+90
+00:04:59,216 --> 00:05:02,466
+with products, you know, Exchange has, depending on your version
+
+91
+00:05:02,483 --> 00:05:06,266
+of Exchange, has between 535 and 610 commandlets. You've got
+
+92
+00:05:06,350 --> 00:05:09,466
+500 and some odd commandlets for SharePoint. You've got 100
+
+93
+00:05:09,483 --> 00:05:13,466
+and some odd commandlets for Active Directory. In Server 2012,
+
+94
+00:05:13,483 --> 00:05:16,466
+you have thousands of commandlets now.
+
+95
+00:05:16,483 --> 00:05:17,466
+>> Thousands, yep.
+
+96
+00:05:17,483 --> 00:05:21,0
+>> There's no way to memorize them. So what they did is they
+
+97
+00:05:21,483 --> 00:05:25,466
+created a Help system. Now, before you go oh, no, not another
+
+98
+00:05:25,483 --> 00:05:29,466
+Help system, because I know, if you've... and I'm not...
+
+99
+00:05:29,483 --> 00:05:33,466
+okay, maybe I am. If you've used the Help system in a particular
+
+100
+00:05:33,483 --> 00:05:38,333
+product before and have found it unuseful, well, just remember
+
+101
+00:05:39,200 --> 00:05:42,466
+it wasn't spent a lot of time on. This was spent a lot of time
+
+102
+00:05:42,483 --> 00:05:45,466
+on by people who wanted you to be successful, knew that the only
+
+103
+00:05:45,483 --> 00:05:49,466
+way that you're going to be successful is to have a great Help system.
+
+104
+00:05:49,483 --> 00:05:53,466
+We, all of us, use this every single day, and I want to point
+
+105
+00:05:54,483 --> 00:05:57,466
+out, as Jeffrey was saying, it's about using the Help system,
+
+106
+00:05:57,483 --> 00:06:01,466
+reading and comprehending it, and then figuring it out.
+
+107
+00:06:01,483 --> 00:06:04,433
+We're IT pros. That's what we do. We figure things out.
+
+108
+00:06:04,483 --> 00:06:08,466
+This is actually fun when you get... start working with it.
+
+109
+00:06:08,483 --> 00:06:11,466
+But one of the challenges that we have is the RTFM side. I mean,
+
+110
+00:06:11,483 --> 00:06:14,466
+as an IT pro, one of the reasons I got into IT is because I was
+
+111
+00:06:14,483 --> 00:06:17,466
+really good at sitting down at a computer and just figuring it out.
+
+112
+00:06:17,483 --> 00:06:20,466
+I didn't have to read the manual. Well, that's not going to
+
+113
+00:06:20,483 --> 00:06:23,466
+work here. We're going to have to use and read and comprehend
+
+114
+00:06:23,483 --> 00:06:27,466
+the manual, and they've made it really easy for us. So let's
+
+115
+00:06:27,483 --> 00:06:30,466
+start doing a little Get Help stuff. First of all...
+
+116
+00:06:31,483 --> 00:06:34,466
+and guys, some of this stuff is in the slides so we're just going
+
+117
+00:06:34,483 --> 00:06:38,466
+to demonstrate it. First of all, let's talk about update help
+
+118
+00:06:38,483 --> 00:06:40,183
+versus the way that we used to have it.
+
+119
+00:06:40,266 --> 00:06:43,466
+>> Yeah, okay. So we used to ship the Help with the property,
+
+120
+00:06:43,483 --> 00:06:46,466
+and it turned out that there are all sorts of problems with that.
+
+121
+00:06:46,483 --> 00:06:50,466
+So basically, the way Microsoft works, because we ship to hundreds
+
+122
+00:06:50,483 --> 00:06:55,283
+of millions of people, right, it really matters that the release
+
+123
+00:06:55,366 --> 00:06:58,466
+is buttoned up, right, which is to say that you stop changing
+
+124
+00:06:58,483 --> 00:07:01,466
+things and then you test and then you test and you test and you
+
+125
+00:07:01,483 --> 00:07:04,466
+test, and then you release it. So what ended up happening was
+
+126
+00:07:05,250 --> 00:07:08,466
+that just as soon as you're putting the finishing bits on the
+
+127
+00:07:08,483 --> 00:07:12,466
+code, the documentation has to be done. And, of course, that
+
+128
+00:07:12,483 --> 00:07:13,466
+doesn't work.
+
+129
+00:07:14,400 --> 00:07:16,466
+But now it's cooked. Like hey, don't change it, because you might
+
+130
+00:07:16,483 --> 00:07:20,466
+break something. So then it gets shipped and the documentation,
+
+131
+00:07:20,483 --> 00:07:24,183
+there's differences between the documentation and the product,
+
+132
+00:07:24,266 --> 00:07:26,466
+and the answer used to be, well, you know, hey, just hang in there.
+
+133
+00:07:27,333 --> 00:07:29,466
+You'll release again in three years and we'll fix that.
+
+134
+00:07:29,483 --> 00:07:32,466
+That's kind of a crummy answer. And then there was a second problem.
+
+135
+00:07:32,483 --> 00:07:36,333
+The second problem is, guess what? The help is huge, right, because
+
+136
+00:07:36,483 --> 00:07:37,433
+there's a ton of it.
+
+137
+00:07:37,483 --> 00:07:42,466
+And then you say, well, jeez, I'm now going to a cloud world
+
+138
+00:07:42,483 --> 00:07:45,466
+where I've go a gazillion machines, I got a gazillion servers.
+
+139
+00:07:45,483 --> 00:07:50,466
+Want to use those, be as efficient as possible with those servers,
+
+140
+00:07:50,483 --> 00:07:52,466
+and you don't need the help on all those servers. You need the
+
+141
+00:07:52,483 --> 00:07:54,466
+help on the machine you're managing them from.
+
+142
+00:07:54,483 --> 00:07:55,166
+>> Right.
+
+143
+00:07:55,483 --> 00:07:59,466
+>> And to put the help on all those systems is just bogging down
+
+144
+00:07:59,483 --> 00:08:02,316
+those servers with stuff that you're not going to use. So because
+
+145
+00:08:02,400 --> 00:08:05,183
+of those two problem, in Windows... sorry, PowerShell Version
+
+146
+00:08:05,266 --> 00:08:09,466
+3, we moved to an updatable help model, which is to say we ship
+
+147
+00:08:09,483 --> 00:08:13,466
+and there's some very kind of like structural help that we generate,
+
+148
+00:08:13,483 --> 00:08:17,466
+based upon metadata. You'll see some examples of that. But then
+
+149
+00:08:17,483 --> 00:08:22,466
+all the help text is available from download from the internet.
+
+150
+00:08:22,200 --> 00:08:23,350
+So that's the way that works.
+
+151
+00:08:23,433 --> 00:08:27,433
+>> And let me just say that in V2, one of the challenges was if
+
+152
+00:08:27,483 --> 00:08:29,466
+you were using the Help system and there's an example in there,
+
+153
+00:08:29,483 --> 00:08:31,466
+there was a possibility, you know, that maybe that example was
+
+154
+00:08:31,483 --> 00:08:35,466
+wrong, and I'll show you a way around that if you're in V2 to
+
+155
+00:08:35,483 --> 00:08:39,466
+get the latest information for it. But really, the joy here
+
+156
+00:08:39,483 --> 00:08:43,466
+with V3 here is as soon as Microsoft updates a help or they find
+
+157
+00:08:43,483 --> 00:08:47,466
+an issue, my Help gets updated on my management station. So the
+
+158
+00:08:47,483 --> 00:08:49,466
+first thing that we're going to do, and then we're going to take
+
+159
+00:08:49,483 --> 00:08:50,466
+a break in a couple minutes...
+
+160
+00:08:50,183 --> 00:08:50,466
+>> Wait, can I give an example?
+
+161
+00:08:50,483 --> 00:08:51,466
+>> Oh, yeah.
+
+162
+00:08:51,483 --> 00:08:53,433
+>> So I don't know if you ever use WQL.
+
+163
+00:08:53,450 --> 00:08:53,466
+>> Yeah.
+
+164
+00:08:53,483 --> 00:08:57,183
+>> Okay, right. So I can never remember WQL. I just can't.
+
+165
+00:08:57,266 --> 00:08:59,250
+It's one of those things, one of those... there's certain things
+
+166
+00:08:59,333 --> 00:09:04,466
+that just never sink in for me. WQL is one of them. And so constantly,
+
+167
+00:09:04,183 --> 00:09:06,466
+whenever I want to use that, I'd have to use search. And there's
+
+168
+00:09:06,483 --> 00:09:10,466
+something about the search... the content, I can never find it
+
+169
+00:09:10,483 --> 00:09:13,350
+on the internet either, right. So at some point, somebody had
+
+170
+00:09:13,433 --> 00:09:16,466
+exactly the same problem. So they went on Microsoft Connect and
+
+171
+00:09:16,483 --> 00:09:19,466
+said you ought to have an About topic for WQL.
+
+172
+00:09:20,483 --> 00:09:23,466
+And guess what? They went and wrote one. And so now we have
+
+173
+00:09:23,483 --> 00:09:26,466
+an About WQL, and it's just there. Point was you didn't have
+
+174
+00:09:26,483 --> 00:09:30,466
+to wait for another release. You had a problem, you told us about
+
+175
+00:09:30,483 --> 00:09:34,466
+your problem, and we responded. And then in a matter of, like, well...
+
+176
+00:09:34,483 --> 00:09:37,466
+I forgot how long that one took. But there was one where somebody
+
+177
+00:09:37,483 --> 00:09:40,466
+complained about an error in the documentation. Two days later,
+
+178
+00:09:40,483 --> 00:09:44,466
+we had an update. So it's pretty peppy. It's continuous publishing.
+
+179
+00:09:44,483 --> 00:09:47,466
+>> And so what you want to make sure that you're doing is you're
+
+180
+00:09:47,483 --> 00:09:49,466
+updating Help. And let me show you how to do that. First of
+
+181
+00:09:49,483 --> 00:09:52,466
+all, you're going to need an internet connection. There is a
+
+182
+00:09:52,483 --> 00:09:54,466
+way around that. But let's just start with the basic update Help here.
+
+183
+00:09:54,483 --> 00:09:57,466
+And so we've got a commandlet for that called update...
+
+184
+00:09:57,483 --> 00:10:00,466
+update, get it... dash Help.
+
+185
+00:10:00,483 --> 00:10:01,466
+>> What do you want to update?
+
+186
+00:10:01,483 --> 00:10:04,466
+>> Yeah, what do you want to update? The Help. The verb, the noun.
+
+187
+00:10:04,483 --> 00:10:07,466
+So that's working out. And I look to use dash force, and guys,
+
+188
+00:10:07,483 --> 00:10:10,466
+this is something that you can run every single day to make sure
+
+189
+00:10:10,483 --> 00:10:12,466
+you have the latest and greatest help. And what it's going to
+
+190
+00:10:12,483 --> 00:10:15,300
+do, it's going to go out to the internet and it's going to download
+
+191
+00:10:15,483 --> 00:10:18,183
+all of the Help files that you need for all of the stuff that
+
+192
+00:10:18,266 --> 00:10:19,316
+you have on your system.
+
+193
+00:10:19,400 --> 00:10:21,250
+>> See that progress bar? Says ooooo.
+
+194
+00:10:22,483 --> 00:10:25,233
+>> Which is what it should say in PowerShell. Oooo.
+
+195
+00:10:25,316 --> 00:10:26,466
+>> So cool.
+
+196
+00:10:26,483 --> 00:10:28,466
+>> Now look, if you have a series... a bunch of machines that
+
+197
+00:10:28,483 --> 00:10:32,216
+don't have direct access to the internet, you can save this Help
+
+198
+00:10:32,300 --> 00:10:34,466
+with Save Help.
+
+199
+00:10:35,483 --> 00:10:40,466
+You can save this Help as a set of files, and then you can update
+
+200
+00:10:40,483 --> 00:10:44,466
+from that set of files. But having the internet connection sure
+
+201
+00:10:44,483 --> 00:10:46,466
+does make your life a lot easier. Now here's the idea.
+
+202
+00:10:48,483 --> 00:10:51,250
+We're going to take a break here and so what we want to do is
+
+203
+00:10:51,333 --> 00:10:53,466
+make sure that you've got a PowerShell console up and make sure
+
+204
+00:10:54,333 --> 00:10:57,466
+that you've updated Help, because when we come back, we're going
+
+205
+00:10:57,483 --> 00:11:00,466
+to start using my favorite things. And let me just show them
+
+206
+00:11:00,483 --> 00:11:01,466
+to you real quick.
+
+207
+00:11:02,483 --> 00:11:06,466
+Get-Help, which, yep, that's going to get us help on stuff, but
+
+208
+00:11:06,483 --> 00:11:10,466
+it's also going to help us search for stuff and so that's its
+
+209
+00:11:10,483 --> 00:11:13,466
+most important thing. Before, though, we go, I want to show you
+
+210
+00:11:13,483 --> 00:11:16,450
+there's a difference. You can see people use Get-Help.
+
+211
+00:11:17,0 --> 00:11:19,466
+You're going to see people use Help, and you're going to see
+
+212
+00:11:19,483 --> 00:11:22,466
+people use Man. And I want to show you that there's a difference
+
+213
+00:11:22,483 --> 00:11:25,466
+between these two. Get-Help, and I'm just going to pick a commandlet
+
+214
+00:11:25,483 --> 00:11:27,466
+and what I'm going to do is I'm going to keep things real simple
+
+215
+00:11:27,483 --> 00:11:30,300
+right now. And I want you to notice my screen. It scrolled all
+
+216
+00:11:30,383 --> 00:11:33,316
+the way to the bottom. Now, this is not a complete Help file,
+
+217
+00:11:33,483 --> 00:11:36,466
+but we'll get to that after break. But I want you to notice
+
+218
+00:11:36,483 --> 00:11:39,333
+it scrolled all the way down to the bottom. Now watch the difference
+
+219
+00:11:39,416 --> 00:11:42,466
+between using Help on the same thing.
+
+220
+00:11:44,483 --> 00:11:46,466
+Look at the bottom of my screen. See how I've got that little
+
+221
+00:11:46,483 --> 00:11:48,466
+more so I can...
+
+222
+00:11:49,483 --> 00:11:53,466
+you probably heard that. I can space bar now and move through
+
+223
+00:11:53,200 --> 00:11:57,466
+the Help file. Man does the same thing. So Man, and I'll do
+
+224
+00:11:57,483 --> 00:12:01,466
+Get Service, gives you that same, you know, like you pipe to
+
+225
+00:12:01,483 --> 00:12:05,466
+more kind of deal, where you can pound your way through it.
+
+226
+00:12:05,483 --> 00:12:09,466
+Use whichever one makes you happiest, and probably today you
+
+227
+00:12:09,483 --> 00:12:13,466
+should experiment. I know, I've got friends that are just Help.
+
+228
+00:12:13,483 --> 00:12:18,466
+I always only use Help. I happen to be a Get-Help kind of guy,
+
+229
+00:12:18,483 --> 00:12:21,466
+because I like it to scroll to the bottom of the screen.
+
+230
+00:12:21,483 --> 00:12:25,466
+The Help system is a super discoverable, great tool to help me
+
+231
+00:12:25,483 --> 00:12:27,400
+find things.
+
+232
+00:12:27,483 --> 00:12:30,466
+And let's do a couple of examples. I'll start off, and then
+
+233
+00:12:30,483 --> 00:12:34,166
+you can join in. This is going to be really awesome, because...
+
+234
+00:12:34,250 --> 00:12:38,316
+and don't memorize or write down anything that we do.
+
+235
+00:12:38,400 --> 00:12:38,466
+>> Yep.
+
+236
+00:12:38,483 --> 00:12:42,466
+>> Swear to God. Don't do it, because that's kind of the whole point.
+
+237
+00:12:42,483 --> 00:12:45,466
+So let me give you an example. First of all, Help has the ability
+
+238
+00:12:45,183 --> 00:12:48,416
+to discover stuff. And I'm a Get Help... Get-Help kind of guy
+
+239
+00:12:48,483 --> 00:12:52,466
+so I'm going to use Get-Help. And I want to find out... here's my...
+
+240
+00:12:52,483 --> 00:12:55,466
+I want to see if there's any commandlets that can help me work
+
+241
+00:12:55,483 --> 00:13:00,466
+with services. So I'm going to do star service star.
+
+242
+00:13:01,483 --> 00:13:04,466
+>> By the way, star is your friend. Star is a wildcard, and it
+
+243
+00:13:04,483 --> 00:13:07,466
+says find anything at the beginning or find anything at the end.
+
+244
+00:13:07,483 --> 00:13:09,466
+Match anything at the beginning or end.
+
+245
+00:13:09,483 --> 00:13:14,466
+>> Yeah, and make sure when you mean wildcard, you use a wildcard,
+
+246
+00:13:14,166 --> 00:13:17,466
+because some commandlets will let you not use the wildcard and
+
+247
+00:13:17,483 --> 00:13:20,466
+that's not a practice to get into. So... oh, my gosh, look
+
+248
+00:13:20,483 --> 00:13:24,166
+at all of these commandlets. So many commandlets that have service
+
+249
+00:13:24,250 --> 00:13:29,466
+in them, whoa! But now is where the fun begins. Look. Is there
+
+250
+00:13:29,483 --> 00:13:33,466
+a commandlets that, in this list, that looks like it might retrieve
+
+251
+00:13:33,483 --> 00:13:39,466
+or, I don't know, get me a list of services on my computer? So yeah.
+
+252
+00:13:39,483 --> 00:13:42,416
+There happens to be one right here. See Get-Service.
+
+253
+00:13:42,483 --> 00:13:45,466
+It would probably get me a list of services.
+
+254
+00:13:46,216 --> 00:13:49,466
+>> Show them the up arrow. Show them the up arrow.
+
+255
+00:13:49,483 --> 00:13:50,466
+>> What am I...
+
+256
+00:13:50,483 --> 00:13:52,466
+>> You can just use the up arrow. Now watch this. Now use the
+
+257
+00:13:52,483 --> 00:13:57,466
+right arrow... left arrow and put a G in front of the star.
+
+258
+00:13:57,483 --> 00:13:58,466
+Check this out.
+
+259
+00:13:59,483 --> 00:14:00,466
+Now do it.
+
+260
+00:14:01,483 --> 00:14:02,466
+>> Oh, got a short list.
+
+261
+00:14:02,483 --> 00:14:03,466
+>> These wildcards are great.
+
+262
+00:14:03,483 --> 00:14:06,200
+>> The wildcards are great, and actually knowing how to do a good
+
+263
+00:14:06,283 --> 00:14:09,466
+search is really good. This is great, this is great. So here's
+
+264
+00:14:09,483 --> 00:14:12,466
+the idea, and we're going to do this a couple times. The idea
+
+265
+00:14:12,483 --> 00:14:16,383
+is you search for, probably by noun, you search for the thing
+
+266
+00:14:16,466 --> 00:14:19,466
+that you want to find. I want to know something about processes
+
+267
+00:14:19,483 --> 00:14:22,466
+or I want to know something about services, which are the examples
+
+268
+00:14:22,483 --> 00:14:26,333
+I'm going to use a lot. But it could be as simple as AD computers
+
+269
+00:14:26,483 --> 00:14:29,316
+or something like that. And you search for what you want and
+
+270
+00:14:29,400 --> 00:14:32,466
+when you find it, well, there's a Help file for it. So let's
+
+271
+00:14:32,483 --> 00:14:35,466
+go in and take a look. I'm going to do Get-Help, Get-Service.
+
+272
+00:14:37,483 --> 00:14:40,383
+Now, this is the simple view of the Help file and let me show
+
+273
+00:14:40,466 --> 00:14:44,466
+it to you real quick. It gives you the name, synopsis, syntax
+
+274
+00:14:44,483 --> 00:14:47,466
+which we're going to talk about here shortly, gives you a description
+
+275
+00:14:47,483 --> 00:14:50,466
+of what the commandlet does and some related links and information.
+
+276
+00:14:51,433 --> 00:14:53,466
+Now, this is not the full Help so don't panic. We're going to
+
+277
+00:14:53,483 --> 00:14:57,166
+do the full Help. But let's try this discovery thing again.
+
+278
+00:14:57,483 --> 00:15:00,466
+I want to do, let's see, Get-Help, and I want to find something that...
+
+279
+00:15:00,483 --> 00:15:03,466
+oh, and I'm going to use your trick. I'm going to say that would
+
+280
+00:15:03,483 --> 00:15:04,466
+G star
+
+281
+00:15:06,483 --> 00:15:09,416
+something with AD computer in it.
+
+282
+00:15:10,166 --> 00:15:12,466
+Because I want to work with Active Directory computers.
+
+283
+00:15:13,483 --> 00:15:17,466
+Oh, look. There's a command there. Get AD computer. You know
+
+284
+00:15:17,483 --> 00:15:19,466
+what I'm thinking? I'm thinking in my head that's probably going
+
+285
+00:15:19,483 --> 00:15:23,300
+to solve my problem. But to be sure, what I'm going to do is
+
+286
+00:15:23,383 --> 00:15:28,466
+do Get-Help, Get AD Computer and take a look at it.
+
+287
+00:15:31,483 --> 00:15:35,466
+And again, this is the simple Help view and we'll get to a better
+
+288
+00:15:35,483 --> 00:15:39,466
+ones here in just a second. But so the concept is pretty simple.
+
+289
+00:15:39,483 --> 00:15:42,466
+What you want to do is you want to discover what you want to
+
+290
+00:15:42,483 --> 00:15:46,200
+work with, and then look at the Help for what you want to work with.
+
+291
+00:15:46,283 --> 00:15:50,200
+Now, the concept is simple, but doing this seems to be a lot of...
+
+292
+00:15:50,283 --> 00:15:53,466
+a big challenge for a lot of folks. You have to become trusting
+
+293
+00:15:53,483 --> 00:15:57,466
+in that this is how we do it, and this actually works. No matter
+
+294
+00:15:57,483 --> 00:16:00,466
+what product you're working with, think of what is it that you
+
+295
+00:16:00,483 --> 00:16:05,466
+want to do something to. What's the noun that you want to find?
+
+296
+00:16:05,483 --> 00:16:08,433
+And then have Help search for it.
+
+297
+00:16:08,450 --> 00:16:08,466
+>> Yep.
+
+298
+00:16:08,483 --> 00:16:10,466
+>> Sounds like great way to get Help to work for it.
+
+299
+00:16:10,483 --> 00:16:13,466
+>> Yeah, we very much tried to create a world where you could
+
+300
+00:16:13,483 --> 00:16:17,466
+think about what you want, type it and get it, okay? So let's
+
+301
+00:16:17,483 --> 00:16:20,383
+just say you wanted to assign something. Well, you'd look for
+
+302
+00:16:20,466 --> 00:16:23,466
+assign and you wouldn't find that. You'd then quickly learn
+
+303
+00:16:23,483 --> 00:16:27,466
+that we use the word set and so you'd say, well, okay. So there's
+
+304
+00:16:27,483 --> 00:16:30,466
+an infinite number of nouns, but the verbs are pretty regular.
+
+305
+00:16:30,483 --> 00:16:34,333
+So imagine you wanted to get the help on the verbs, like...
+
+306
+00:16:34,450 --> 00:16:34,466
+>> Yeah.
+
+307
+00:16:35,250 --> 00:16:36,333
+>> Like you type.
+
+308
+00:16:37,483 --> 00:16:38,466
+>> Go ahead.
+
+309
+00:16:38,233 --> 00:16:43,466
+>> So what you'd do is you'd say, you'd say Get Verb, and
+
+310
+00:16:44,483 --> 00:16:47,466
+it shows you all the verbs. And so these are all the verbs that
+
+311
+00:16:47,483 --> 00:16:51,0
+you're going to learn. And you see, well, how many are there?
+
+312
+00:16:51,483 --> 00:16:54,466
+So you might want to say, well, get the verb. I'd like to measure them.
+
+313
+00:16:54,483 --> 00:16:58,466
+And you see that there are 98 verbs. And here you see we break
+
+314
+00:16:58,483 --> 00:17:03,350
+them up into, into, you know, whether they're security verbs
+
+315
+00:17:03,433 --> 00:17:05,466
+or communication verbs, et cetera. Anyway, so those...
+
+316
+00:17:06,483 --> 00:17:09,316
+you're going to learn those 98 things and then you're going to
+
+317
+00:17:09,400 --> 00:17:11,466
+be able to think, type, and get what you want.
+
+318
+00:17:11,483 --> 00:17:15,466
+>> And what happens often is you're not even going to learn all
+
+319
+00:17:15,483 --> 00:17:17,466
+98 of those. You're just going to learn a few of them, because
+
+320
+00:17:17,483 --> 00:17:19,466
+you'll know that what the verbs will do for you, and you end
+
+321
+00:17:19,483 --> 00:17:23,466
+up looking for the nouns. So it becomes a very easy process to
+
+322
+00:17:23,166 --> 00:17:25,466
+follow through. But let's start getting into what this Help can
+
+323
+00:17:25,483 --> 00:17:29,466
+do for us. So once again, I'm going to do this. Get-Help.
+
+324
+00:17:29,483 --> 00:17:33,466
+I want to find command that will retrieve me some services.
+
+325
+00:17:33,483 --> 00:17:38,466
+Now, notice, well, there is Get Service, and so I want to take
+
+326
+00:17:38,216 --> 00:17:42,466
+a look at what this can do for me. So I'm going to do Get-Help
+
+327
+00:17:42,483 --> 00:17:45,466
+and Get Service. Again, this is a simplified Help view. But there's
+
+328
+00:17:45,483 --> 00:17:49,466
+more to Help than just this. Once you've updated Help, this Help
+
+329
+00:17:50,0 --> 00:17:52,466
+can be extended or expanded upon. And let me show you a couple
+
+330
+00:17:53,333 --> 00:17:55,466
+of things. This is where it gets oh, just so happy for me.
+
+331
+00:17:56,483 --> 00:18:00,466
+Because watch. I'm going to do Get-Help on Get Service, but we
+
+332
+00:18:00,483 --> 00:18:04,466
+have a parameter that will allow us to get detailed...
+
+333
+00:18:05,200 --> 00:18:08,466
+ooh, detailed help. And here's what detailed help is going to
+
+334
+00:18:08,483 --> 00:18:11,466
+show us. I'm going to scroll all the way back to the top, and
+
+335
+00:18:11,483 --> 00:18:14,466
+Get Service gives you the synopsis. Again the syntax, which
+
+336
+00:18:15,166 --> 00:18:16,466
+we're going to talk about in a second, and the description.
+
+337
+00:18:16,483 --> 00:18:19,466
+This is what we saw before, but here's this. When we talk about
+
+338
+00:18:19,483 --> 00:18:22,250
+syntax, we're going to start talking about what these things
+
+339
+00:18:22,333 --> 00:18:27,466
+are, parameters. These parameters change how the commandlet acts.
+
+340
+00:18:27,483 --> 00:18:30,466
+Well, I don't necessarily know what these things mean.
+
+341
+00:18:31,400 --> 00:18:33,466
+Well, when you go to detailed help, look.
+
+342
+00:18:34,483 --> 00:18:38,466
+The parameters are listed here with an explanation of what they mean.
+
+343
+00:18:38,483 --> 00:18:42,216
+And so what you'll do is you'll actually be up here looking and
+
+344
+00:18:42,300 --> 00:18:45,250
+going I have no idea what that is. Then you can just scroll
+
+345
+00:18:45,333 --> 00:18:48,466
+down and get a definition of the parameters. Also, as I scroll
+
+346
+00:18:48,483 --> 00:18:50,466
+down here, I want you to notice something really interesting.
+
+347
+00:18:51,483 --> 00:18:54,466
+Now we start to get examples. Now, I want you to think about
+
+348
+00:18:54,483 --> 00:18:57,466
+this for a second. I've got a commandlet called Get-Service.
+
+349
+00:18:57,483 --> 00:18:59,466
+So let's talk about what it's probably going to do. I haven't
+
+350
+00:18:59,483 --> 00:19:02,466
+run it yet. It's probably going to give me, and if I read the
+
+351
+00:19:03,483 --> 00:19:07,266
+description, a list of all of the services on my computer, whether
+
+352
+00:19:07,350 --> 00:19:10,466
+they're running, stopped or paused. And it will tell me about that.
+
+353
+00:19:10,483 --> 00:19:13,433
+How many examples of that do you really think we need?
+
+354
+00:19:14,366 --> 00:19:20,466
+Well, we need 11 of them. And here's why I want to point this out.
+
+355
+00:19:20,483 --> 00:19:23,466
+We apparently, we need 11 examples of this, and there's a reason
+
+356
+00:19:23,483 --> 00:19:26,466
+for this. Because the people that work so hard on these Help
+
+357
+00:19:27,166 --> 00:19:29,466
+files knew that there were going to be all kinds of different
+
+358
+00:19:29,483 --> 00:19:32,466
+ways that you're going to want to try to use this, and they wanted
+
+359
+00:19:32,483 --> 00:19:35,466
+to give you examples. What happens is this is oftentimes you'll
+
+360
+00:19:35,483 --> 00:19:37,466
+be thinking of a business problem or trying to solve a business
+
+361
+00:19:38,0 --> 00:19:40,466
+problem, and you'll say, gee whiz, let me go. I found the commandlet.
+
+362
+00:19:40,483 --> 00:19:43,466
+Let me go look at the example. You'll find an example that is
+
+363
+00:19:43,483 --> 00:19:48,466
+really close to probably exactly what you wanted to do, which
+
+364
+00:19:48,483 --> 00:19:50,466
+is one of the cool things. So a big shout-out to all the folks
+
+365
+00:19:50,483 --> 00:19:51,466
+that work on...
+
+366
+00:19:51,483 --> 00:19:53,466
+>> You know the other thing we did was there are few of the ones
+
+367
+00:19:53,483 --> 00:19:56,283
+we knew people were going to use a lot, like Get Process.
+
+368
+00:19:56,366 --> 00:19:59,466
+Boy, you always want to spend time looking at Get Process because
+
+369
+00:19:59,483 --> 00:20:03,466
+there, what we did was we said, hey, Get Process, Get Service,
+
+370
+00:20:03,483 --> 00:20:05,466
+people are going to use these a lot. And so in our Help in our
+
+371
+00:20:05,483 --> 00:20:08,466
+examples, we show you not just how to use Get Process and Get
+
+372
+00:20:09,483 --> 00:20:13,466
+Service, but we also show you some very common PowerShell techniques
+
+373
+00:20:13,483 --> 00:20:16,466
+that then help you, you know, kind of lead you to the next step.
+
+374
+00:20:16,483 --> 00:20:18,466
+You start off saying oh, I'd like to get something... Get Services,
+
+375
+00:20:18,483 --> 00:20:21,466
+what do I want to do, and then you say, well, jeez, actually,
+
+376
+00:20:21,483 --> 00:20:24,466
+I'd like to format it a little differently or I'd like to find
+
+377
+00:20:24,483 --> 00:20:28,466
+these things, filter. And so we used those high volume topics
+
+378
+00:20:28,483 --> 00:20:31,416
+to kind of go a little bit deeper, to teach you the next level
+
+379
+00:20:31,483 --> 00:20:32,333
+of PowerShell.
+
+380
+00:20:32,483 --> 00:20:34,466
+>> Which is you're going to... as we take you through learning
+
+381
+00:20:34,483 --> 00:20:36,466
+all of this deep level part of PowerShell, you're going to look
+
+382
+00:20:36,483 --> 00:20:39,216
+at these Help files in a totally new way, and you'll see that
+
+383
+00:20:39,300 --> 00:20:43,466
+examples of sorting and filtering and getting the kinds of information
+
+384
+00:20:43,483 --> 00:20:46,316
+that you want and changing the kinds of information you want.
+
+385
+00:20:46,400 --> 00:20:49,250
+A lot of times, right in the examples. A lot of people, the
+
+386
+00:20:49,333 --> 00:20:52,0
+first thing they do is they go to examples. As a matter of fact,
+
+387
+00:20:52,483 --> 00:20:55,466
+there is, rather than detailed, you have a parameter called examples
+
+388
+00:20:56,450 --> 00:20:58,466
+that will take you right into just the examples if you want to
+
+389
+00:20:58,483 --> 00:21:02,466
+get there real quick. Something else that you can do, and this
+
+390
+00:21:03,483 --> 00:21:07,466
+is going to become a big deal this afternoon as we work through
+
+391
+00:21:07,483 --> 00:21:09,466
+this, there's also Full Help.
+
+392
+00:21:10,483 --> 00:21:12,466
+I don't know, Jeffrey, I don't know if they can handle the Full Help.
+
+393
+00:21:12,483 --> 00:21:14,466
+I mean, that's an awful lot...
+
+394
+00:21:14,483 --> 00:21:16,466
+>> Stress test.
+
+395
+00:21:16,233 --> 00:21:17,466
+>> There we go. Full Help.
+
+396
+00:21:17,483 --> 00:21:18,466
+>> Put your seat belts on.
+
+397
+00:21:19,166 --> 00:21:20,466
+>> Put your seat belts on.
+
+398
+00:21:21,333 --> 00:21:23,466
+Full Help, guys, I'm going to tell you right now, the Full Help
+
+399
+00:21:23,483 --> 00:21:26,466
+is very similar to Detailed, except when you're in the parameters,
+
+400
+00:21:27,483 --> 00:21:29,466
+there's some special information, and this is going to make,
+
+401
+00:21:29,483 --> 00:21:32,466
+in the next section when we're going to talk about what this
+
+402
+00:21:32,483 --> 00:21:35,466
+information means to you, it's actually very important to us.
+
+403
+00:21:35,483 --> 00:21:38,466
+And this will help us understand how the commands work in the
+
+404
+00:21:38,483 --> 00:21:41,400
+pipeline and so we're going to talk about that stuff in a little bit.
+
+405
+00:21:41,483 --> 00:21:45,366
+So right now, when you're running Get Help, you can use detailed
+
+406
+00:21:45,450 --> 00:21:48,466
+or you can use examples, but a little bit later on, you'll always
+
+407
+00:21:48,483 --> 00:21:51,466
+end up using full. Now, I want to... I promised you earlier
+
+408
+00:21:51,483 --> 00:21:55,466
+that for you folks that are running PowerShell V2, and even if
+
+409
+00:21:55,483 --> 00:21:59,466
+you're running V3, sometimes if you're running V2, your Help
+
+410
+00:21:59,483 --> 00:22:03,466
+files, they're not up to date and you want the latest. I need
+
+411
+00:22:03,483 --> 00:22:07,333
+the latest and greatest information. Well, you can't run Update
+
+412
+00:22:07,483 --> 00:22:10,250
+Help if you're in V2, which is why on your admin box you should
+
+413
+00:22:10,333 --> 00:22:10,466
+be running V3.
+
+414
+00:22:11,483 --> 00:22:15,466
+However, let me just show you. This is how we used to get around that.
+
+415
+00:22:15,483 --> 00:22:17,383
+Microsoft helped us with this.
+
+416
+00:22:18,483 --> 00:22:21,466
+Dash online. I love this. Dash online.
+
+417
+00:22:22,466 --> 00:22:25,466
+Looky what it just did. Takes me... opens up a browser, takes
+
+418
+00:22:25,483 --> 00:22:28,466
+me out. Look, updated, shows you when it was last updated and
+
+419
+00:22:28,483 --> 00:22:30,300
+here's the Full Help
+
+420
+00:22:31,483 --> 00:22:35,166
+for whatever it is I was looking for. In this case, Get Service.
+
+421
+00:22:35,483 --> 00:22:40,466
+So again, don't close that. I'll lose the chat. Dash online.
+
+422
+00:22:40,483 --> 00:22:42,400
+>> Can I show my favorite?
+
+423
+00:22:42,483 --> 00:22:46,433
+>> Yeah, because... I hope you do. I was confused by this at
+
+424
+00:22:46,483 --> 00:22:48,433
+first, but go ahead.
+
+425
+00:22:48,450 --> 00:22:48,466
+>> But what?
+
+426
+00:22:48,483 --> 00:22:50,466
+>> I'll show you. You go.
+
+427
+00:22:50,483 --> 00:22:59,166
+>> Okay. So let's swap to mine. So here we do Get Help, Get Service.
+
+428
+00:22:59,483 --> 00:23:03,466
+So here's the thing. You can say examples, right? Examples.
+
+429
+00:23:04,350 --> 00:23:06,466
+And you say oh, that's cool. Let's, let's, let's run this.
+
+430
+00:23:07,166 --> 00:23:11,383
+Let's, let's, let's, let's, let's do one of these, okay?
+
+431
+00:23:11,466 --> 00:23:15,466
+And type that and by the way, so you do, you do enter and then
+
+432
+00:23:15,483 --> 00:23:20,283
+left mouse button, and okay great. Now you want to do the next one.
+
+433
+00:23:20,366 --> 00:23:25,466
+Oh, well, so you see... the work flow's all messed up. So what
+
+434
+00:23:25,483 --> 00:23:27,466
+you can do is you can say
+
+435
+00:23:29,483 --> 00:23:34,466
+Get Help minus show. Show window. And look here. Comes up in
+
+436
+00:23:34,483 --> 00:23:39,466
+a window. Okay? Now this has all sorts of great stuff. One of
+
+437
+00:23:39,483 --> 00:23:44,466
+these is settings, and you can say, hey, I want to just see...
+
+438
+00:23:44,483 --> 00:23:45,466
+I don't want to see all this stuff.
+
+439
+00:23:46,383 --> 00:23:48,466
+I just want to see the examples.
+
+440
+00:23:50,166 --> 00:23:51,466
+Look at all the stuff you can have control over.
+
+441
+00:23:51,483 --> 00:23:53,333
+>> I know, it's amazing to me.
+
+442
+00:23:53,483 --> 00:23:58,466
+>> So now you just go here, cut, paste... sorry.
+
+443
+00:23:58,483 --> 00:24:02,466
+Paste and do that. And then the next one.
+
+444
+00:24:05,483 --> 00:24:10,433
+Cut, paste. And so it's a very nice work flow, much nicer work flow.
+
+445
+00:24:10,450 --> 00:24:10,466
+>> Yeah.
+
+446
+00:24:10,483 --> 00:24:17,350
+>> So again, that is this, this Show Window. And there's some
+
+447
+00:24:17,433 --> 00:24:19,433
+really fun stuff with Show Window. Can I spend some more time
+
+448
+00:24:19,450 --> 00:24:19,466
+on Show Window?
+
+449
+00:24:19,483 --> 00:24:20,433
+>> Yeah, absolutely.
+
+450
+00:24:20,483 --> 00:24:22,466
+>> Okay. So now let's turn all this back on there.
+
+451
+00:24:23,483 --> 00:24:27,466
+So you say it's got lots of stuff here.
+
+452
+00:24:29,483 --> 00:24:32,466
+So now, in the Show Window, you can do things like remember...
+
+453
+00:24:32,483 --> 00:24:35,350
+what is it? Well, anyway, you got a find here.
+
+454
+00:24:35,483 --> 00:24:41,466
+So you can find stuff, like dependent. Depend. Okay. And so
+
+455
+00:24:41,483 --> 00:24:44,466
+notice it gets highlighted and says here, it says
+
+456
+00:24:46,483 --> 00:24:52,466
+18 matches, okay? And you can search. Didn't do that very well.
+
+457
+00:24:53,166 --> 00:24:55,466
+So anyway, then you can start searching for these things.
+
+458
+00:24:55,483 --> 00:24:57,466
+And so it's super nice.
+
+459
+00:24:57,483 --> 00:25:00,466
+>> And I think the addition of this, this was added to V3, and
+
+460
+00:25:00,483 --> 00:25:03,466
+I think the addition of this is really phenomenal, because guys,
+
+461
+00:25:03,483 --> 00:25:07,466
+let me show you. Traditionally, you're going to spend so much
+
+462
+00:25:07,483 --> 00:25:10,466
+time in the Help file, and you're going to want to do just that.
+
+463
+00:25:10,483 --> 00:25:13,466
+You're going to want to cut and paste from a Help file or you're
+
+464
+00:25:13,483 --> 00:25:16,466
+going to want to read a Help file while you're working in PowerShell
+
+465
+00:25:16,483 --> 00:25:18,466
+that a lot of times what a lot of guys would do, if you take
+
+466
+00:25:19,333 --> 00:25:23,466
+at my screen, I'm just going to launch two PowerShell sessions.
+
+467
+00:25:23,200 --> 00:25:26,183
+Now, if you have two monitors, this is great, right? So you do
+
+468
+00:25:26,266 --> 00:25:30,466
+Help in one and then you can work in another one. But with V3,
+
+469
+00:25:31,483 --> 00:25:37,466
+having the Show Window stuff, well, first of all, it fits better
+
+470
+00:25:37,483 --> 00:25:40,466
+on your screen. It's easy to move around. You can have the Help.
+
+471
+00:25:40,483 --> 00:25:43,466
+It's easier to get stuff... the part that always confuses me
+
+472
+00:25:43,483 --> 00:25:46,466
+is, and we're going to fix this later when we start talking about
+
+473
+00:25:46,483 --> 00:25:51,466
+the magical ISE, but it's the cut and the paste, man. It's that whole...
+
+474
+00:25:52,166 --> 00:25:52,466
+>> Yeah, yeah, yeah.
+
+475
+00:25:52,483 --> 00:25:55,466
+>> It's that right clicking and stuff in the console. Why can't
+
+476
+00:25:55,483 --> 00:26:00,433
+we fix that? Why can't we fix that? Why can't we fix that, that console?
+
+477
+00:26:01,483 --> 00:26:02,316
+>> Because it's horrible.
+
+478
+00:26:02,483 --> 00:26:04,466
+>> Okay. That's the answer I wanted.
+
+479
+00:26:04,483 --> 00:26:07,466
+>> So here's the thing. Here's the thing. So let me give you
+
+480
+00:26:07,483 --> 00:26:12,466
+a little tutorial about some of the behind the scenes stuff at Microsoft.
+
+481
+00:26:12,233 --> 00:26:15,466
+So there was some point where people said, oh, you know, Microsoft
+
+482
+00:26:15,483 --> 00:26:20,466
+stopped advancing IE, you know. Oh, that just proves what bad
+
+483
+00:26:20,483 --> 00:26:23,466
+guys they are. There's no competition. They stopped innovating.
+
+484
+00:26:23,483 --> 00:26:26,233
+No, no, no my friends. Honestly, that's not what happened.
+
+485
+00:26:26,316 --> 00:26:27,350
+What happened
+
+486
+00:26:28,483 --> 00:26:32,466
+was that it got to the point where every time we made a change,
+
+487
+00:26:32,183 --> 00:26:34,166
+we broke a bunch of people, right?
+
+488
+00:26:34,250 --> 00:26:34,466
+>> Right.
+
+489
+00:26:34,483 --> 00:26:38,466
+>> So then it's like people are like hey, jerk, stop breaking us.
+
+490
+00:26:38,483 --> 00:26:42,466
+And so... and so they stopped doing that. And then all of a
+
+491
+00:26:42,483 --> 00:26:45,466
+sudden, some competitors got up there, and so now they went and
+
+492
+00:26:45,483 --> 00:26:49,466
+started doing things even though sometimes things break.
+
+493
+00:26:49,483 --> 00:26:52,466
+Same thing happens with the console window. The console window,
+
+494
+00:26:52,183 --> 00:26:56,466
+man, every time you change that thing, you break tons of people.
+
+495
+00:26:56,483 --> 00:26:59,466
+You just break tons of them. And so you don't want to change
+
+496
+00:26:59,483 --> 00:27:02,466
+that thing very much. Now, here's the thing. Actually, I'm pretty
+
+497
+00:27:02,483 --> 00:27:06,466
+hostile to the console window, okay? So that's it. I'm trying
+
+498
+00:27:06,483 --> 00:27:09,466
+to make this thing die. I'll just be straight up about it.
+
+499
+00:27:09,483 --> 00:27:13,466
+Make it die. And why is that? And the answer is that there are
+
+500
+00:27:13,483 --> 00:27:17,466
+these things called console apps, okay. Now, a console app only
+
+501
+00:27:17,483 --> 00:27:21,466
+works in the console. Now, here's why I want to kill the console,
+
+502
+00:27:22,333 --> 00:27:25,166
+because I want to kill console apps. And it turns out that the
+
+503
+00:27:25,250 --> 00:27:27,466
+reason I want to kill console apps is you go and you write...
+
+504
+00:27:27,483 --> 00:27:30,466
+you do something on the console app and it writes directly on
+
+505
+00:27:31,0 --> 00:27:34,466
+to the console, which means you cannot automate it, okay?
+
+506
+00:27:34,483 --> 00:27:39,466
+You can't run something, get its output, process the output,
+
+507
+00:27:39,483 --> 00:27:42,466
+and do something with it because it writes directly on the screen.
+
+508
+00:27:42,483 --> 00:27:46,466
+So this is just evil incarnate. It is the enemy of automation
+
+509
+00:27:46,166 --> 00:27:48,466
+so we're trying to get rid of those things. So we're trying
+
+510
+00:27:48,483 --> 00:27:54,433
+to get everybody on to PowerShell ISE, which is a much richer investment.
+
+511
+00:27:54,483 --> 00:27:57,466
+So by the way, stop asking me to fix the console. I'm not going
+
+512
+00:27:57,483 --> 00:27:58,466
+to fix the console.
+
+513
+00:27:58,483 --> 00:28:02,0
+>> And that's the point is that the console... and look, I know
+
+514
+00:28:02,483 --> 00:28:04,466
+cut and pasting in the console and some guys go the console's
+
+515
+00:28:04,483 --> 00:28:06,466
+driving me nuts. A little bit later on today, we're going to
+
+516
+00:28:06,483 --> 00:28:10,316
+help you with, well, he hates it and so there's actually a really
+
+517
+00:28:10,400 --> 00:28:12,466
+cool solution to it. But I want you to wait until we get there
+
+518
+00:28:12,483 --> 00:28:17,466
+with the ISE. So to cut and paste in the console is, if you haven't
+
+519
+00:28:17,483 --> 00:28:22,466
+done it, yep, you highlight it, you right click, and then you
+
+520
+00:28:22,483 --> 00:28:27,183
+can right click again. So no control C, no control V in this puppy.
+
+521
+00:28:27,266 --> 00:28:31,466
+I think we may have something cooler for you later on. But right
+
+522
+00:28:31,483 --> 00:28:34,466
+now, that's how you do it. So right click and right click will
+
+523
+00:28:34,483 --> 00:28:37,466
+take care of it for you. Jeffrey, you know what we need to do?
+
+524
+00:28:37,483 --> 00:28:39,466
+We need to start to take a look at
+
+525
+00:28:40,483 --> 00:28:42,433
+and explaining syntax.
+
+526
+00:28:42,450 --> 00:28:42,466
+>> Yeah.
+
+527
+00:28:43,333 --> 00:28:47,466
+>> Because here's the thing. Everybody wants to work with commandlet,
+
+528
+00:28:47,483 --> 00:28:50,250
+but, you know, commandlet is going to do great stuff for you,
+
+529
+00:28:50,333 --> 00:28:54,383
+but sometimes you want the commandlet to alter its output or
+
+530
+00:28:54,466 --> 00:28:57,216
+change what it's actually doing for you. You know, Get Service
+
+531
+00:28:57,300 --> 00:28:59,466
+is great, but it's going to give you a list of all your services.
+
+532
+00:29:00,483 --> 00:29:04,466
+Maybe I just want the one called bits or something like that.
+
+533
+00:29:04,216 --> 00:29:07,466
+So the syntax of the commandlet will explain to you the options
+
+534
+00:29:07,483 --> 00:29:10,466
+that you have available to control the commandlet. And so at
+
+535
+00:29:11,483 --> 00:29:14,466
+first, it looks very, very confusing. Now, we've got slides
+
+536
+00:29:14,483 --> 00:29:17,466
+for this, and so it's all in the slide deck. But let's take
+
+537
+00:29:17,483 --> 00:29:20,283
+a look here. I've got Get Service up right now, and I'm going
+
+538
+00:29:20,366 --> 00:29:21,466
+to take a look at something pretty simple.
+
+539
+00:29:21,483 --> 00:29:24,466
+>> You know what? If you do this in Show Window, it comes out better.
+
+540
+00:29:24,483 --> 00:29:25,466
+>> You like it in Show Window better?
+
+541
+00:29:25,483 --> 00:29:26,433
+>> Yeah, because watch. Do it.
+
+542
+00:29:26,450 --> 00:29:26,466
+>> Oh.
+
+543
+00:29:26,483 --> 00:29:28,466
+>> No, you do it.
+
+544
+00:29:30,483 --> 00:29:32,466
+>> Let's do Show Window.
+
+545
+00:29:32,483 --> 00:29:36,466
+>> See, because one, you've got the zoom there down at the bottom.
+
+546
+00:29:36,483 --> 00:29:38,316
+You didn't notice that?
+
+547
+00:29:38,483 --> 00:29:41,183
+>> Oh, yeah, yeah, yeah.
+
+548
+00:29:41,483 --> 00:29:42,466
+Oh, that's very, very nice.
+
+549
+00:29:42,483 --> 00:29:45,466
+>> The other thing is it highlights some things. So I think it's
+
+550
+00:29:45,483 --> 00:29:46,466
+a little bit easier to read.
+
+551
+00:29:46,483 --> 00:29:47,466
+>> Very easy to read.
+
+552
+00:29:47,483 --> 00:29:49,466
+>> And it's easier to select and say...
+
+553
+00:29:51,400 --> 00:29:53,466
+>> Okay. So we're going to use... we're going to use this instead.
+
+554
+00:29:53,483 --> 00:29:56,466
+This is much better. So take a look at this right here. See the
+
+555
+00:29:56,483 --> 00:29:59,216
+thing with the dash in front of it? So you'll notice that I've
+
+556
+00:29:59,300 --> 00:30:02,466
+got a commandlet, and then it starts followed by all of this
+
+557
+00:30:02,483 --> 00:30:04,466
+magical characters, and we're going to explain what all these
+
+558
+00:30:04,483 --> 00:30:06,466
+characters are, but the first thing I want you to notice is look
+
+559
+00:30:06,483 --> 00:30:10,466
+how many times under syntax I see the name of this commandlet.
+
+560
+00:30:10,483 --> 00:30:13,466
+I see it three times. Now, Jeffrey, technically, this is called
+
+561
+00:30:13,483 --> 00:30:17,466
+parameter sets, but why am I seeing three of these?
+
+562
+00:30:17,483 --> 00:30:20,416
+>> Yeah, so here's the thing. Imagine... take a look at the net
+
+563
+00:30:20,483 --> 00:30:24,466
+command, right? There's net use and net view, et cetera.
+
+564
+00:30:25,483 --> 00:30:28,466
+These are different parameter sets. And what happens is when
+
+565
+00:30:28,483 --> 00:30:31,466
+you type net view, you get one set of functionality. When you
+
+566
+00:30:31,483 --> 00:30:35,466
+type net use, you get a different set of functionality. So what
+
+567
+00:30:35,483 --> 00:30:40,466
+happens is that they then reuse the word, command net. Now, that's
+
+568
+00:30:40,483 --> 00:30:43,466
+essentially what a parameter set is. Now, we take a different
+
+569
+00:30:43,483 --> 00:30:48,466
+take on it. Net use is extremely different functionality than
+
+570
+00:30:48,483 --> 00:30:52,466
+net views, okay. So we don't like that. We want to be clear.
+
+571
+00:30:52,483 --> 00:30:56,466
+But the point about Get Service is that there are different parameter sets.
+
+572
+00:30:56,483 --> 00:30:59,466
+Sometimes you want to say Get Service based upon its name.
+
+573
+00:30:59,483 --> 00:31:03,350
+Or you're going to say I want to get service based upon its display
+
+574
+00:31:03,433 --> 00:31:06,450
+name, okay. So those are two different parameter sets. A better
+
+575
+00:31:06,483 --> 00:31:10,466
+example would be Get Process. Sometimes you want to say Get Process
+
+576
+00:31:10,483 --> 00:31:14,466
+whose name is this. Sometimes you want to say Get Process whose
+
+577
+00:31:14,483 --> 00:31:18,466
+ID is this. Or sometimes you go and just say Get Process and
+
+578
+00:31:18,483 --> 00:31:19,433
+get them all.
+
+579
+00:31:19,450 --> 00:31:19,466
+>> And get them all.
+
+580
+00:31:19,483 --> 00:31:22,466
+>> Yeah, so those are different parameter sets.
+
+581
+00:31:22,483 --> 00:31:24,466
+>> And let me show you what Jeremy is talking about. Notice in
+
+582
+00:31:24,483 --> 00:31:27,200
+these three different Get Services, and yeah, don't worry, we'll
+
+583
+00:31:27,283 --> 00:31:29,466
+take a look at Get Process too. In these three different Get
+
+584
+00:31:29,483 --> 00:31:32,466
+Services, look at this one. This one has dash name. Down here
+
+585
+00:31:32,483 --> 00:31:36,466
+in these other two, you don't see dash name. This one has dash
+
+586
+00:31:36,483 --> 00:31:39,466
+display name. You don't see that in the other two. So that's
+
+587
+00:31:39,483 --> 00:31:43,466
+what makes that particular parameter set unique. As a matter
+
+588
+00:31:43,483 --> 00:31:45,466
+of fact, I'm going to demonstrate these here in just a second.
+
+589
+00:31:46,483 --> 00:31:48,466
+But again, look at these dashes.
+
+590
+00:31:49,483 --> 00:31:54,466
+These dashes indicate that they're parameters. Dashes.
+
+591
+00:31:54,483 --> 00:31:57,466
+Parameters. Parameters will allow you to change the results of
+
+592
+00:31:57,483 --> 00:32:00,466
+what the command's going to do, and I want to do an example for you.
+
+593
+00:32:00,233 --> 00:32:03,466
+Let's take a look at dash name. I want you to notice it's followed
+
+594
+00:32:03,483 --> 00:32:06,466
+by these characters here. I just kind of go like this, call them
+
+595
+00:32:06,483 --> 00:32:08,300
+chihuahuas or something like this.
+
+596
+00:32:08,483 --> 00:32:12,466
+>> Chihuahuas? That's the technical term. Not many people knew that.
+
+597
+00:32:12,483 --> 00:32:14,383
+I didn't realize that you...
+
+598
+00:32:14,466 --> 00:32:19,466
+>> The official technical term now is chihuahuas. And what this
+
+599
+00:32:19,483 --> 00:32:22,466
+is is this is the kind of values that you can give this...
+
+600
+00:32:22,483 --> 00:32:25,283
+>> I think we're going to get in trouble with HR on that one.
+
+601
+00:32:25,366 --> 00:32:27,466
+>> Really? Okay. These things...
+
+602
+00:32:28,483 --> 00:32:29,183
+>> Chihuahuas.
+
+603
+00:32:29,266 --> 00:32:30,466
+>> No, like Pacman, Pacman.
+
+604
+00:32:30,483 --> 00:32:31,466
+>> Uh-huh, Pacman.
+
+605
+00:32:31,183 --> 00:32:33,466
+>> So these can be...
+
+606
+00:32:33,483 --> 00:32:37,466
+now these are the values that you can give to the parameter.
+
+607
+00:32:37,483 --> 00:32:40,466
+I'm going to show you. So let me give you a quick example here.
+
+608
+00:32:40,483 --> 00:32:42,466
+Let me lower this down. Well, I'm not going to lower it down.
+
+609
+00:32:43,166 --> 00:32:45,466
+I'll just do it here. Watch. I'm going to do Get Service and
+
+610
+00:32:45,483 --> 00:32:47,466
+I'm going to use one of the parameters. Now, parameters always
+
+611
+00:32:47,483 --> 00:32:51,333
+begin with a dash. So make sure you always put a dash in front
+
+612
+00:32:51,416 --> 00:32:54,466
+of the parameters. And now I'm going to put in a value that would
+
+613
+00:32:54,483 --> 00:32:57,250
+be inside those chihuahuas, and it said that the value type was
+
+614
+00:32:57,333 --> 00:33:00,283
+string, which means alpha numeric, and I'm going to put in the
+
+615
+00:33:00,366 --> 00:33:04,466
+name, which is a short name, of a service. I'm going to do bits.
+
+616
+00:33:04,483 --> 00:33:08,466
+Instead of getting the entire service list, this parameter now
+
+617
+00:33:08,483 --> 00:33:11,466
+is going to allow me to just get the service that I want.
+
+618
+00:33:11,483 --> 00:33:16,466
+So here's the idea. Parameters can have these arguments on them.
+
+619
+00:33:16,483 --> 00:33:19,466
+And a lot of parameters can take multiple arguments. And let
+
+620
+00:33:19,483 --> 00:33:23,466
+me show you what they look like. Let's say I wanted two services.
+
+621
+00:33:24,483 --> 00:33:27,466
+Notice the comma in between. Now, the space is optional, but
+
+622
+00:33:27,483 --> 00:33:29,466
+put a space in here, makes it easier to read.
+
+623
+00:33:30,333 --> 00:33:34,466
+Now I get those two. Let me show you how that looks in the syntax,
+
+624
+00:33:34,483 --> 00:33:38,450
+and so let's go back here. Notice up here, at dash name, that's
+
+625
+00:33:38,483 --> 00:33:39,250
+the parameter.
+
+626
+00:33:39,483 --> 00:33:43,466
+Then we have the chihuahuas with the type of data that we can
+
+627
+00:33:43,483 --> 00:33:47,466
+put in there the value type. See these guys inside? These guys.
+
+628
+00:33:47,483 --> 00:33:50,466
+And you got to do them close together, because we've got these
+
+629
+00:33:50,483 --> 00:33:52,466
+guys and we've got these guys.
+
+630
+00:33:52,483 --> 00:33:53,466
+>> Those are chihuahuas. What are these?
+
+631
+00:33:53,483 --> 00:33:56,200
+>> Chihuahuas, I just call them binkies because they're inside.
+
+632
+00:33:56,283 --> 00:33:56,333
+>> Binkies.
+
+633
+00:33:56,416 --> 00:34:01,466
+>> Yeah. I got chihuahuas and inside the chihuahuas you have these binkies.
+
+634
+00:34:01,483 --> 00:34:04,466
+If you see binkies in there, that means you can take multiple
+
+635
+00:34:04,483 --> 00:34:08,466
+values, separated by a comma. Now, I'll show you some stuff later
+
+636
+00:34:08,483 --> 00:34:12,466
+where you won't see the internal binky, and so... boy, there's
+
+637
+00:34:12,483 --> 00:34:16,466
+going to be a whole phrase book now. And so can only take one
+
+638
+00:34:16,483 --> 00:34:19,216
+value, and this is very important for you to be able to know.
+
+639
+00:34:19,300 --> 00:34:21,466
+But here's the part where it starts to get a little confusing.
+
+640
+00:34:22,266 --> 00:34:23,416
+Let me do a
+
+641
+00:34:24,483 --> 00:34:28,466
+little demonstration here of dash name with multiple values,
+
+642
+00:34:28,483 --> 00:34:31,466
+which I just did, but let me show you something else.
+
+643
+00:34:31,483 --> 00:34:34,283
+This isn't the confusing part. I'm going to ask Jeffrey about
+
+644
+00:34:34,366 --> 00:34:38,300
+this confusing part. Again, you can do wildcards. So dash main
+
+645
+00:34:38,383 --> 00:34:42,166
+B star means I'm going to get all the services listed that begin
+
+646
+00:34:42,450 --> 00:34:42,466
+with B.
+
+647
+00:34:42,483 --> 00:34:47,466
+>> There's no conflict between wildcards and arrays or collections.
+
+648
+00:34:47,483 --> 00:34:50,466
+So do this. Do the up arrow. Now do...
+
+649
+00:34:51,333 --> 00:34:54,466
+now comma C star.
+
+650
+00:34:54,216 --> 00:34:56,433
+>> Oh, yeah, yeah. This is... oh, yeah. Great point.
+
+651
+00:34:56,450 --> 00:34:56,466
+>> Yeah.
+
+652
+00:34:56,483 --> 00:34:59,466
+>> Great point. So now I get both the ones that begin with Bs
+
+653
+00:34:59,483 --> 00:35:02,466
+and with Cs. And see, that's awesome. That's totally awesome.
+
+654
+00:35:02,483 --> 00:35:05,466
+So oh, I closed my Show Window. So let me go up here
+
+655
+00:35:07,483 --> 00:35:09,466
+and open up the Show Window.
+
+656
+00:35:09,483 --> 00:35:12,250
+Here's the part where I start getting kind of confused here,
+
+657
+00:35:12,333 --> 00:35:15,466
+and this originally kind of threw me off is I want you guys to
+
+658
+00:35:15,166 --> 00:35:16,466
+notice this guy down here.
+
+659
+00:35:17,266 --> 00:35:20,466
+Computer name. And I want you to notice what's around computer name.
+
+660
+00:35:20,483 --> 00:35:25,466
+See these brackets that surround both the parameter and the argument there?
+
+661
+00:35:25,483 --> 00:35:28,166
+So it's not the internal binkies inside the chihuahuas.
+
+662
+00:35:28,250 --> 00:35:32,366
+It's these things that surround either the parameter or the parameter
+
+663
+00:35:32,450 --> 00:35:33,466
+and its argument.
+
+664
+00:35:34,483 --> 00:35:38,200
+This means you don't have to use it. It's optional. But wait,
+
+665
+00:35:38,283 --> 00:35:44,316
+we're not done yet. Great example is take a look at this first syntax.
+
+666
+00:35:44,483 --> 00:35:46,466
+This syntax up here.
+
+667
+00:35:47,483 --> 00:35:53,466
+Notice that everything has these around it. Which means that
+
+668
+00:35:53,483 --> 00:35:57,466
+there's nothing actually required that I type in. Notice I've
+
+669
+00:35:57,483 --> 00:35:59,466
+got them around here. Got them around here.
+
+670
+00:36:00,483 --> 00:36:05,466
+And every single one of them, optional. That means all's I need
+
+671
+00:36:05,483 --> 00:36:11,466
+to do or all's I have to do is type Get Service, and it gives
+
+672
+00:36:11,483 --> 00:36:14,466
+me a whole list. In other words, no parameters were required.
+
+673
+00:36:15,433 --> 00:36:19,366
+But take a look at this.
+
+674
+00:36:20,483 --> 00:36:23,466
+Inside the syntax. Look at this second syntax.
+
+675
+00:36:23,483 --> 00:36:26,466
+I want you to notice, look at this guy down here.
+
+676
+00:36:27,483 --> 00:36:31,466
+See how display name doesn't have these around it?
+
+677
+00:36:32,483 --> 00:36:35,466
+Well, that means if you're going to use display name, you've
+
+678
+00:36:35,483 --> 00:36:38,466
+got to put it in, and then you've got to give me a value for it.
+
+679
+00:36:39,483 --> 00:36:40,466
+Now, here's an example.
+
+680
+00:36:41,483 --> 00:36:46,466
+Display name, by the way, is the long name.
+
+681
+00:36:46,483 --> 00:36:51,466
+So it's this really long name. And I can Get Services by that
+
+682
+00:36:51,483 --> 00:36:55,333
+display name, but I want you to notice that you've got a choice.
+
+683
+00:36:55,416 --> 00:37:02,466
+Dash name or dash display name. So Get Service-display name.
+
+684
+00:37:03,483 --> 00:37:07,466
+And now I can type in whatever long lengthy, and I'm just making
+
+685
+00:37:07,483 --> 00:37:10,466
+it up, display name that I want to type in. But if you're going
+
+686
+00:37:10,483 --> 00:37:13,466
+to use display name, now you have to use display name and the
+
+687
+00:37:14,166 --> 00:37:17,466
+value that goes with it. That's what gets you into that other syntax.
+
+688
+00:37:18,483 --> 00:37:21,466
+Let's do something else. Let's do stop.
+
+689
+00:37:21,233 --> 00:37:23,433
+>> Wait, your didn't show them... so here's the thing.
+
+690
+00:37:23,450 --> 00:37:23,466
+>> Yeah.
+
+691
+00:37:23,483 --> 00:37:28,466
+>> So imagine you wanted to get like... do a Get Service B star.
+
+692
+00:37:30,450 --> 00:37:30,466
+>> Just V star?
+
+693
+00:37:30,483 --> 00:37:31,466
+>> B, B.
+
+694
+00:37:31,483 --> 00:37:32,333
+>> Oh, B star.
+
+695
+00:37:32,483 --> 00:37:38,466
+>> Okay. So look at this. The name for bit locker drive encryption
+
+696
+00:37:38,216 --> 00:37:43,466
+service is BDESV. Now remember we said, oh, you want to create
+
+697
+00:37:43,483 --> 00:37:45,466
+a world where you think about what you want, you type it and
+
+698
+00:37:45,483 --> 00:37:49,166
+you get it. How many of you were thinking oh, I want to get the
+
+699
+00:37:50,483 --> 00:37:52,466
+BDESVC service, right?
+
+700
+00:37:53,483 --> 00:37:57,466
+So no, you want bit locker, okay? So then you want to say, okay,
+
+701
+00:37:57,483 --> 00:38:01,466
+well Get Service display bit... no, you can't type bit locker.
+
+702
+00:38:01,483 --> 00:38:04,466
+It's bit locker drive encryption service.
+
+703
+00:38:04,483 --> 00:38:11,466
+So remember, partial's great because I'm flawed pipe can't remember
+
+704
+00:38:11,483 --> 00:38:13,466
+BDESVC, and I'm definitely
+
+705
+00:38:14,483 --> 00:38:18,466
+not going to remember bit locker drive encryption service.
+
+706
+00:38:18,483 --> 00:38:22,466
+And look, even if I could remember it, I can guarantee you I cannot...
+
+707
+00:38:22,483 --> 00:38:27,466
+I'm like incapable of typing that correctly. So what you do
+
+708
+00:38:27,483 --> 00:38:28,283
+is you type...
+
+709
+00:38:28,483 --> 00:38:29,466
+>> Display name.
+
+710
+00:38:30,483 --> 00:38:32,466
+>> Bit star. No, just bit...
+
+711
+00:38:32,483 --> 00:38:34,166
+>> Oh, just bit star, yeah.
+
+712
+00:38:34,483 --> 00:38:38,466
+>> Bit star. Something to do with bit locker. Boom, and it just works.
+
+713
+00:38:38,483 --> 00:38:41,466
+>> It got us by the long name which actually makes more human
+
+714
+00:38:41,483 --> 00:38:44,466
+sense than those little tiny short names.
+
+715
+00:38:44,183 --> 00:38:47,466
+>> One of the things we said was with PowerShell, it's like programming
+
+716
+00:38:47,483 --> 00:38:51,466
+with hand grenades, versus sniper rifles, you know. It just
+
+717
+00:38:51,483 --> 00:38:54,466
+sort of, just sort of like over there. I don't know if I ever
+
+718
+00:38:54,483 --> 00:38:55,466
+told you that story.
+
+719
+00:38:55,483 --> 00:39:01,466
+My buddy, college, I... my roommate used to be in Vietnam.
+
+720
+00:39:01,483 --> 00:39:04,466
+He was a Vietnam... 18, Special Forces. No, that was actually
+
+721
+00:39:04,483 --> 00:39:06,466
+the other guy that I worked with. He was a Navy SEAL. And the
+
+722
+00:39:07,483 --> 00:39:10,216
+Navy SEALs get their own weapons, right. So everybody else,
+
+723
+00:39:10,300 --> 00:39:11,466
+like you're this kind of guy, you get this kind of weapon.
+
+724
+00:39:11,483 --> 00:39:15,466
+The Navy SEALs, like the gun manufacturers would make them guns.
+
+725
+00:39:15,483 --> 00:39:18,466
+And he talked about this thing. I never quite got it in focus,
+
+726
+00:39:18,483 --> 00:39:23,466
+but it's basically sort of like a machine gun/shotgun, a machine shotgun.
+
+727
+00:39:23,483 --> 00:39:26,466
+He said, and the great thing about that was in Vietnam, you know,
+
+728
+00:39:26,483 --> 00:39:30,283
+you had the jungle, and you sort of only had to know, like, is
+
+729
+00:39:30,366 --> 00:39:34,166
+my problem over there or over there? And you'd set up with this
+
+730
+00:39:34,483 --> 00:39:37,466
+thing and he says you'd let loose with it and three seconds later,
+
+731
+00:39:37,483 --> 00:39:39,466
+your problem was gone or everything between you and your problem
+
+732
+00:39:39,483 --> 00:39:40,433
+was gone.
+
+733
+00:39:40,450 --> 00:39:40,466
+>> Was gone.
+
+734
+00:39:41,166 --> 00:39:43,350
+>> Focusing on your problem. Well, that's the same sort of thing.
+
+735
+00:39:43,433 --> 00:39:47,466
+You're just sort of like, hey, bit locker, something to do with
+
+736
+00:39:47,483 --> 00:39:49,166
+bit locker. Bit star.
+
+737
+00:39:49,450 --> 00:39:49,466
+>> Bit star.
+
+738
+00:39:49,483 --> 00:39:53,466
+>> And so that's kind of the model we're trying to go for is,
+
+739
+00:39:53,166 --> 00:39:55,216
+you know, just sort of over here or sort of over there.
+
+740
+00:39:55,300 --> 00:39:58,166
+Now, there are times when you need to be precise and you can
+
+741
+00:39:58,483 --> 00:40:00,433
+be precise. And there are times when it's just sort of like over
+
+742
+00:40:00,483 --> 00:40:03,466
+there is good enough. And by the way, when you need both, you'll
+
+743
+00:40:03,483 --> 00:40:06,466
+see how we deal with that. Through something called minus what-if
+
+744
+00:40:06,483 --> 00:40:07,466
+and minus confirm.
+
+745
+00:40:07,483 --> 00:40:11,466
+>> Yeah, yeah, yeah. And so and Jeffrey what I need you to help
+
+746
+00:40:11,483 --> 00:40:13,466
+me with is that is the...
+
+747
+00:40:13,483 --> 00:40:17,466
+this is the one that seems to throw most people off.
+
+748
+00:40:18,483 --> 00:40:22,466
+So a dash... da-da-da... means you have a parameter. And if
+
+749
+00:40:23,0 --> 00:40:26,166
+it's followed by chihuahuas, that means you can put arguments
+
+750
+00:40:26,483 --> 00:40:29,350
+on it and you get the value type of the argument, string, int
+
+751
+00:40:29,433 --> 00:40:31,466
+that kind of thing. And if it's got binkies in there, you can
+
+752
+00:40:31,483 --> 00:40:34,466
+take multiple arguments, separated by a comma. You see plenty
+
+753
+00:40:34,483 --> 00:40:37,466
+of examples of us doing that. And if you're surrounded by these
+
+754
+00:40:37,483 --> 00:40:40,466
+brackets, you don't have to... it's optional. You don't have
+
+755
+00:40:40,483 --> 00:40:42,433
+to do it at all. But.
+
+756
+00:40:42,450 --> 00:40:42,466
+>> But.
+
+757
+00:40:42,483 --> 00:40:44,466
+>> There's something tricky here in this view.
+
+758
+00:40:44,483 --> 00:40:45,466
+>> Yeah, isn't that cool?
+
+759
+00:40:45,483 --> 00:40:48,383
+>> Let's look at this guy. Look at this dash name. This guy's...
+
+760
+00:40:48,466 --> 00:40:51,466
+throws everybody off. So I don't have to type this in. I don't
+
+761
+00:40:51,483 --> 00:40:53,466
+type anything in, because we all know that I can just run Get
+
+762
+00:40:53,483 --> 00:40:58,466
+Service and get all of them. But if I'm using dash name and I
+
+763
+00:40:58,483 --> 00:41:02,466
+want to specify a name of a service, like bits, what is it with
+
+764
+00:41:02,183 --> 00:41:04,466
+these little duders inside here?
+
+765
+00:41:04,483 --> 00:41:07,466
+>> Yeah, this is something we called positional parameters, okay?
+
+766
+00:41:07,483 --> 00:41:11,466
+And so that means that if you just specify the value, you don't
+
+767
+00:41:11,483 --> 00:41:13,466
+have to specify dash name.
+
+768
+00:41:13,483 --> 00:41:14,250
+>> So...
+
+769
+00:41:15,450 --> 00:41:15,466
+>> So...
+
+770
+00:41:15,483 --> 00:41:19,466
+>> This makes so... watch. Get Service.
+
+771
+00:41:20,483 --> 00:41:21,466
+I can do this.
+
+772
+00:41:22,483 --> 00:41:26,466
+You might be saying, oh, I got to type a lot. Actually, you
+
+773
+00:41:26,483 --> 00:41:29,466
+don't have to type a lot, but here's what positional means.
+
+774
+00:41:30,483 --> 00:41:34,466
+If you're going to give me a bunch of names of services, you
+
+775
+00:41:34,483 --> 00:41:38,466
+don't have to use dash name. See? Works the same way. Which means
+
+776
+00:41:38,483 --> 00:41:41,466
+so those brackets around the parameter simply mean you don't
+
+777
+00:41:41,483 --> 00:41:43,466
+have to use the parameter. But you got to give me the argument.
+
+778
+00:41:43,483 --> 00:41:44,466
+That's what makes it...
+
+779
+00:41:45,333 --> 00:41:48,466
+>> It gets even better, because now you can just type GSV.
+
+780
+00:41:48,483 --> 00:41:52,433
+>> Oh, yeah. You can use the alias to even shorten it up even further.
+
+781
+00:41:52,450 --> 00:41:52,466
+So watch.
+
+782
+00:41:52,483 --> 00:41:57,250
+>> Do you want to go ahead and do it?
+
+783
+00:41:57,333 --> 00:41:57,400
+>> Go ahead.
+
+784
+00:41:57,416 --> 00:41:57,433
+>> GSV...
+
+785
+00:41:57,450 --> 00:41:57,466
+>> Bits....
+
+786
+00:41:57,483 --> 00:41:58,200
+>> bits.
+
+787
+00:41:58,283 --> 00:42:02,466
+>> And so here's kind of a key kind of principle of PowerShell, okay.
+
+788
+00:42:02,483 --> 00:42:07,350
+The principle is we want to have this very regular, very self-describing
+
+789
+00:42:07,483 --> 00:42:11,466
+surface, okay. So when it's 3:00 in the morning and things didn't
+
+790
+00:42:11,483 --> 00:42:15,466
+go the way you wanted to, and during some IT upgrade, and you
+
+791
+00:42:15,483 --> 00:42:20,466
+bring up some script, you want that script to be absolutely readable.
+
+792
+00:42:20,483 --> 00:42:24,383
+You want to know what's going on, okay. And so that's why PowerShell
+
+793
+00:42:24,466 --> 00:42:28,466
+is very clear, you know. Get-Service-Name, et cetera. So that
+
+794
+00:42:28,483 --> 00:42:30,466
+when you're reading it, you know exactly what's going on.
+
+795
+00:42:30,483 --> 00:42:34,466
+On the other hand, when you're interactive, you can type that
+
+796
+00:42:34,483 --> 00:42:37,466
+if you want. We make it easier to type that with things like
+
+797
+00:42:37,483 --> 00:42:40,466
+tab completion. But sometimes, you just want to go, go, go, go, go.
+
+798
+00:42:40,483 --> 00:42:44,466
+And so we have all these short cuts and aliases so that you can
+
+799
+00:42:44,483 --> 00:42:48,466
+be very, very productive as a high speed, advanced, interactive user.
+
+800
+00:42:49,483 --> 00:42:52,466
+But then when you go and write scripts, we encourage the more
+
+801
+00:42:52,483 --> 00:42:53,466
+verbose style.
+
+802
+00:42:54,0 --> 00:42:56,466
+>> As a matter of fact, just to emphasize on that a little bit
+
+803
+00:42:56,483 --> 00:42:59,466
+further, so when you're writing scripts, this is the way that
+
+804
+00:42:59,483 --> 00:43:01,433
+you're going to want to do it here in the top example.
+
+805
+00:43:01,483 --> 00:43:06,266
+You're going to want to be very explanatory of what you're doing.
+
+806
+00:43:06,350 --> 00:43:09,466
+But as Jeffrey was saying, when you're at the console, free reign.
+
+807
+00:43:09,483 --> 00:43:12,466
+I mean, you can use aliases and shorten this up with the positional
+
+808
+00:43:13,0 --> 00:43:15,466
+parameters so that you can quickly get things done. You're going
+
+809
+00:43:15,483 --> 00:43:18,466
+to see examples of that today, because Jeffrey uses an awful
+
+810
+00:43:18,483 --> 00:43:22,466
+lot of aliases, and I usually, because I'm getting ready to automate
+
+811
+00:43:23,483 --> 00:43:26,466
+it, sometimes I just do the whole thing the first time through
+
+812
+00:43:26,483 --> 00:43:29,466
+where I use all the parameters and all the arguments. So you
+
+813
+00:43:29,483 --> 00:43:33,466
+can see that contrast between working quickly interactively with
+
+814
+00:43:33,483 --> 00:43:36,466
+the short, you know, short versions and then the long versions
+
+815
+00:43:36,483 --> 00:43:38,466
+that you're going to want to see in a script. But let me give
+
+816
+00:43:38,483 --> 00:43:41,466
+you a hint and then we'll do another example and then take a
+
+817
+00:43:41,483 --> 00:43:45,466
+look at how to work with all of this. Have you guys been hitting
+
+818
+00:43:45,483 --> 00:43:50,466
+the tab key? Take your pinky, take your pinky. If you're a touch
+
+819
+00:43:50,483 --> 00:43:54,466
+typist, this is probably not for you. But this pinky should...
+
+820
+00:43:54,483 --> 00:43:57,333
+>> He's showing you the official flexes move.
+
+821
+00:43:57,416 --> 00:43:57,433
+>> Yeah, yeah.
+
+822
+00:43:57,450 --> 00:43:57,466
+>> Warm up.
+
+823
+00:43:57,483 --> 00:43:58,466
+>> Want to make sure you stretch.
+
+824
+00:43:58,483 --> 00:43:59,433
+>> Want to warm it up...
+
+825
+00:43:59,450 --> 00:43:59,466
+>> Stretch it.
+
+826
+00:43:59,483 --> 00:44:00,466
+>> In the beginning of every day.
+
+827
+00:44:00,483 --> 00:44:03,466
+>> Stretch it, stretch the pinky. And you want this pinky to
+
+828
+00:44:03,483 --> 00:44:06,466
+hover right over the tab key always, because what you want to
+
+829
+00:44:07,483 --> 00:44:09,466
+do is, watch, get SE... I'm going to start hitting the tab key.
+
+830
+00:44:10,483 --> 00:44:12,466
+Look, look, look, it starts going through the commandlets.
+
+831
+00:44:12,483 --> 00:44:15,0
+I've got so many commandlets now, there's a lot of them to go through.
+
+832
+00:44:15,483 --> 00:44:18,466
+There we go, wait a minute. Shift tab goes backwards. Watch, dash.
+
+833
+00:44:18,483 --> 00:44:21,466
+I'm going to hit the tab key. It will cycle through the parameters
+
+834
+00:44:21,483 --> 00:44:23,466
+for me. Oh, this is cool.
+
+835
+00:44:23,483 --> 00:44:26,266
+>> Remember I said we'd make it easier to help type this stuff out?
+
+836
+00:44:26,350 --> 00:44:26,466
+The that's what he's talking about.
+
+837
+00:44:26,483 --> 00:44:31,466
+>> Yeah. And so look. In just about as many key strokes as doing,
+
+838
+00:44:31,483 --> 00:44:36,466
+like, GSV bits, just a couple of more and I can bang this out
+
+839
+00:44:36,483 --> 00:44:40,183
+and get it to look really nice and clean so that if I'm going
+
+840
+00:44:40,266 --> 00:44:43,466
+to use this in a script. So the tab key is your friend. Use the
+
+841
+00:44:43,483 --> 00:44:46,183
+tab key. You're going to see us use this all the time today.
+
+842
+00:44:46,266 --> 00:44:48,466
+Let me show you another example of finding something as kind
+
+843
+00:44:48,483 --> 00:44:52,466
+of a summary here of finding a commandlet and then taking a look
+
+844
+00:44:52,483 --> 00:44:53,466
+at its syntax.
+
+845
+00:44:54,483 --> 00:44:56,466
+Then we're going to show you how to put commandlets together
+
+846
+00:44:56,483 --> 00:44:58,466
+on the pipeline. So let's do this.
+
+847
+00:44:59,483 --> 00:45:02,466
+I have this business problem. Business problem time. And my
+
+848
+00:45:02,483 --> 00:45:05,466
+business problem is I need to get...
+
+849
+00:45:06,483 --> 00:45:09,466
+I need some errors.
+
+850
+00:45:10,483 --> 00:45:12,166
+I need the newest errors.
+
+851
+00:45:12,483 --> 00:45:15,466
+The newest five errors out of my system log.
+
+852
+00:45:15,483 --> 00:45:16,466
+>> Oh, yeah.
+
+853
+00:45:16,483 --> 00:45:18,183
+>> So I need to be able to look at my event...
+
+854
+00:45:18,266 --> 00:45:18,466
+>> Log file.
+
+855
+00:45:18,483 --> 00:45:19,433
+>> Yeah, the log file.
+
+856
+00:45:19,450 --> 00:45:19,466
+>> Yeah.
+
+857
+00:45:19,483 --> 00:45:22,466
+>> So I'm thinking I need to look at my event logs. I wonder
+
+858
+00:45:22,483 --> 00:45:27,466
+if PowerShell has a commandlet that can help me with my event log.
+
+859
+00:45:27,483 --> 00:45:29,283
+So Get Help star.
+
+860
+00:45:30,300 --> 00:45:32,200
+Well, let's see, do you have anything with event logs?
+
+861
+00:45:32,483 --> 00:45:36,466
+Oh, and lo and behold, there are plenty. As a matter of fact,
+
+862
+00:45:36,483 --> 00:45:39,183
+this is a great time now, you can take a look at the verbs.
+
+863
+00:45:39,483 --> 00:45:42,466
+You can just guess what do you think clear event log is going
+
+864
+00:45:42,483 --> 00:45:43,466
+to do.
+
+865
+00:45:43,483 --> 00:45:44,466
+>> That would clear it.
+
+866
+00:45:44,483 --> 00:45:47,466
+>> I bet it would clear it too. You know what do you think get
+
+867
+00:45:48,483 --> 00:45:52,233
+event log is going to do? Ta-da. It's going to... I know it
+
+868
+00:45:52,316 --> 00:45:55,266
+seems ridiculous, but this is the point is you're looking at
+
+869
+00:45:55,350 --> 00:45:57,416
+the verbs and figuring out what they're going to do and it's
+
+870
+00:45:57,483 --> 00:46:00,466
+not that difficult at this point. Now what we're going to do
+
+871
+00:46:00,483 --> 00:46:03,466
+is I want to get an event log. Now, I could just try to run this,
+
+872
+00:46:03,483 --> 00:46:05,466
+but I want to take a look at the help file first, so I'm going
+
+873
+00:46:06,483 --> 00:46:07,466
+to do Get Help on Get Event Log,
+
+874
+00:46:09,483 --> 00:46:12,466
+and I want to take a look at the syntax, and I also, if I have
+
+875
+00:46:12,483 --> 00:46:14,466
+questions about the parameters, I want to be able to see the
+
+876
+00:46:14,483 --> 00:46:17,466
+definitions of those parameters. So I'm going to do dash detailed
+
+877
+00:46:17,483 --> 00:46:21,466
+right now. And I'm going to go up here and go, hey, here's Get
+
+878
+00:46:21,483 --> 00:46:22,466
+Event Log.
+
+879
+00:46:23,483 --> 00:46:27,466
+Take a look at the syntax. Look. Get Event Log. Look at all
+
+880
+00:46:27,483 --> 00:46:30,466
+of these parameters. See the dashes? See the arguments that they
+
+881
+00:46:30,483 --> 00:46:33,466
+can have, whether they can have multiple values? And if you don't
+
+882
+00:46:33,483 --> 00:46:37,466
+know what something is, like, hm, I wonder what newest means,
+
+883
+00:46:38,483 --> 00:46:40,466
+you can scroll down and you can take a look down here. And the
+
+884
+00:46:40,483 --> 00:46:43,466
+reason I'm going through this is this is what we all have...
+
+885
+00:46:43,483 --> 00:46:46,466
+end up doing is I don't know necessarily what all the parameters
+
+886
+00:46:46,483 --> 00:46:49,466
+mean so a lot of times I go to the list and I read the list of
+
+887
+00:46:49,483 --> 00:46:54,400
+parameters first, just to find out what capabilities I have.
+
+888
+00:46:54,483 --> 00:46:56,466
+I know that seems like it may take a few extra minutes, but it's
+
+889
+00:46:56,483 --> 00:47:01,466
+worth it because I found that newest means I can get the newest
+
+890
+00:47:01,483 --> 00:47:04,466
+entries in the log. But also take a look at something else in
+
+891
+00:47:04,483 --> 00:47:06,466
+this syntax. Oops, where did it go?
+
+892
+00:47:07,483 --> 00:47:10,466
+Look at all of the things that are optional. But I want you
+
+893
+00:47:10,483 --> 00:47:12,466
+to notice something. Looky up here.
+
+894
+00:47:13,483 --> 00:47:18,466
+I want you to notice that dash log name isn't required, but this
+
+895
+00:47:18,483 --> 00:47:19,466
+guy is.
+
+896
+00:47:20,183 --> 00:47:23,466
+I want you to see what happens when something is mandatory and
+
+897
+00:47:23,483 --> 00:47:26,466
+you try to run it. So if I just tried to run get ept log, I want
+
+898
+00:47:26,483 --> 00:47:29,466
+you to think about this. If this worked just like this, think
+
+899
+00:47:29,483 --> 00:47:32,400
+about all of the... it's going to go through all of the logs
+
+900
+00:47:32,483 --> 00:47:36,466
+and spit all of the logs out on to my screen. Could that be
+
+901
+00:47:36,483 --> 00:47:40,416
+a little performance issue, especially if you're doing it to
+
+902
+00:47:40,483 --> 00:47:42,183
+50 machines at once?
+
+903
+00:47:42,266 --> 00:47:43,466
+>> That's now called big data.
+
+904
+00:47:44,483 --> 00:47:45,466
+>> That's right, big data.
+
+905
+00:47:45,483 --> 00:47:46,466
+>> Big data.
+
+906
+00:47:47,483 --> 00:47:48,466
+>> Big data.
+
+907
+00:47:49,483 --> 00:47:53,466
+So watch. I'm going to strike enter and PowerShell is smart enough
+
+908
+00:47:53,483 --> 00:47:57,466
+to go hey, look, you need to know what log you want to look in.
+
+909
+00:47:57,200 --> 00:47:59,466
+So we're going to make you tell us what log.
+
+910
+00:48:00,483 --> 00:48:02,466
+So I'm going to say system. Now, of course, it's now going to
+
+911
+00:48:02,483 --> 00:48:06,466
+give me the entire system log, but let me just show you by using
+
+912
+00:48:06,483 --> 00:48:10,466
+the Help file, looking at the examples, reading the parameters,
+
+913
+00:48:10,200 --> 00:48:14,466
+you can start to make solutions like this. Get Event Log I know
+
+914
+00:48:14,183 --> 00:48:17,466
+wants a log name. I want the log name system. I also know that
+
+915
+00:48:17,483 --> 00:48:19,466
+I want the newest...
+
+916
+00:48:19,233 --> 00:48:20,466
+>> Wait. I think you can tab complete that too.
+
+917
+00:48:22,316 --> 00:48:24,466
+>> I think you can now too. Yes. Wait a minute, let's try it.
+
+918
+00:48:25,0 --> 00:48:28,466
+Didn't used to be able to do that. Let's see. Oh, look.
+
+919
+00:48:28,216 --> 00:48:28,466
+>> Is that cool?
+
+920
+00:48:28,483 --> 00:48:31,466
+>> That is totally cool. I noticed that a lot in V3, that you
+
+921
+00:48:32,0 --> 00:48:34,433
+can now tab complete on a lot of the things that the system has.
+
+922
+00:48:34,450 --> 00:48:34,466
+>> Yeah.
+
+923
+00:48:34,483 --> 00:48:36,466
+>> I think another reason you should be using V3.
+
+924
+00:48:37,483 --> 00:48:40,466
+>> Yeah, right. That's a V3-ism, not a V2-ism.
+
+925
+00:48:40,216 --> 00:48:43,466
+>> Yeah. So I know that by looking at the Help file that newest
+
+926
+00:48:43,483 --> 00:48:46,450
+will let me get the newest... I'm just going to say three entries.
+
+927
+00:48:46,483 --> 00:48:49,0
+But here's the thing. You guys know this, in a log file there's
+
+928
+00:48:49,483 --> 00:48:52,283
+a lot of that information stuff, and I don't want that.
+
+929
+00:48:52,366 --> 00:48:54,466
+Just so happens if you look at the Help file, you'll find that
+
+930
+00:48:54,483 --> 00:48:55,466
+entry type
+
+931
+00:48:57,216 --> 00:49:01,466
+error, that's going to give me the three latest errors.
+
+932
+00:49:01,233 --> 00:49:03,466
+Now, you might be thinking to yourself, well, that's not...
+
+933
+00:49:03,483 --> 00:49:06,466
+you know, that's cool, but I had to do a lot of reading. I could
+
+934
+00:49:06,483 --> 00:49:11,466
+have just opened up, you know, the graphical for this. Oh, yeah?
+
+935
+00:49:11,483 --> 00:49:12,466
+Well, watch this.
+
+936
+00:49:14,183 --> 00:49:15,466
+Thing is this.
+
+937
+00:49:16,483 --> 00:49:18,466
+There's a parameter in here called computer name. I want the
+
+938
+00:49:18,483 --> 00:49:23,466
+latest three errors from three different computers.
+
+939
+00:49:25,483 --> 00:49:30,333
+Here's the thing you need to kind of get from all of this.
+
+940
+00:49:30,416 --> 00:49:35,466
+You can't open the graphical fast enough, more or less get that
+
+941
+00:49:35,483 --> 00:49:36,466
+data that quick.
+
+942
+00:49:37,483 --> 00:49:44,266
+So in this one command that I figured out, I can get errors from
+
+943
+00:49:44,350 --> 00:49:49,466
+multiple computers on my display. Now, it's on my display, and
+
+944
+00:49:49,483 --> 00:49:52,466
+we're going to fix that here in this next section, because maybe
+
+945
+00:49:52,166 --> 00:49:55,466
+I don't want it on my display. Maybe I want it, I don't know,
+
+946
+00:49:55,483 --> 00:49:56,466
+in a web page.
+
+947
+00:49:57,483 --> 00:50:00,466
+Or a CSV or something like that but...
+
+948
+00:50:00,483 --> 00:50:02,466
+>> They missed the look. Show that again.
+
+949
+00:50:02,216 --> 00:50:10,466
+>> Ooh, a web page. I turned to Jeffrey and go ooh. So I've used
+
+950
+00:50:10,483 --> 00:50:13,466
+the Help file to build one great command and now we want to start
+
+951
+00:50:13,483 --> 00:50:17,466
+doing more with it. So to kind of wrap this up here, I've got
+
+952
+00:50:17,483 --> 00:50:19,466
+some slides in here, and like I said, everything that we've been
+
+953
+00:50:19,483 --> 00:50:23,466
+doing is in the slide deck so let me just kind of thumb through
+
+954
+00:50:23,483 --> 00:50:24,466
+here the slides. So again, questions?
+
+955
+00:50:25,483 --> 00:50:26,433
+>> By the way, you missed something crucial.
+
+956
+00:50:26,450 --> 00:50:26,466
+>> Did I?
+
+957
+00:50:26,483 --> 00:50:27,466
+>> Yeah.
+
+958
+00:50:27,483 --> 00:50:28,466
+>> What did I miss?
+
+959
+00:50:28,483 --> 00:50:32,366
+>> Go back to... go back to that wildcard help. Interactive.
+
+960
+00:50:33,450 --> 00:50:33,466
+>> Which...
+
+961
+00:50:33,483 --> 00:50:35,283
+>> Oh, good Lord. Go to mine.
+
+962
+00:50:35,366 --> 00:50:36,233
+>> Fine, fine.
+
+963
+00:50:37,483 --> 00:50:41,366
+>> He said Get Help, help, star event log.
+
+964
+00:50:42,483 --> 00:50:46,466
+And pointed out, oh, look here, you got clear, you got get, limit.
+
+965
+00:50:46,483 --> 00:50:48,466
+But look here. About.
+
+966
+00:50:48,483 --> 00:50:51,233
+>> Oh, I forgot to talk about the About Help.
+
+967
+00:50:51,316 --> 00:50:54,333
+>> No, this is like one of the most important things. It's About
+
+968
+00:50:54,483 --> 00:50:58,466
+Event Logs okay? So these are what we call conceptual topics, okay?
+
+969
+00:50:58,483 --> 00:51:01,466
+So you say, okay, clear screen and then... by the way, here's
+
+970
+00:51:01,483 --> 00:51:04,466
+a trick I do, right. So if I did clear screen. Here's the thing.
+
+971
+00:51:05,483 --> 00:51:07,466
+So now I want to see this. If I do clear screen and then, oh,
+
+972
+00:51:07,483 --> 00:51:09,466
+what was it I was going to do? Oh, shoot.
+
+973
+00:51:10,483 --> 00:51:15,466
+All right. Because again, I'm flawed, right? I can't... about something.
+
+974
+00:51:15,483 --> 00:51:19,216
+Okay. So here, so what you do is you do clear screen and then semicolon.
+
+975
+00:51:19,300 --> 00:51:24,466
+Semicolon is a statement separator that says do this and then
+
+976
+00:51:24,483 --> 00:51:27,366
+do something else. So it's a way to do two things at once.
+
+977
+00:51:27,450 --> 00:51:32,466
+Then I'm going to say get... I'll just say help, about event...
+
+978
+00:51:32,483 --> 00:51:37,200
+by the way, tab return. Event logs. So then it clears the screen
+
+979
+00:51:37,283 --> 00:51:41,333
+and shows me About. So here notice it gives me a short description,
+
+980
+00:51:41,450 --> 00:51:45,466
+describes things, viewing the event logs, goes through the discussion
+
+981
+00:51:46,183 --> 00:51:49,466
+about the topic. Tells you about the commands, et cetera.
+
+982
+00:51:49,483 --> 00:51:53,466
+And so there's quite a bit here. And then clear screen. If you
+
+983
+00:51:53,483 --> 00:51:56,466
+just say help, about underscore star...
+
+984
+00:51:56,483 --> 00:51:58,466
+>> Yeah, that's, there you go.
+
+985
+00:51:58,483 --> 00:52:03,200
+>> You'll see lots of About topics. Look at them. There's a...
+
+986
+00:52:03,283 --> 00:52:07,266
+and there's just a ton of really good stuff here. Like wildcards.
+
+987
+00:52:07,350 --> 00:52:10,466
+Hey, About Wildcards. About Wildcards.
+
+988
+00:52:11,483 --> 00:52:14,466
+About PowerShell Version 4. Guess which one I'm using.
+
+989
+00:52:14,483 --> 00:52:19,400
+About the ISE, About W My and there's the one I mentioned, remember,
+
+990
+00:52:19,483 --> 00:52:20,433
+About WQL...
+
+991
+00:52:20,450 --> 00:52:20,466
+>> Yeah.
+
+992
+00:52:20,483 --> 00:52:23,466
+>> So, so I got to tell you, this is one of the best investments
+
+993
+00:52:24,166 --> 00:52:28,466
+you can make is to go and do this Help About and spend some time
+
+994
+00:52:28,483 --> 00:52:31,433
+reading them. I mean, there's really great stuff there.
+
+995
+00:52:31,483 --> 00:52:34,333
+>> Yeah, and I think, I think the important side to this is that
+
+996
+00:52:34,416 --> 00:52:38,433
+there's actually two Help systems. The Help will help you discover
+
+997
+00:52:38,483 --> 00:52:41,466
+out of both of them. You've got Help system for the commandlets
+
+998
+00:52:41,483 --> 00:52:44,466
+and then you have this About_Help system, which, as Jeffrey just
+
+999
+00:52:44,483 --> 00:52:47,466
+said, is conceptual stuff. As we go through today, we're going
+
+1000
+00:52:47,483 --> 00:52:50,466
+to be pointing out, oh, yeah, you need more information, go to
+
+1001
+00:52:50,483 --> 00:52:52,466
+the about underscore, blah, blah, blah, blah, and there will
+
+1002
+00:52:52,483 --> 00:52:54,466
+be more information in it.
+
+1003
+00:52:54,483 --> 00:52:55,466
+>> No, there's more than that.
+
+1004
+00:52:55,483 --> 00:52:56,466
+>> What's more than that?
+
+1005
+00:52:56,483 --> 00:52:58,283
+>> Oh, so you don't know about Category?
+
+1006
+00:52:58,483 --> 00:52:59,466
+>> Category?
+
+1007
+00:52:59,483 --> 00:53:04,466
+>> Yeah. So Get Help plus Category, and here's the trick, right.
+
+1008
+00:53:04,483 --> 00:53:08,466
+So you say that I know that Category takes up value, but I don't
+
+1009
+00:53:08,483 --> 00:53:11,250
+know what value it is, right? And so sometimes we have to have
+
+1010
+00:53:11,333 --> 00:53:13,466
+completion, sometimes we don't. Here's what I have to do. I just
+
+1011
+00:53:13,483 --> 00:53:17,433
+like give a bad value and then often what it will do is it will
+
+1012
+00:53:17,450 --> 00:53:17,466
+tell you...
+
+1013
+00:53:18,483 --> 00:53:19,466
+>> Come up and tell you what categories?
+
+1014
+00:53:19,483 --> 00:53:23,466
+>> The argument, blah, blah, blah does not belong to the set and
+
+1015
+00:53:23,483 --> 00:53:25,466
+it tells you the set of things that you can type.
+
+1016
+00:53:26,333 --> 00:53:29,466
+>> Oh, so you can get specifically for, like, the providers we're
+
+1017
+00:53:29,483 --> 00:53:30,366
+going to be talking about?
+
+1018
+00:53:30,450 --> 00:53:33,466
+>> That's the key. I'll tell you here, we did this and set this
+
+1019
+00:53:33,483 --> 00:53:36,466
+up, and we had quite ambitious things for the Help subsystem,
+
+1020
+00:53:36,483 --> 00:53:39,466
+and we haven't fully implemented all of them. Some of our partners
+
+1021
+00:53:40,333 --> 00:53:42,466
+have implemented some of them, but we didn't. Like we were going
+
+1022
+00:53:42,483 --> 00:53:46,466
+to have FAQs and glossary terms. So if you say Help FAQ, it's
+
+1023
+00:53:46,483 --> 00:53:50,466
+not there. Okay? Like to get around to that. But in particular,
+
+1024
+00:53:50,483 --> 00:53:55,466
+notice here, it says... where did... provider, right? So what
+
+1025
+00:53:56,0 --> 00:53:56,466
+you can do is you can say...
+
+1026
+00:53:58,483 --> 00:54:01,466
+by the way, tab works.
+
+1027
+00:54:01,483 --> 00:54:02,466
+>> There you go.
+
+1028
+00:54:03,166 --> 00:54:05,466
+>> It tells you, oh, look here are the various providers.
+
+1029
+00:54:06,166 --> 00:54:08,233
+Now, we're going to talk about this topic later.
+
+1030
+00:54:08,316 --> 00:54:08,466
+>> Right.
+
+1031
+00:54:08,483 --> 00:54:11,183
+>> But if you did that and you said, oh, Get Help
+
+1032
+00:54:13,483 --> 00:54:19,433
+Certificate, certificate, cer, tiff, tiff, tiff.
+
+1033
+00:54:19,450 --> 00:54:19,466
+>> Tificate.
+
+1034
+00:54:19,483 --> 00:54:20,466
+>> It will
+
+1035
+00:54:22,183 --> 00:54:24,466
+give you information about a provider. When we get to the topic
+
+1036
+00:54:24,483 --> 00:54:27,466
+about providers, this will make more sense. But it's a very,
+
+1037
+00:54:27,483 --> 00:54:28,466
+very rich Help system.
+
+1038
+00:54:28,483 --> 00:54:30,466
+>> Yeah, very rich Help system.
+

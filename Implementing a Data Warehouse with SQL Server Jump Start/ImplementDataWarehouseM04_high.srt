@@ -1,0 +1,2852 @@
+1
+00:00:00,333 --> 00:00:07,333
+[Music]
+
+2
+00:00:18,483 --> 00:00:20,466
+Welcome back, everyone, to Implementing a Data
+
+3
+00:00:20,483 --> 00:00:23,433
+Warehouse with SQL Server 2012 Jumpstart.
+
+4
+00:00:23,483 --> 00:00:27,466
+I'm George Squillace. I'm here with my colleague, Rich Currey.
+
+5
+00:00:28,483 --> 00:00:32,466
+Lots of good stuff up in this next session. Before I pass the
+
+6
+00:00:32,483 --> 00:00:35,300
+football to you, Rich, I just want to give a shout out to our
+
+7
+00:00:35,383 --> 00:00:36,466
+project manager Alice.
+
+8
+00:00:38,283 --> 00:00:39,466
+>> We couldn't have done it without her.
+
+9
+00:00:39,483 --> 00:00:42,466
+>> And the wizards behind the multimedia gear, some heavy gear,
+
+10
+00:00:42,483 --> 00:00:43,466
+Danny and Barry.
+
+11
+00:00:44,483 --> 00:00:45,466
+>> Thanks, guys!
+
+12
+00:00:45,483 --> 00:00:48,466
+>> So, Rich, what's up in this module?
+
+13
+00:00:48,483 --> 00:00:52,466
+>> Well, we've been talking about data flow. Data flow is the
+
+14
+00:00:52,483 --> 00:00:55,466
+middle part of the ETL process, but you know what?
+
+15
+00:00:56,483 --> 00:01:01,333
+Data flow is only one piece of what can be a pretty complex work
+
+16
+00:01:01,416 --> 00:01:06,350
+flow that may involve things like sending emails, like accessing
+
+17
+00:01:06,433 --> 00:01:11,466
+FTP sites, going out and looping through files in a directory.
+
+18
+00:01:11,483 --> 00:01:16,466
+All sorts of stuff that is peripheral to the actual process of
+
+19
+00:01:16,483 --> 00:01:20,466
+extracting data, transforming it and loading it, but it is as
+
+20
+00:01:21,166 --> 00:01:27,383
+integral a part of the process as any data flow can be, and that's
+
+21
+00:01:27,466 --> 00:01:32,466
+called control flow. So what we're headed in to in this module
+
+22
+00:01:33,483 --> 00:01:37,266
+is an overview that's going to talk about all of the different
+
+23
+00:01:37,350 --> 00:01:41,466
+containers that are available, the tasks that they can contain
+
+24
+00:01:41,483 --> 00:01:45,466
+that get executed. We're going to talk about how to tie these
+
+25
+00:01:45,483 --> 00:01:51,216
+tasks together and control the sequence of execution with precedents constraints.
+
+26
+00:01:51,483 --> 00:01:56,166
+We're going to deal with the ability to pass information form
+
+27
+00:01:56,483 --> 00:02:01,416
+one task to another, or from one package to another, or just
+
+28
+00:02:01,483 --> 00:02:06,466
+from an external environment to the e-package itself, variables
+
+29
+00:02:06,483 --> 00:02:07,416
+in parameters.
+
+30
+00:02:07,483 --> 00:02:12,466
+And last, but certainly not least, George, checkpoints in transactions,
+
+31
+00:02:12,483 --> 00:02:19,400
+being able to control whether or not data is actually saved
+
+32
+00:02:20,483 --> 00:02:25,466
+and whether or not we can pick up in the middle of a flow if
+
+33
+00:02:25,483 --> 00:02:26,466
+it breaks.
+
+34
+00:02:26,483 --> 00:02:27,466
+>> There you go.
+
+35
+00:02:27,483 --> 00:02:32,466
+>> So lets start off with containers and tasks. Containers and
+
+36
+00:02:32,483 --> 00:02:38,466
+tasks are the two pieces that we use to develop a workflow.
+
+37
+00:02:38,483 --> 00:02:39,466
+The containers
+
+38
+00:02:40,483 --> 00:02:45,466
+take a series of tasks and treat them as a single unit and the
+
+39
+00:02:46,483 --> 00:02:47,466
+tasks themselves
+
+40
+00:02:48,483 --> 00:02:53,466
+that define the pieces of work that we're going to do.
+
+41
+00:02:54,483 --> 00:02:57,466
+So some of the common tasks that we deal with, well, they're
+
+42
+00:02:57,483 --> 00:02:58,466
+execute tasks.
+
+43
+00:02:59,483 --> 00:03:04,466
+Execute SQL is going to give us the ability to create an SQL
+
+44
+00:03:04,483 --> 00:03:09,466
+command and pass it out to an already BMS system for execution.
+
+45
+00:03:09,483 --> 00:03:13,466
+Now, the nature of the command deals with the nature of the connection.
+
+46
+00:03:13,483 --> 00:03:18,466
+If it's a SQL Server it's going to be a T SQL. If it is non-SQL
+
+47
+00:03:18,483 --> 00:03:23,466
+Server it's going to be another language. We also have to ability
+
+48
+00:03:23,483 --> 00:03:29,466
+to develop modular workflows by creating individual packages
+
+49
+00:03:29,483 --> 00:03:33,466
+that encapsulate a series of tasks that maybe has to execute
+
+50
+00:03:33,483 --> 00:03:36,166
+in three or four different processes.
+
+51
+00:03:37,483 --> 00:03:45,466
+We have a task called the execute package task where we can now
+
+52
+00:03:45,483 --> 00:03:51,466
+configure it to go out, grab a different SSIS package, and force
+
+53
+00:03:51,483 --> 00:03:56,416
+that to run a workflow. So we have to ability to build a package
+
+54
+00:03:56,483 --> 00:04:01,466
+to accomplish a specific process, and then to use that process
+
+55
+00:04:01,483 --> 00:04:04,216
+in many other separate processes.
+
+56
+00:04:05,483 --> 00:04:10,466
+We also have, speaking of process, the execute process task.
+
+57
+00:04:11,166 --> 00:04:15,383
+Execute process allows us to go out and get a non-SSIS
+
+58
+00:04:16,483 --> 00:04:21,466
+executable and cause that to execute. Maybe it's going to be
+
+59
+00:04:21,483 --> 00:04:28,466
+to open up a file using an application, maybe there is an executable
+
+60
+00:04:28,483 --> 00:04:32,266
+that goes out and reaches out to an application to get data,
+
+61
+00:04:32,350 --> 00:04:33,466
+whatever it might be.
+
+62
+00:04:34,483 --> 00:04:38,466
+Then we have the file system task. File system task is one of
+
+63
+00:04:38,483 --> 00:04:42,466
+those that gets used quite a bit because, if you think, there
+
+64
+00:04:42,483 --> 00:04:47,466
+are a whole lot of different areas where people bring Excel files,
+
+65
+00:04:48,333 --> 00:04:54,216
+CSV files, Word documents, whatever they might be, and they drop
+
+66
+00:04:54,300 --> 00:04:58,466
+them to be processed at a later point. The file system task
+
+67
+00:04:58,483 --> 00:05:02,466
+gives us the ability to manage those external files. Maybe we're
+
+68
+00:05:02,483 --> 00:05:05,466
+going to copy them to a new location. Maybe we're going to create
+
+69
+00:05:05,483 --> 00:05:09,466
+a new directory to move them into. Whatever it might be, that's
+
+70
+00:05:09,483 --> 00:05:11,466
+where the file system task goes.
+
+71
+00:05:12,483 --> 00:05:18,466
+We then have one, which is real important. You need to know
+
+72
+00:05:18,483 --> 00:05:21,416
+this task, the send mail task.
+
+73
+00:05:22,166 --> 00:05:25,466
+Send mail is for notification.
+
+74
+00:05:26,483 --> 00:05:30,466
+Now, many times when you've got a notification
+
+75
+00:05:31,483 --> 00:05:38,466
+you need to tell people when something fails, when something
+
+76
+00:05:39,333 --> 00:05:44,466
+is completed, the send mail task allows you to send that email
+
+77
+00:05:44,183 --> 00:05:51,466
+out so that other folks are aware of when that process is completed.
+
+78
+00:05:51,483 --> 00:05:52,466
+>> Super useful.
+
+79
+00:05:52,483 --> 00:05:55,466
+>> Yeah, it requires an SMTP Connection Manager.
+
+80
+00:05:55,483 --> 00:05:56,466
+>> No surprise.
+
+81
+00:05:56,483 --> 00:06:01,466
+>> No! But SMTP is pretty easy. You need to IP address of the
+
+82
+00:06:01,483 --> 00:06:06,466
+SMTP server and you need potentially, depending on configuration,
+
+83
+00:06:07,483 --> 00:06:08,466
+some authentication information.
+
+84
+00:06:09,483 --> 00:06:13,466
+Finally, you've got a task grouping. Now, I've got to tell you,
+
+85
+00:06:13,483 --> 00:06:19,466
+George, this is not an actual task. It doesn't accomplish anything.
+
+86
+00:06:19,483 --> 00:06:24,466
+Task grouping is more about design than it is anything else.
+
+87
+00:06:25,166 --> 00:06:30,466
+Task grouping allows me to take a series or a group of tasks
+
+88
+00:06:30,483 --> 00:06:35,466
+and associate them visually in the editor so that I can hide
+
+89
+00:06:35,483 --> 00:06:39,466
+them or move them around as a unit, rather than having to deal
+
+90
+00:06:39,483 --> 00:06:43,466
+with them one by one. So if you've got a large workflow that
+
+91
+00:06:43,483 --> 00:06:50,466
+has 50, 60, 100, 200 tasks you can group them into units so that
+
+92
+00:06:50,483 --> 00:06:53,466
+you're not constantly scrolling all over the place.
+
+93
+00:06:53,483 --> 00:06:57,466
+Collapse each group and then just expand it when you're working
+
+94
+00:06:57,183 --> 00:06:59,466
+with the tasks in that group.
+
+95
+00:06:59,483 --> 00:07:04,466
+Now, along with the common tasks we have a series of containers,
+
+96
+00:07:04,483 --> 00:07:12,333
+and these unlike groups, are actual execution issues. So I have
+
+97
+00:07:12,416 --> 00:07:16,466
+a sequence container. A sequence container takes a series of
+
+98
+00:07:16,483 --> 00:07:25,466
+tasks and turns it into a single execution unit so that the success
+
+99
+00:07:25,183 --> 00:07:28,466
+or failure of all of them together
+
+100
+00:07:29,483 --> 00:07:34,466
+is determined by the success or failure of each individual one.
+
+101
+00:07:34,483 --> 00:07:38,466
+So no longer are we talking about each individual task as its
+
+102
+00:07:38,483 --> 00:07:43,466
+own, but grouping them together for execution purposes so that
+
+103
+00:07:43,483 --> 00:07:47,333
+only when they've all completed would I move on.
+
+104
+00:07:48,483 --> 00:07:53,466
+Next we have the for loop. For loop, if you're a developer, if
+
+105
+00:07:53,216 --> 00:07:57,466
+you've done any coding, you've probably run into a for loop before.
+
+106
+00:07:57,483 --> 00:08:02,200
+The for loop allows you to create an iteration.
+
+107
+00:08:02,483 --> 00:08:07,466
+So I may have three or four tasks in there that are going to
+
+108
+00:08:07,216 --> 00:08:08,466
+run repeatedly.
+
+109
+00:08:09,483 --> 00:08:15,466
+A for loop you define how many times you want to run through it.
+
+110
+00:08:15,233 --> 00:08:20,466
+A starting point and ending point determines a set number of executions.
+
+111
+00:08:22,166 --> 00:08:23,466
+Now, set number of executions?
+
+112
+00:08:24,483 --> 00:08:26,466
+I'm going to give you an example here.
+
+113
+00:08:27,483 --> 00:08:32,466
+If I have Excel files that are being dropped in a directory, George...
+
+114
+00:08:32,183 --> 00:08:32,466
+>> Sure.
+
+115
+00:08:32,483 --> 00:08:37,466
+>> Let's say I have ten sales reps out there and their job is
+
+116
+00:08:37,483 --> 00:08:41,400
+on Friday of every week, by 5 P.M.
+
+117
+00:08:42,483 --> 00:08:46,466
+they need to drop that Excel file in a directory so that I can
+
+118
+00:08:46,483 --> 00:08:49,466
+import it into the data warehouse. Maybe they're putting their
+
+119
+00:08:49,483 --> 00:08:52,466
+next two weeks forecast in.
+
+120
+00:08:53,483 --> 00:09:02,466
+So Fred is a sales rep, and Fred is at a client until 5:15 on Friday.
+
+121
+00:09:04,483 --> 00:09:09,250
+My other nine sales reps got their files there, but Fred didn't.
+
+122
+00:09:09,483 --> 00:09:15,266
+So if I were expecting ten files and only nine of them show up,
+
+123
+00:09:15,350 --> 00:09:16,466
+what's that going to do to my for loop?
+
+124
+00:09:16,483 --> 00:09:17,466
+>> Kaboom!
+
+125
+00:09:17,483 --> 00:09:21,466
+>> That would be right. It is a gone-er. It's going to look for
+
+126
+00:09:21,483 --> 00:09:25,466
+that tenth iteration, no file there, done.
+
+127
+00:09:26,483 --> 00:09:31,466
+So instead of a for loop I have a for each loop.
+
+128
+00:09:31,483 --> 00:09:37,466
+The for each loop iterates through a collection, a collection
+
+129
+00:09:37,483 --> 00:09:45,266
+of files, a collection of objects, a collection of things that
+
+130
+00:09:45,350 --> 00:09:51,350
+you can think of. Anything that you can iterate through you can
+
+131
+00:09:51,433 --> 00:09:53,466
+have a for each loop
+
+132
+00:09:54,483 --> 00:10:01,466
+to do it, and all of them contain a series of tasks. You define
+
+133
+00:10:01,200 --> 00:10:03,466
+the tasks that are going to be looped through.
+
+134
+00:10:04,483 --> 00:10:07,466
+So what do you think, George? Should we go take a look at it?
+
+135
+00:10:08,0 --> 00:10:09,466
+>> Yeah, give us the tour.
+
+136
+00:10:09,483 --> 00:10:14,266
+>> All right. So here I've got a workflow, and in this workflow...
+
+137
+00:10:14,350 --> 00:10:17,466
+I'm going to zoom out a little bit so you can see it's not exactly
+
+138
+00:10:17,483 --> 00:10:23,216
+just a simple one. It's got a for loop, it's got a sequence container,
+
+139
+00:10:23,483 --> 00:10:27,466
+it goes out and sends and email, creates a folder, and I apologize
+
+140
+00:10:27,483 --> 00:10:31,466
+the graphic's a little bit tough to read. But as you can see
+
+141
+00:10:31,483 --> 00:10:34,300
+when you zoom out to the point where you can read it, it gets
+
+142
+00:10:34,383 --> 00:10:38,466
+now you can't see the whole workflow. But the key there is that
+
+143
+00:10:38,483 --> 00:10:43,466
+in my for loop I've got an open file. Kind of the situation
+
+144
+00:10:43,483 --> 00:10:47,466
+we were talking about where I'm going to go through and grab
+
+145
+00:10:47,483 --> 00:10:54,466
+a file and do something with it. Well, if I go into my for loop
+
+146
+00:10:54,483 --> 00:10:57,466
+you can see I've got a fixed set of expressions.
+
+147
+00:10:58,483 --> 00:11:03,250
+The initial expression, which is where the starting point, the
+
+148
+00:11:03,333 --> 00:11:06,466
+eval, where it's going to stop, and what you do at the end of
+
+149
+00:11:06,483 --> 00:11:10,466
+every loop, the assign expression. So this is going to go through
+
+150
+00:11:10,483 --> 00:11:11,466
+from one to four.
+
+151
+00:11:12,483 --> 00:11:15,466
+Now, what happens if one of those files is missing, George?
+
+152
+00:11:16,483 --> 00:11:17,416
+>> What's going to happen?
+
+153
+00:11:17,483 --> 00:11:18,466
+>> It's going to blow up.
+
+154
+00:11:18,483 --> 00:11:19,433
+>> Uh-oh.
+
+155
+00:11:19,483 --> 00:11:24,300
+>> So having a fixed number of iterations is not what I want.
+
+156
+00:11:24,383 --> 00:11:29,466
+I'm going to replace that with a for each loop.
+
+157
+00:11:30,483 --> 00:11:34,466
+And now I can configure in the for each loop
+
+158
+00:11:37,333 --> 00:11:37,466
+the collection
+
+159
+00:11:39,483 --> 00:11:41,466
+that I want it to use.
+
+160
+00:11:41,483 --> 00:11:46,466
+I've got a series of different kinds. I can do a file enumerator.
+
+161
+00:11:46,483 --> 00:11:52,466
+I can do an item enumerator where I define what the item is.
+
+162
+00:11:54,166 --> 00:11:59,466
+I can do an ADO enumerator where I give it a source object an
+
+163
+00:11:59,483 --> 00:12:03,466
+ADO enumerator deals with records in a record set.
+
+164
+00:12:04,283 --> 00:12:11,466
+I have an ADO.NET schema row set to go through the schemas in
+
+165
+00:12:11,200 --> 00:12:15,466
+a database so I could process all of the tables in each schema
+
+166
+00:12:15,483 --> 00:12:16,466
+for example.
+
+167
+00:12:17,483 --> 00:12:18,266
+I also
+
+168
+00:12:19,483 --> 00:12:24,466
+have a variable enumerator to loop through a series of variables,
+
+169
+00:12:24,483 --> 00:12:30,466
+a node list and a server management objects iterator, which
+
+170
+00:12:33,483 --> 00:12:36,466
+connects to the SQL Server management objects.
+
+171
+00:12:37,483 --> 00:12:41,466
+So for each file enumerator there are a couple of things you
+
+172
+00:12:41,483 --> 00:12:44,466
+are going to put in here. Number one, you're going to specify
+
+173
+00:12:45,483 --> 00:12:50,466
+the folder that it's going to point to. And this is real straightforward.
+
+174
+00:12:50,450 --> 00:12:54,466
+It's just a browser. Pick it and off you go. I'm going to leave
+
+175
+00:12:54,216 --> 00:12:55,466
+it on that C drive.
+
+176
+00:12:56,466 --> 00:13:01,200
+And then you specify the pattern for the files that it wants
+
+177
+00:13:01,283 --> 00:13:01,466
+to hit.
+
+178
+00:13:02,483 --> 00:13:07,466
+If I wanted all Excel files I could say Excelxx for example,
+
+179
+00:13:07,483 --> 00:13:11,466
+and it's going to grab only those files with that extension.
+
+180
+00:13:12,483 --> 00:13:16,466
+And then I can tell it do I want to use retrieve the name and
+
+181
+00:13:17,166 --> 00:13:22,466
+extension, just the fully qualified path, or just the name?
+
+182
+00:13:22,483 --> 00:13:27,466
+And I can even, George, ask it to go down and grab all the subfolders
+
+183
+00:13:28,200 --> 00:13:28,466
+if I want.
+
+184
+00:13:29,483 --> 00:13:30,466
+>> Recursion!
+
+185
+00:13:30,483 --> 00:13:35,333
+>> I love recursion. It makes it easy. And then finally, I choose
+
+186
+00:13:35,483 --> 00:13:40,466
+the variable that I want to put the value into and the index
+
+187
+00:13:41,483 --> 00:13:46,466
+point of it when I'm all done I hit Okay, and I have now configure
+
+188
+00:13:46,483 --> 00:13:50,466
+my loop container. It's going to put the file name into the f
+
+189
+00:13:50,483 --> 00:13:56,433
+name variable. I now populate and drag any tasks that I want
+
+190
+00:13:56,483 --> 00:14:00,333
+into that for each loop and deal with it.
+
+191
+00:14:00,483 --> 00:14:06,466
+>> So whatever task I drag in there it will loop through whatever
+
+192
+00:14:06,183 --> 00:14:10,333
+files happen to be in that folder with a variable number of objects?
+
+193
+00:14:10,483 --> 00:14:14,466
+>> Exactly. So if there are five files there it will loop five times.
+
+194
+00:14:14,483 --> 00:14:18,466
+If there are 25 files there it loops 25 times. You don't need
+
+195
+00:14:18,483 --> 00:14:20,466
+to worry about it.
+
+196
+00:14:20,483 --> 00:14:22,233
+>> Good programming resiliency!
+
+197
+00:14:22,483 --> 00:14:25,466
+>> I like that! I like that a lot!
+
+198
+00:14:25,483 --> 00:14:29,166
+>> Well, we have more to look at along the lines of workflow.
+
+199
+00:14:29,483 --> 00:14:31,466
+So precedence constraints come up next, Rich.
+
+200
+00:14:31,483 --> 00:14:36,466
+>> So when we're talking about a precedence constraint, a precedence
+
+201
+00:14:36,166 --> 00:14:39,466
+constraint very simply we've got multiple tasks to execute and
+
+202
+00:14:40,0 --> 00:14:44,466
+a workflow, right George? And each of those tasks typically you
+
+203
+00:14:44,483 --> 00:14:50,466
+have to do task one before you do task two because there are dependencies.
+
+204
+00:14:50,483 --> 00:14:51,350
+>> Absolutely.
+
+205
+00:14:51,433 --> 00:14:55,466
+>> If I have files in directory A and I'm processing them from
+
+206
+00:14:55,483 --> 00:15:00,466
+directory B I need to make sure they get moved from A to B first.
+
+207
+00:15:00,483 --> 00:15:07,466
+So what the order that things happen is determined by the precedence constraints.
+
+208
+00:15:07,483 --> 00:15:11,183
+Now, you've got two kinds. You've got very simple ones, which
+
+209
+00:15:11,266 --> 00:15:15,466
+are just drag and drop, and you've got more complex ones where
+
+210
+00:15:15,483 --> 00:15:19,466
+you can put in expressions where it's not just dependent on a
+
+211
+00:15:20,483 --> 00:15:24,466
+task status, maybe it's dependent on a piece of information in
+
+212
+00:15:24,483 --> 00:15:27,466
+a variable as to whether or not it's going to run as well.
+
+213
+00:15:28,483 --> 00:15:34,466
+Now, the simple constraints very simply, every task that you
+
+214
+00:15:34,483 --> 00:15:39,466
+configure in the control flow is going to have an arrow.
+
+215
+00:15:39,483 --> 00:15:43,466
+You grab the arrow, you drag it and drop it on the task that
+
+216
+00:15:44,333 --> 00:15:47,466
+you want to run next, and then you have a choice, George.
+
+217
+00:15:47,483 --> 00:15:48,466
+>> What's the choice?
+
+218
+00:15:48,483 --> 00:15:53,450
+>> The choice is do I want it to run as soon as the previous task
+
+219
+00:15:53,483 --> 00:15:54,0
+is done?
+
+220
+00:15:54,483 --> 00:16:00,466
+DO I want to it to run only if the previous task completes successfully?
+
+221
+00:16:00,483 --> 00:16:06,466
+Or do I want it to run only if the previous task runs unsuccessfully?
+
+222
+00:16:07,200 --> 00:16:12,466
+As an example, I have a task that copies files from directory
+
+223
+00:16:12,483 --> 00:16:13,466
+A to directory B.
+
+224
+00:16:14,483 --> 00:16:19,466
+When that task is completed I'm then going to take those files
+
+225
+00:16:19,183 --> 00:16:20,466
+and put them into a dataflow.
+
+226
+00:16:21,483 --> 00:16:25,466
+Now, if the copy happens successfully I want to run the dataflow, right?
+
+227
+00:16:25,483 --> 00:16:26,466
+>> Yup.
+
+228
+00:16:26,483 --> 00:16:31,466
+>> If the copy runs unsuccessfully is there any sense in doing
+
+229
+00:16:31,483 --> 00:16:32,233
+to dataflow?
+
+230
+00:16:32,316 --> 00:16:32,466
+>> No.
+
+231
+00:16:32,483 --> 00:16:36,466
+>> No! Because the files aren't there! But what would make sense
+
+232
+00:16:36,483 --> 00:16:42,466
+is to now send an email to somebody saying that the copy failed.
+
+233
+00:16:43,316 --> 00:16:49,466
+So now I put in my file system task and I create a dataflow task.
+
+234
+00:16:49,483 --> 00:16:55,383
+I connect it with success precedence, I put in a send mail task,
+
+235
+00:16:55,466 --> 00:16:58,466
+I connect it with the failure precedence.
+
+236
+00:16:59,483 --> 00:17:00,466
+Now here's the cool part, George.
+
+237
+00:17:00,483 --> 00:17:01,466
+>> The cool part is?
+
+238
+00:17:02,483 --> 00:17:05,250
+>> If I don't connect any tasks, guess what?
+
+239
+00:17:05,333 --> 00:17:05,466
+>> What's that?
+
+240
+00:17:05,483 --> 00:17:09,466
+>> They run at the same time. If I've got four tasks and none
+
+241
+00:17:09,483 --> 00:17:12,466
+of them are connected to each other they're going to run in parallel.
+
+242
+00:17:12,483 --> 00:17:17,250
+But if I've got two tasks that need to run and then the third
+
+243
+00:17:17,333 --> 00:17:22,466
+one runs and finally I've got two tasks afterwards, I could have
+
+244
+00:17:22,483 --> 00:17:28,466
+multiple predecessors, I could have multiple successors to any task.
+
+245
+00:17:29,483 --> 00:17:30,466
+>> Nice.
+
+246
+00:17:30,200 --> 00:17:30,466
+>> It is.
+
+247
+00:17:30,483 --> 00:17:34,466
+>> Lots of control. And speaking of control, it goes even crazier
+
+248
+00:17:34,483 --> 00:17:35,466
+than that.
+
+249
+00:17:35,483 --> 00:17:38,433
+>> Yeah, it does, because I have to tell you,
+
+250
+00:17:39,483 --> 00:17:44,466
+having a dependency from one task to the other is cool, but sometimes
+
+251
+00:17:44,483 --> 00:17:50,466
+it's not enough. Sometimes I may have an external dependency
+
+252
+00:17:51,316 --> 00:17:55,466
+maybe a variable where a value needed to be set to a specific
+
+253
+00:17:55,483 --> 00:18:01,466
+value in order to trigger the next flow. Maybe I've got a package
+
+254
+00:18:01,483 --> 00:18:04,466
+where when that package is executed
+
+255
+00:18:06,483 --> 00:18:12,466
+the IDE or the user or whoever is causing it to run has to ability
+
+256
+00:18:12,483 --> 00:18:16,466
+to set a parameter value that says if it's one I want to do this,
+
+257
+00:18:16,483 --> 00:18:20,466
+if it's two I want to do that, if it's three I want to do something else.
+
+258
+00:18:21,483 --> 00:18:26,216
+It's a choice, a conscious decision being made by the person executing.
+
+259
+00:18:26,483 --> 00:18:28,466
+So now I can add in
+
+260
+00:18:30,483 --> 00:18:34,466
+a condition over and above a previous task that's going to go
+
+261
+00:18:34,483 --> 00:18:39,466
+out, check the parameter value, and only if the previous task
+
+262
+00:18:39,483 --> 00:18:44,466
+completed and the value was three is it going to go do this next one.
+
+263
+00:18:45,483 --> 00:18:51,466
+Okay? So let's flip over, take a look at what we got here.
+
+264
+00:18:52,483 --> 00:18:57,466
+I am going to illustrate very quickly. We have some further
+
+265
+00:18:58,483 --> 00:19:00,466
+on, shall we say, dependencies here.
+
+266
+00:19:01,483 --> 00:19:05,466
+This first one, if you look, we have a connection between our
+
+267
+00:19:05,483 --> 00:19:09,466
+for each loop and our sequence container, and the color of the
+
+268
+00:19:09,483 --> 00:19:12,466
+connection, you can see it in the GUI, is green.
+
+269
+00:19:13,483 --> 00:19:17,383
+Now, I am going to throw something out here because it's important
+
+270
+00:19:17,466 --> 00:19:20,383
+for people to know. There are a lot of folks out there that are
+
+271
+00:19:20,466 --> 00:19:23,466
+colorblind, so you're not going to be able to just look at those
+
+272
+00:19:23,483 --> 00:19:28,466
+connectors and see green, red, or and we had this argument yesterday,
+
+273
+00:19:29,333 --> 00:19:33,466
+either blue or black on completion. Because I got to tell you,
+
+274
+00:19:33,483 --> 00:19:36,466
+George and I went back and forth for at least five minutes trying
+
+275
+00:19:36,483 --> 00:19:42,466
+to figure out is it blue or is it black? Okay? Yeah. This is black!
+
+276
+00:19:43,366 --> 00:19:44,316
+That's blue!
+
+277
+00:19:44,333 --> 00:19:44,466
+[Laughter]
+
+278
+00:19:45,483 --> 00:19:50,466
+It wasn't as obvious. So if you are colorblind let's go back
+
+279
+00:19:50,483 --> 00:19:53,466
+to the VM, I'm going to show you the trick. You right click
+
+280
+00:19:53,483 --> 00:19:58,466
+on it and it will tell you success, failure, and completion with
+
+281
+00:19:58,483 --> 00:20:02,466
+the check mark. And guess what? That's the way that you choose
+
+282
+00:20:02,483 --> 00:20:03,466
+it as well.
+
+283
+00:20:03,483 --> 00:20:06,200
+>> The condition is what matters, not the color.
+
+284
+00:20:06,283 --> 00:20:09,466
+>> Absolutely. And no, for those of you that are wondering, it
+
+285
+00:20:09,483 --> 00:20:15,466
+is not configurable for color. All right. So we've chosen our
+
+286
+00:20:15,483 --> 00:20:19,466
+success condition here and you can see down here I've got my
+
+287
+00:20:19,483 --> 00:20:22,466
+blue, is it blue is it black, arrow.
+
+288
+00:20:23,333 --> 00:20:27,466
+If I look it does say the word completion right on top of it.
+
+289
+00:20:27,483 --> 00:20:31,466
+So another indicator without having to right click on it, it
+
+290
+00:20:31,483 --> 00:20:34,466
+does indicate failure completion.
+
+291
+00:20:35,316 --> 00:20:39,400
+Now, some of these are solid lines, some are dotted lines.
+
+292
+00:20:39,450 --> 00:20:39,466
+>> Curious.
+
+293
+00:20:40,0 --> 00:20:42,466
+>> Yeah. That's an indicator as well.
+
+294
+00:20:43,483 --> 00:20:49,316
+The solid line means that it is a simple constraint. It is only
+
+295
+00:20:49,400 --> 00:20:52,466
+dependent on the status of the previous task.
+
+296
+00:20:52,483 --> 00:20:58,466
+The dotted line, however, is an indication that there are multiple
+
+297
+00:20:58,483 --> 00:21:05,300
+constraints involved here. It's not just the sequence container failed.
+
+298
+00:21:05,483 --> 00:21:09,466
+So let's take a look this particular constraint right here, which
+
+299
+00:21:09,483 --> 00:21:13,466
+is failure. I right click on it, and I'm going to choose edit
+
+300
+00:21:14,0 --> 00:21:15,466
+this time, George.
+
+301
+00:21:15,233 --> 00:21:15,466
+>> Fun.
+
+302
+00:21:16,483 --> 00:21:22,466
+>> And you can see that I now have here an evaluation operation
+
+303
+00:21:22,483 --> 00:21:26,466
+of constraint. I'm going to go in and change it to expression
+
+304
+00:21:27,483 --> 00:21:28,466
+and constraint.
+
+305
+00:21:29,333 --> 00:21:35,466
+Now, I designate is it a logical or or is it a logical and?
+
+306
+00:21:35,483 --> 00:21:41,466
+Either one is okay but I specify now my expression.
+
+307
+00:21:42,483 --> 00:21:47,466
+And this is where I could go out and say, for example, I only
+
+308
+00:21:47,483 --> 00:21:53,466
+want this to fire if counter is greater than... Woops!
+
+309
+00:21:53,483 --> 00:21:56,466
+What did I do? I double clicked didn't I?
+
+310
+00:21:56,483 --> 00:21:57,466
+>> Just over type, no problem.
+
+311
+00:21:57,483 --> 00:21:59,466
+>> Yeah, we'll fix that. Drag it in again.
+
+312
+00:22:00,450 --> 00:22:00,466
+>> Perfect.
+
+313
+00:22:00,483 --> 00:22:07,466
+>> Is greater than five. So now I've set up a condition where
+
+314
+00:22:07,483 --> 00:22:08,466
+I've got two
+
+315
+00:22:09,483 --> 00:22:15,466
+conditions that are in play, they both must be true.
+
+316
+00:22:16,483 --> 00:22:22,466
+If the previous task fails and the value of the counter variable
+
+317
+00:22:22,483 --> 00:22:23,466
+is greater than five
+
+318
+00:22:25,483 --> 00:22:31,466
+we have the next task, which is our send failure notification
+
+319
+00:22:31,483 --> 00:22:32,466
+that's going to run.
+
+320
+00:22:33,483 --> 00:22:39,466
+And you can see the fx right next to it that tells you you have
+
+321
+00:22:39,483 --> 00:22:45,283
+an expression condition in there as well. Cool?
+
+322
+00:22:45,366 --> 00:22:46,466
+>> Very cool.
+
+323
+00:22:46,483 --> 00:22:47,316
+>> All right.
+
+324
+00:22:47,483 --> 00:22:50,466
+So what do we have coming up next sir?
+
+325
+00:22:50,483 --> 00:22:54,466
+>> And next up we have variables and parameters. Some other ways
+
+326
+00:22:54,483 --> 00:22:56,466
+we can make packages dynamic.
+
+327
+00:22:56,483 --> 00:23:00,300
+>> You mean now I get to explain all of that stuff I've been talking
+
+328
+00:23:00,383 --> 00:23:01,466
+about with the variables?
+
+329
+00:23:01,483 --> 00:23:04,366
+>> Well, you dropped some hints earlier. You told us more was
+
+330
+00:23:04,450 --> 00:23:06,466
+coming up. So now the time has come.
+
+331
+00:23:06,483 --> 00:23:10,283
+>> Okay. Let's drop into it. Variables and parameters, they're
+
+332
+00:23:10,366 --> 00:23:17,433
+very similar. Okay? A variable is a storage location inside the
+
+333
+00:23:17,483 --> 00:23:22,466
+package that's going to store a value. It requires a name.
+
+334
+00:23:23,233 --> 00:23:29,466
+It requires that you have a data type. It requires that you have...
+
+335
+00:23:30,483 --> 00:23:38,466
+I messed up here I got confused.
+
+336
+00:23:39,483 --> 00:23:40,466
+An initial value.
+
+337
+00:23:41,166 --> 00:23:46,466
+It has a length in some cases, depending on what it is.
+
+338
+00:23:47,483 --> 00:23:51,466
+And it stores a piece of information. Now, there are a couple
+
+339
+00:23:52,483 --> 00:23:56,466
+of kinds of variables. You've got system variables, which are
+
+340
+00:23:56,483 --> 00:24:01,466
+predefined by SSIS, they can store information like the execution
+
+341
+00:24:01,483 --> 00:24:05,466
+time, like the user name, the name of the package and some of
+
+342
+00:24:05,483 --> 00:24:07,416
+those GUIDS.
+
+343
+00:24:08,483 --> 00:24:10,466
+>> Package ID, execution ID.
+
+344
+00:24:10,483 --> 00:24:14,466
+>> 16 bit hexadecimal numbers that are guaranteed random. I hate
+
+345
+00:24:14,483 --> 00:24:16,466
+looking at them they are way too long.
+
+346
+00:24:17,483 --> 00:24:21,466
+They all start with a prefix of the word system and then colon
+
+347
+00:24:21,483 --> 00:24:26,250
+colon the name of the variable. They're easy. But I'm not done.
+
+348
+00:24:26,333 --> 00:24:27,466
+I can create my own.
+
+349
+00:24:28,483 --> 00:24:34,466
+Those are going to start with user colon colon and will follow
+
+350
+00:24:34,483 --> 00:24:38,466
+with the name of the variable, and then I give it the scope,
+
+351
+00:24:38,483 --> 00:24:42,400
+which is what executables are going to be able to access the
+
+352
+00:24:42,483 --> 00:24:48,466
+value, I give it its data type, and I give it its initial value.
+
+353
+00:24:49,483 --> 00:24:52,466
+>> I don't remember if you talk about scope more coming up or not.
+
+354
+00:24:52,483 --> 00:24:57,466
+>> I do, but let's define it right here and right now. So if
+
+355
+00:24:57,483 --> 00:25:05,466
+I have a variable that's defined inside a specific dataflow,
+
+356
+00:25:05,483 --> 00:25:06,466
+for example.
+
+357
+00:25:08,483 --> 00:25:12,266
+If I'm outside that dataflow does the variable exist?
+
+358
+00:25:12,483 --> 00:25:21,466
+No. So it's limited to the scope of whatever is inside that dataflow task.
+
+359
+00:25:22,483 --> 00:25:27,466
+Now, scope can be at the task level. It can be at the container level.
+
+360
+00:25:27,483 --> 00:25:29,466
+Scope can even be the package level.
+
+361
+00:25:29,483 --> 00:25:30,466
+>> Package-wide.
+
+362
+00:25:30,483 --> 00:25:35,466
+>> Absolutely. You are defining where that variable is going to live.
+
+363
+00:25:36,483 --> 00:25:40,466
+And in defining where it lives you're identifying all of the
+
+364
+00:25:40,483 --> 00:25:44,466
+pieces of the package that are then going to be able to access
+
+365
+00:25:44,483 --> 00:25:45,250
+the value.
+
+366
+00:25:45,483 --> 00:25:47,166
+>> Can I mention one more thing, Rich?
+
+367
+00:25:47,250 --> 00:25:50,466
+>> You can, George. One of the things that was nasty in SSIS,
+
+368
+00:25:50,483 --> 00:25:55,183
+pardon me, something I didn't quite appreciate previously was
+
+369
+00:25:55,266 --> 00:25:59,466
+that once you defined scope and SSIS you stepped in a bear trap
+
+370
+00:25:59,483 --> 00:26:02,450
+and could not change that. And now there's a nice little button
+
+371
+00:26:02,483 --> 00:26:06,466
+where you can change the scope from task, container, package,
+
+372
+00:26:06,483 --> 00:26:08,466
+up and down at will. It's very nice.
+
+373
+00:26:08,483 --> 00:26:11,466
+>> Yes it is. It is very, very helpful.
+
+374
+00:26:11,483 --> 00:26:14,250
+>> But we have something new in 2012. What's that, Rich?
+
+375
+00:26:14,333 --> 00:26:16,316
+>> We have parameters.
+
+376
+00:26:16,483 --> 00:26:23,466
+Now, parameters are kind of like variables at the project level.
+
+377
+00:26:24,483 --> 00:26:29,466
+Okay? A package parameter is available at the package level.
+
+378
+00:26:29,483 --> 00:26:36,400
+It allows an external entry of a value to what's basically a variable.
+
+379
+00:26:36,483 --> 00:26:42,283
+So, for example, I could set a file name if I had a package where
+
+380
+00:26:42,366 --> 00:26:45,466
+I could feed the file name in. I could set the name of the file
+
+381
+00:26:45,483 --> 00:26:47,466
+I wanted the package to run against.
+
+382
+00:26:48,400 --> 00:26:52,466
+I also have project parameters, which now are only available,
+
+383
+00:26:53,166 --> 00:26:56,466
+you have to be careful, if you're doing project deployment.
+
+384
+00:26:57,233 --> 00:26:58,433
+>> That's going to come up later.
+
+385
+00:26:58,483 --> 00:27:01,466
+>> It is. That's going to be mod 6, so stay tuned there.
+
+386
+00:27:01,483 --> 00:27:08,466
+Parameters have default values. They can be set at design time.
+
+387
+00:27:09,483 --> 00:27:13,466
+If I set it at design time and I don't change it any other way,
+
+388
+00:27:13,483 --> 00:27:18,0
+then that design value is the one that gets used when it executes.
+
+389
+00:27:18,483 --> 00:27:26,383
+When I deploy a package I can assign a default value to the deployed package.
+
+390
+00:27:26,466 --> 00:27:29,466
+Now, when I deploy that means I'm making it available in either
+
+391
+00:27:29,483 --> 00:27:33,466
+SQL Server or the SSIS process.
+
+392
+00:27:34,483 --> 00:27:39,466
+And at that point I have the ability to set that parameter value
+
+393
+00:27:40,483 --> 00:27:46,466
+for the package. It overrides the design value and makes it available
+
+394
+00:27:46,483 --> 00:27:51,466
+again to everything inside the package. And then we have one
+
+395
+00:27:51,483 --> 00:27:56,466
+further setting. When I go to execute it I can override that
+
+396
+00:27:56,483 --> 00:28:02,466
+stored value, so now I've got the design default. I've got the
+
+397
+00:28:02,483 --> 00:28:07,283
+server default. I've got the execution value, which sticks for
+
+398
+00:28:07,366 --> 00:28:08,466
+only that one.
+
+399
+00:28:09,483 --> 00:28:16,466
+Project parameters, I'm sorry, parameters are only available
+
+400
+00:28:16,166 --> 00:28:20,466
+in the project deployment model. Be the package level or the
+
+401
+00:28:20,483 --> 00:28:21,466
+project level.
+
+402
+00:28:22,483 --> 00:28:25,200
+>> But there are other ways to make packages dynamic.
+
+403
+00:28:25,483 --> 00:28:31,466
+>> There are. They do use parameters in many cases and it's called
+
+404
+00:28:31,183 --> 00:28:32,466
+property expressions.
+
+405
+00:28:33,483 --> 00:28:38,466
+Now, if you notice when we go back and look at all of these control
+
+406
+00:28:38,483 --> 00:28:42,466
+flow tasks and dataflow tasks they are all configurable, right?
+
+407
+00:28:42,483 --> 00:28:43,250
+>> Sure.
+
+408
+00:28:43,333 --> 00:28:47,466
+>> And we do that by setting property values. Maybe it's an initial
+
+409
+00:28:48,166 --> 00:28:54,466
+counter, maybe it's the directory to look at for a for each file enumerator.
+
+410
+00:28:54,483 --> 00:28:59,433
+Maybe it's the name of the server where a database exists and
+
+411
+00:28:59,483 --> 00:29:02,466
+a connection manager. We've got all these properties
+
+412
+00:29:04,483 --> 00:29:10,400
+that make values that determine the behavior of that executable,
+
+413
+00:29:10,483 --> 00:29:16,200
+of that object. Now, a property expression allows me to dynamically
+
+414
+00:29:16,483 --> 00:29:23,216
+set the values based on the properties of a specific object in
+
+415
+00:29:23,483 --> 00:29:28,466
+SSIS based on a parameter or variable value.
+
+416
+00:29:29,483 --> 00:29:34,466
+So now I don't need to know what the name of a server is when
+
+417
+00:29:34,483 --> 00:29:40,466
+I deploy out to a particular server. I can set a property expression,
+
+418
+00:29:40,483 --> 00:29:44,466
+which is going to go out and grab a parameter, which is populated
+
+419
+00:29:44,483 --> 00:29:49,466
+with the server value so that whenever that executable runs,
+
+420
+00:29:49,483 --> 00:29:55,400
+and depending on where it runs, the property is configured based
+
+421
+00:29:55,483 --> 00:29:57,466
+on the value of the parameter.
+
+422
+00:29:58,483 --> 00:30:04,466
+Okay? Lets go out and take a quick gander at something here,
+
+423
+00:30:05,483 --> 00:30:08,466
+and I think what I'm going to do is, let's
+
+424
+00:30:10,483 --> 00:30:13,466
+see, I've got a connection manager here.
+
+425
+00:30:14,483 --> 00:30:19,183
+And my connection manager I'm going to double click on it.
+
+426
+00:30:19,266 --> 00:30:22,466
+That brings up the editor. We can see the usage type and all that.
+
+427
+00:30:22,483 --> 00:30:27,433
+But you know what? I'm also going to go out to edit.
+
+428
+00:30:28,483 --> 00:30:29,466
+I'm not getting it on that one.
+
+429
+00:30:30,483 --> 00:30:35,466
+I got to get it on, where is it? I'm not getting it there I should
+
+430
+00:30:35,483 --> 00:30:36,466
+be getting it there.
+
+431
+00:30:41,483 --> 00:30:42,466
+>> Remind me, what were you looking for?
+
+432
+00:30:43,483 --> 00:30:47,333
+>> I should have been getting some property expressions on there.
+
+433
+00:30:47,483 --> 00:30:50,400
+So we'll flip over here to the file system task editor because
+
+434
+00:30:50,483 --> 00:30:51,466
+I'll be able to get it on that one.
+
+435
+00:30:51,483 --> 00:30:53,466
+>> Or go to the properties pane, one or the other.
+
+436
+00:30:53,483 --> 00:30:58,466
+>> Yeah, but here's the key. We've got two pages. We've got the
+
+437
+00:30:58,200 --> 00:31:03,466
+general, which has the regular normal entry of values into those
+
+438
+00:31:03,483 --> 00:31:06,466
+editors, and we have expressions.
+
+439
+00:31:06,483 --> 00:31:11,350
+When I go in to expressions I click on the ellipsis and now I
+
+440
+00:31:11,433 --> 00:31:13,333
+get to choose the property.
+
+441
+00:31:13,483 --> 00:31:17,466
+Let's say that I'm going to look at is
+
+442
+00:31:18,483 --> 00:31:23,433
+the source path variable? The name, for example. And I can go
+
+443
+00:31:23,483 --> 00:31:27,466
+in and now I've got my variables and parameters together I can
+
+444
+00:31:27,483 --> 00:31:33,183
+take and I can drop it into the expression. I hit okay and now
+
+445
+00:31:33,266 --> 00:31:38,466
+dynamically the name property will now take on the value of user
+
+446
+00:31:38,483 --> 00:31:40,466
+colon colon f name.
+
+447
+00:31:40,483 --> 00:31:43,0
+>> And I saw that expression editor, Rich. So that means you
+
+448
+00:31:43,483 --> 00:31:47,466
+have all the things available, parameters, variables, functions,
+
+449
+00:31:47,483 --> 00:31:50,466
+and conversion functions. All those are available.
+
+450
+00:31:50,483 --> 00:31:54,466
+>> Absolutely. The only thing you can't access, depending on where
+
+451
+00:31:54,483 --> 00:31:59,466
+you are, is you will not be able to access information in the dataflow.
+
+452
+00:32:00,483 --> 00:32:05,466
+This is only to be able to access parameters and variables.
+
+453
+00:32:07,483 --> 00:32:10,233
+So what do we got coming up now, George?
+
+454
+00:32:10,316 --> 00:32:13,466
+>> Next we're going to look at maintaining package integrity,
+
+455
+00:32:13,483 --> 00:32:17,250
+checkpoints, and transactions. But I know you have a lot to talk
+
+456
+00:32:17,333 --> 00:32:17,466
+about there.
+
+457
+00:32:17,483 --> 00:32:21,316
+>> You know, this is actually one of my favorite topics.
+
+458
+00:32:22,483 --> 00:32:28,466
+Whenever you've got a complex workflow there is at least a possibility
+
+459
+00:32:28,216 --> 00:32:33,300
+that something may not go right. I don't know about you, I don't
+
+460
+00:32:33,383 --> 00:32:34,466
+get that too much.
+
+461
+00:32:35,483 --> 00:32:39,466
+I really do make packages that work right every time.
+
+462
+00:32:39,483 --> 00:32:41,466
+>> You're captain wonderful.
+
+463
+00:32:41,483 --> 00:32:43,350
+But there are other factors too.
+
+464
+00:32:43,483 --> 00:32:48,466
+>> No. Sometimes it's outside of my control, I admit it. But checkpoints
+
+465
+00:32:50,483 --> 00:32:54,466
+and transactions are two ways that we can manage the behavior
+
+466
+00:32:55,483 --> 00:33:00,316
+of our packages, the behaviors of our dataflow. When it comes
+
+467
+00:33:00,400 --> 00:33:03,466
+to persisting data into the destination.
+
+468
+00:33:04,416 --> 00:33:08,466
+That's really what it's all about. We have two scenarios here.
+
+469
+00:33:08,483 --> 00:33:14,466
+One is the dataflow is interrupted midstream with a problem,
+
+470
+00:33:15,483 --> 00:33:20,466
+and we want everything that's already happened to stay happened
+
+471
+00:33:20,483 --> 00:33:22,466
+and then pick up where we left off.
+
+472
+00:33:23,483 --> 00:33:24,266
+>> Perfect.
+
+473
+00:33:24,350 --> 00:33:29,466
+>> The other scenario is I've gotten part way through my flow
+
+474
+00:33:29,483 --> 00:33:34,466
+and everything that's happened has to be successfully completed
+
+475
+00:33:34,483 --> 00:33:38,466
+with everything that hasn't happened. So I can't let
+
+476
+00:33:40,333 --> 00:33:44,466
+what's been done stay done. I need to undo it. And that's what
+
+477
+00:33:44,483 --> 00:33:47,466
+checkpoints and transactions accomplish.
+
+478
+00:33:48,166 --> 00:33:50,466
+>> So you have some more detail here for these.
+
+479
+00:33:50,483 --> 00:33:53,383
+>> Yup. Checkpoints are
+
+480
+00:33:54,483 --> 00:34:01,466
+files that are created by SSIS while the package is running that
+
+481
+00:34:01,483 --> 00:34:07,183
+keep track of what has been completed by the package.
+
+482
+00:34:07,483 --> 00:34:14,466
+So if I have a 10-step dataflow or a 10-step control flow that
+
+483
+00:34:14,483 --> 00:34:18,466
+includes three different data flows, and I get through step seven
+
+484
+00:34:20,466 --> 00:34:25,466
+and then I get a failure, a checkpoint can record the fact that
+
+485
+00:34:25,483 --> 00:34:30,250
+step seven was completed but step eight never finished and it
+
+486
+00:34:30,333 --> 00:34:31,466
+had to be undone.
+
+487
+00:34:32,483 --> 00:34:37,466
+Now, when I restart that package, George, and run it a second
+
+488
+00:34:37,483 --> 00:34:42,466
+time it reads that file, skips the first seven steps because
+
+489
+00:34:42,483 --> 00:34:46,466
+they've been done, and picks up with eight and finishes through.
+
+490
+00:34:47,483 --> 00:34:51,466
+When you've got long-running packages that are working with a
+
+491
+00:34:51,216 --> 00:34:56,466
+lot of data, checkpoints can really, really, really help you
+
+492
+00:34:57,416 --> 00:34:59,466
+to not have to repeat things.
+
+493
+00:34:59,483 --> 00:35:04,300
+>> Sure. Let's say I just spent two hours FTPing a bunch of files.
+
+494
+00:35:04,383 --> 00:35:07,466
+The files still load in fine but something with further processing
+
+495
+00:35:07,483 --> 00:35:13,216
+failed, you know, why re download two hours worth of files.
+
+496
+00:35:13,300 --> 00:35:17,466
+>> Absolutely correct. Absolutely correct. It saves you from
+
+497
+00:35:17,483 --> 00:35:22,466
+repeating significant chunks of work that were already successfully done.
+
+498
+00:35:22,483 --> 00:35:28,466
+Now, packages are configurable. You have to tell the package
+
+499
+00:35:28,483 --> 00:35:31,466
+if it's going to use checkpoints. The default is that it will
+
+500
+00:35:31,483 --> 00:35:37,466
+not use checkpoints. But you can configure it to use a checkpoint
+
+501
+00:35:37,483 --> 00:35:44,466
+file if one exists or you can configure it to require a checkpoint file.
+
+502
+00:35:45,0 --> 00:35:50,166
+Now, the difference between those two is that if it doesn't exist
+
+503
+00:35:50,483 --> 00:35:56,466
+SSIS will assume that it starts from the beginning of the flow,
+
+504
+00:35:57,166 --> 00:36:01,466
+and will only look at that checkpoint file as a restart if the
+
+505
+00:36:01,483 --> 00:36:07,466
+file exists. If you do require it then that file must be there
+
+506
+00:36:07,483 --> 00:36:08,466
+at all times.
+
+507
+00:36:09,483 --> 00:36:13,466
+So if you have a workflow where it's going out to a directory
+
+508
+00:36:13,200 --> 00:36:17,466
+that's outside of your control, I recommend using "if exists"
+
+509
+00:36:18,483 --> 00:36:22,466
+as the setting because you can't really, you're not in control
+
+510
+00:36:22,483 --> 00:36:26,200
+of whether somebody is going to delete that file. If the directory
+
+511
+00:36:26,283 --> 00:36:30,466
+is under your control then you've got a much more reasonable choice.
+
+512
+00:36:31,483 --> 00:36:35,466
+Now, the other piece of this is transactions. Now, a transaction
+
+513
+00:36:36,400 --> 00:36:42,466
+is a unit of work that must succeed or fail as a unit. Now, think
+
+514
+00:36:42,483 --> 00:36:43,466
+of this, George.
+
+515
+00:36:44,483 --> 00:36:48,466
+You've got two bank accounts in two separate banks.
+
+516
+00:36:49,233 --> 00:36:53,200
+So you go into bank A and you fill out a transfer slip that says
+
+517
+00:36:53,283 --> 00:36:56,216
+I want to move a thousand dollars from A to B.
+
+518
+00:36:57,483 --> 00:37:02,466
+You go and thy withdraw the money form A and send it off to B,
+
+519
+00:37:02,483 --> 00:37:04,466
+everything works fine and everybody's happy.
+
+520
+00:37:05,166 --> 00:37:07,466
+But lets assume for a minute that it came out of A,
+
+521
+00:37:09,483 --> 00:37:11,466
+went to B, and B wasn't able to deposit it.
+
+522
+00:37:12,483 --> 00:37:16,466
+Now, if B doesn't tell A that it didn't get the money what happens?
+
+523
+00:37:16,483 --> 00:37:17,466
+>> Uh-oh. Mismatch.
+
+524
+00:37:17,483 --> 00:37:19,466
+>> You're out a thousand bucks. Are you a happy boy?
+
+525
+00:37:19,483 --> 00:37:20,466
+>> Not happy.
+
+526
+00:37:21,0 --> 00:37:22,466
+>> Okay. Let's go the other way.
+
+527
+00:37:23,483 --> 00:37:27,466
+A goes to withdraw it, it fails,
+
+528
+00:37:28,483 --> 00:37:32,466
+B deposits it anyway. Who's happy now?
+
+529
+00:37:32,483 --> 00:37:33,466
+>> Nice.
+
+530
+00:37:33,483 --> 00:37:35,466
+>> Yeah, George just got a thousand bucks.
+
+531
+00:37:36,483 --> 00:37:40,466
+But the bank that he took it from is probably not going to be
+
+532
+00:37:40,483 --> 00:37:46,466
+thrilled with him. A transaction can wrap those two behaviors
+
+533
+00:37:46,483 --> 00:37:51,466
+together so that if either on of them fails then neither one
+
+534
+00:37:52,450 --> 00:37:52,466
+of them works.
+
+535
+00:37:53,483 --> 00:37:57,466
+And that's the way I like to look at it. It's an all or nothing.
+
+536
+00:37:57,483 --> 00:38:01,466
+The transactions exhibit what are called the acid properties.
+
+537
+00:38:01,483 --> 00:38:06,466
+They are atomic, which means they cannot be broken down any further
+
+538
+00:38:06,483 --> 00:38:12,466
+into finer levels of independent work, and that's the key, independent.
+
+539
+00:38:13,483 --> 00:38:18,400
+They are consistent, which means when everything's done the answers
+
+540
+00:38:18,483 --> 00:38:20,466
+that you expect are the ones that are there.
+
+541
+00:38:21,483 --> 00:38:25,466
+They are isolated, which means nothing else can touch the data
+
+542
+00:38:25,483 --> 00:38:28,466
+while the transaction is working with the data, and they are
+
+543
+00:38:28,483 --> 00:38:33,466
+durable because when it's done it's permanent and it can't be undone.
+
+544
+00:38:34,483 --> 00:38:39,466
+You can set up transactions at any container level.
+
+545
+00:38:39,483 --> 00:38:43,250
+You can set it up at the package level at a sequence container,
+
+546
+00:38:43,333 --> 00:38:47,250
+at a loop container, you can even set them up at a task level.
+
+547
+00:38:48,483 --> 00:38:51,466
+The settings there are three of them. They can be required,
+
+548
+00:38:52,483 --> 00:38:56,366
+which means it will always start a new transaction when it gets there.
+
+549
+00:38:56,450 --> 00:39:01,466
+They can be supported, which means if there's a transaction it
+
+550
+00:39:01,483 --> 00:39:07,466
+will join it and they can be not supported, which means even
+
+551
+00:39:07,483 --> 00:39:10,466
+if there is a transaction out there I don't care. I'm not going
+
+552
+00:39:10,483 --> 00:39:13,466
+to deal with it. I am ignoring you.
+
+553
+00:39:14,483 --> 00:39:16,466
+>> And you have some things to show too.
+
+554
+00:39:16,483 --> 00:39:17,233
+>> Why, yes.
+
+555
+00:39:17,483 --> 00:39:18,466
+Yes, I do.
+
+556
+00:39:20,483 --> 00:39:22,266
+Let us now
+
+557
+00:39:23,483 --> 00:39:28,466
+go into another demo I've got here, which is going to come one
+
+558
+00:39:28,483 --> 00:39:30,0
+now, there you go.
+
+559
+00:39:32,483 --> 00:39:35,466
+I've got a package here called load data.
+
+560
+00:39:36,316 --> 00:39:42,466
+Load data has three steps in it, a create folder step, a copy
+
+561
+00:39:42,483 --> 00:39:45,416
+file step, and a load to staging table.
+
+562
+00:39:46,483 --> 00:39:50,466
+Now, I want this to use checkpoints. I want tit to be able to
+
+563
+00:39:51,483 --> 00:39:53,466
+pick up if something happens.
+
+564
+00:39:54,333 --> 00:39:58,183
+So the first thing I need to do is I need to display the properties.
+
+565
+00:39:58,266 --> 00:40:03,466
+So I'm going to go up to view properties window, and now when
+
+566
+00:40:03,483 --> 00:40:06,466
+I click anywhere in the background I get my package property.
+
+567
+00:40:07,483 --> 00:40:10,466
+In my package properties, right up at the top when you're in
+
+568
+00:40:11,483 --> 00:40:16,466
+category view of the properties, is the checkpoint properties.
+
+569
+00:40:16,483 --> 00:40:20,466
+I've got checkpoint file name, checkpoint usage, and saved checkpoints.
+
+570
+00:40:20,483 --> 00:40:22,350
+Now, the first thing I'm going to tell you is if you're going
+
+571
+00:40:22,433 --> 00:40:25,466
+to use checkpoints this has to be true.
+
+572
+00:40:26,483 --> 00:40:30,466
+Otherwise there is not sense in doing it. Then I configure my
+
+573
+00:40:30,483 --> 00:40:37,466
+usage, never, if exists, or always. I'm going to set up an if exists.
+
+574
+00:40:38,483 --> 00:40:42,466
+I'm now going to go to my checkpoint file name and I'm going
+
+575
+00:40:42,166 --> 00:40:46,466
+to specify where that checkpoint is going to live. I'm going
+
+576
+00:40:46,483 --> 00:40:51,466
+to put it down here in my D directory under the checkpoints right
+
+577
+00:40:51,483 --> 00:40:57,166
+where the package is and I'm going to call it loaddata.chk.
+
+578
+00:40:58,483 --> 00:41:03,266
+Now, I used a convention there. It's not a requirement.
+
+579
+00:41:03,350 --> 00:41:10,283
+That chk can be absolutely any extension that you can think of.
+
+580
+00:41:10,366 --> 00:41:11,466
+>> I've seen that before though.
+
+581
+00:41:11,483 --> 00:41:17,466
+>> But it's an easy one. It's easy because it indicates that it's
+
+582
+00:41:17,483 --> 00:41:21,466
+a checkpoint file and people are going to recognize that.
+
+583
+00:41:22,483 --> 00:41:25,466
+So I open it. Now, guess what I need to do next, George?
+
+584
+00:41:25,483 --> 00:41:26,266
+>> What's next?
+
+585
+00:41:26,350 --> 00:41:32,283
+>> I need to actually configure each of these tasks so that the
+
+586
+00:41:32,366 --> 00:41:33,466
+checkpoint will occur.
+
+587
+00:41:33,483 --> 00:41:34,466
+>> There you go.
+
+588
+00:41:34,483 --> 00:41:40,466
+>> So each task has a property called fail parent on failure,
+
+589
+00:41:41,483 --> 00:41:44,466
+and you can see the default value of that is false.
+
+590
+00:41:45,483 --> 00:41:50,466
+That means that if that individual task were to fail, the parent
+
+591
+00:41:51,483 --> 00:41:53,466
+would just keep right on trucking.
+
+592
+00:41:53,483 --> 00:41:58,466
+The parent in this case is the package. I've also go fail package
+
+593
+00:41:58,483 --> 00:42:03,466
+on failure, which will do the exact same thing if you set that
+
+594
+00:42:03,483 --> 00:42:07,466
+one on subtasks, maybe I have tasks in side containers.
+
+595
+00:42:08,483 --> 00:42:13,466
+Then even if one that's three or four levels down fails it doesn't
+
+596
+00:42:13,483 --> 00:42:16,466
+matter what its parents are set to it will just fail the package.
+
+597
+00:42:17,333 --> 00:42:19,466
+So you set that for all your critical tasks.
+
+598
+00:42:19,483 --> 00:42:21,466
+>> Super granular.
+
+599
+00:42:21,233 --> 00:42:27,466
+>> Absolutely. I set that to true and now the package will fail
+
+600
+00:42:28,483 --> 00:42:30,466
+if the task is unsuccessful.
+
+601
+00:42:31,300 --> 00:42:35,466
+I'm going to do that for all three steps because these are all
+
+602
+00:42:35,483 --> 00:42:36,466
+critical steps.
+
+603
+00:42:37,483 --> 00:42:41,466
+Now, notice I'm just double clicking and I'm changing it.
+
+604
+00:42:41,483 --> 00:42:44,466
+You can use the drop down, but when you've got toggle switches
+
+605
+00:42:44,483 --> 00:42:47,200
+like that it's easier to double click sometimes.
+
+606
+00:42:47,283 --> 00:42:48,466
+>> That's a good trick to show.
+
+607
+00:42:48,483 --> 00:42:52,266
+>> Yeah, I like that one. So now I'm going to start debugging.
+
+608
+00:42:53,483 --> 00:42:55,466
+It goes in and
+
+609
+00:42:57,483 --> 00:43:01,466
+oh, that's interesting. It thought the file was already there
+
+610
+00:43:02,483 --> 00:43:06,466
+because it skipped over the first two. Now, I'm looking here
+
+611
+00:43:06,483 --> 00:43:13,216
+and I've got no green checks and a red x, so there must have
+
+612
+00:43:13,300 --> 00:43:16,466
+been a checkpoint file out there already that I didn't see.
+
+613
+00:43:16,483 --> 00:43:21,466
+So let's go out to the file system. I'm going to keel out of
+
+614
+00:43:22,483 --> 00:43:26,433
+the debugger. I'm going to go to the file system.
+
+615
+00:43:26,483 --> 00:43:31,466
+We're going to go to our D drive 1077,
+
+616
+00:43:34,483 --> 00:43:36,300
+demo 7
+
+617
+00:43:37,483 --> 00:43:41,466
+- nope, demo 6. I got the wrong one there. Sorry about that.
+
+618
+00:43:42,483 --> 00:43:43,466
+Nope.
+
+619
+00:43:44,366 --> 00:43:45,466
+>> There was a checkpoints folder.
+
+620
+00:43:46,483 --> 00:43:49,466
+>> Yeah, but I've got to find the right spot.
+
+621
+00:43:52,450 --> 00:43:52,466
+There it is.
+
+622
+00:43:53,483 --> 00:43:56,466
+I'm going to delete that so that it's not there.
+
+623
+00:43:58,483 --> 00:44:00,183
+And now when we run it
+
+624
+00:44:02,483 --> 00:44:06,466
+you can see the first two ran, the third one didn't. So that
+
+625
+00:44:06,483 --> 00:44:07,466
+just goes to show you.
+
+626
+00:44:09,483 --> 00:44:13,466
+If that checkpoint file exists, and I didn't catch the fact that
+
+627
+00:44:13,483 --> 00:44:16,466
+it was already there when I set this up, it
+
+628
+00:44:18,483 --> 00:44:21,416
+will use that checkpoint file.
+
+629
+00:44:21,483 --> 00:44:27,466
+So a great way on the if exists is to get rid of the checkpoint file.
+
+630
+00:44:27,483 --> 00:44:32,466
+When I close this we are going to go back to that directory.
+
+631
+00:44:32,483 --> 00:44:35,466
+I should have kept that open, shouldn't I, George?
+
+632
+00:44:35,183 --> 00:44:36,0
+>> It's all right.
+
+633
+00:44:36,483 --> 00:44:37,466
+>> It only takes a second.
+
+634
+00:44:38,483 --> 00:44:43,283
+Mod 5 checkpoints, there's my load data check. Let's go take
+
+635
+00:44:43,366 --> 00:44:45,466
+a look at what's in there.
+
+636
+00:44:46,333 --> 00:44:48,466
+>> Now you're playing Curious George.
+
+637
+00:44:48,483 --> 00:44:55,466
+>> A little bit. Look it is an XML file and that xml file has
+
+638
+00:44:55,483 --> 00:45:02,400
+things like the fact that it is a DTS checkpoint, the name space,
+
+639
+00:45:02,483 --> 00:45:07,466
+the package ID. It's got variables like the container ID and
+
+640
+00:45:07,483 --> 00:45:09,466
+the DTS result.
+
+641
+00:45:10,483 --> 00:45:12,466
+That's how it keeps track of where it was.
+
+642
+00:45:14,483 --> 00:45:18,333
+As long as that file is there I go back to run this a second
+
+643
+00:45:18,416 --> 00:45:22,466
+time and now you can see it reads the content of the file, it
+
+644
+00:45:22,483 --> 00:45:26,466
+picks up with the tasks that were already there.
+
+645
+00:45:26,483 --> 00:45:30,466
+>> So a folder was made and a bunch of files were FTPed or copied
+
+646
+00:45:30,183 --> 00:45:33,466
+from some other process but the failure occurred after that,
+
+647
+00:45:33,483 --> 00:45:35,466
+why repeat that initial work?
+
+648
+00:45:35,483 --> 00:45:40,466
+>> Absolutely correct. So let's take a look at one more thing
+
+649
+00:45:40,483 --> 00:45:42,466
+in here because we talked about transactions.
+
+650
+00:45:43,466 --> 00:45:47,466
+So let's go back in here and take a look at how to set them up.
+
+651
+00:45:47,483 --> 00:45:51,466
+So what I'm going to do is again, I'm going to go to the package level.
+
+652
+00:45:52,483 --> 00:45:58,466
+And at the package level I'm going to look for a property, and
+
+653
+00:45:58,183 --> 00:46:01,466
+give me a second here because I don't have them all memorized.
+
+654
+00:46:02,483 --> 00:46:04,300
+>> There's only thousands.
+
+655
+00:46:04,383 --> 00:46:08,266
+>> Yeah, there are only thousands. There's my transaction option.
+
+656
+00:46:08,483 --> 00:46:11,466
+Now, if you look at the transaction option the initial value
+
+657
+00:46:11,483 --> 00:46:15,466
+is supported. So if this were to get called from another package
+
+658
+00:46:15,483 --> 00:46:20,466
+that was in the midst of a transaction, then it would use that
+
+659
+00:46:20,483 --> 00:46:23,466
+transaction, it would join into it and become a part of it.
+
+660
+00:46:23,483 --> 00:46:29,466
+If I want this package to create a transaction I'm now going
+
+661
+00:46:29,483 --> 00:46:32,466
+to choose the value required.
+
+662
+00:46:33,483 --> 00:46:36,216
+That means, woops, what did I do?
+
+663
+00:46:37,483 --> 00:46:39,466
+I must have misclicked.
+
+664
+00:46:39,483 --> 00:46:41,466
+>> We saw required though.
+
+665
+00:46:43,483 --> 00:46:46,466
+>> That should have gone in there though.
+
+666
+00:46:48,483 --> 00:46:54,466
+Not supported works, but required is not showing...
+
+667
+00:46:56,483 --> 00:47:02,416
+oh. Save checkpoints or transactions. Yeah, the two are mutually exclusive.
+
+668
+00:47:02,483 --> 00:47:03,466
+I forgot about that.
+
+669
+00:47:04,266 --> 00:47:10,166
+So lets go back up here to our save checkpoints, set it to false,
+
+670
+00:47:10,483 --> 00:47:18,283
+now I can go in and I can set my not supported to required and
+
+671
+00:47:18,366 --> 00:47:21,466
+we're good. It will still use a checkpoint file that's there
+
+672
+00:47:21,483 --> 00:47:24,466
+but it's not necessarily going to save things. Now that I've
+
+673
+00:47:24,483 --> 00:47:30,466
+got required I can go into my individual tasks and I can change
+
+674
+00:47:30,483 --> 00:47:35,466
+each one. Now, again the default value for each task is supported.
+
+675
+00:47:35,483 --> 00:47:41,466
+So when I configure the individual package it will automatically,
+
+676
+00:47:41,483 --> 00:47:45,466
+all of the control flow tasks in it will join that transaction.
+
+677
+00:47:45,483 --> 00:47:51,333
+If any one of them fail, then they all will fail and it will
+
+678
+00:47:51,483 --> 00:47:53,466
+undo the work that was done.
+
+679
+00:47:53,483 --> 00:47:58,466
+Now, here I am, I'm talking about create folder, copy file, load
+
+680
+00:47:58,483 --> 00:48:01,466
+the staging table. Those aren't all database stuff, are they?
+
+681
+00:48:01,483 --> 00:48:07,433
+No? But yet I can still put a transaction on there.
+
+682
+00:48:08,483 --> 00:48:10,466
+Transactions are not just for databases.
+
+683
+00:48:11,483 --> 00:48:16,466
+There is a service that's available within Windows called the
+
+684
+00:48:16,483 --> 00:48:19,466
+Distributed Transaction Coordinator.
+
+685
+00:48:20,483 --> 00:48:26,400
+The Distributed Transaction Coordinator is an external process
+
+686
+00:48:26,483 --> 00:48:32,466
+that Windows, that SQL Server, that many different services and
+
+687
+00:48:32,483 --> 00:48:38,466
+servers can talk to even on separate boxes that can coordinate
+
+688
+00:48:38,483 --> 00:48:43,466
+the activities from one machine from one process to another.
+
+689
+00:48:44,266 --> 00:48:51,466
+Then when an individual process is successful the DTC is notified
+
+690
+00:48:51,483 --> 00:48:55,466
+of that success. When all of the processes are successful it
+
+691
+00:48:55,483 --> 00:49:01,466
+sends that notification back to wherever the processes that were
+
+692
+00:49:01,483 --> 00:49:03,466
+involved in the transaction live.
+
+693
+00:49:04,483 --> 00:49:09,466
+Once they're all successful we get commit. If anything happens,
+
+694
+00:49:09,483 --> 00:49:14,466
+if any of them fail we come back out of it and none of them work.
+
+695
+00:49:15,450 --> 00:49:16,300
+>> There we go.
+
+696
+00:49:16,383 --> 00:49:19,466
+>> All right. So we talked about a lot in this module, didn't we?
+
+697
+00:49:19,483 --> 00:49:20,466
+>> Lots of dev stuff.
+
+698
+00:49:20,483 --> 00:49:25,466
+>> Yeah. We defined the control flow and the workflow elements
+
+699
+00:49:25,483 --> 00:49:28,466
+that go into it and how to connect them together. How to set
+
+700
+00:49:28,483 --> 00:49:30,466
+up conditional execution.
+
+701
+00:49:31,200 --> 00:49:31,466
+>> Containers.
+
+702
+00:49:32,483 --> 00:49:36,466
+>> We talked about containers with for each loops and for loops
+
+703
+00:49:36,483 --> 00:49:39,466
+and sequence. We talked a little bit about grouping and how that
+
+704
+00:49:39,483 --> 00:49:45,250
+works for the ability to work with things. And then we went
+
+705
+00:49:45,333 --> 00:49:49,466
+into package control from the standpoint of checkpoints and transactions.
+
+706
+00:49:50,483 --> 00:49:52,466
+How to combine and how to interrupt.
+
+707
+00:49:53,483 --> 00:49:57,466
+Setting up the dependencies and how to stop it in the mid stream
+
+708
+00:49:57,200 --> 00:49:59,450
+and how to be able to pick it up again later.
+
+709
+00:49:59,483 --> 00:50:01,466
+>> That's a handful. I bet everybody's ready for a break.
+
+710
+00:50:01,483 --> 00:50:02,466
+>> I know I am.
+
+711
+00:50:02,483 --> 00:50:05,466
+>> Well, thanks, everybody, for continuing with us on Implementing
+
+712
+00:50:05,483 --> 00:50:09,466
+a Data Warehouse with SQL Server 2012 Jumpstart. Let's take
+
+713
+00:50:09,483 --> 00:50:12,466
+a 10-minute stretch or so. We'll see you back at the top of the hour.
+

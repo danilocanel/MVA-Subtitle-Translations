@@ -1,0 +1,2072 @@
+1
+00:00:00,333 --> 00:00:06,333
+[Music]
+
+2
+00:00:17,483 --> 00:00:19,466
+>> So when we're doing remoting... >> Yes.
+
+3
+00:00:19,483 --> 00:00:22,466
+>> And remember, invoke command, we're now going to use the alias
+
+4
+00:00:22,483 --> 00:00:25,466
+ICM for this, just to abbreviate things.
+
+5
+00:00:25,483 --> 00:00:29,433
+We're actually starting a remote PowerShell session.
+
+6
+00:00:29,450 --> 00:00:29,466
+>> Yeah.
+
+7
+00:00:29,483 --> 00:00:30,466
+>> Like you said.
+
+8
+00:00:31,316 --> 00:00:33,466
+We're feeding it a command.
+
+9
+00:00:34,483 --> 00:00:38,466
+Then we're closing that PowerShell session and leaving?
+
+10
+00:00:38,483 --> 00:00:40,433
+>> Right. So we start a TCP connection.
+
+11
+00:00:40,450 --> 00:00:40,466
+>> TCP.
+
+12
+00:00:40,483 --> 00:00:42,433
+>> We start a process.
+
+13
+00:00:42,450 --> 00:00:42,466
+>> Process.
+
+14
+00:00:42,483 --> 00:00:47,466
+>> We load the CLR. We load PowerShell. We initialize PowerShell.
+
+15
+00:00:48,333 --> 00:00:51,316
+We run all your profiles. There can be up to four profiles.
+
+16
+00:00:51,400 --> 00:00:51,466
+>> There you go.
+
+17
+00:00:51,483 --> 00:00:55,183
+>> We run those, and when those are all ready, then we take the
+
+18
+00:00:55,266 --> 00:00:58,466
+code, we execute it, and we throw all that away.
+
+19
+00:00:58,200 --> 00:01:01,183
+>> And then we throw everything away. So this is important.
+
+20
+00:01:01,266 --> 00:01:03,466
+When you're using remoting, we're going to connect to that box.
+
+21
+00:01:03,483 --> 00:01:06,466
+We're going to start all this stuff up. We're going to climb
+
+22
+00:01:06,483 --> 00:01:09,466
+up this mountain. We're going to give it your little tiny code,
+
+23
+00:01:10,483 --> 00:01:14,466
+do that, and then we have to tear all this down and walk away.
+
+24
+00:01:14,483 --> 00:01:17,466
+You can imagine that, if you're going to do a lot of invoke commands
+
+25
+00:01:17,483 --> 00:01:22,250
+in a row, that's not very efficient. So there's a way we can
+
+26
+00:01:22,333 --> 00:01:24,466
+make this more efficient, and I want to demonstrate it using
+
+27
+00:01:24,483 --> 00:01:27,433
+variables first, and then we'll take a look at some cool things
+
+28
+00:01:27,483 --> 00:01:29,466
+we can do with this. So watch, guys. I'm going to go to...
+
+29
+00:01:29,483 --> 00:01:34,466
+I'm just going to do this on DC first. I'm going to show you
+
+30
+00:01:34,483 --> 00:01:37,166
+what's happening. I'm going to do dollar sign var equals 2.
+
+31
+00:01:38,483 --> 00:01:41,466
+I'm going to go to the domain controller. I'm going to set up
+
+32
+00:01:41,483 --> 00:01:43,466
+PowerShell, I'm going to set a variable,
+
+33
+00:01:44,483 --> 00:01:48,466
+and I'm going to destroy PowerShell. So what happens is, if
+
+34
+00:01:48,483 --> 00:01:54,466
+I now ask it what's that variable on output...
+
+35
+00:01:55,483 --> 00:01:56,466
+on DC,
+
+36
+00:01:57,483 --> 00:02:01,466
+well, is anybody shocked that it's not there anymore? When the
+
+37
+00:02:01,483 --> 00:02:04,466
+console dies, everything dies. This is why PowerShell has to
+
+38
+00:02:04,483 --> 00:02:08,466
+run all the time. So nothing dies. But, no, when the console
+
+39
+00:02:08,483 --> 00:02:11,466
+dies, when that execute... when PowerShell exe on that other
+
+40
+00:02:11,483 --> 00:02:15,466
+side dies, everything dies with it. What I'd really like to
+
+41
+00:02:15,483 --> 00:02:19,466
+do is I'd like to be able to connect to the machine, go through,
+
+42
+00:02:19,483 --> 00:02:22,416
+start all this up, and leave it up.
+
+43
+00:02:22,483 --> 00:02:24,466
+>> Yeah. Yeah, I'm in.
+
+44
+00:02:24,200 --> 00:02:24,466
+>> You in for this?
+
+45
+00:02:24,483 --> 00:02:26,466
+>> Yeah, we call those things sessions.
+
+46
+00:02:26,483 --> 00:02:27,466
+>> Sessions.
+
+47
+00:02:27,483 --> 00:02:29,466
+>> You'd like to create a PowerShell session.
+
+48
+00:02:29,483 --> 00:02:32,383
+>> We're going to create a power... so watch. Let's create the
+
+49
+00:02:32,466 --> 00:02:34,466
+PowerShell session. So what I'm going to do, I'm going to set
+
+50
+00:02:34,483 --> 00:02:36,466
+this equal to a variable called sessions.
+
+51
+00:02:37,483 --> 00:02:40,466
+Equals new PS session.
+
+52
+00:02:41,483 --> 00:02:43,300
+I'm going to specify the computer, and right now I'm just going
+
+53
+00:02:43,383 --> 00:02:46,466
+to keep it real simple. I'm just going to use DC right now.
+
+54
+00:02:46,483 --> 00:02:50,466
+So what happens is I've created a session that's going to keep
+
+55
+00:02:50,483 --> 00:02:53,466
+PowerShell running on that remote machine. Now, I'm only doing
+
+56
+00:02:53,483 --> 00:02:57,166
+it to one machine right now, but it's on that remote machine.
+
+57
+00:02:57,483 --> 00:02:59,466
+Just to show you. We have a Cmdlet for get PS session. It will
+
+58
+00:02:59,483 --> 00:03:03,466
+show you what sessions you have. Notice, out of session to that
+
+59
+00:03:03,483 --> 00:03:08,466
+computer, it's open, life is good. What I can do now is start
+
+60
+00:03:08,483 --> 00:03:11,466
+using invoke command, and instead of using dash computer name,
+
+61
+00:03:11,483 --> 00:03:16,466
+I can specify that I want to use this session. So ICM...
+
+62
+00:03:16,483 --> 00:03:18,466
+we're going to do the exact same example again. So let me just
+
+63
+00:03:18,483 --> 00:03:21,466
+go ahead and clear the screen here. I'm going to do ICM.
+
+64
+00:03:22,483 --> 00:03:24,450
+Computer... no, not computer.
+
+65
+00:03:24,483 --> 00:03:25,283
+>> It's just a dollar sign.
+
+66
+00:03:25,366 --> 00:03:27,466
+>> Yeah, dollar sign session. Of course, I had to make it long
+
+67
+00:03:27,483 --> 00:03:31,466
+and hard to type. But I'm going to do the same thing, var equals 2.
+
+68
+00:03:33,350 --> 00:03:36,466
+And this time I'm going to go back and check on it.
+
+69
+00:03:37,483 --> 00:03:39,466
+Whoo, whoo.
+
+70
+00:03:39,483 --> 00:03:41,383
+>> Fast, fast, fast.
+
+71
+00:03:41,466 --> 00:03:44,466
+>> And this now gives us a lot of power to do a lot of really,
+
+72
+00:03:45,200 --> 00:03:48,466
+really cool things. So we can keep this session open, and we
+
+73
+00:03:48,483 --> 00:03:50,466
+can continuously fire things. We can reference variables that
+
+74
+00:03:50,483 --> 00:03:54,466
+we have open. This is going to make our lives a lot easier.
+
+75
+00:03:54,483 --> 00:03:55,466
+>> Happy, happy, happy.
+
+76
+00:03:55,483 --> 00:03:56,466
+>> Happy, happy, happy.
+
+77
+00:03:56,483 --> 00:03:58,200
+>> Can I show them the difference in time?
+
+78
+00:03:58,483 --> 00:03:59,466
+>> Yeah, yeah, yeah.
+
+79
+00:03:59,483 --> 00:04:01,466
+>> Do measure... do you know measure command?
+
+80
+00:04:01,483 --> 00:04:02,266
+>> Measure command, yeah.
+
+81
+00:04:02,350 --> 00:04:04,466
+>> Do measure command on... just invoke command minus command
+
+82
+00:04:04,483 --> 00:04:06,466
+name, computer name.
+
+83
+00:04:07,483 --> 00:04:08,466
+>> Oh, you want to see the difference in time?
+
+84
+00:04:09,333 --> 00:04:09,466
+>> Yeah.
+
+85
+00:04:09,216 --> 00:04:10,466
+>> Oh, I wonder if that will... do you think it's going to be
+
+86
+00:04:10,483 --> 00:04:12,466
+apparent here? Computer name DC.
+
+87
+00:04:12,483 --> 00:04:14,466
+>> Yeah, get process.
+
+88
+00:04:14,483 --> 00:04:17,333
+>> Oh, get process. Yeah, that's good. Get process.
+
+89
+00:04:17,483 --> 00:04:21,466
+>> No, no, no, you wrap that whole thing in a script block and
+
+90
+00:04:21,483 --> 00:04:23,466
+put measure command at the beginning.
+
+91
+00:04:26,383 --> 00:04:26,466
+>> Wait.
+
+92
+00:04:27,483 --> 00:04:28,466
+>> Measure.
+
+93
+00:04:28,483 --> 00:04:29,466
+>> Measure.
+
+94
+00:04:30,450 --> 00:04:30,466
+>> Command.
+
+95
+00:04:30,483 --> 00:04:31,466
+See?
+
+96
+00:04:32,483 --> 00:04:35,466
+>> So what's happening here is that the measure command is going
+
+97
+00:04:35,483 --> 00:04:38,466
+to take what we're running, and you can see what it's doing.
+
+98
+00:04:38,483 --> 00:04:41,433
+It's showing us how long this is taking.
+
+99
+00:04:41,450 --> 00:04:41,466
+>> Yeah.
+
+100
+00:04:41,483 --> 00:04:46,466
+>> I love ticks. But, anyways, milliseconds. 886 milliseconds.
+
+101
+00:04:46,483 --> 00:04:48,350
+>> Now do it with a session.
+
+102
+00:04:48,483 --> 00:04:51,466
+>> So let's do the same thing. So I'm just going to do measure command.
+
+103
+00:04:51,483 --> 00:04:52,466
+>> Just do up arrow, man.
+
+104
+00:04:52,483 --> 00:04:56,350
+>> Yeah, what... me and my up arrows.
+
+105
+00:04:56,433 --> 00:05:01,433
+>> Down one, there. Now change computer name DC. Change it to...
+
+106
+00:05:01,450 --> 00:05:01,466
+>> Okay, let's do that.
+
+107
+00:05:01,483 --> 00:05:03,466
+>> It says 886.
+
+108
+00:05:03,483 --> 00:05:09,466
+>> 886 to session dollar sign sessions, boom.
+
+109
+00:05:11,483 --> 00:05:14,250
+>> Five. Probably even faster but...
+
+110
+00:05:14,333 --> 00:05:16,466
+>> It's going to be actually even faster. Here's the thing.
+
+111
+00:05:16,483 --> 00:05:21,466
+It is faster doing it this way, but now when it's really going
+
+112
+00:05:21,483 --> 00:05:25,433
+to pay off being faster, phew, want to see something cool?
+
+113
+00:05:25,450 --> 00:05:25,466
+>> Yeah.
+
+114
+00:05:25,483 --> 00:05:26,466
+>> I'm going to draw.
+
+115
+00:05:26,483 --> 00:05:27,466
+>> Okay.
+
+116
+00:05:28,483 --> 00:05:32,466
+>> Watch. This is when sessions and remoting change your world.
+
+117
+00:05:32,483 --> 00:05:35,466
+So I want to prove to you that I'm not lying to you. First of
+
+118
+00:05:35,483 --> 00:05:38,350
+all, I'm going to kill everything. So you know that I'm not...
+
+119
+00:05:38,433 --> 00:05:40,466
+I'm going to kill the Shell, boink, and you bring up a new one.
+
+120
+00:05:41,466 --> 00:05:44,466
+That way you know I have a clean shell, and I'm not hiding...
+
+121
+00:05:44,483 --> 00:05:48,383
+no rabbits up sleeves or anything like that. Here we go.
+
+122
+00:05:48,483 --> 00:05:51,466
+Quick demonstration, but see if you catch what's going to happen here.
+
+123
+00:05:51,483 --> 00:05:54,466
+First of all, $servers equals...
+
+124
+00:05:55,450 --> 00:05:55,466
+>> Ooh.
+
+125
+00:05:56,316 --> 00:05:58,466
+>> Let's do S1 and S2.
+
+126
+00:06:00,483 --> 00:06:01,466
+So you guys know when $servers...
+
+127
+00:06:02,483 --> 00:06:06,466
+well, you know. Cool.
+
+128
+00:06:06,483 --> 00:06:10,466
+Watch. Show you that I'm not cheating. Nothing's being hidden here.
+
+129
+00:06:10,483 --> 00:06:14,466
+Start... let me do it this way.
+
+130
+00:06:14,483 --> 00:06:18,400
+$servers. Oh, typed.
+
+131
+00:06:18,483 --> 00:06:20,200
+>> Do you need some coffee?
+
+132
+00:06:20,283 --> 00:06:21,216
+>> Oh, yeah.
+
+133
+00:06:21,483 --> 00:06:26,466
+$servers and watch, watch. I'm going to use a Cmdlet called for
+
+134
+00:06:26,483 --> 00:06:29,466
+each, and what's this going to let me do is iterate through each
+
+135
+00:06:30,483 --> 00:06:33,466
+one of those coming across the pipeline. You know it's in $servers.
+
+136
+00:06:33,483 --> 00:06:35,166
+I've got two computer names.
+
+137
+00:06:35,483 --> 00:06:39,200
+I want to grab the current one across the pipeline and use it
+
+138
+00:06:39,283 --> 00:06:42,366
+in a special way. So what I'm going to do is start http...
+
+139
+00:06:42,450 --> 00:06:44,466
+oops. Start iexplore
+
+140
+00:06:47,433 --> 00:06:52,316
+http dollar sign underscore. Here's what I'm going to do.
+
+141
+00:06:52,400 --> 00:06:55,466
+Start an iexplore for each one of these and go to the servers
+
+142
+00:06:55,483 --> 00:07:00,466
+and show that there's no websites there. There's no default pages.
+
+143
+00:07:00,483 --> 00:07:03,466
+It's just going to come up and give me an error. This can't
+
+144
+00:07:03,483 --> 00:07:04,466
+be displayed.
+
+145
+00:07:05,483 --> 00:07:08,466
+So that's not that big of a deal, but I just want you to see
+
+146
+00:07:08,483 --> 00:07:12,200
+that I'm not hiding anything. So now let's do a session, and
+
+147
+00:07:12,283 --> 00:07:13,466
+let's do something cool.
+
+148
+00:07:14,483 --> 00:07:15,466
+Session.
+
+149
+00:07:16,483 --> 00:07:18,366
+>> Just type dollar sign S.
+
+150
+00:07:18,450 --> 00:07:22,466
+>> You're right. I type in way too much. Equals new PS session.
+
+151
+00:07:22,483 --> 00:07:26,466
+And what I want to do it too is $servers.
+
+152
+00:07:27,483 --> 00:07:30,466
+Boom, I'm going to get my sessions to these remote boxes.
+
+153
+00:07:30,483 --> 00:07:33,466
+Now, just so that you see I'm not cheating.
+
+154
+00:07:33,483 --> 00:07:34,166
+>> Multiple sessions.
+
+155
+00:07:34,250 --> 00:07:36,466
+>> There's my sessions. Multiple sessions. You know what I want
+
+156
+00:07:36,483 --> 00:07:40,166
+to do? And this is an actual business problem I've had several times.
+
+157
+00:07:40,250 --> 00:07:43,466
+Did I mention I was a web guy? I just... anyways, so here's
+
+158
+00:07:43,483 --> 00:07:46,216
+the business problem. I need to deploy...
+
+159
+00:07:47,333 --> 00:07:49,200
+actually, I had a friend call me up on the phone. I need to
+
+160
+00:07:49,283 --> 00:07:50,466
+deploy a web...
+
+161
+00:07:51,483 --> 00:07:56,466
+50-server website load balanced, and I need to copy the website
+
+162
+00:07:56,483 --> 00:07:59,200
+out from the developers, and we have three months to do it.
+
+163
+00:07:59,283 --> 00:08:01,466
+Can PowerShell help me with any of this?
+
+164
+00:08:03,483 --> 00:08:06,466
+Seriously, dude? When's the last time you had a vacation?
+
+165
+00:08:07,483 --> 00:08:09,466
+Well, this conversation went on for a while, me talking about
+
+166
+00:08:09,483 --> 00:08:12,466
+vacations, and him talking about this three month long project.
+
+167
+00:08:14,483 --> 00:08:17,466
+Let's do it. So with the session that we have right now...
+
+168
+00:08:17,483 --> 00:08:19,216
+>> Dude, we don't have three months.
+
+169
+00:08:19,300 --> 00:08:19,466
+>> What's that?
+
+170
+00:08:19,483 --> 00:08:22,466
+>> We only have like a couple of hours. We don't have three months.
+
+171
+00:08:23,483 --> 00:08:26,466
+>> Okay, okay, okay, so you want to challenge me. Okay, fine.
+
+172
+00:08:27,483 --> 00:08:30,466
+Okay, fine. So invoke command on the session that I just made,
+
+173
+00:08:30,483 --> 00:08:33,466
+which now is shorter, dollar sign S. Here's what I want to do.
+
+174
+00:08:33,483 --> 00:08:38,466
+Install Windows feature, web dash server. Now, I know, guys,
+
+175
+00:08:38,483 --> 00:08:42,466
+this isn't going to be all that cool and tricky, but here's the thing.
+
+176
+00:08:43,483 --> 00:08:46,216
+For web services, every component that you need of the web service,
+
+177
+00:08:46,300 --> 00:08:49,466
+you can just put in comma and specify every single one.
+
+178
+00:08:49,483 --> 00:08:52,466
+This doesn't have to be web service. This could be Hyper-V servers.
+
+179
+00:08:52,483 --> 00:08:55,466
+This could be whatever it is you need deployed. I want you to
+
+180
+00:08:55,483 --> 00:08:57,166
+see it's happening on...
+
+181
+00:08:57,483 --> 00:09:00,466
+ooh. We're over here ooh.
+
+182
+00:09:01,483 --> 00:09:07,466
+Pretend that the sessions for dollar sign S was 50 servers, 1,000 servers.
+
+183
+00:09:08,483 --> 00:09:11,316
+Now take a look. It comes up, and as it shows me as it's finishing
+
+184
+00:09:11,400 --> 00:09:15,383
+the installation on those remote boxes, and I'm maintaining this session.
+
+185
+00:09:15,466 --> 00:09:16,266
+Yeah, it's still doing ooh.
+
+186
+00:09:16,350 --> 00:09:18,466
+>> It's not serial. It does it in parallel.
+
+187
+00:09:18,483 --> 00:09:22,466
+>> Yeah, it does it in parallel. So what happens is it's not going
+
+188
+00:09:22,200 --> 00:09:26,466
+to this server and going to this... it's going, dudes, install.
+
+189
+00:09:28,483 --> 00:09:32,466
+Come on. We're talking less than four minutes, I've just deployed
+
+190
+00:09:32,483 --> 00:09:36,466
+as many web servers as I want. But wait, we're not done.
+
+191
+00:09:36,233 --> 00:09:41,466
+Watch, there's more. Watch. I'm just going to up arrow for once
+
+192
+00:09:41,483 --> 00:09:43,466
+and go back to this command. Watch.
+
+193
+00:09:45,450 --> 00:09:45,466
+>> Oh.
+
+194
+00:09:45,483 --> 00:09:46,433
+>> Oh, come on.
+
+195
+00:09:46,450 --> 00:09:46,466
+>> Oh.
+
+196
+00:09:47,483 --> 00:09:48,466
+>> Oh, come on.
+
+197
+00:09:48,483 --> 00:09:49,466
+>> Yeah.
+
+198
+00:09:50,0 --> 00:09:52,466
+>> But wait, there's one more step. Guys, we've got to make our
+
+199
+00:09:52,483 --> 00:09:53,466
+own web page. [Singing]
+
+200
+00:09:53,483 --> 00:09:57,466
+>> Three months, baby.
+
+201
+00:09:57,183 --> 00:10:02,466
+>> We're going to make our own web page real quick just to prove
+
+202
+00:10:02,483 --> 00:10:06,466
+you can still do this. Yeah, just make this default htm, and
+
+203
+00:10:06,483 --> 00:10:10,466
+you say MVA and PowerShell rocks.
+
+204
+00:10:11,483 --> 00:10:15,466
+Going to save this. I want to deploy this.
+
+205
+00:10:15,483 --> 00:10:20,466
+I want to deploy this. So I'm going to $servers pipe.
+
+206
+00:10:21,483 --> 00:10:26,466
+For each one of those servers, I'm going to have it copy item...
+
+207
+00:10:26,483 --> 00:10:31,466
+God, I love, I love, I love the item commands to work with stuff
+
+208
+00:10:31,483 --> 00:10:36,266
+because we're going to take that default htm, and the coolest
+
+209
+00:10:36,350 --> 00:10:39,466
+thing about PowerShell Cmdlets is they give you more capabilities
+
+210
+00:10:39,483 --> 00:10:43,466
+than you've ever had before because the destination can be a UNC.
+
+211
+00:10:44,483 --> 00:10:48,466
+So I'm going to say back slash, back slash, dollar sign.
+
+212
+00:10:48,216 --> 00:10:51,433
+Remember, that's the current object. That will be those servers.
+
+213
+00:10:51,483 --> 00:10:54,466
+And I want it to go to their administrative share, and I want
+
+214
+00:10:54,483 --> 00:10:56,466
+it to go to inet pub.
+
+215
+00:10:57,483 --> 00:11:02,466
+This is where the default web page is stored. And let's
+
+216
+00:11:03,483 --> 00:11:06,466
+go up and run it again.
+
+217
+00:11:07,166 --> 00:11:08,466
+And lo and behold.
+
+218
+00:11:10,483 --> 00:11:12,466
+>> Aruba, Bahamas. We're going.
+
+219
+00:11:12,483 --> 00:11:15,466
+>> It's vacation time now. So in other words, in just a couple
+
+220
+00:11:15,483 --> 00:11:19,466
+of minutes, I've deployed out, in this case, a web server and
+
+221
+00:11:19,483 --> 00:11:23,466
+a website. It's a small demonstration, but the idea is this.
+
+222
+00:11:23,483 --> 00:11:25,466
+It changes how you think about administration.
+
+223
+00:11:25,483 --> 00:11:29,466
+>> Now it's, instead of sending guys out, going, go out there
+
+224
+00:11:29,483 --> 00:11:32,466
+and install this and install that and let me know when you're
+
+225
+00:11:32,483 --> 00:11:36,183
+done in three months. Now it's get somebody with a screwdriver
+
+226
+00:11:36,266 --> 00:11:38,466
+to rack these things. As soon as they're powered up, I'm going
+
+227
+00:11:38,483 --> 00:11:40,466
+to remote into these things, install what they need.
+
+228
+00:11:41,483 --> 00:11:43,466
+I'll probably script it so I never actually have to type these
+
+229
+00:11:43,483 --> 00:11:45,466
+four commands again.
+
+230
+00:11:46,483 --> 00:11:47,466
+Boom, it's done.
+
+231
+00:11:48,383 --> 00:11:50,466
+Now that I've got the script, if I need to add more, just add
+
+232
+00:11:50,483 --> 00:11:52,466
+some more. Just add some more. Totally awesome.
+
+233
+00:11:52,483 --> 00:11:55,466
+>> Or give it to me because I have a problem. You give it to
+
+234
+00:11:55,483 --> 00:11:59,466
+me, and I just do it. Like it might be more complex. I really
+
+235
+00:11:59,483 --> 00:12:02,466
+don't understand this web stuff. I can say, oh, I have this problem.
+
+236
+00:12:03,0 --> 00:12:05,450
+And you can say, hey, Jeffrey, here's the script I have.
+
+237
+00:12:05,483 --> 00:12:08,466
+And you look at it and say, boom, boom, boom, mine is what if,
+
+238
+00:12:08,483 --> 00:12:11,200
+do it. Off to Aruba.
+
+239
+00:12:11,283 --> 00:12:11,466
+>> Off to Aruba.
+
+240
+00:12:11,483 --> 00:12:14,416
+>> And the thing is that's the thing that people sort of don't
+
+241
+00:12:14,483 --> 00:12:18,466
+get until they get it, and that is the transformational effect
+
+242
+00:12:18,483 --> 00:12:21,466
+of these technologies, remoting, in particular. The fact that
+
+243
+00:12:21,483 --> 00:12:26,466
+all of a sudden you're able to do just phenomenal things, massive
+
+244
+00:12:26,483 --> 00:12:30,466
+things in a heartbeat, things that your boss is probably thinking,
+
+245
+00:12:30,483 --> 00:12:33,466
+I'm just not even going to ask because that's going to take so long.
+
+246
+00:12:34,316 --> 00:12:37,450
+We don't do things. And so you end up with this sort of static,
+
+247
+00:12:37,483 --> 00:12:40,466
+brittle, ossified...
+
+248
+00:12:40,483 --> 00:12:44,466
+excuse me. Ossified data processes and structures. All of a
+
+249
+00:12:44,483 --> 00:12:47,466
+sudden now, with these tools, you can become fast.
+
+250
+00:12:47,483 --> 00:12:50,466
+You can become flexible. You can become agile. You can do things
+
+251
+00:12:50,483 --> 00:12:55,466
+you never thought of doing before all because of the power of PowerShell.
+
+252
+00:12:55,483 --> 00:12:56,466
+It really is transformational.
+
+253
+00:12:57,483 --> 00:13:01,466
+>> It is transformational, and also, my CTO doesn't like the answer
+
+254
+00:13:01,483 --> 00:13:05,466
+it's going to take three months. He really likes it when I give
+
+255
+00:13:05,483 --> 00:13:08,466
+him the answer of it will be done within the hour. As a matter
+
+256
+00:13:08,483 --> 00:13:11,366
+of fact, it's done now. I'm just testing.
+
+257
+00:13:11,450 --> 00:13:12,166
+>> Yeah.
+
+258
+00:13:12,483 --> 00:13:15,233
+>> I mean, that's the whole point to this is that your management
+
+259
+00:13:15,316 --> 00:13:15,466
+totally changes.
+
+260
+00:13:15,483 --> 00:13:16,466
+>> Is or like that guy.
+
+261
+00:13:16,483 --> 00:13:17,466
+>> Not only are we in scale...
+
+262
+00:13:17,483 --> 00:13:20,466
+>> Or like that guy, I'll have it to you in the morning. I'm going home.
+
+263
+00:13:20,483 --> 00:13:23,466
+>> Yeah, I'm going home. That's the whole thing. Now, one other
+
+264
+00:13:23,483 --> 00:13:25,466
+thing in remoting I want to show you right now.
+
+265
+00:13:25,483 --> 00:13:28,466
+>> I think we're promoting like slacking off.
+
+266
+00:13:28,483 --> 00:13:31,466
+>> Slacking off, I know. Everybody's leaving.
+
+267
+00:13:32,483 --> 00:13:35,466
+There's one other super cool thing in remoting that I want to
+
+268
+00:13:35,483 --> 00:13:37,466
+show you before we get through the rest of scripting.
+
+269
+00:13:37,483 --> 00:13:42,466
+And I have to do it with a new console.
+
+270
+00:13:43,483 --> 00:13:44,466
+You know...
+
+271
+00:13:44,483 --> 00:13:45,333
+>> I don't.
+
+272
+00:13:46,266 --> 00:13:48,466
+>> I'm not going to be at this machine tomorrow.
+
+273
+00:13:49,483 --> 00:13:50,466
+>> Oh, oh.
+
+274
+00:13:50,483 --> 00:13:54,466
+>> And you know what, in fact, when I'm out on vacation and I'm
+
+275
+00:13:54,483 --> 00:13:56,466
+using PowerShell Web Access, who knows?
+
+276
+00:13:57,483 --> 00:13:59,316
+I'm going to be at some box.
+
+277
+00:14:00,166 --> 00:14:02,466
+The thing is that, guys, I've been using Active Directory Cmdlets.
+
+278
+00:14:02,483 --> 00:14:06,183
+I've been using all kinds of stuff from modules that are installed
+
+279
+00:14:06,266 --> 00:14:09,466
+from the remote server administration tools. You know, if I
+
+280
+00:14:10,0 --> 00:14:13,466
+want to manage Exchange, I need the remote server administration tools.
+
+281
+00:14:13,216 --> 00:14:17,466
+I am going to need to install the Exchange management tools.
+
+282
+00:14:17,483 --> 00:14:21,466
+And I do a lot of SCVMM stuff. I'm going to need to install,
+
+283
+00:14:21,483 --> 00:14:24,450
+oh, man, all the VMM management tools.
+
+284
+00:14:25,466 --> 00:14:27,416
+God, it's going to take me a couple hours to do that.
+
+285
+00:14:27,450 --> 00:14:27,466
+>> Oh.
+
+286
+00:14:27,483 --> 00:14:30,466
+>> And as soon as I go to a different machine...
+
+287
+00:14:31,333 --> 00:14:31,466
+>> Eh.
+
+288
+00:14:31,483 --> 00:14:34,466
+>> Eh. None of the Cmdlets. None of the modules will be there.
+
+289
+00:14:34,483 --> 00:14:35,466
+None of it exists.
+
+290
+00:14:36,216 --> 00:14:40,466
+So I'm going to show you what I think is absolutely the coolest
+
+291
+00:14:40,483 --> 00:14:43,466
+thing in the world. I use it constantly because on my box, I
+
+292
+00:14:43,483 --> 00:14:46,466
+don't install anything. I don't install the remote server administration
+
+293
+00:14:46,166 --> 00:14:49,433
+tools, the exchange tools, nothing. And here's the reason why.
+
+294
+00:14:49,450 --> 00:14:49,466
+I don't have to.
+
+295
+00:14:49,483 --> 00:14:52,466
+>> Put your seat belts on because this is freakish, freakishly
+
+296
+00:14:52,483 --> 00:14:53,466
+powerful, freakish.
+
+297
+00:14:53,483 --> 00:14:57,466
+>> This is the new world order because here's the deal. I don't
+
+298
+00:14:57,483 --> 00:15:00,466
+have time to be installing tools every time I sit down at a box.
+
+299
+00:15:00,483 --> 00:15:03,466
+And the other thing is, if I walk up to a server or something
+
+300
+00:15:03,483 --> 00:15:06,466
+like that, unh-unh, you're not going to be installing anything
+
+301
+00:15:06,216 --> 00:15:09,466
+on there. So you need a bunch of Cmdlets. I'm going to need
+
+302
+00:15:09,483 --> 00:15:11,466
+the Active Directory command... I don't know why I'm starting
+
+303
+00:15:11,483 --> 00:15:12,466
+to do it like this, but it's kind of like soul.
+
+304
+00:15:12,483 --> 00:15:13,466
+>> It's like watching Godfather.
+
+305
+00:15:13,483 --> 00:15:14,466
+>> Yeah. It's like watching Godfather.
+
+306
+00:15:14,483 --> 00:15:15,466
+>> Goodfellas.
+
+307
+00:15:15,483 --> 00:15:16,333
+>> I don't know what I'm doing.
+
+308
+00:15:16,483 --> 00:15:19,466
+>> Are you calling me funny? Are you saying I'm funny?
+
+309
+00:15:19,483 --> 00:15:23,183
+>> Funny? You're saying I got PowerShell and stick that in an SO.
+
+310
+00:15:23,266 --> 00:15:27,416
+Here we go. So what I'm going to do is I'm going to create a
+
+311
+00:15:27,483 --> 00:15:31,466
+session to the servers that have the Cmdlet that's I want.
+
+312
+00:15:31,483 --> 00:15:32,466
+Now think about this.
+
+313
+00:15:34,200 --> 00:15:38,466
+You really want the Cmdlets from the servers that naturally have them.
+
+314
+00:15:38,483 --> 00:15:41,466
+A domain controller has the Active Directory Cmdlets. An Exchange
+
+315
+00:15:41,483 --> 00:15:48,466
+2007 server has the Exchange 2007 Cmdlets. An Exchange 2010
+
+316
+00:15:48,483 --> 00:15:51,466
+server has the Exchange 2010 ones. I couldn't get all those
+
+317
+00:15:52,483 --> 00:15:55,466
+tools on my box if I wanted to but watch.
+
+318
+00:15:55,183 --> 00:15:56,466
+>> And you don't want to.
+
+319
+00:15:56,483 --> 00:15:59,466
+>> And you don't want to. So dollar sign S equals new PS session,
+
+320
+00:15:59,483 --> 00:16:03,466
+and in this, I'm going to... just going to hit a domain controller.
+
+321
+00:16:05,300 --> 00:16:08,166
+So I'm going to establish a session to this domain controller.
+
+322
+00:16:08,483 --> 00:16:12,466
+Import PS session.
+
+323
+00:16:13,483 --> 00:16:16,466
+Module. Guys, do you see what I'm doing?
+
+324
+00:16:17,483 --> 00:16:19,466
+There's a module on that remote server called Active Directory.
+
+325
+00:16:19,483 --> 00:16:22,466
+So I'm going to say give me that module, Active Directory.
+
+326
+00:16:24,483 --> 00:16:28,466
+Now, because I right now on this VM I do have the RSET tools,
+
+327
+00:16:28,483 --> 00:16:31,466
+I'm going to prefix it. So there's a prefix, and I'm going to
+
+328
+00:16:31,483 --> 00:16:34,450
+call it remote so you know it's coming from somewhere else.
+
+329
+00:16:34,483 --> 00:16:37,466
+Then we're going to ask Jeffrey to explain how this magical stuff works.
+
+330
+00:16:38,483 --> 00:16:39,466
+Watch. As soon as I do this...
+
+331
+00:16:41,266 --> 00:16:42,466
+oops, I forgot to give it the session.
+
+332
+00:16:43,450 --> 00:16:43,466
+>> Dollar sign S.
+
+333
+00:16:43,483 --> 00:16:46,466
+>> Darn, dollar sign S. I was going to do it all in one line,
+
+334
+00:16:46,483 --> 00:16:48,400
+and I screwed it all up. I forgot the session.
+
+335
+00:16:48,483 --> 00:16:50,466
+>> Oh, yeah, no, you can't. That's a string.
+
+336
+00:16:50,483 --> 00:16:54,466
+>> Oh, yeah. So let me do this. Dollar sign session. There we go.
+
+337
+00:16:54,483 --> 00:16:57,333
+>> Way back machine. You didn't see that. Click, click, click.
+
+338
+00:16:57,416 --> 00:16:58,333
+Men in Black.
+
+339
+00:16:58,416 --> 00:17:01,466
+>> Men in black, men in black. So module
+
+340
+00:17:02,483 --> 00:17:04,466
+session dollar sign S.
+
+341
+00:17:07,483 --> 00:17:09,466
+I don't know if you know what just happened right now but check
+
+342
+00:17:09,483 --> 00:17:10,466
+this out.
+
+343
+00:17:10,483 --> 00:17:14,466
+I wonder if I have any Cmdlets. Now, pretend that I had no Active
+
+344
+00:17:14,483 --> 00:17:16,466
+Directory Cmdlets. So what we're going to do is I wonder if I
+
+345
+00:17:16,483 --> 00:17:19,466
+have anything for remote. Remote, remote, remote. Ah, let's
+
+346
+00:17:19,483 --> 00:17:23,233
+do this, remote AD. That should work.
+
+347
+00:17:25,483 --> 00:17:29,466
+Dudes, dudettes, you see what's scrolling across my screen right now?
+
+348
+00:17:29,483 --> 00:17:33,233
+Looks and smells like I have all these Cmdlets I just asked for.
+
+349
+00:17:33,316 --> 00:17:35,466
+Look at all these Active Directory commands. See that's prefixed
+
+350
+00:17:35,483 --> 00:17:38,350
+with remote. So I have these Cmdlets... as a matter of fact,
+
+351
+00:17:38,433 --> 00:17:45,283
+I can do this. Watch, get remote AD computer filter... ooh.
+
+352
+00:17:46,450 --> 00:17:46,466
+>> Fitler?
+
+353
+00:17:46,483 --> 00:17:52,466
+>> It's his brother. Anyways, the star. Look, it ran.
+
+354
+00:17:52,483 --> 00:17:54,466
+Look, look, look.
+
+355
+00:17:54,483 --> 00:17:57,466
+I got these commands from a server. Nothing's installed.
+
+356
+00:17:57,483 --> 00:17:59,466
+How is this working? Explain to me how this is working because
+
+357
+00:17:59,483 --> 00:18:01,466
+this is like freaking me out right now.
+
+358
+00:18:01,483 --> 00:18:03,433
+>> It's magic, baby. Magic, magic, magic.
+
+359
+00:18:03,450 --> 00:18:03,466
+>> I love magic.
+
+360
+00:18:03,483 --> 00:18:04,466
+>> So here's the deal.
+
+361
+00:18:05,483 --> 00:18:10,466
+Let me show you this. So here we've been showing people get command...
+
+362
+00:18:11,483 --> 00:18:16,466
+sorry. Get help. Get help. Get process.
+
+363
+00:18:17,483 --> 00:18:20,466
+And that gives you this. But there's another thing, and it's
+
+364
+00:18:20,483 --> 00:18:23,466
+called get command. And people have often asked, well, what's
+
+365
+00:18:23,483 --> 00:18:26,466
+the difference between these two? Get help versus get command.
+
+366
+00:18:26,483 --> 00:18:32,466
+And the answer is that get command is more structural, programmatic information.
+
+367
+00:18:32,483 --> 00:18:38,400
+So watch this, dollar sign C. Hello. Oh, wrong one. Plus sign
+
+368
+00:18:38,483 --> 00:18:40,466
+C equals get command. Dollar sign C.parameters.
+
+369
+00:18:42,483 --> 00:18:45,466
+And now let's take a look at this parameter saying name.
+
+370
+00:18:47,483 --> 00:18:48,466
+Oh, sorry, name.
+
+371
+00:18:50,483 --> 00:18:53,433
+And look, we've got all the information, the name, its type,
+
+372
+00:18:53,450 --> 00:18:53,466
+et cetera.
+
+373
+00:18:54,483 --> 00:19:00,466
+And so what happens is when I go and I do that import, what I
+
+374
+00:19:00,483 --> 00:19:03,466
+do is I go to that remote machine. I load the module that you
+
+375
+00:19:03,483 --> 00:19:08,466
+asked for, and I do a get command on all the things, and I get
+
+376
+00:19:08,483 --> 00:19:12,466
+that data structure. And what I do is on this side, now on my
+
+377
+00:19:12,483 --> 00:19:16,466
+side, I go, and I take that information, and I recreate a set
+
+378
+00:19:16,483 --> 00:19:19,466
+of scripts with exactly the same signature.
+
+379
+00:19:20,483 --> 00:19:24,466
+And then the body of the function basically says, hey, when you
+
+380
+00:19:24,200 --> 00:19:28,466
+go do this, gather all that stuff up and run it over there using
+
+381
+00:19:28,483 --> 00:19:29,466
+invoke command.
+
+382
+00:19:29,483 --> 00:19:33,466
+>> So I don't actually have these Cmdlets on my machine. I have
+
+383
+00:19:33,483 --> 00:19:35,466
+like a proxy.
+
+384
+00:19:36,450 --> 00:19:36,466
+>> Yeah.
+
+385
+00:19:36,483 --> 00:19:37,466
+>> Or a shortcut.
+
+386
+00:19:38,450 --> 00:19:38,466
+>> Exactly.
+
+387
+00:19:38,483 --> 00:19:41,450
+>> That is saying, take all the information from the parameters
+
+388
+00:19:41,483 --> 00:19:43,466
+and then go run it on the source machine.
+
+389
+00:19:43,483 --> 00:19:47,466
+>> Exactly. So do this. Do... on your machine now, type get command.
+
+390
+00:19:47,483 --> 00:19:48,400
+>> Get command.
+
+391
+00:19:48,483 --> 00:19:51,466
+>> Get dash star AD computer.
+
+392
+00:19:52,483 --> 00:19:53,466
+>> Get dash star.
+
+393
+00:19:53,483 --> 00:19:54,466
+>> AD computer.
+
+394
+00:19:54,483 --> 00:19:55,466
+>> AD computer.
+
+395
+00:19:58,450 --> 00:20:01,466
+>> So look, notice, one, the get AD computer is a Cmdlet.
+
+396
+00:20:01,483 --> 00:20:06,466
+That Cmdlet is.NET code. But look at the function.
+
+397
+00:20:06,483 --> 00:20:07,466
+>> Yeah, what's going on there?
+
+398
+00:20:07,483 --> 00:20:13,466
+>> So now take a look and do this. Type parentheses, paren get
+
+399
+00:20:14,0 --> 00:20:19,166
+command, get remote AD
+
+400
+00:20:20,483 --> 00:20:23,466
+computer, end paren.definition.
+
+401
+00:20:25,483 --> 00:20:29,466
+>> Ooh, ooh, look at this.
+
+402
+00:20:29,483 --> 00:20:33,466
+>> Look at this. This was dynamically generated code.
+
+403
+00:20:34,483 --> 00:20:36,466
+>> Dynamically generated code on my side.
+
+404
+00:20:36,483 --> 00:20:37,466
+>> On your side.
+
+405
+00:20:37,483 --> 00:20:39,466
+>> That says grab these parameters.
+
+406
+00:20:40,233 --> 00:20:43,433
+>> So you know what, let me just say, in PowerShell version 2
+
+407
+00:20:43,483 --> 00:20:48,466
+was a pivotal technology. In PowerShell version 1, Cmdlets had
+
+408
+00:20:48,483 --> 00:20:49,433
+to be.NET.
+
+409
+00:20:50,483 --> 00:20:57,283
+In PowerShell version 2, we said Cmdlets could be .NET or PowerShell itself.
+
+410
+00:20:58,400 --> 00:21:01,466
+So now PowerShell scripts are full Cmdlets.
+
+411
+00:21:01,483 --> 00:21:03,466
+>> Which you're going to see in a little bit, guys.
+
+412
+00:21:03,483 --> 00:21:06,466
+>> Now, this was a transformational technology because what it
+
+413
+00:21:06,483 --> 00:21:10,466
+means is now all of a sudden you can write programs which generate
+
+414
+00:21:11,483 --> 00:21:14,466
+Cmdlets dynamically, and that's what we do here. That's what
+
+415
+00:21:14,483 --> 00:21:18,466
+that import PS session does. We go, and we get a data structure.
+
+416
+00:21:18,483 --> 00:21:23,466
+We have a program that dynamically generates a PowerShell script
+
+417
+00:21:24,266 --> 00:21:28,250
+that has exactly the same signature as the.NET Cmdlet on the
+
+418
+00:21:28,333 --> 00:21:32,300
+remote machine, has exactly the same signature. I gather up
+
+419
+00:21:32,383 --> 00:21:36,466
+all that information, and I then run it on the remote machine.
+
+420
+00:21:36,483 --> 00:21:39,466
+>> And I think what the... so to make sure the concept is good
+
+421
+00:21:39,483 --> 00:21:43,466
+is that we're, just like Jeffrey said, this is... it looks and
+
+422
+00:21:43,483 --> 00:21:47,466
+tastes and feels like the Cmdlets are here on my machine, but
+
+423
+00:21:47,216 --> 00:21:49,466
+they're not. They're functions that are going back and running
+
+424
+00:21:49,483 --> 00:21:52,466
+it on the remote machine. So think about this. Who's going to
+
+425
+00:21:52,483 --> 00:21:57,466
+be better at running get AD computer anyway, your box or the
+
+426
+00:21:57,483 --> 00:22:01,166
+domain controller. So first of all, that's going to be faster.
+
+427
+00:22:01,483 --> 00:22:04,466
+But you were telling me about this scenario, and I love this
+
+428
+00:22:04,483 --> 00:22:07,466
+scenario about the guy who had to do a migration from Exchange.
+
+429
+00:22:07,483 --> 00:22:08,466
+>> Yeah.
+
+430
+00:22:08,483 --> 00:22:15,466
+>> Of... I had to do a migration from Exchange 2007 to Exchange 2010.
+
+431
+00:22:15,483 --> 00:22:19,216
+You're not going to get those tools all installed on your box,
+
+432
+00:22:19,300 --> 00:22:24,466
+but you can import both sets of Cmdlets. Prefix one with 2007,
+
+433
+00:22:25,316 --> 00:22:28,466
+prefix another with 2010. Now you've got both sets of Cmdlets
+
+434
+00:22:28,483 --> 00:22:32,333
+all in the same place, and you can get the two products to work together.
+
+435
+00:22:32,416 --> 00:22:32,433
+>> Exactly.
+
+436
+00:22:32,450 --> 00:22:32,466
+>> I think that is.
+
+437
+00:22:32,483 --> 00:22:36,166
+>> It's doing the equivalent of like get... I'll just say v1
+
+438
+00:22:36,250 --> 00:22:37,466
+and v2. Get v1
+
+439
+00:22:38,483 --> 00:22:41,433
+user pipe to set v2 user.
+
+440
+00:22:41,450 --> 00:22:41,466
+>> Right.
+
+441
+00:22:41,483 --> 00:22:44,466
+>> And what's happening is he's on this box. He's getting the
+
+442
+00:22:44,483 --> 00:22:47,466
+users from this machine, and he's setting it on that machine.
+
+443
+00:22:47,483 --> 00:22:50,466
+This is the power of this stuff. Now all of a sudden... it used
+
+444
+00:22:50,483 --> 00:22:54,466
+to be integration was just painful, right? I've got to find all
+
+445
+00:22:54,483 --> 00:22:58,166
+this stuff? I've got to get it all in this box so it bloats the box.
+
+446
+00:22:58,250 --> 00:23:02,283
+I'm running out of disk space. Oh, wait, this guy updated something.
+
+447
+00:23:02,366 --> 00:23:05,466
+I've got to patch it. Oh, wait, they require different versions
+
+448
+00:23:05,483 --> 00:23:09,466
+of stuff, blah, blah, blah, just hideous, hideous, hideous.
+
+449
+00:23:09,483 --> 00:23:13,0
+And now the answer is, hey, dude, I'm sitting right here. I import
+
+450
+00:23:13,483 --> 00:23:16,466
+the stuff from there. I import the stuff. I import the stuff.
+
+451
+00:23:16,483 --> 00:23:20,333
+And I'm sitting here, and by the way, type, type, type.
+
+452
+00:23:20,483 --> 00:23:22,466
+Look, you get tab completion. Watch this, watch this.
+
+453
+00:23:22,483 --> 00:23:28,466
+>> So get remote, and look... well, here, let me do remote AD
+
+454
+00:23:28,483 --> 00:23:29,166
+so that we...
+
+455
+00:23:30,233 --> 00:23:32,466
+look, yeah. All the tab completion.
+
+456
+00:23:32,483 --> 00:23:34,466
+>> See all the tab completion.
+
+457
+00:23:34,483 --> 00:23:37,466
+>> You've got help, everything. And help will discover all of this.
+
+458
+00:23:37,483 --> 00:23:40,333
+So you've got full discoverability. You've got full help.
+
+459
+00:23:40,483 --> 00:23:42,466
+It looks and feels like it's here, but it's running in the best
+
+460
+00:23:42,483 --> 00:23:45,433
+place possible, which is on those machines.
+
+461
+00:23:45,450 --> 00:23:45,466
+>> Yeah, magic.
+
+462
+00:23:46,166 --> 00:23:48,466
+>> And I didn't have to install anything. Now, this is referred
+
+463
+00:23:48,483 --> 00:23:52,216
+to as implicit remoting, and you probably are going to want to
+
+464
+00:23:52,300 --> 00:23:55,466
+do this yourself. It's already in the slides. We'll also give
+
+465
+00:23:55,483 --> 00:23:57,466
+you some more referenced for the implicit remoting, and to be
+
+466
+00:23:57,483 --> 00:24:01,450
+honest, when I'm managing, I literally, this is what I'm doing.
+
+467
+00:24:01,483 --> 00:24:04,466
+I don't install anything on my local box because I'm not too
+
+468
+00:24:04,483 --> 00:24:07,466
+sure as a consultant what box I'm going to be on. So I'll just
+
+469
+00:24:07,483 --> 00:24:11,366
+implicitly remote the command I need when I need them.
+
+470
+00:24:11,450 --> 00:24:14,466
+>> You know what, we missed... here's the other thing that's so important.
+
+471
+00:24:15,166 --> 00:24:17,466
+When I imagine I'm going to go get this stuff from different
+
+472
+00:24:17,483 --> 00:24:21,466
+things, over here, I might need a different set of credentials
+
+473
+00:24:21,483 --> 00:24:22,433
+than over there.
+
+474
+00:24:22,450 --> 00:24:22,466
+>> Right.
+
+475
+00:24:22,483 --> 00:24:25,466
+>> So instead of having to type the credentials all the time,
+
+476
+00:24:25,483 --> 00:24:28,466
+you create the session with the set of credentials. You import
+
+477
+00:24:28,483 --> 00:24:30,466
+the Cmdlets, and those credentials are then used.
+
+478
+00:24:31,483 --> 00:24:34,466
+>> And, guys, there's a dash credential parameter on this.
+
+479
+00:24:34,483 --> 00:24:37,466
+So when you create the session, you use the credentials that
+
+480
+00:24:37,483 --> 00:24:42,466
+you want to use when you do the import of the modules.
+
+481
+00:24:43,166 --> 00:24:45,466
+Then it's... you're using those credentials and over and over
+
+482
+00:24:45,483 --> 00:24:47,466
+and over again so you don't have to keep track of all of that.
+
+483
+00:24:48,333 --> 00:24:51,466
+It really makes your life a lot easier and cuts down on all the
+
+484
+00:24:51,483 --> 00:24:54,466
+minutia and tools and all this kind of stuff.
+
+485
+00:24:54,483 --> 00:24:58,466
+>> Really encourage you guys to go try this, even if you do it locally.
+
+486
+00:24:58,216 --> 00:25:00,466
+Let me show you something. I'll just show you how to do it locally
+
+487
+00:25:00,483 --> 00:25:01,466
+because it's just so freaky.
+
+488
+00:25:02,483 --> 00:25:07,466
+Here, I just hit dollar sign S equals new session. And that
+
+489
+00:25:07,483 --> 00:25:11,400
+will connect to locally, right? Your local machine. And you
+
+490
+00:25:11,483 --> 00:25:13,466
+can do import PS session.
+
+491
+00:25:14,483 --> 00:25:18,466
+Dollar sign S, minus... and we'll just like do one command.
+
+492
+00:25:18,483 --> 00:25:22,466
+Minus command, get process, minus prefix.
+
+493
+00:25:23,483 --> 00:25:25,466
+Prefix, WOW.
+
+494
+00:25:26,0 --> 00:25:30,466
+So now all of a sudden, you've got get WOW process.
+
+495
+00:25:32,483 --> 00:25:35,233
+And it just works.
+
+496
+00:25:35,316 --> 00:25:35,466
+>> There you go.
+
+497
+00:25:35,483 --> 00:25:39,466
+>> So the point is just try it. Because you don't necessarily
+
+498
+00:25:39,483 --> 00:25:42,200
+have to have access to some remote machine with the main controllers
+
+499
+00:25:42,283 --> 00:25:44,233
+and all that stuff. You can do it on your local box.
+
+500
+00:25:44,483 --> 00:25:48,400
+But it is so freakishly cool, you just want to have fun with it.
+
+501
+00:25:48,450 --> 00:25:48,466
+Give it a try.
+
+502
+00:25:48,483 --> 00:25:51,466
+>> It's seriously going to solve a lot of business problems for
+
+503
+00:25:51,483 --> 00:25:55,450
+you going forward. Just grabbing the Cmdlets from the machines
+
+504
+00:25:55,483 --> 00:25:58,466
+that have them. You've got the correct versions of whatever product
+
+505
+00:25:58,483 --> 00:26:02,466
+you're working with. Implicit remoting is truly a God send for this.
+
+506
+00:26:02,483 --> 00:26:05,166
+Guys, we're going to take another ten-minute break, and we're
+
+507
+00:26:05,250 --> 00:26:07,333
+going to have our last session.
+
+508
+00:26:07,450 --> 00:26:07,466
+>> For today.
+
+509
+00:26:07,483 --> 00:26:08,466
+>> For today.
+
+510
+00:26:08,483 --> 00:26:12,416
+>> And it's going to be on... we're going to start scripting.
+
+511
+00:26:12,483 --> 00:26:16,183
+We're going to start seeing what the script looks like. So come
+
+512
+00:26:16,266 --> 00:26:17,466
+back and join us in ten minutes, and let's automate.
+
+513
+00:26:17,483 --> 00:26:21,466
+>> And in two weeks, we do the advanced one. Now, the advanced
+
+514
+00:26:21,483 --> 00:26:24,466
+one, we roll up our... they're already rolled up. We roll up
+
+515
+00:26:24,483 --> 00:26:28,466
+our sleeves, and we get into the scripting, the automation, et cetera.
+
+516
+00:26:28,483 --> 00:26:31,416
+>> The hard-core stuff. This is a taste I think you're going to
+
+517
+00:26:31,483 --> 00:26:34,350
+enjoy, and it will get you working and get you prepped for what
+
+518
+00:26:34,433 --> 00:26:38,466
+you need in two weeks. So see you in ten minutes.
+

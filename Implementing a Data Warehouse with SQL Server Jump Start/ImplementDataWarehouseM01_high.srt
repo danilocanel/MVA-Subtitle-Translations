@@ -1,0 +1,3140 @@
+1
+00:00:00,333 --> 00:00:07,333
+[Music]
+
+2
+00:00:17,483 --> 00:00:18,300
+Hello, everyone.
+
+3
+00:00:18,483 --> 00:00:20,383
+Welcome to Implementing a Data Warehouse with
+
+4
+00:00:20,483 --> 00:00:24,466
+SQL Server 2012 Jump Start. My name is George Squillace, and
+
+5
+00:00:24,483 --> 00:00:26,466
+this is my colleague, Rich Currey.
+
+6
+00:00:26,483 --> 00:00:30,466
+>> Good morning, everyone. How are you? My name is Rich Currey.
+
+7
+00:00:30,483 --> 00:00:38,283
+I am a senior tech instructor for New Horizons. We deliver training
+
+8
+00:00:38,366 --> 00:00:41,466
+for SQL Server and a bunch of other things. I have been an implement
+
+9
+00:00:41,483 --> 00:00:45,466
+every for data warehousing, I've been an instructor here for
+
+10
+00:00:45,483 --> 00:00:49,466
+the last ten years. I focus in on SQL Server, been doing this
+
+11
+00:00:49,483 --> 00:00:53,466
+for, oh, way too many years, George. If I told you how many,
+
+12
+00:00:53,483 --> 00:00:56,466
+well, we'd have a problem. That would make me way too old.
+
+13
+00:00:56,483 --> 00:01:00,450
+So been there, done that. Hopefully I can help you out over the
+
+14
+00:01:00,483 --> 00:01:03,466
+course of the day as we talk about data warehousing and away
+
+15
+00:01:03,483 --> 00:01:06,466
+talk about integration services. George, how about you?
+
+16
+00:01:06,483 --> 00:01:09,466
+>> And, Rich, I know you're going to have an awful lot to offer
+
+17
+00:01:09,483 --> 00:01:14,400
+because you're enthusiastic about the topic and also have a great
+
+18
+00:01:14,483 --> 00:01:17,466
+amount of experience. A little bit of background on myself.
+
+19
+00:01:17,233 --> 00:01:21,466
+I'm also a long-term tech trainer. Love doing this. Been doing
+
+20
+00:01:21,483 --> 00:01:25,466
+it for a long time. Been a Microsoft certified trainer since 1997.
+
+21
+00:01:25,483 --> 00:01:30,466
+Been certified in every version of SQL Server since SQL 2000
+
+22
+00:01:30,200 --> 00:01:34,450
+and then a final kicker, 96 times in the exam booth.
+
+23
+00:01:34,483 --> 00:01:37,466
+>> Way too many, George. You've become a professional exam-taker,
+
+24
+00:01:38,450 --> 00:01:38,466
+I think.
+
+25
+00:01:38,483 --> 00:01:42,466
+>> Just part of the job.
+
+26
+00:01:42,483 --> 00:01:47,233
+>> So we're going to be dealing with implementing a data warehouse
+
+27
+00:01:47,316 --> 00:01:51,466
+today, and some of the things that we're going to be going over
+
+28
+00:01:51,483 --> 00:01:54,466
+are going to include how to design and implement dimensions and
+
+29
+00:01:54,483 --> 00:01:59,250
+fact tables, we're going to be talking about not just the technical
+
+30
+00:01:59,333 --> 00:02:03,466
+aspect but also some of the busy implications that go with it
+
+31
+00:02:03,483 --> 00:02:07,466
+and what it takes to make sure that you've got a solid design
+
+32
+00:02:07,483 --> 00:02:11,466
+to base your business analysis and reporting on. Then we're
+
+33
+00:02:11,483 --> 00:02:14,466
+going to work and start talking about data flows. We're going
+
+34
+00:02:14,483 --> 00:02:18,466
+to start off with how to extract data, dealing with data sources,
+
+35
+00:02:18,483 --> 00:02:23,466
+data destinations, connections, the technology about retrieving data.
+
+36
+00:02:23,483 --> 00:02:27,466
+We're then going to loop in on the next section to the big part,
+
+37
+00:02:27,483 --> 00:02:30,466
+which is transform. Transformation of data as it goes from your
+
+38
+00:02:30,483 --> 00:02:37,466
+operational systems to your reporting and data warehousing, your
+
+39
+00:02:37,233 --> 00:02:42,316
+analysis systems. That's a big part of it to support those dimensions
+
+40
+00:02:42,400 --> 00:02:45,466
+and fact tables that we build up. Then this afternoon we're
+
+41
+00:02:45,483 --> 00:02:48,466
+going to go into the workflow portion of things, because data
+
+42
+00:02:48,483 --> 00:02:52,466
+flow is not the only thing that we deal with. We deal with control.
+
+43
+00:02:53,483 --> 00:02:57,466
+Control is all about workflow, not just the data flow but the
+
+44
+00:02:57,483 --> 00:03:03,466
+other pieces that go along with it. After that, no project is
+
+45
+00:03:03,483 --> 00:03:07,466
+worth its salt unless you can get it out to the production environment.
+
+46
+00:03:07,483 --> 00:03:11,466
+So we're going to talk about some of the configuration issues,
+
+47
+00:03:11,483 --> 00:03:16,466
+things like package configurations, like environments, we're
+
+48
+00:03:16,166 --> 00:03:21,466
+going to talk about logging and event handling, things of that nature.
+
+49
+00:03:21,483 --> 00:03:26,466
+And, finally, deployment itself, package deployment, project deployment.
+
+50
+00:03:27,483 --> 00:03:28,466
+Then at the end of the day...
+
+51
+00:03:29,483 --> 00:03:31,466
+keep you in your seat...
+
+52
+00:03:32,483 --> 00:03:34,433
+enterprise data.
+
+53
+00:03:34,483 --> 00:03:39,466
+One of the biggest challenges that faces any large organization
+
+54
+00:03:39,483 --> 00:03:43,466
+and many small to mid-size organizations as well is the fact
+
+55
+00:03:43,483 --> 00:03:49,466
+that they consume the same information in multiple databases,
+
+56
+00:03:49,483 --> 00:03:50,466
+multiple systems.
+
+57
+00:03:51,483 --> 00:03:55,466
+And one of the challenges is to ensure that that data is the
+
+58
+00:03:55,483 --> 00:04:01,466
+same on all of those systems, not just for this one but so that
+
+59
+00:04:01,483 --> 00:04:05,466
+when I bring it together, when I take all those operational sources
+
+60
+00:04:05,483 --> 00:04:09,466
+and bring them back in so that they hook up in a data warehouse
+
+61
+00:04:09,483 --> 00:04:14,466
+and can be used together, that they match up correctly and that
+
+62
+00:04:14,483 --> 00:04:19,333
+they can be effectively analyzed to give the business the information
+
+63
+00:04:19,416 --> 00:04:20,466
+they need to work forward.
+
+64
+00:04:20,483 --> 00:04:22,466
+>> It's a full outing here.
+
+65
+00:04:22,483 --> 00:04:26,216
+>> Oh, yeah. We are going to be busy today. There's no question
+
+66
+00:04:26,300 --> 00:04:29,466
+about that. Now, some of the things that you're probably going
+
+67
+00:04:29,483 --> 00:04:34,466
+to want to have for a baseline here, we are going to be talking
+
+68
+00:04:34,483 --> 00:04:41,333
+about a lot of the basics as well as moving forward. So don't
+
+69
+00:04:41,483 --> 00:04:45,200
+be intimidated if you're new to data warehousing. We're not
+
+70
+00:04:45,283 --> 00:04:48,466
+just going to leave you sitting here. This is targeted to folks
+
+71
+00:04:48,483 --> 00:04:52,466
+who have some background and some understanding and who also
+
+72
+00:04:52,483 --> 00:04:55,466
+have some baseline experience with SQL Server.
+
+73
+00:04:56,483 --> 00:05:01,183
+But, I promise, even if you're new to the subject, you're still
+
+74
+00:05:01,266 --> 00:05:04,383
+going to get a lot of good stuff that you can use to prepare
+
+75
+00:05:04,466 --> 00:05:06,466
+for the exam. The 70-463
+
+76
+00:05:07,483 --> 00:05:11,466
+exam, that's what our going to be targeting after this.
+
+77
+00:05:12,416 --> 00:05:18,433
+Now, some of the supporting material that might help is, of course, 10777.
+
+78
+00:05:19,483 --> 00:05:20,466
+Did I get all the 7s?
+
+79
+00:05:20,483 --> 00:05:21,466
+>> You got all the 7s.
+
+80
+00:05:22,483 --> 00:05:23,266
+Triple 7.
+
+81
+00:05:23,350 --> 00:05:28,433
+>> Yeah, we're in an area where airlines are big, so triple 7,
+
+82
+00:05:28,483 --> 00:05:30,216
+you get that one wrong, it can be a problem.
+
+83
+00:05:30,300 --> 00:05:32,466
+>> That's meaningful around here.
+
+84
+00:05:32,483 --> 00:05:35,466
+>> Yeah. Okay. So this is Microsoft. So can you guess where we are?
+
+85
+00:05:35,483 --> 00:05:36,466
+At any rate.
+
+86
+00:05:36,483 --> 00:05:43,466
+10777 is a five-day class. It's offered by New Horizons, who
+
+87
+00:05:43,483 --> 00:05:47,366
+we happen to teach for. So if you decide to take that class,
+
+88
+00:05:47,450 --> 00:05:51,466
+there is a chance, yes, a chance... I know it's hard, but, George,
+
+89
+00:05:52,483 --> 00:05:55,283
+they might actually get us as an instructor.
+
+90
+00:05:55,366 --> 00:05:56,466
+>> I'm teaching in two weeks.
+
+91
+00:05:56,483 --> 00:06:00,466
+>> That would be cool. So that's one spot. George, the other
+
+92
+00:06:00,483 --> 00:06:03,316
+one, you've got a book there, I think.
+
+93
+00:06:03,400 --> 00:06:07,466
+>> That's right. You'll notice an MS Press book which is promoted here.
+
+94
+00:06:07,483 --> 00:06:10,466
+I personally own that book. And, you know, I have to say I've
+
+95
+00:06:10,483 --> 00:06:13,266
+benefitted a lot from that book, not only the material in it,
+
+96
+00:06:13,350 --> 00:06:14,250
+but also the
+
+97
+00:06:15,483 --> 00:06:18,466
+test preparation software that they had.
+
+98
+00:06:18,483 --> 00:06:20,466
+>> Where can they pick that up, George?
+
+99
+00:06:20,483 --> 00:06:23,283
+>> At oreilly.com they can pick up that book.
+
+100
+00:06:23,366 --> 00:06:26,466
+>> O'Reilly's got a lot of great books on SQL Server that can
+
+101
+00:06:26,233 --> 00:06:29,466
+really help you out. So what do we got coming there, bud?
+
+102
+00:06:29,483 --> 00:06:31,466
+>> There you go. Module 1.
+
+103
+00:06:32,483 --> 00:06:37,466
+>> So why don't we get started, designing and implementing dimensions
+
+104
+00:06:37,483 --> 00:06:40,466
+and fact tables. And what we're going to be talking about here,
+
+105
+00:06:40,483 --> 00:06:45,466
+we're going to first start off talking about the design issues
+
+106
+00:06:45,166 --> 00:06:48,466
+on dimensions. Now, there are two approaches you can take.
+
+107
+00:06:48,483 --> 00:06:54,466
+A star schema and a snowflake schema. And what that does is
+
+108
+00:06:54,483 --> 00:07:01,466
+it describes how the dimensions relate back to the fact tables.
+
+109
+00:07:01,483 --> 00:07:06,466
+Now, facts and fact tables are the things that hold the information
+
+110
+00:07:06,483 --> 00:07:10,466
+that the business is concerned about that measure...
+
+111
+00:07:10,483 --> 00:07:13,466
+there's a word you're going to hear a lot... that measures the
+
+112
+00:07:13,483 --> 00:07:16,466
+performance of the organization.
+
+113
+00:07:17,483 --> 00:07:23,316
+Now, they all took together. And we have to deal with how granularity...
+
+114
+00:07:23,400 --> 00:07:27,466
+now granularity is a measure of how the dimensions and the facts
+
+115
+00:07:27,233 --> 00:07:31,466
+relate to each other, how fine a level of detail we've got.
+
+116
+00:07:31,483 --> 00:07:35,166
+We're also going to be talking about two different kinds of dimensions,
+
+117
+00:07:35,483 --> 00:07:40,466
+conformed and non-conformed...
+
+118
+00:07:41,466 --> 00:07:46,466
+let's get that right. Sorry about that... and, finally, time dimensions.
+
+119
+00:07:46,483 --> 00:07:51,383
+And time dimensions are a real interesting discussion because
+
+120
+00:07:51,466 --> 00:07:54,466
+they are super critical to the organization, but yet they're
+
+121
+00:07:54,483 --> 00:07:57,466
+probably the easiest one to generate. And I'll show you a couple
+
+122
+00:07:58,483 --> 00:08:03,466
+of tricks on how to do those. So let's start off with star schemas
+
+123
+00:08:03,483 --> 00:08:07,400
+and snowflake schemas. And we've got a couple of topics we're
+
+124
+00:08:07,483 --> 00:08:09,466
+going to be dealing with here. I'm going to describe the star
+
+125
+00:08:09,483 --> 00:08:13,183
+schemas, the snowflake schemas, and then we're going to talk
+
+126
+00:08:13,266 --> 00:08:16,466
+about some of the processing and performance considerations.
+
+127
+00:08:17,0 --> 00:08:20,466
+So, George, if I talk to you about a star, what do you see?
+
+128
+00:08:20,200 --> 00:08:22,466
+Well, look at that. What a graphic, huh?
+
+129
+00:08:22,483 --> 00:08:24,466
+>> Did I give that away too early?
+
+130
+00:08:24,483 --> 00:08:25,466
+>> Yeah, just a little bit.
+
+131
+00:08:27,483 --> 00:08:31,466
+That's okay. When you see a star, you think about individual
+
+132
+00:08:31,483 --> 00:08:36,366
+spokes coming out from a center hub, right? So what we're talking
+
+133
+00:08:36,450 --> 00:08:40,200
+about here is when we're dealing with dimensions, we're trying
+
+134
+00:08:40,283 --> 00:08:45,466
+to show, by calling it a star schema, that every dimension is
+
+135
+00:08:45,216 --> 00:08:50,350
+tied directly to the fact table, the measure table, the one that
+
+136
+00:08:50,433 --> 00:08:52,466
+contains all the important stuff.
+
+137
+00:08:52,483 --> 00:08:58,466
+Dimensions give you the ability to qualify your measures, to
+
+138
+00:08:58,483 --> 00:09:03,466
+add meaning to what that measure is about. So a customer dimension
+
+139
+00:09:03,483 --> 00:09:09,466
+that's tied to a sales measure would provide meaning to who did
+
+140
+00:09:10,483 --> 00:09:12,366
+the sale, who bought the product.
+
+141
+00:09:12,450 --> 00:09:17,466
+Okay? Now, what that means is that every dimension table needs
+
+142
+00:09:17,483 --> 00:09:21,466
+to have all of the attributes, all of the pieces of information
+
+143
+00:09:22,483 --> 00:09:26,466
+about that dimension that describe the measure.
+
+144
+00:09:27,483 --> 00:09:28,416
+All right. We good?
+
+145
+00:09:28,483 --> 00:09:29,466
+>> Yeah. We're good.
+
+146
+00:09:29,166 --> 00:09:34,466
+>> All right. Now, star schemas, because we have all of that information
+
+147
+00:09:35,483 --> 00:09:39,466
+in the table, some of the attributes might have the same value
+
+148
+00:09:39,483 --> 00:09:43,466
+in many records. For example, if I'm a retailer and I've got
+
+149
+00:09:43,483 --> 00:09:47,233
+a lot of people buying my product, is it possible that many of
+
+150
+00:09:47,316 --> 00:09:49,466
+my customers would be in the same city?
+
+151
+00:09:49,483 --> 00:09:50,466
+>> Sure.
+
+152
+00:09:50,216 --> 00:09:51,250
+>> The same region?
+
+153
+00:09:51,333 --> 00:09:51,466
+>> Sure.
+
+154
+00:09:51,483 --> 00:09:52,466
+>> The same country?
+
+155
+00:09:52,483 --> 00:09:53,450
+>> Sure.
+
+156
+00:09:53,483 --> 00:09:56,466
+>> So I'm going to have repeating values in that dimension table.
+
+157
+00:09:56,483 --> 00:09:57,466
+>> Lots of repeated.
+
+158
+00:09:57,483 --> 00:10:03,250
+>> And that typically is referred to as a denormalized solution.
+
+159
+00:10:03,483 --> 00:10:09,466
+All right. Now, let's take a look, if we can, at what a star
+
+160
+00:10:10,333 --> 00:10:13,366
+schema is going to give us. So if we can go over to the virtual
+
+161
+00:10:13,450 --> 00:10:18,466
+machine for just a minute, what I've done is I've created a database
+
+162
+00:10:18,483 --> 00:10:24,466
+here called Demo DW. And Demo DW I don't have any tables right now.
+
+163
+00:10:24,483 --> 00:10:30,466
+So this is where we're going to build an example of a data warehouse.
+
+164
+00:10:30,166 --> 00:10:32,433
+Now it's going to be pretty basic and I'm not going to put any
+
+165
+00:10:32,483 --> 00:10:35,466
+data in it. I want to do this to show you the structure.
+
+166
+00:10:36,483 --> 00:10:40,466
+So the first thing we have here is we have two create table statements.
+
+167
+00:10:40,483 --> 00:10:46,316
+The top one right here, the create table for product, is going
+
+168
+00:10:46,400 --> 00:10:49,466
+to build a product dimension. We've got a key value which is
+
+169
+00:10:49,483 --> 00:10:55,466
+going to be used to relate back to the measures, the fact table.
+
+170
+00:10:56,300 --> 00:10:59,466
+It is an identity column, which means that we're not pulling
+
+171
+00:10:59,483 --> 00:11:02,466
+the information from anywhere else. And then we have an alt
+
+172
+00:11:02,483 --> 00:11:08,466
+key column. The alt key is the business key or the tie back to
+
+173
+00:11:08,483 --> 00:11:10,466
+the original source system.
+
+174
+00:11:11,483 --> 00:11:14,466
+And then I add in my attributes. So product name, the description,
+
+175
+00:11:14,483 --> 00:11:16,333
+the category name.
+
+176
+00:11:16,483 --> 00:11:23,466
+When I run this script, we now have our table in the Demo DW warehouse.
+
+177
+00:11:23,483 --> 00:11:27,466
+I have the same kind of setup for my customer table. I've got
+
+178
+00:11:27,483 --> 00:11:32,366
+the customer key, the customer alt key, and then some descriptors,
+
+179
+00:11:32,450 --> 00:11:35,466
+the name, the email, and the geography. Now, I'm going to hold
+
+180
+00:11:35,483 --> 00:11:38,266
+off on that geography key for a minute. I don't want to give
+
+181
+00:11:38,350 --> 00:11:39,466
+away the ending on this demo.
+
+182
+00:11:40,483 --> 00:11:44,466
+We've got a couple more here that we're going to build. The salesperson
+
+183
+00:11:45,483 --> 00:11:49,466
+table, again, all of the attributes that describe the salesperson
+
+184
+00:11:51,200 --> 00:11:55,466
+and the date table. Now, this is a timetable, so I don't want
+
+185
+00:11:55,483 --> 00:11:59,466
+to go into too much detail about all the columns, but I want
+
+186
+00:11:59,483 --> 00:12:00,466
+it in there.
+
+187
+00:12:01,266 --> 00:12:04,466
+Hmm. It helps if you highlight the whole thing, doesn't it?
+
+188
+00:12:04,483 --> 00:12:05,466
+>> Yep.
+
+189
+00:12:05,483 --> 00:12:08,466
+>> Yep. One of the neat things about Management Studio but also
+
+190
+00:12:08,483 --> 00:12:11,466
+one of the things that can drive you nuts if you do it wrong.
+
+191
+00:12:12,483 --> 00:12:16,466
+So now I need to put something in the middle, so I'm going to
+
+192
+00:12:16,483 --> 00:12:21,466
+create a fact table. Now, the fact table ties back to each of
+
+193
+00:12:21,483 --> 00:12:25,216
+the dimension tables. We've got the product key, the customer
+
+194
+00:12:25,300 --> 00:12:30,466
+key, the salesperson key, and the order date key. And then we've
+
+195
+00:12:30,483 --> 00:12:35,233
+got information about the fact itself. An order number, an item
+
+196
+00:12:35,316 --> 00:12:38,366
+number, a quantity, a sales amount, a cost.
+
+197
+00:12:38,483 --> 00:12:42,466
+These are the measures, the things that we're interested in.
+
+198
+00:12:42,483 --> 00:12:44,466
+>> And I see a bunch of references that are also...
+
+199
+00:12:45,0 --> 00:12:50,466
+>> Oh, yeah. Because you have to tie it back to those dimension tables.
+
+200
+00:12:51,200 --> 00:12:57,466
+And that's where the product key, customer key, salesperson key,
+
+201
+00:12:57,483 --> 00:13:01,466
+order date key and then order number/item number are all going
+
+202
+00:13:01,483 --> 00:13:05,466
+to be a part of the primary key, because each measure is going
+
+203
+00:13:05,483 --> 00:13:11,466
+to relate to the combination of each of those descriptive records.
+
+204
+00:13:11,483 --> 00:13:15,466
+So I build my fact table, and now
+
+205
+00:13:17,483 --> 00:13:21,466
+we have... and this is the cool part. This might help some folks
+
+206
+00:13:21,483 --> 00:13:24,466
+out there... I'm going to come up here, and right above tables
+
+207
+00:13:24,483 --> 00:13:28,250
+I've got database diagrams. So let's take a look and see if we
+
+208
+00:13:28,333 --> 00:13:29,466
+really do have a star.
+
+209
+00:13:29,483 --> 00:13:31,233
+>> Oh, this is cool when you do this.
+
+210
+00:13:31,316 --> 00:13:35,466
+>> Yeah. So I hit my new database diagram, we wait for the machine
+
+211
+00:13:35,483 --> 00:13:39,466
+to catch up, because it does have to do some graphical stuff.
+
+212
+00:13:42,250 --> 00:13:46,466
+There we go. I'm going to refresh my add table, and there are
+
+213
+00:13:46,483 --> 00:13:50,466
+the tables I just put in. I highlight them all because I want
+
+214
+00:13:50,483 --> 00:13:53,233
+them all in, and when I add them in,
+
+215
+00:13:55,266 --> 00:13:56,350
+there is
+
+216
+00:13:57,483 --> 00:14:00,466
+my star schema.
+
+217
+00:14:00,483 --> 00:14:05,466
+Now, hard to see everything here because it's zoomed in pretty good.
+
+218
+00:14:05,483 --> 00:14:09,466
+I'm going to zoom it out just a little bit so we can see things.
+
+219
+00:14:09,483 --> 00:14:12,466
+Notice, single tables,
+
+220
+00:14:13,483 --> 00:14:16,466
+all relating directly back into the fact table.
+
+221
+00:14:16,483 --> 00:14:18,316
+>> Looks like a star to me.
+
+222
+00:14:18,400 --> 00:14:23,466
+>> Yeah. So that's what that star schema is all about. Now, that's not...
+
+223
+00:14:23,483 --> 00:14:26,466
+let's head back to the slides now, because the next thing that
+
+224
+00:14:26,483 --> 00:14:31,466
+we want to talk about is our snowflake schema.
+
+225
+00:14:32,250 --> 00:14:37,466
+The snowflake schema is a more normalized solution. So remember
+
+226
+00:14:37,483 --> 00:14:40,466
+when I was talking about the customers and I mentioned that you
+
+227
+00:14:40,483 --> 00:14:44,466
+might have multiple customers with the same city, the same region,
+
+228
+00:14:45,333 --> 00:14:46,466
+the same country?
+
+229
+00:14:46,483 --> 00:14:47,466
+>> Uh-huh.
+
+230
+00:14:47,483 --> 00:14:53,166
+>> So in that situation I end up with many records with the same values.
+
+231
+00:14:53,250 --> 00:14:57,250
+In denormalization, a good practice is to take those values out,
+
+232
+00:14:57,333 --> 00:15:01,466
+put them in a separate table. Once I do that in a data warehouse,
+
+233
+00:15:01,483 --> 00:15:06,466
+that's what drives me to a snowflake schema. I now end up with
+
+234
+00:15:07,483 --> 00:15:12,466
+all of these tables not necessarily connecting directly back
+
+235
+00:15:12,483 --> 00:15:14,466
+to the measures, to the fact table.
+
+236
+00:15:15,483 --> 00:15:17,250
+>> I see a mixture now in the diagram.
+
+237
+00:15:17,333 --> 00:15:22,466
+>> Absolutely. We have some that relate to other dimension tables.
+
+238
+00:15:22,483 --> 00:15:27,466
+So each table has to have the dimension values, the attributes,
+
+239
+00:15:28,483 --> 00:15:33,466
+it has to have the key, and it has to have a foreign key value
+
+240
+00:15:33,483 --> 00:15:38,466
+to relate to the parent dimension, the denormalized dimension
+
+241
+00:15:38,483 --> 00:15:41,466
+that it is a part of.
+
+242
+00:15:41,483 --> 00:15:43,466
+>> And I know you have some stuff you want to show us here as
+
+243
+00:15:43,483 --> 00:15:44,216
+well, Rich.
+
+244
+00:15:44,300 --> 00:15:49,466
+>> Oh, absolutely. Absolutely. So I have another script here
+
+245
+00:15:49,483 --> 00:15:54,466
+that's going to create a geography table. The geography table
+
+246
+00:15:54,483 --> 00:16:00,466
+has a geography key, it has a postal code, a city, a region,
+
+247
+00:16:01,483 --> 00:16:07,466
+and a country. So when I execute this script, I've now built
+
+248
+00:16:07,483 --> 00:16:13,466
+a table that no longer relates directly back to a fact table.
+
+249
+00:16:15,450 --> 00:16:15,466
+>> I see that.
+
+250
+00:16:16,483 --> 00:16:17,466
+>> Here's the cool part.
+
+251
+00:16:18,483 --> 00:16:23,366
+When I go into my diagram, I'm going to add the table back in,
+
+252
+00:16:26,266 --> 00:16:31,250
+and even though I've created it, does it look like it relates
+
+253
+00:16:31,333 --> 00:16:31,466
+to anything?
+
+254
+00:16:31,483 --> 00:16:34,466
+>> No, it is free-floating and unrelated.
+
+255
+00:16:34,483 --> 00:16:37,466
+>> So I need to make that connection. So what I'm going to do
+
+256
+00:16:37,483 --> 00:16:41,466
+is I'm going grab this geography key
+
+257
+00:16:43,483 --> 00:16:47,433
+and I need to drop it here on
+
+258
+00:16:49,333 --> 00:16:50,466
+my salesperson table.
+
+259
+00:16:51,483 --> 00:16:55,466
+And I make a relationship between the geography key and the geography
+
+260
+00:16:55,483 --> 00:17:00,466
+table, the geography key and the salesperson, and then I do the
+
+261
+00:17:00,483 --> 00:17:06,466
+same thing here to my customer table. And now
+
+262
+00:17:08,483 --> 00:17:12,466
+we have our snowflake. Now, the one thing you need to remember,
+
+263
+00:17:12,483 --> 00:17:18,333
+George, this is a small encapsulated example to show how those
+
+264
+00:17:18,416 --> 00:17:21,466
+relating to the. In the real world you're going to end up with
+
+265
+00:17:21,483 --> 00:17:26,466
+a data warehouse that can have 30 fact tables, that could have
+
+266
+00:17:26,483 --> 00:17:32,466
+150 or 200 dimension tables depending on how complex the organization
+
+267
+00:17:32,483 --> 00:17:37,466
+is and how complex the design of the data warehouse is.
+
+268
+00:17:37,483 --> 00:17:38,466
+>> It can get tangled.
+
+269
+00:17:38,483 --> 00:17:44,466
+>> So those dimensions, those snowflake and star designs,
+
+270
+00:17:46,266 --> 00:17:51,466
+that is a big part of determining how efficient your data warehouse
+
+271
+00:17:51,166 --> 00:17:52,450
+is going to be.
+
+272
+00:17:52,483 --> 00:17:53,466
+>> It's like a foundation.
+
+273
+00:17:53,483 --> 00:18:00,400
+>> It is. It is. And the actual choices that you make, you don't
+
+274
+00:18:00,483 --> 00:18:04,466
+have to go all star, you don't have to go all snowflake.
+
+275
+00:18:04,483 --> 00:18:09,466
+You can have some dimensions that use a star approach, some dimensions
+
+276
+00:18:09,483 --> 00:18:13,400
+that use a snowflake approach, and what you end up with is a
+
+277
+00:18:13,483 --> 00:18:15,383
+hybrid somewhere between the two.
+
+278
+00:18:15,466 --> 00:18:16,466
+>> So it's just not always tidy.
+
+279
+00:18:17,166 --> 00:18:21,466
+>> Absolutely. Now, the big thing with that is how you make those
+
+280
+00:18:21,483 --> 00:18:24,466
+decisions is all about performance.
+
+281
+00:18:25,483 --> 00:18:30,466
+It's all about dealing with the trade-offs on where you want
+
+282
+00:18:30,483 --> 00:18:32,333
+to pay the piper, George.
+
+283
+00:18:32,416 --> 00:18:32,466
+>> Yep.
+
+284
+00:18:33,166 --> 00:18:37,466
+>> There are advantages to a star schema, there are advantages
+
+285
+00:18:37,483 --> 00:18:38,466
+to a snowflake.
+
+286
+00:18:38,483 --> 00:18:42,350
+>> So you're going to take a hit somewhere, perhaps. There are
+
+287
+00:18:42,433 --> 00:18:45,383
+some processing and performance considerations we want to take
+
+288
+00:18:45,450 --> 00:18:45,466
+a look at.
+
+289
+00:18:45,483 --> 00:18:49,466
+>> There absolutely are. There absolutely are. A star schema
+
+290
+00:18:50,216 --> 00:18:55,166
+is usually going to take a performance hit in what's called the
+
+291
+00:18:55,250 --> 00:18:59,466
+ETL process, the extract, transform, and load. That's where
+
+292
+00:18:59,483 --> 00:19:04,466
+you're taking data from your source systems and you're pulling
+
+293
+00:19:04,483 --> 00:19:09,466
+it through and combining it, transforming it, aggregating it,
+
+294
+00:19:09,483 --> 00:19:13,466
+whatever it might be, and putting it into the data warehouse.
+
+295
+00:19:14,483 --> 00:19:18,216
+Your source systems are typically going to be highly denormalized.
+
+296
+00:19:18,300 --> 00:19:21,466
+So to... sorry, highly normalized. I said that backwards.
+
+297
+00:19:21,483 --> 00:19:25,466
+It's early in the morning here. No matter where you might be,
+
+298
+00:19:25,483 --> 00:19:26,466
+it's early here.
+
+299
+00:19:27,483 --> 00:19:33,466
+So in a highly normalized solution, we need to combine all of
+
+300
+00:19:33,483 --> 00:19:41,166
+those normalized tables into a single record for the denormalization
+
+301
+00:19:41,483 --> 00:19:42,450
+of the information.
+
+302
+00:19:43,483 --> 00:19:47,466
+That's the process that happens during the ETL process, and it
+
+303
+00:19:47,483 --> 00:19:51,266
+means that there's going to be a large amount of time taken in
+
+304
+00:19:51,350 --> 00:19:56,466
+large systems. But the flip side is the advantage there is that
+
+305
+00:19:56,216 --> 00:19:59,466
+because everything is denormalized, when you go to retrieve it
+
+306
+00:19:59,483 --> 00:20:04,466
+all, all of that information is right in the one record, and
+
+307
+00:20:04,483 --> 00:20:08,466
+it is available immediately without having to do a lot of joins,
+
+308
+00:20:09,483 --> 00:20:13,333
+which means your queries, retrieval of information for analysis
+
+309
+00:20:13,483 --> 00:20:16,250
+is going to go very quick. Now, what do you think that means
+
+310
+00:20:16,333 --> 00:20:17,466
+for a star schema, George?
+
+311
+00:20:18,483 --> 00:20:20,466
+>> I'm sorry, I don't know where you're going with that. Tell me.
+
+312
+00:20:21,483 --> 00:20:24,466
+>> Oh. So if I'm going to have a snow...
+
+313
+00:20:25,483 --> 00:20:28,466
+sorry, a snowflake schema. I said it backwards. No wonder you
+
+314
+00:20:28,483 --> 00:20:32,433
+couldn't figure out where I was going. In a snowflake schema
+
+315
+00:20:32,483 --> 00:20:37,466
+the ETL process is going to take the denormalized... the normalized information...
+
+316
+00:20:37,483 --> 00:20:39,466
+you know, this is tough to get it all in.
+
+317
+00:20:41,300 --> 00:20:44,466
+It has the normalized information
+
+318
+00:20:46,483 --> 00:20:50,466
+brought directly into the data warehouse or at least more closely.
+
+319
+00:20:50,166 --> 00:20:54,466
+So the ETL process is a lot more efficient. However, on the
+
+320
+00:20:54,483 --> 00:20:57,466
+back side when you're querying it, there are a lot more joins
+
+321
+00:20:57,483 --> 00:21:00,466
+in your queries which means that your queries are going to be
+
+322
+00:21:00,483 --> 00:21:04,466
+a little bit less responsive and are going to take longer to
+
+323
+00:21:04,483 --> 00:21:07,466
+analyze and retrieve the information you need.
+
+324
+00:21:07,483 --> 00:21:09,466
+>> A lot of decision-making.
+
+325
+00:21:09,216 --> 00:21:14,466
+>> It is. It is. And that really is the big part of getting that
+
+326
+00:21:14,483 --> 00:21:18,466
+design right is understanding where those trade-offs need to
+
+327
+00:21:18,483 --> 00:21:22,466
+occur and the decision process that goes into them.
+
+328
+00:21:23,333 --> 00:21:26,466
+>> So you've talked about the dimension tables and dimension design.
+
+329
+00:21:26,483 --> 00:21:29,466
+Now let's take a look at facts and fact tables.
+
+330
+00:21:29,483 --> 00:21:32,466
+>> Yeah. We've got facts and fact tables. And as I said earlier,
+
+331
+00:21:32,483 --> 00:21:39,466
+the fact tables are the tables that hold the measures, the information
+
+332
+00:21:39,483 --> 00:21:43,466
+that the business uses to measure its performance.
+
+333
+00:21:44,483 --> 00:21:47,466
+Things like sales, things like
+
+334
+00:21:49,483 --> 00:21:55,466
+orders or costs, those are the kinds of information that we need.
+
+335
+00:21:55,483 --> 00:21:58,466
+So we're going to talk about facts and what they are, how to
+
+336
+00:21:58,483 --> 00:22:01,466
+group them together, and then we're going to go into granularity
+
+337
+00:22:02,483 --> 00:22:04,466
+and what that's all about.
+
+338
+00:22:04,200 --> 00:22:04,466
+>> Important.
+
+339
+00:22:04,483 --> 00:22:10,466
+>> It is. It is. So a fact is basically a piece of information
+
+340
+00:22:10,483 --> 00:22:13,166
+that's used to measure the business results. I've mentioned
+
+341
+00:22:13,483 --> 00:22:17,466
+that a couple of times. Sales information, production information,
+
+342
+00:22:17,483 --> 00:22:23,450
+inventory information. And facts, curiously enough, can be additive,
+
+343
+00:22:23,483 --> 00:22:25,466
+semi-additive or non-additive.
+
+344
+00:22:25,483 --> 00:22:28,350
+>> And you have some good examples of those, too.
+
+345
+00:22:28,433 --> 00:22:34,466
+>> I do, actually. An additive fact is a fact or a measure that
+
+346
+00:22:34,233 --> 00:22:40,466
+can be summarized across all dimensions. For example, sales.
+
+347
+00:22:41,483 --> 00:22:46,466
+I can summarize sales along customers, along products, along
+
+348
+00:22:46,483 --> 00:22:51,466
+time, pretty much however you think about your organization,
+
+349
+00:22:52,483 --> 00:22:55,466
+you're going to be able to take those individual sales and add
+
+350
+00:22:55,483 --> 00:22:59,466
+them up and group them together to get an aggregate value.
+
+351
+00:22:59,483 --> 00:23:03,166
+That would be an additive measure, one that can be aggregated
+
+352
+00:23:03,250 --> 00:23:04,466
+along all dimensions.
+
+353
+00:23:04,483 --> 00:23:08,183
+>> Sometimes I've heard the term fully additive in case you ever
+
+354
+00:23:08,266 --> 00:23:09,466
+hear that out there also.
+
+355
+00:23:09,483 --> 00:23:16,466
+>> Absolutely. Semi-additive is one where a measure or a fact
+
+356
+00:23:16,483 --> 00:23:22,466
+is aggregatable along some dimensions but not all. Think, for
+
+357
+00:23:22,183 --> 00:23:23,466
+example, about inventory.
+
+358
+00:23:24,483 --> 00:23:28,466
+If I have a lot of warehouses that store my products and they're
+
+359
+00:23:28,483 --> 00:23:32,350
+in many different regions of the U.S.,
+
+360
+00:23:33,483 --> 00:23:38,166
+could I take the total values of each of those inventories in
+
+361
+00:23:38,483 --> 00:23:41,433
+each warehouse and add them up to get a total U.S. value?
+
+362
+00:23:41,450 --> 00:23:41,466
+>> Definitely.
+
+363
+00:23:41,483 --> 00:23:47,466
+>> So along geography, at any rate, that could be an additive measure.
+
+364
+00:23:47,483 --> 00:23:52,466
+But let's look at customers for a minute. If I have customers,
+
+365
+00:23:53,483 --> 00:23:57,266
+do I have inventory on a per-customer basis, George?
+
+366
+00:23:57,350 --> 00:23:59,466
+>> No. Those don't match. They don't intersect.
+
+367
+00:23:59,483 --> 00:24:04,166
+>> No. Inventory belongs to my organization, not to my customers.
+
+368
+00:24:04,483 --> 00:24:09,366
+So inventory can't be aggregated along that customer dimension.
+
+369
+00:24:09,483 --> 00:24:14,466
+It is meaningless to a customer. Okay?
+
+370
+00:24:14,483 --> 00:24:15,466
+>> And there's one more.
+
+371
+00:24:15,483 --> 00:24:19,466
+>> There is. And that would be the non-additive measure. And a
+
+372
+00:24:19,483 --> 00:24:25,466
+non-additive measure is typically a calculated measure. So, for
+
+373
+00:24:25,483 --> 00:24:29,466
+example, a percent profit.
+
+374
+00:24:31,483 --> 00:24:36,233
+Can I calculate percent profit for each product?
+
+375
+00:24:36,483 --> 00:24:37,366
+>> Sure.
+
+376
+00:24:37,483 --> 00:24:41,466
+>> Can I calculate percent product for a product category?
+
+377
+00:24:41,483 --> 00:24:42,466
+>> Sure.
+
+378
+00:24:42,483 --> 00:24:47,466
+>> Okay. So if I had 5 percent profit on product A, 5 percent
+
+379
+00:24:47,483 --> 00:24:52,216
+on product B, 5 percent on product C, that would mean if they're
+
+380
+00:24:52,300 --> 00:24:56,466
+all in the same category I'd have 15 percent for that category, right?
+
+381
+00:24:56,483 --> 00:24:58,466
+>> No, that's not the way the money people work.
+
+382
+00:25:01,450 --> 00:25:01,466
+>> Oh, man.
+
+383
+00:25:02,483 --> 00:25:05,466
+So that means that it wouldn't be summing?
+
+384
+00:25:06,483 --> 00:25:07,216
+>> Non-additive.
+
+385
+00:25:07,483 --> 00:25:12,466
+>> There you go. You got it. So any measure that you can add up,
+
+386
+00:25:13,0 --> 00:25:17,466
+aggregate along all the dimensions, additive. Any measure that
+
+387
+00:25:17,483 --> 00:25:21,466
+only aggregates on some of the dimensions, semi-additive.
+
+388
+00:25:22,483 --> 00:25:26,466
+Any measure that you a need to calculate along a dimension at
+
+389
+00:25:26,200 --> 00:25:28,466
+each level, non-additive.
+
+390
+00:25:29,483 --> 00:25:30,466
+>> Good summary.
+
+391
+00:25:30,166 --> 00:25:30,466
+>> Okay.
+
+392
+00:25:31,166 --> 00:25:34,466
+Now, what have we got next?
+
+393
+00:25:34,483 --> 00:25:36,466
+>> Next we have grouping facts.
+
+394
+00:25:36,166 --> 00:25:41,466
+>> All right. So would it make sense, George, if I had two measures,
+
+395
+00:25:41,483 --> 00:25:45,166
+one of which was additive and one of which was semi-additive,
+
+396
+00:25:45,483 --> 00:25:50,466
+would they relate to the same group of dimensions?
+
+397
+00:25:51,483 --> 00:25:52,466
+>> Probably not.
+
+398
+00:25:52,483 --> 00:25:56,466
+>> No. Because they don't pertain to that dimension.
+
+399
+00:25:56,483 --> 00:25:58,466
+Inventory is not going to relate to a customer.
+
+400
+00:25:59,483 --> 00:26:02,433
+So, therefore, can I put them in the same fact table?
+
+401
+00:26:02,450 --> 00:26:02,466
+>> No.
+
+402
+00:26:03,0 --> 00:26:06,466
+>> Probably not. Because remember when we talked about that fact
+
+403
+00:26:06,483 --> 00:26:11,466
+table we said that the fact table needs to have the dimension
+
+404
+00:26:11,483 --> 00:26:17,466
+keys for all of the dimensions it relates to as part of the primary key.
+
+405
+00:26:17,483 --> 00:26:20,466
+Well, you can't have null values in a primary key.
+
+406
+00:26:21,233 --> 00:26:24,466
+Therefore if the two measures don't relate to the same facts,
+
+407
+00:26:25,483 --> 00:26:29,466
+they're not going to have a fully qualified primary key.
+
+408
+00:26:29,483 --> 00:26:32,466
+There's going to be some nulls. It means you can't put them in
+
+409
+00:26:32,483 --> 00:26:33,466
+the same table.
+
+410
+00:26:33,483 --> 00:26:34,466
+>> Design impact.
+
+411
+00:26:34,483 --> 00:26:39,266
+>> Absolutely. So one of the grouping considerations is to make
+
+412
+00:26:39,350 --> 00:26:45,466
+sure that you keep only those facts that have the same key relationships,
+
+413
+00:26:45,483 --> 00:26:50,466
+the same dimension relationships, together in a single table.
+
+414
+00:26:50,483 --> 00:26:55,200
+But that's not the only consideration, because also you may have
+
+415
+00:26:55,283 --> 00:26:59,466
+fully additive measures that some parts of the business use but
+
+416
+00:26:59,483 --> 00:27:02,466
+not other parts of the business. They just don't bother with them.
+
+417
+00:27:02,483 --> 00:27:07,466
+So sometimes it may make sense to create multiple fact tables
+
+418
+00:27:08,483 --> 00:27:13,466
+based on business needs so that measures that are common to a
+
+419
+00:27:13,483 --> 00:27:17,466
+part of the business are grouped together and easily available,
+
+420
+00:27:17,483 --> 00:27:20,466
+other measures that aren't something that they're concerned with
+
+421
+00:27:21,450 --> 00:27:21,466
+don't show up.
+
+422
+00:27:23,350 --> 00:27:27,400
+The last thing that we're going to deal with here is granularity,
+
+423
+00:27:27,483 --> 00:27:33,466
+because facts that don't make sense all the way up and down the
+
+424
+00:27:33,483 --> 00:27:37,466
+dimension, they're not going to be keyed the same either because
+
+425
+00:27:37,483 --> 00:27:40,466
+they're going to have different granularity.
+
+426
+00:27:41,483 --> 00:27:46,466
+Granularity refers to the level of detail that a fact has.
+
+427
+00:27:46,483 --> 00:27:52,466
+For example, it may not relate to an individual customer, it
+
+428
+00:27:52,483 --> 00:27:57,416
+may relate only to the collection of customers at the city level.
+
+429
+00:27:57,483 --> 00:28:01,466
+So that fact doesn't have that level of detail.
+
+430
+00:28:02,483 --> 00:28:07,466
+Maybe it is at the product category level rather than at the
+
+431
+00:28:08,333 --> 00:28:09,466
+product level.
+
+432
+00:28:10,483 --> 00:28:14,466
+Granularity is how detailed that information is.
+
+433
+00:28:14,483 --> 00:28:18,466
+>> So different parts of the organization might want to analyze
+
+434
+00:28:18,483 --> 00:28:21,383
+differently and that's going to impact my design.
+
+435
+00:28:21,466 --> 00:28:24,466
+>> You know, it's not even so much different parts of the organization
+
+436
+00:28:25,0 --> 00:28:30,466
+as it is the level of detail that the fact is available with
+
+437
+00:28:30,483 --> 00:28:31,466
+as well.
+
+438
+00:28:31,483 --> 00:28:32,466
+>> Part of the source.
+
+439
+00:28:32,483 --> 00:28:37,333
+>> It truly is. So some information may not be available at that
+
+440
+00:28:37,416 --> 00:28:41,166
+fine level of detail, some of it might not be, as you said, George,
+
+441
+00:28:41,483 --> 00:28:44,466
+interesting at that fine level of detail.
+
+442
+00:28:45,166 --> 00:28:45,233
+>> Sure.
+
+443
+00:28:45,316 --> 00:28:47,466
+>> So what have we got next there, my friend?
+
+444
+00:28:47,483 --> 00:28:50,250
+>> So design considerations. You've laid a lot of things on the
+
+445
+00:28:50,333 --> 00:28:53,466
+table here that impact design. Go ahead and tell us a bit more
+
+446
+00:28:53,483 --> 00:28:54,466
+about those.
+
+447
+00:28:54,483 --> 00:29:00,166
+>> Summarizing them right up, fact tables, we need to have all
+
+448
+00:29:00,483 --> 00:29:04,466
+of the keys to every dimension that it relates to. If it doesn't
+
+449
+00:29:04,483 --> 00:29:08,466
+relate to the dimension, then it can't be in that fact table.
+
+450
+00:29:08,483 --> 00:29:13,466
+And the primary key needs to be a composite key for all of those
+
+451
+00:29:13,483 --> 00:29:14,466
+dimension keys.
+
+452
+00:29:15,483 --> 00:29:18,466
+And like I said, semi-additive, additive, non-additive, they
+
+453
+00:29:18,483 --> 00:29:23,466
+all have different impacts. They should all be keyed different.
+
+454
+00:29:23,483 --> 00:29:27,466
+>> All right. And then next up you have some more to talk about
+
+455
+00:29:27,483 --> 00:29:30,466
+as far as fact and dimension granularity.
+
+456
+00:29:30,483 --> 00:29:34,266
+>> Yeah. We need to get into just a little bit more detail on
+
+457
+00:29:34,350 --> 00:29:39,466
+how this goes. And this is really talking about that how we figure
+
+458
+00:29:39,483 --> 00:29:44,466
+out what that granularity is and what that dimension granularity
+
+459
+00:29:44,483 --> 00:29:49,216
+talks about. Now, granularity, again, as you alluded to, George,
+
+460
+00:29:49,300 --> 00:29:53,466
+it's not just based on business needs, it's not just based on
+
+461
+00:29:53,483 --> 00:29:57,466
+the level of availability of the information, but it should be
+
+462
+00:29:57,216 --> 00:30:02,466
+driven by the business needs. If you've got order detail down
+
+463
+00:30:02,483 --> 00:30:08,466
+to the second, do I need to put order detail down to the second
+
+464
+00:30:08,483 --> 00:30:09,466
+into a data warehouse?
+
+465
+00:30:10,416 --> 00:30:12,466
+>> Probably not that level of detail.
+
+466
+00:30:12,483 --> 00:30:17,0
+>> No. Because are we ever going to look at how much did I sell
+
+467
+00:30:17,483 --> 00:30:18,466
+at 1933?
+
+468
+00:30:19,450 --> 00:30:19,466
+>> No.
+
+469
+00:30:20,483 --> 00:30:23,466
+>> No. How much did I sell at 742?
+
+470
+00:30:23,483 --> 00:30:24,466
+>> No.
+
+471
+00:30:24,483 --> 00:30:30,466
+>> Usually we only go down to the day, maybe for some organizations
+
+472
+00:30:30,483 --> 00:30:35,466
+to the hour. For an online retailer that's doing global sales,
+
+473
+00:30:35,483 --> 00:30:40,333
+having that hourly information might be helpful for their business analysis.
+
+474
+00:30:40,416 --> 00:30:45,466
+But that's the key is this is all driven by business needs.
+
+475
+00:30:47,483 --> 00:30:53,466
+Don't ever load into a data warehouse more detail than you need.
+
+476
+00:30:54,483 --> 00:30:58,466
+Your data warehouse is going to be so big anyway that it doesn't
+
+477
+00:30:58,483 --> 00:31:02,466
+make sense to clutter it up with a lot of extra information.
+
+478
+00:31:02,483 --> 00:31:06,166
+>> So that's fact granularity. What about dimension granularity?
+
+479
+00:31:06,250 --> 00:31:10,466
+>> Well, again, just like with facts, why load more detail than
+
+480
+00:31:10,483 --> 00:31:14,466
+you need? If the lowest level of detail that you're ever going
+
+481
+00:31:14,483 --> 00:31:20,466
+to need in time is the day level, don't build a timetable that
+
+482
+00:31:20,483 --> 00:31:25,316
+is down to the hour or to the minute. If you need that level
+
+483
+00:31:25,400 --> 00:31:30,0
+of detail, then, yes, you have to create the dimension table
+
+484
+00:31:30,483 --> 00:31:34,166
+down to that level of granularity. But just like with facts,
+
+485
+00:31:35,483 --> 00:31:39,250
+it all ties together. You don't need to drive facts lower than
+
+486
+00:31:39,333 --> 00:31:43,466
+they need to be analyzed, you don't need to drive dimensions
+
+487
+00:31:43,483 --> 00:31:47,466
+lower than the facts need to separate.
+
+488
+00:31:48,483 --> 00:31:52,466
+>> And I know you have a few specific things you wanted to mention,
+
+489
+00:31:52,483 --> 00:31:56,333
+some dimension-specific design aspects.
+
+490
+00:31:56,416 --> 00:32:02,466
+>> Yeah. We've got this thing, it's called conformed and non-conformed dimensions.
+
+491
+00:32:02,483 --> 00:32:06,466
+And along with that we've got shared dimensions and degenerate
+
+492
+00:32:06,483 --> 00:32:13,466
+dimensions, and, oh, yeah, last and certainly not least, a slowly
+
+493
+00:32:13,483 --> 00:32:16,183
+changing dimension.
+
+494
+00:32:17,250 --> 00:32:22,316
+So let's start out with conformed and non-conformed. A conformed
+
+495
+00:32:22,400 --> 00:32:29,466
+dimension is a dimension that is shared by multiple fact tables,
+
+496
+00:32:29,483 --> 00:32:35,233
+and there's only one version of it. So there's one definition
+
+497
+00:32:35,316 --> 00:32:39,466
+for what a product dimension has for attributes. There's one
+
+498
+00:32:39,483 --> 00:32:43,466
+definition for what a customer dimension has. There's one dimension
+
+499
+00:32:43,483 --> 00:32:49,466
+for what the financial dimension has. A single categorization
+
+500
+00:32:50,200 --> 00:32:53,466
+that all aspects of the business access.
+
+501
+00:32:54,483 --> 00:33:01,366
+A non-conformed dimension is when we have a dimension where part
+
+502
+00:33:01,450 --> 00:33:07,466
+of the business uses only some of the attributes, another part
+
+503
+00:33:07,483 --> 00:33:11,466
+of the business uses a different subset of the attributes.
+
+504
+00:33:11,483 --> 00:33:15,466
+There might be crossover, but when you look at the dimension,
+
+505
+00:33:16,466 --> 00:33:20,350
+there's really two definitions of what that dimension needs to
+
+506
+00:33:20,433 --> 00:33:26,433
+have depending on who uses it. So the dimension tables are designed...
+
+507
+00:33:26,483 --> 00:33:30,466
+you might have two of them... for example, a manufacturing product
+
+508
+00:33:30,483 --> 00:33:35,466
+dimension and a sales product dimension... where each one has
+
+509
+00:33:35,483 --> 00:33:37,466
+a different set of attributes.
+
+510
+00:33:38,483 --> 00:33:45,416
+So you separate them out and show each one the way it needs to be.
+
+511
+00:33:45,483 --> 00:33:47,466
+>> And it looks like you have some stuff that you want to show
+
+512
+00:33:47,483 --> 00:33:48,316
+us about these.
+
+513
+00:33:48,400 --> 00:33:52,466
+>> Oh, yeah. We've got a demo coming up here. So what I've done,
+
+514
+00:33:53,0 --> 00:33:56,466
+if we can get over to... there we go. Let's see if pick actually
+
+515
+00:33:56,483 --> 00:34:00,466
+get it up there. We have the script. So what I've done here
+
+516
+00:34:00,483 --> 00:34:05,466
+is I've actually got two dimensions. I've got a manufacturing
+
+517
+00:34:06,0 --> 00:34:11,466
+product dimension which has a product ID, a name, a parent item,
+
+518
+00:34:11,483 --> 00:34:14,166
+a standard cost, and a color.
+
+519
+00:34:14,483 --> 00:34:18,366
+And then I've got a sales product where the product ID and the
+
+520
+00:34:18,450 --> 00:34:22,466
+name cross over. They're in both dimensions. But sales isn't
+
+521
+00:34:22,483 --> 00:34:26,233
+quite as worried about the parent item or the standard cost or
+
+522
+00:34:26,316 --> 00:34:30,466
+the color. They're more interested in the list price and in the category.
+
+523
+00:34:31,483 --> 00:34:38,466
+So when I build these two, I now have two different product dimensions...
+
+524
+00:34:40,483 --> 00:34:42,466
+oh, I already made the top one, huh?
+
+525
+00:34:42,483 --> 00:34:44,466
+>> Yeah, there you go.
+
+526
+00:34:44,216 --> 00:34:47,333
+>> That's what happens. I ran it twice. Sorry about that.
+
+527
+00:34:49,483 --> 00:34:53,433
+I must have clicked twice. Do my tables in there? Let's take
+
+528
+00:34:53,450 --> 00:34:53,466
+a look.
+
+529
+00:34:54,483 --> 00:34:57,466
+There they go. Okay. So I've got
+
+530
+00:35:00,483 --> 00:35:01,466
+>> Oh, you're in DQS main.
+
+531
+00:35:03,483 --> 00:35:07,466
+>> Always helps if you're in the right database. Thanks for that, George.
+
+532
+00:35:07,200 --> 00:35:09,466
+>> Oh, you're a great second pair of eyes.
+
+533
+00:35:10,483 --> 00:35:14,466
+>> All right. So there's any two dimensions. They are non-conformed
+
+534
+00:35:15,0 --> 00:35:20,466
+dimensions because they both deal with the same entity, a product,
+
+535
+00:35:20,483 --> 00:35:23,466
+but they have different attribute definitions.
+
+536
+00:35:24,483 --> 00:35:29,466
+When I create my fact table... ask here's a very simple one with
+
+537
+00:35:29,200 --> 00:35:33,466
+product ID and sales quantity... now both of those dimensions
+
+538
+00:35:33,483 --> 00:35:34,466
+relate in.
+
+539
+00:35:36,483 --> 00:35:42,366
+The flip side of that, the conformed dimension is when I would
+
+540
+00:35:42,450 --> 00:35:48,0
+create the single product dimension that has a product ID and
+
+541
+00:35:48,483 --> 00:35:53,300
+a name, the same as both of the manufacturing and sales product,
+
+542
+00:35:53,483 --> 00:35:57,466
+and then takes the full list of both attributes, parent item,
+
+543
+00:35:57,483 --> 00:35:59,383
+standard cost, color,
+
+544
+00:36:00,483 --> 00:36:03,466
+and the sales attributes, list price and category.
+
+545
+00:36:04,483 --> 00:36:12,183
+So conformed and non-conformed. I forgot. I already have a product
+
+546
+00:36:12,266 --> 00:36:12,466
+in there, so...
+
+547
+00:36:12,483 --> 00:36:13,466
+>> Yeah, we get the point.
+
+548
+00:36:13,483 --> 00:36:16,466
+>> But the script is there. Cool?
+
+549
+00:36:16,483 --> 00:36:19,466
+>> Very cool. So there were some other dimension designs that
+
+550
+00:36:19,483 --> 00:36:21,166
+you want to talk about too.
+
+551
+00:36:21,250 --> 00:36:25,466
+>> Yeah. And this is as much a qualification of terminology as
+
+552
+00:36:26,0 --> 00:36:29,466
+anything else, and it is something that you need to know because
+
+553
+00:36:29,483 --> 00:36:33,466
+these are terms that are very commonly used. And you're going
+
+554
+00:36:33,483 --> 00:36:37,466
+to run into them in a lot of different places so I highly recommend
+
+555
+00:36:37,483 --> 00:36:41,0
+that you get comfortable with shared and degenerate dimensions.
+
+556
+00:36:41,483 --> 00:36:47,466
+A shared dimension is a dimension that is used by multiple facts,
+
+557
+00:36:48,383 --> 00:36:51,466
+multiple measures, it's stored in...
+
+558
+00:36:53,250 --> 00:36:55,466
+sorry, it is stored
+
+559
+00:36:57,483 --> 00:37:00,333
+in the dimension table
+
+560
+00:37:01,483 --> 00:37:05,466
+and connected right in. The dimension value is... sorry, the
+
+561
+00:37:05,483 --> 00:37:10,466
+key is in the fact table. The values themselves are in the dimension
+
+562
+00:37:10,483 --> 00:37:14,466
+table along with the other attributes of that dimension.
+
+563
+00:37:14,483 --> 00:37:19,466
+It's when it's used by multiple measures in multiple scenarios.
+
+564
+00:37:19,483 --> 00:37:20,466
+>> There you go.
+
+565
+00:37:20,483 --> 00:37:25,466
+>> A degenerate dimension is one where the attribute that you're
+
+566
+00:37:25,483 --> 00:37:31,166
+interested in really is a very specifically used attribute.
+
+567
+00:37:31,483 --> 00:37:37,283
+It only applies to a single thing and doesn't make sense to be
+
+568
+00:37:37,366 --> 00:37:42,433
+having its own dimension table, its own key. It's only used
+
+569
+00:37:42,483 --> 00:37:48,466
+in a limited scenario. So you store it directly in the fact table
+
+570
+00:37:48,483 --> 00:37:55,466
+rather than creating that dimension table to support it. So shared
+
+571
+00:37:55,483 --> 00:38:01,433
+dimension has its on dimension table keyed back. Degenerate dimensions,
+
+572
+00:38:01,483 --> 00:38:04,316
+stored directly in the table.
+
+573
+00:38:05,483 --> 00:38:08,466
+Now, a slowly changing dimension, this is one that you're going
+
+574
+00:38:08,483 --> 00:38:13,466
+to run into a lot. A slowly changing dimension is a dimension
+
+575
+00:38:14,483 --> 00:38:20,466
+where the attribute values of the dimension change over time.
+
+576
+00:38:21,483 --> 00:38:23,466
+They are retained
+
+577
+00:38:25,433 --> 00:38:31,400
+if the attributes are updated. So, for example, if a customer
+
+578
+00:38:31,483 --> 00:38:34,466
+lives in Connecticut...
+
+579
+00:38:35,483 --> 00:38:37,466
+I happen to live in Connecticut so >> No
+
+580
+00:38:37,483 --> 00:38:38,466
+wonder you brought that up.
+
+581
+00:38:39,483 --> 00:38:41,466
+>> Yeah. You know, it's nice to give a plus for the hometown.
+
+582
+00:38:41,483 --> 00:38:42,466
+>> There you go.
+
+583
+00:38:43,483 --> 00:38:46,466
+>> If a customer is in Connecticut and then they move to, for
+
+584
+00:38:46,483 --> 00:38:48,300
+example, Seattle,
+
+585
+00:38:50,483 --> 00:38:54,466
+their history, what they bought when they were in Connecticut,
+
+586
+00:38:54,183 --> 00:38:55,466
+says Connecticut.
+
+587
+00:38:57,483 --> 00:39:00,466
+What they're going to buy in the future is going to be from Seattle.
+
+588
+00:39:01,483 --> 00:39:06,466
+It's important to understand what your choices are when you're
+
+589
+00:39:06,483 --> 00:39:12,433
+dealing with the fact that that same customer now has two different
+
+590
+00:39:12,483 --> 00:39:18,466
+sets of information describing where they are. At some points
+
+591
+00:39:18,216 --> 00:39:21,416
+they're in Connecticut, at other points they're in Seattle.
+
+592
+00:39:21,483 --> 00:39:26,466
+A slowly changing dimension is one where that is tracked.
+
+593
+00:39:26,483 --> 00:39:30,466
+So I've got a tie to the records
+
+594
+00:39:31,483 --> 00:39:36,466
+when they happened in Connecticut, a tie when they happened in Seattle.
+
+595
+00:39:37,483 --> 00:39:40,466
+Now, the cool part of the slowly changing dimension is you've
+
+596
+00:39:40,483 --> 00:39:45,266
+got three choices in dealing with it. You cannot retain the history.
+
+597
+00:39:45,483 --> 00:39:49,466
+If you don't retain the history, then anything I did when I lived
+
+598
+00:39:49,483 --> 00:39:53,233
+in Connecticut is going to look like it happened when I was in Seattle.
+
+599
+00:39:53,483 --> 00:39:57,466
+That's a great thing to do when you're trying to use history
+
+600
+00:39:57,483 --> 00:39:59,466
+to forecast future behavior.
+
+601
+00:40:00,483 --> 00:40:06,466
+I'm in Seattle. So everything I did in Connecticut needs to look
+
+602
+00:40:06,483 --> 00:40:11,466
+as if it happened in Seattle so that it projects what my behavior
+
+603
+00:40:11,483 --> 00:40:12,466
+might be in the future.
+
+604
+00:40:14,483 --> 00:40:20,466
+A Type 2 dimension, the attribute change creates a new record.
+
+605
+00:40:21,483 --> 00:40:25,466
+So now I've got both records in the data warehouse. I've got
+
+606
+00:40:25,483 --> 00:40:28,466
+the original that says I was in Connecticut, I've got the new
+
+607
+00:40:28,483 --> 00:40:34,466
+one that says I was in Seattle, and I now have a choice in how
+
+608
+00:40:34,483 --> 00:40:39,466
+I'm using that data in business analysis. I can look at it from
+
+609
+00:40:39,483 --> 00:40:43,466
+a historical perspective as if it occurred in Connecticut, I
+
+610
+00:40:43,483 --> 00:40:48,466
+can look at it from a forecasting perspective as if it happened
+
+611
+00:40:49,483 --> 00:40:54,350
+when I was in Seattle. A Type 3 slowly changing dimension, the
+
+612
+00:40:54,433 --> 00:41:01,466
+original attribute value is recorded in the record and the latest
+
+613
+00:41:01,483 --> 00:41:07,333
+attribute value is recorded with an effective date. So there's
+
+614
+00:41:07,483 --> 00:41:11,316
+only one record, but it's got an original, a current, and an
+
+615
+00:41:11,400 --> 00:41:16,466
+effective date so that you can tell when they moved from Connecticut
+
+616
+00:41:16,483 --> 00:41:17,466
+to Seattle.
+
+617
+00:41:18,483 --> 00:41:21,466
+>> And you have some things you want to show us about SCDs.
+
+618
+00:41:21,483 --> 00:41:27,466
+>> I do. I do. I do. So I've got... and this is a real basic
+
+619
+00:41:27,483 --> 00:41:32,466
+script because this really does illustrate how easy it is to
+
+620
+00:41:32,483 --> 00:41:36,466
+go down the road. I take my dimension table, in this case I'm
+
+621
+00:41:36,483 --> 00:41:42,466
+saying dim customer, and I add in an effective date.
+
+622
+00:41:43,200 --> 00:41:48,466
+Now, if it's a Type 3 not only am I going to add in an effective
+
+623
+00:41:48,483 --> 00:41:54,466
+date, I'm also going to alter the table, dim customer...
+
+624
+00:41:56,483 --> 00:41:58,466
+did I type it right? Of course not.
+
+625
+00:41:59,483 --> 00:42:03,466
+And I'm going to add in...
+
+626
+00:42:06,400 --> 00:42:09,216
+I've got to look at what I've got for customer columns in here
+
+627
+00:42:09,300 --> 00:42:09,466
+real quick.
+
+628
+00:42:10,483 --> 00:42:14,466
+I've got my customer key, I've got my customer name, customer email.
+
+629
+00:42:14,483 --> 00:42:21,450
+I'm going to add in old email as... and we're going to make
+
+630
+00:42:21,483 --> 00:42:22,466
+this the same,
+
+631
+00:42:24,400 --> 00:42:34,466
+a and now by doing those two alters, George, I end up with a
+
+632
+00:42:34,483 --> 00:42:39,466
+Type 3 slowly changing dimension where I'm recording their previous
+
+633
+00:42:39,483 --> 00:42:47,466
+email address, I've got a record of their current email address
+
+634
+00:42:47,483 --> 00:42:51,466
+and the date that it flipped between the two.
+
+635
+00:42:52,483 --> 00:42:53,250
+Okay?
+
+636
+00:42:54,483 --> 00:42:58,466
+>> So moving next, we have a consideration for time dimensions,
+
+637
+00:42:58,483 --> 00:43:01,466
+and there are some things that you wanted to talk about specific
+
+638
+00:43:01,483 --> 00:43:04,466
+to time dimensions as they need some special treatment.
+
+639
+00:43:04,483 --> 00:43:09,466
+>> Time dimensions, yes, time dimensions are kind of cool because
+
+640
+00:43:09,483 --> 00:43:14,266
+time dimensions categorize the when things happened.
+
+641
+00:43:14,483 --> 00:43:18,466
+>> So that matters pretty much for every analysis project, right?
+
+642
+00:43:18,483 --> 00:43:22,466
+>> Sure. What's the most common thing, common question that you
+
+643
+00:43:22,483 --> 00:43:26,466
+hear about any kind of business analysis? Are we doing better
+
+644
+00:43:26,483 --> 00:43:32,166
+now than we were a year ago? Have we improved over the last six months?
+
+645
+00:43:32,250 --> 00:43:36,333
+Are we getting better or are we getting worse? Those are the
+
+646
+00:43:36,483 --> 00:43:40,466
+kinds of questions. And the time dimension is what puts things
+
+647
+00:43:40,483 --> 00:43:46,466
+in perspective, qualifies them so that you can do those kinds
+
+648
+00:43:46,483 --> 00:43:47,466
+of analyses.
+
+649
+00:43:47,483 --> 00:43:51,466
+Now, we've got several different kinds of time dimensions.
+
+650
+00:43:52,483 --> 00:43:57,466
+We've got time dimensions... and I need to back up here.
+
+651
+00:43:57,483 --> 00:43:58,400
+>> All right.
+
+652
+00:43:58,483 --> 00:44:00,466
+>> I need to back up a little bit here, because I'm using the
+
+653
+00:44:00,483 --> 00:44:06,466
+term dimension, and really and truly I should be using the term hierarchy.
+
+654
+00:44:06,483 --> 00:44:07,433
+>> Got it.
+
+655
+00:44:07,483 --> 00:44:13,466
+>> A dimension is a table that qualifies all of the descriptive
+
+656
+00:44:13,483 --> 00:44:15,466
+attributes about your measures.
+
+657
+00:44:16,483 --> 00:44:20,466
+A hierarchy establishes the relationships
+
+658
+00:44:21,483 --> 00:44:23,466
+between those attributes.
+
+659
+00:44:24,483 --> 00:44:28,466
+Now, I flipped a little bit outside of the data warehouse into
+
+660
+00:44:29,233 --> 00:44:32,466
+a little bit of terminology that's more appropriate to analysis
+
+661
+00:44:32,483 --> 00:44:37,466
+services because that's where those hierarchies really come into play.
+
+662
+00:44:37,483 --> 00:44:41,466
+But the problem is is that you have to take that into consideration
+
+663
+00:44:42,266 --> 00:44:44,466
+when you're building your time dimension.
+
+664
+00:44:44,483 --> 00:44:45,466
+>> Absolutely.
+
+665
+00:44:46,166 --> 00:44:51,183
+>> A hierarchy is the relationship between different levels in
+
+666
+00:44:51,266 --> 00:44:55,466
+a dimension. So, for example, calendar year, calendar semester,
+
+667
+00:44:55,483 --> 00:45:00,233
+calendar quarter, calendar month, calendar week, calendar day,
+
+668
+00:45:01,166 --> 00:45:06,466
+those are all parts of a calendar hierarchy.
+
+669
+00:45:07,483 --> 00:45:10,466
+But do all companies run on the same calendar, George?
+
+670
+00:45:10,483 --> 00:45:11,466
+>> Absolutely not.
+
+671
+00:45:11,483 --> 00:45:18,266
+>> So some companies are going to have a fiscal year that starts
+
+672
+00:45:18,350 --> 00:45:23,466
+at a different time than other companies and may not start at
+
+673
+00:45:23,483 --> 00:45:25,466
+the same time as a calendar year does.
+
+674
+00:45:25,483 --> 00:45:26,400
+>> Nope.
+
+675
+00:45:26,483 --> 00:45:31,466
+>> Many companies have a fiscal year that runs July 1st to June 30th.
+
+676
+00:45:32,483 --> 00:45:36,166
+You've got to be able to represent that.
+
+677
+00:45:36,483 --> 00:45:39,466
+>> So I have to know ahead of time what I want to analyze and
+
+678
+00:45:39,483 --> 00:45:44,466
+how and then I back load, so to say, or design my warehouse in
+
+679
+00:45:44,483 --> 00:45:45,466
+view of that.
+
+680
+00:45:45,483 --> 00:45:49,466
+>> Absolutely. You create the attributes of the time dimension.
+
+681
+00:45:50,166 --> 00:45:52,466
+And typically they're artificially created.
+
+682
+00:45:53,483 --> 00:45:54,466
+They are generated.
+
+683
+00:45:55,250 --> 00:46:00,466
+Rather than coming from the business systems, it is a generated
+
+684
+00:46:00,483 --> 00:46:05,466
+table that drives the qualifications of all of that information.
+
+685
+00:46:05,483 --> 00:46:12,466
+Okay? So I need to have a way to relate an individual date to
+
+686
+00:46:12,483 --> 00:46:16,466
+the calendar quarter it's in, the fiscal quarter it's in, the
+
+687
+00:46:16,483 --> 00:46:20,466
+fiscal month, the calendar month, the week number of year, whatever
+
+688
+00:46:20,483 --> 00:46:21,466
+it might be.
+
+689
+00:46:21,483 --> 00:46:25,166
+>> You don't want to have to calculate all that, do you?
+
+690
+00:46:26,483 --> 00:46:28,416
+>> It's actually not that bad.
+
+691
+00:46:28,483 --> 00:46:30,450
+>> Yeah, because you have some tricks, Rich. I know that.
+
+692
+00:46:30,483 --> 00:46:32,466
+>> Oh, yeah, I do have some tricks.
+
+693
+00:46:33,216 --> 00:46:38,466
+But you need to, again, worry about those hierarchies, about
+
+694
+00:46:38,483 --> 00:46:42,466
+designing them and building the dimension to support them.
+
+695
+00:46:42,483 --> 00:46:47,450
+So let's go over and take a look real quick at a couple of things.
+
+696
+00:46:47,483 --> 00:46:52,466
+We are going to, first off, bring up a spreadsheet.
+
+697
+00:46:52,483 --> 00:46:57,466
+>> Looks like something I'm familiar with.
+
+698
+00:46:57,483 --> 00:47:01,466
+>> Yeah. A lot of people are. But you might be thinking why is
+
+699
+00:47:01,483 --> 00:47:07,416
+he bringing up an Excel spreadsheet in an SSIS data warehousing class?
+
+700
+00:47:07,483 --> 00:47:08,466
+>> Well, let's see.
+
+701
+00:47:08,483 --> 00:47:13,466
+>> This is actually one of the simplest ways that there is to
+
+702
+00:47:13,200 --> 00:47:14,466
+generate a timetable.
+
+703
+00:47:16,483 --> 00:47:21,466
+And what I've got here is an example of a timetable, or the beginnings
+
+704
+00:47:21,483 --> 00:47:22,466
+of one,
+
+705
+00:47:23,483 --> 00:47:26,466
+that is driven off of a date column.
+
+706
+00:47:26,483 --> 00:47:27,466
+>> I see a couple dates there.
+
+707
+00:47:28,483 --> 00:47:33,466
+>> Yeah. We've got January 1st, 2005, January 2nd, 2005.
+
+708
+00:47:34,483 --> 00:47:38,466
+I use that date to calculate, using standard Excel formulas,
+
+709
+00:47:39,266 --> 00:47:39,466
+a date key.
+
+710
+00:47:40,483 --> 00:47:44,466
+I extract the year out of it, the quarter, the month.
+
+711
+00:47:45,483 --> 00:47:49,216
+I get the month name, the day of month, day of neek... neek.
+
+712
+00:47:49,483 --> 00:47:51,466
+Wow. That was good.
+
+713
+00:47:51,483 --> 00:47:54,366
+First day with the new mouth.
+
+714
+00:47:54,450 --> 00:47:54,466
+>> There you go.
+
+715
+00:47:55,333 --> 00:48:00,466
+>> The day of week, the day name, a fiscal year, a fiscal quarter.
+
+716
+00:48:00,483 --> 00:48:05,466
+And as long as you can calculate it, you could add another column
+
+717
+00:48:05,483 --> 00:48:07,466
+and put it together. Now, here's the cool part.
+
+718
+00:48:08,483 --> 00:48:11,466
+I'm going to highlight those two ranges. Do you want me to generate
+
+719
+00:48:11,483 --> 00:48:13,466
+an entire month's worth of information?
+
+720
+00:48:13,483 --> 00:48:14,383
+>> Let's go.
+
+721
+00:48:14,450 --> 00:48:14,466
+>> All right.
+
+722
+00:48:16,483 --> 00:48:17,366
+Auto fill.
+
+723
+00:48:18,483 --> 00:48:24,466
+And I can go down as far as I want, and if I keep going there
+
+724
+00:48:24,483 --> 00:48:29,466
+and drag it down a couple of thousand rows, now all I have to
+
+725
+00:48:29,483 --> 00:48:35,466
+do is import it into my data warehouse using SSIS.
+
+726
+00:48:35,483 --> 00:48:38,466
+>> A simple CSV out of Excel and you're in.
+
+727
+00:48:38,483 --> 00:48:44,466
+>> Absolutely. But you know what? It is not the only way to do that.
+
+728
+00:48:44,483 --> 00:48:49,466
+So let's see if I can close this down without closing the entire
+
+729
+00:48:49,483 --> 00:48:50,466
+virtual machine.
+
+730
+00:48:51,483 --> 00:48:54,466
+That's going to be my challenge today, clicking on the right
+
+731
+00:48:54,183 --> 00:48:56,183
+x's without closing things off.
+
+732
+00:48:56,266 --> 00:48:57,366
+>> Lots of x's.
+
+733
+00:48:57,450 --> 00:48:58,466
+>> Oh, yeah. Oh, yeah.
+
+734
+00:48:59,483 --> 00:49:04,183
+I'm a data warehousing guy. I am not the technology guy.
+
+735
+00:49:04,266 --> 00:49:07,466
+And we're waiting for things to go. There we go. So I'm back
+
+736
+00:49:07,483 --> 00:49:12,466
+in here. You can do the same thing in a SQL Server script.
+
+737
+00:49:13,483 --> 00:49:16,466
+So what I've got here is a very basic timetable that's going
+
+738
+00:49:16,483 --> 00:49:23,466
+to insert into the dim date table the values that are driven
+
+739
+00:49:23,483 --> 00:49:30,466
+from a loop that starts at date 1 and ends at date 2. The starting
+
+740
+00:49:30,483 --> 00:49:36,466
+date for this loop, January 1st, 2005, the end date, get date,
+
+741
+00:49:36,483 --> 00:49:37,466
+which would be today.
+
+742
+00:49:37,483 --> 00:49:40,316
+>> And it looks like I can put in any date there.
+
+743
+00:49:40,400 --> 00:49:44,450
+>> You could. You could generate any range you want. And then
+
+744
+00:49:44,483 --> 00:49:47,466
+it's going to go out and it's going to manipulate using the date
+
+745
+00:49:47,483 --> 00:49:52,250
+functions to grab the year, the date part, the month, the date
+
+746
+00:49:52,333 --> 00:49:56,466
+name, the day, et cetera, et cetera, et cetera. Again, if you
+
+747
+00:49:56,483 --> 00:50:02,466
+can calculate it, you can use it as a part of that solution.
+
+748
+00:50:02,483 --> 00:50:03,466
+So I execute this.
+
+749
+00:50:05,300 --> 00:50:07,466
+Of course, you can't just highlight one word.
+
+750
+00:50:08,416 --> 00:50:10,466
+>> You're in DQS main. There you go.
+
+751
+00:50:10,483 --> 00:50:12,466
+>> No, I was in the right one on this one.
+
+752
+00:50:12,483 --> 00:50:13,433
+>> Oh, you were? Okay.
+
+753
+00:50:13,483 --> 00:50:15,466
+>> Yeah. I had the use statement in there that time.
+
+754
+00:50:15,483 --> 00:50:16,183
+>> Okay.
+
+755
+00:50:16,266 --> 00:50:18,433
+>> Just because I forgot to put it in one script doesn't mean
+
+756
+00:50:18,483 --> 00:50:20,466
+I do it all the time, George. Give me some credit here.
+
+757
+00:50:20,216 --> 00:50:21,466
+>> All right. All right.
+
+758
+00:50:21,483 --> 00:50:26,466
+>> All right. So there you go. We can now go out, we can grab
+
+759
+00:50:26,166 --> 00:50:31,166
+and retrieve our date records from the dim date table and you
+
+760
+00:50:31,483 --> 00:50:37,200
+can see that we now have a date table that is fully qualified
+
+761
+00:50:37,483 --> 00:50:42,466
+that we can use to determine what bucket at any particular level
+
+762
+00:50:43,333 --> 00:50:45,466
+a fact or a measure occurs in.
+
+763
+00:50:45,483 --> 00:50:46,466
+>> Excellent.
+
+764
+00:50:46,483 --> 00:50:50,466
+>> So one of the things... and somebody actually put this in for
+
+765
+00:50:50,483 --> 00:50:53,466
+a question real quick. So I want to address it because it's a
+
+766
+00:50:54,166 --> 00:50:57,466
+pretty good question. It came in on chat, and they were asking
+
+767
+00:50:57,483 --> 00:51:02,266
+about whether fact tables, dimension tables and cubes can be
+
+768
+00:51:02,350 --> 00:51:05,466
+imported to SQL 2012 from earlier versions.
+
+769
+00:51:06,483 --> 00:51:11,366
+And real simple, it's a very quick and easy answer.
+
+770
+00:51:11,450 --> 00:51:18,466
+Yes. SQL 2000 and 8 tables are completely compatible in SQL 2012
+
+771
+00:51:18,483 --> 00:51:23,383
+so they come right in, everything's good to go. Cubes that were
+
+772
+00:51:23,466 --> 00:51:27,466
+built in Analysis Services 2008 can be brought into SQL 2012,
+
+773
+00:51:27,483 --> 00:51:33,466
+to Analyze Services 2012 as well. So we spent this module talking
+
+774
+00:51:33,483 --> 00:51:38,466
+about facts, about dimensions, about how they relate to each
+
+775
+00:51:38,483 --> 00:51:42,466
+other, the schemas, the design issues that you've got to deal with.
+
+776
+00:51:42,483 --> 00:51:46,466
+That really sets the foundation for the rest of the day, because
+
+777
+00:51:46,200 --> 00:51:50,350
+all of that data warehousing design, George, drives what our
+
+778
+00:51:50,433 --> 00:51:53,466
+ETL process is going to look like, our extract, transform and
+
+779
+00:51:53,483 --> 00:52:00,466
+load, bringing data from a production system into our data warehousing system.
+
+780
+00:52:00,483 --> 00:52:03,466
+>> And you're leading us into the next segment here, but for now
+
+781
+00:52:03,483 --> 00:52:05,466
+we're going to take a short break. Thanks for attending the
+
+782
+00:52:05,483 --> 00:52:09,466
+Implementing a Data Warehouse with SQL Server 2012 Jump Start.
+
+783
+00:52:09,483 --> 00:52:12,466
+Next up, data flow. We'll see you in about 10 minutes.
+
+784
+00:52:12,483 --> 00:52:13,466
+>> See you in a few.
+
+785
+00:52:13,483 --> 00:52:16,466
+>> Get up, move around, stretch, and we'll see you in a bit.
+

@@ -108,11 +108,11 @@ SSMS, o de SQL Server Management Studio, porque vamos
 
 28
 00:01:47,283 --> 00:01:50,466
-a pasar mucho tiempo en ello, and then a basic knowledge
+a pasar mucho tiempo en ello, y entonces un conocimiento básico
 
 29
 00:01:50,483 --> 00:01:52,466
-of some of the Microsoft Windows operating system and some of
+de algo del sistema operativo Microsoft Windows y algo de
 
 30
 00:01:52,483 --> 00:01:55,466

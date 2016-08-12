@@ -1,0 +1,3496 @@
+1
+00:00:00,333 --> 00:00:07,333
+[Music]
+
+2
+00:00:17,483 --> 00:00:19,466
+Welcome back to Implementing a Data
+
+3
+00:00:19,483 --> 00:00:24,183
+Warehouse with SQL Server 2012 Jump Start. I'm George Squillace.
+
+4
+00:00:24,483 --> 00:00:27,250
+I'm here with Rich Currey. And, Rich, you have a lot of good
+
+5
+00:00:27,333 --> 00:00:29,0
+things queued up for us in this module.
+
+6
+00:00:29,483 --> 00:00:32,466
+>> Yeah, this is going to be a fun one because we are going to
+
+7
+00:00:32,483 --> 00:00:37,466
+go back and continue on this data flow thing. We're going to
+
+8
+00:00:37,483 --> 00:00:41,466
+be talking about data flow, transforming data. We're going to
+
+9
+00:00:41,483 --> 00:00:45,466
+be dealing with a lot of the standard transforms that you use
+
+10
+00:00:45,483 --> 00:00:51,316
+to build an ETL process. Now, not control flow. Control flow,
+
+11
+00:00:51,400 --> 00:00:56,466
+after the meal break, is going to deal with workflow issues.
+
+12
+00:00:56,483 --> 00:01:02,466
+This is all about manipulating the data as it goes on through.
+
+13
+00:01:02,483 --> 00:01:06,466
+So let's go in and start talking about the beginnings of this.
+
+14
+00:01:06,483 --> 00:01:12,466
+Merges, look-ups, data modification. This is one of those topics
+
+15
+00:01:12,483 --> 00:01:17,466
+where we've got a lot of transforms that can affect the content
+
+16
+00:01:18,166 --> 00:01:18,466
+of our data.
+
+17
+00:01:19,483 --> 00:01:23,383
+Merge transforms to take two data streams and bring them into
+
+18
+00:01:23,466 --> 00:01:27,466
+a single one, we've got look-up transforms that can go out and
+
+19
+00:01:27,483 --> 00:01:32,200
+get data from somewhere based on a value in the pipeline, and
+
+20
+00:01:32,283 --> 00:01:35,466
+we've got data modification that can actually change it as it
+
+21
+00:01:35,483 --> 00:01:36,466
+goes along.
+
+22
+00:01:37,483 --> 00:01:41,350
+So let's start out with the merge transforms. And there are
+
+23
+00:01:41,433 --> 00:01:44,466
+two of them, the merge transform and the merge join transform.
+
+24
+00:01:45,483 --> 00:01:50,466
+Both of them, George, require that your data be ordered.
+
+25
+00:01:51,483 --> 00:01:55,466
+And, even better, it's got to be in the same order.
+
+26
+00:01:56,483 --> 00:02:02,466
+You can't have data sorted by date in one input and by product
+
+27
+00:02:02,483 --> 00:02:06,466
+ID in another because then there would be no way to put them together.
+
+28
+00:02:06,483 --> 00:02:11,466
+The merge is like taking a deck of cards, splitting it in half
+
+29
+00:02:11,483 --> 00:02:14,466
+and shuffling them so that they come together like this.
+
+30
+00:02:14,483 --> 00:02:18,466
+But in order for them to come together right, they have to be
+
+31
+00:02:19,483 --> 00:02:20,466
+in that same order.
+
+32
+00:02:20,483 --> 00:02:23,466
+>> Well put. I like the interleaving there, Rich.
+
+33
+00:02:23,483 --> 00:02:25,466
+>> You know, it's a visual. It works.
+
+34
+00:02:25,483 --> 00:02:26,466
+>> It works.
+
+35
+00:02:26,483 --> 00:02:30,466
+>> All right. Now, another requirement on merges is that they
+
+36
+00:02:30,483 --> 00:02:35,466
+have to have the same number of columns in both data flows and
+
+37
+00:02:35,233 --> 00:02:39,466
+they have to have the same data types in each column. Now, it
+
+38
+00:02:39,483 --> 00:02:43,466
+would help, George, if they also had the same logical information
+
+39
+00:02:43,233 --> 00:02:48,466
+in each column, but it is not a requirement, unlike the other two.
+
+40
+00:02:49,483 --> 00:02:55,333
+Now, if I've got a data source that has the ability to pre-sort
+
+41
+00:02:55,483 --> 00:03:00,466
+the data, that would be a huge benefit to the data flow. So whenever
+
+42
+00:03:00,483 --> 00:03:05,466
+possible, you want to have the data sorted in the data source.
+
+43
+00:03:05,483 --> 00:03:09,466
+So if you're retrieving it from an RDBMS, you'd want put in order
+
+44
+00:03:09,483 --> 00:03:12,466
+by on that retrieval, on that
+
+45
+00:03:14,483 --> 00:03:18,350
+select statement, that would put the data in the appropriate
+
+46
+00:03:18,433 --> 00:03:22,250
+order and then you would mark that data source as being sorted.
+
+47
+00:03:23,0 --> 00:03:28,316
+You then have top indicate what it's sorted on so that the development
+
+48
+00:03:28,400 --> 00:03:32,466
+environment has the ability to check and make sure that both
+
+49
+00:03:32,483 --> 00:03:34,466
+sources are sorted the same way.
+
+50
+00:03:35,483 --> 00:03:39,383
+Now, the merge deals with the records and putting two record
+
+51
+00:03:39,466 --> 00:03:40,466
+sets together.
+
+52
+00:03:41,483 --> 00:03:44,466
+What I like to say, it puts them together vertically.
+
+53
+00:03:44,483 --> 00:03:45,466
+>> Yeah, I like that too.
+
+54
+00:03:45,483 --> 00:03:49,466
+>> It takes the two record sets and it puts one on top of the
+
+55
+00:03:49,483 --> 00:03:53,466
+other or takes them and combines them so that they come into
+
+56
+00:03:53,483 --> 00:03:54,466
+a single flow.
+
+57
+00:03:55,483 --> 00:04:01,466
+A merge join is more like a database join. A merge join has
+
+58
+00:04:01,483 --> 00:04:06,316
+the ability to support inner joins, left joins, full joins that
+
+59
+00:04:06,400 --> 00:04:13,216
+has to be at least one column that matches from a metadata standpoint,
+
+60
+00:04:13,300 --> 00:04:15,466
+data type, et cetera,
+
+61
+00:04:16,483 --> 00:04:22,466
+and, again, like the merge, both inputs have to be sorted the
+
+62
+00:04:22,483 --> 00:04:26,466
+same way so that the join can be enabled. What you end up with,
+
+63
+00:04:26,483 --> 00:04:31,466
+then, is a single record set that matches the two records together
+
+64
+00:04:31,483 --> 00:04:36,466
+and creates, instead of a set of records stacked on each other,
+
+65
+00:04:36,483 --> 00:04:40,466
+it's side by side where the record from input A is matched up
+
+66
+00:04:40,483 --> 00:04:43,466
+with the record from input B and you have all the columns from
+
+67
+00:04:44,0 --> 00:04:45,466
+both inputs together.
+
+68
+00:04:46,366 --> 00:04:49,466
+>> Something's curiously missing, though. I see an inner join,
+
+69
+00:04:49,483 --> 00:04:52,466
+a left, and a full, but I don't see a right.
+
+70
+00:04:52,483 --> 00:04:53,433
+>> Okay.
+
+71
+00:04:53,483 --> 00:04:59,466
+George, very simply, if I were to take and flip
+
+72
+00:05:00,483 --> 00:05:04,466
+the tables from one side to the other, what happened to my left table?
+
+73
+00:05:04,483 --> 00:05:06,466
+>> Well, guess what? I gotta switch there.
+
+74
+00:05:06,483 --> 00:05:09,466
+>> Yeah. The left is on the right and the right is on the left.
+
+75
+00:05:09,483 --> 00:05:13,466
+So if you need a left join, you'd start with table A. If you
+
+76
+00:05:13,483 --> 00:05:16,466
+need a right join, you'd start with table B.
+
+77
+00:05:16,483 --> 00:05:17,283
+>> There you go. Easy.
+
+78
+00:05:17,366 --> 00:05:22,466
+>> All right. Let's move into our next topic, look-up transforms.
+
+79
+00:05:22,483 --> 00:05:26,466
+Look-up transforms, again, just like a merge and a merge join,
+
+80
+00:05:26,483 --> 00:05:30,466
+it is a multi-input transformation.
+
+81
+00:05:30,483 --> 00:05:34,466
+Merge and merge join take two and bring them together. The look-up
+
+82
+00:05:34,483 --> 00:05:39,466
+takes a value from a record that's currently in the data flow
+
+83
+00:05:39,483 --> 00:05:45,166
+pipeline and then goes out to an external source to retrieve
+
+84
+00:05:45,483 --> 00:05:48,400
+information from a record that has a matching value.
+
+85
+00:05:49,483 --> 00:05:54,233
+It is typically defined by a select statement, so it takes a
+
+86
+00:05:54,316 --> 00:05:59,466
+value, it uses that value to select data from that external source.
+
+87
+00:06:00,483 --> 00:06:06,466
+The external source can be either an OLEDB connection or a cache connection.
+
+88
+00:06:08,333 --> 00:06:11,466
+A cache connection is a connection that's in memory.
+
+89
+00:06:12,483 --> 00:06:16,466
+Now, think about this for a minute. What would be more efficient, George?
+
+90
+00:06:16,483 --> 00:06:21,416
+Would it be more efficient for me to look up each record from
+
+91
+00:06:21,483 --> 00:06:26,466
+an external database one by one or might it be more efficient
+
+92
+00:06:26,200 --> 00:06:29,466
+to go out and grab the record and leave it in memory in case
+
+93
+00:06:29,483 --> 00:06:30,466
+I need it later?
+
+94
+00:06:30,483 --> 00:06:31,466
+>> Let's leave it in memory.
+
+95
+00:06:31,483 --> 00:06:34,466
+>> That's the cache. But if I've got a couple hundred thousand
+
+96
+00:06:34,483 --> 00:06:39,300
+records, well, the more records that you're retrieving in that
+
+97
+00:06:39,383 --> 00:06:43,466
+look-up, the less efficient it is to leave them all in cache.
+
+98
+00:06:43,483 --> 00:06:45,466
+>> Sure. So there's a design aspect to it.
+
+99
+00:06:45,483 --> 00:06:51,466
+>> There absolutely is. And you can configure the cache. You can
+
+100
+00:06:51,483 --> 00:06:55,466
+same I want it fully cached, I want it partially cached, you
+
+101
+00:06:55,483 --> 00:06:59,466
+can control the amount of memory it's going to use, you can even
+
+102
+00:06:59,483 --> 00:07:01,233
+say I don't want it cached.
+
+103
+00:07:01,316 --> 00:07:02,183
+>> Very granular.
+
+104
+00:07:02,266 --> 00:07:03,466
+>> And here's another cool one.
+
+105
+00:07:04,483 --> 00:07:07,466
+You can even pre-load the cache.
+
+106
+00:07:07,483 --> 00:07:08,466
+>> Nice.
+
+107
+00:07:08,483 --> 00:07:13,466
+>> So that when the data flow starts, it goes out, retrieves the
+
+108
+00:07:13,483 --> 00:07:17,466
+records from the look-up source, loads them in memory, and that
+
+109
+00:07:17,483 --> 00:07:22,250
+way everything you need is right there and available.
+
+110
+00:07:23,483 --> 00:07:24,466
+>> Nice.
+
+111
+00:07:26,483 --> 00:07:30,400
+>> Lastly I want to talk about some of the data modification transforms.
+
+112
+00:07:32,483 --> 00:07:35,466
+It is called ETL.
+
+113
+00:07:36,483 --> 00:07:41,466
+We're changing the data as it traverses through the pipeline.
+
+114
+00:07:42,0 --> 00:07:46,466
+We've got the ability to change data types
+
+115
+00:07:48,183 --> 00:07:50,166
+with a data conversion transform.
+
+116
+00:07:50,483 --> 00:07:55,466
+It takes a standard data type, it's the equivalent of a SQL Server
+
+117
+00:07:55,483 --> 00:07:57,466
+cast or convert, as an example.
+
+118
+00:07:58,483 --> 00:08:04,466
+We can do a derived column. A derived column, we can take and
+
+119
+00:08:04,483 --> 00:08:08,466
+calculate a new value based on values that are already in the
+
+120
+00:08:08,483 --> 00:08:09,466
+data flow.
+
+121
+00:08:09,483 --> 00:08:10,466
+>> Very powerful transform.
+
+122
+00:08:11,0 --> 00:08:14,466
+>> Yeah. An example of that one: I've got a first name, a last
+
+123
+00:08:14,483 --> 00:08:20,466
+name, and I want to combine those into a full name, last name,
+
+124
+00:08:20,483 --> 00:08:24,466
+comma, first name. I can calculate that with an expression and
+
+125
+00:08:24,483 --> 00:08:30,466
+add that to my data flow as a new value or I could just use it
+
+126
+00:08:30,483 --> 00:08:34,200
+to replace the existing name value as well.
+
+127
+00:08:34,483 --> 00:08:38,466
+There are a lot of functions in there. There are all of the
+
+128
+00:08:38,233 --> 00:08:42,466
+standard string manipulation and functions and things like that.
+
+129
+00:08:42,483 --> 00:08:43,466
+Very cool.
+
+130
+00:08:44,483 --> 00:08:49,466
+I can do character mapping. Character mapping allows me to manipulate
+
+131
+00:08:49,483 --> 00:08:51,466
+the string data types...
+
+132
+00:08:51,483 --> 00:08:55,466
+text, VARCHAR, CHAR...
+
+133
+00:08:55,483 --> 00:09:00,466
+using all of the standard string functions. You can
+
+134
+00:09:01,483 --> 00:09:08,216
+upper case it, lower case it, all that kind of stuff.
+
+135
+00:09:08,300 --> 00:09:11,466
+>> And, like all along, you have some things you want to show us.
+
+136
+00:09:11,483 --> 00:09:13,166
+Or are we not ready for that?
+
+137
+00:09:13,250 --> 00:09:14,433
+>> No, we can do that.
+
+138
+00:09:14,450 --> 00:09:14,466
+>> All right.
+
+139
+00:09:14,483 --> 00:09:16,433
+>> I guess we'll let that happen now.
+
+140
+00:09:16,450 --> 00:09:16,466
+>> All right.
+
+141
+00:09:18,300 --> 00:09:20,466
+>> Sorry. I was playing with you a little bit there.
+
+142
+00:09:21,483 --> 00:09:27,466
+Let's go over to the virtual machine here, and I have a blank
+
+143
+00:09:27,483 --> 00:09:32,166
+slate with SQL Server Integration Services going. So I'm just
+
+144
+00:09:32,483 --> 00:09:35,466
+going to create a new project, and that new project is going
+
+145
+00:09:35,483 --> 00:09:39,166
+to be an integration services project. And just like before,
+
+146
+00:09:39,250 --> 00:09:42,466
+I really don't care where they put it or what they call it.
+
+147
+00:09:42,483 --> 00:09:43,283
+>> That's just detail.
+
+148
+00:09:43,366 --> 00:09:44,250
+>> We're playing.
+
+149
+00:09:44,333 --> 00:09:44,466
+>> For now.
+
+150
+00:09:44,483 --> 00:09:48,466
+>> Well, what do I need to be able to do transforms? I need a
+
+151
+00:09:48,483 --> 00:09:52,466
+data flow task. So first thing I'm going to do is drop a data
+
+152
+00:09:52,483 --> 00:09:56,466
+flow task into my control flow.
+
+153
+00:09:57,333 --> 00:10:02,300
+I'm going to open it up, I'm going to grab a data source >> Gotta
+
+154
+00:10:02,383 --> 00:10:02,466
+start somewhere.
+
+155
+00:10:02,483 --> 00:10:05,466
+>> You do. You gotta add data if you're going to transform it.
+
+156
+00:10:05,483 --> 00:10:10,350
+So I'm going to grab an OLEDB source, drop it on there. I don't
+
+157
+00:10:10,433 --> 00:10:12,466
+have a connection manager. I'm going to create one. I'm going
+
+158
+00:10:12,483 --> 00:10:15,450
+to base it on one of the ones we've already got.
+
+159
+00:10:15,483 --> 00:10:17,466
+Makes it nice and easy.
+
+160
+00:10:18,483 --> 00:10:20,433
+And you know what I forgot, George?
+
+161
+00:10:20,450 --> 00:10:20,466
+>> What's that?
+
+162
+00:10:20,483 --> 00:10:24,466
+>> I was I was cleaning up from our last little adventure I did
+
+163
+00:10:24,483 --> 00:10:27,466
+not recreate my data warehouse.
+
+164
+00:10:28,483 --> 00:10:35,250
+So let me quickly go over to Management Studio and load up a
+
+165
+00:10:35,333 --> 00:10:36,383
+setup script...
+
+166
+00:10:36,466 --> 00:10:38,166
+>> Oh, you have something handy for that, do you?
+
+167
+00:10:38,483 --> 00:10:41,466
+>> I always have something handy. I'm like the Boy Scouts here
+
+168
+00:10:42,450 --> 00:10:42,466
+in the States.
+
+169
+00:10:42,483 --> 00:10:43,466
+>> Always prepared?
+
+170
+00:10:43,483 --> 00:10:45,466
+>> Their motto is be prepared.
+
+171
+00:10:46,216 --> 00:10:52,183
+So let's go back and into SQL BIC. There's my error message.
+
+172
+00:10:52,266 --> 00:10:55,466
+I told you I forgot. Let's try it again.
+
+173
+00:10:57,216 --> 00:11:00,466
+I may have to go back and actually kill this. I do. I'm going
+
+174
+00:11:00,483 --> 00:11:02,466
+to have to reconfigure now.
+
+175
+00:11:03,483 --> 00:11:07,400
+Come on, you.
+
+176
+00:11:13,483 --> 00:11:15,466
+I love it when that happens.
+
+177
+00:11:18,483 --> 00:11:21,466
+>> While you're queueing that up, Rich, whenever I think of the
+
+178
+00:11:21,483 --> 00:11:25,466
+transformations available in SSIS, I'm always reminded of the
+
+179
+00:11:25,483 --> 00:11:27,383
+game Mouse Trap.
+
+180
+00:11:27,483 --> 00:11:31,466
+I don't know if you all remember the game Mouse Trap, but remember
+
+181
+00:11:31,483 --> 00:11:36,466
+the contraptions and all the moving parts and things like that?
+
+182
+00:11:36,483 --> 00:11:40,466
+It just always reminds me of Mouse Trap. What we're building
+
+183
+00:11:40,483 --> 00:11:41,466
+is a data contraption.
+
+184
+00:11:41,483 --> 00:11:45,166
+>> It really is. It really is. There are a lot of moving pieces,
+
+185
+00:11:45,483 --> 00:11:48,466
+and you do have to actually get them right. So I just went in
+
+186
+00:11:48,483 --> 00:11:51,466
+and I grabbed the connection that I had made earlier.
+
+187
+00:11:51,483 --> 00:11:52,333
+>> Perfect.
+
+188
+00:11:52,416 --> 00:11:56,466
+>> And we now have our list of tables to get. Every now and again
+
+189
+00:11:56,483 --> 00:12:00,466
+sometimes if you just recreate or go in and grab a different
+
+190
+00:12:00,233 --> 00:12:05,466
+version, it frequently clears it up. So let's go out and let's
+
+191
+00:12:05,483 --> 00:12:09,200
+look at our product table.
+
+192
+00:12:09,483 --> 00:12:14,416
+And we're just going to grab all of the records from our product
+
+193
+00:12:14,483 --> 00:12:16,466
+table and we're going to play with those.
+
+194
+00:12:16,483 --> 00:12:21,466
+Now, the first thing I'm going to do is I am going to create...
+
+195
+00:12:23,333 --> 00:12:26,466
+and let's take a look and see what our transforms are. As you
+
+196
+00:12:26,483 --> 00:12:28,466
+can tell, we've got a lot of them.
+
+197
+00:12:28,483 --> 00:12:29,466
+>> And they're categorized.
+
+198
+00:12:29,483 --> 00:12:32,0
+>> They are. Well, kind of loosely.
+
+199
+00:12:32,450 --> 00:12:32,466
+>> Loosely.
+
+200
+00:12:32,483 --> 00:12:35,466
+>> Very loosely. The common ones and the other ones.
+
+201
+00:12:36,483 --> 00:12:40,466
+So I won't say that it's a really useful categorization, but,
+
+202
+00:12:40,483 --> 00:12:41,466
+yeah, you're right, it's there.
+
+203
+00:12:42,483 --> 00:12:46,466
+Let's look at first a very good one, which is
+
+204
+00:12:47,483 --> 00:12:49,466
+our derived column.
+
+205
+00:12:50,483 --> 00:12:56,466
+Now, what did I have to do when I made my data destination aware
+
+206
+00:12:56,483 --> 00:12:58,466
+of the records that were coming in?
+
+207
+00:12:58,483 --> 00:13:01,366
+>> Going to have to make a pipeline flow here.
+
+208
+00:13:01,450 --> 00:13:05,466
+>> You got it. Now, when I select the OLEDB source... I just
+
+209
+00:13:05,483 --> 00:13:08,466
+want to give you a little hint, a little preview of things to come.
+
+210
+00:13:09,216 --> 00:13:10,466
+See the two arrows?
+
+211
+00:13:10,483 --> 00:13:11,466
+>> There are two.
+
+212
+00:13:11,483 --> 00:13:14,466
+>> There are. One of them is kind of blueish and the other one
+
+213
+00:13:14,483 --> 00:13:15,466
+is red.
+
+214
+00:13:16,483 --> 00:13:20,466
+And the red one is where error... is where records that have
+
+215
+00:13:20,483 --> 00:13:25,466
+errors go if you configure. We're going to be talking more about
+
+216
+00:13:25,483 --> 00:13:26,450
+that a little later.
+
+217
+00:13:26,483 --> 00:13:27,466
+>> The difficult ones.
+
+218
+00:13:27,483 --> 00:13:28,333
+>> It is.
+
+219
+00:13:28,483 --> 00:13:32,466
+We're going to connect the two together. My derived column is
+
+220
+00:13:32,483 --> 00:13:36,466
+now aware of the columns that are coming out of the source.
+
+221
+00:13:36,483 --> 00:13:42,466
+So when I double click on my derived column, I'm given the dialogue
+
+222
+00:13:43,0 --> 00:13:47,466
+that's going to allow me to create a new column.
+
+223
+00:13:48,483 --> 00:13:50,466
+I've got my derived column name.
+
+224
+00:13:51,483 --> 00:13:53,466
+I'm going to call this
+
+225
+00:13:54,483 --> 00:13:59,366
+NameDescription because I was tasked with putting together a
+
+226
+00:13:59,450 --> 00:14:05,166
+concatenation separated by a dash of a name and a product description.
+
+227
+00:14:05,483 --> 00:14:09,466
+Now, over here on the left side I've got all of the values that
+
+228
+00:14:09,483 --> 00:14:14,466
+are available to me. Variables, including system variables, and
+
+229
+00:14:14,483 --> 00:14:20,466
+all of the columns that are coming into the derived column transform.
+
+230
+00:14:21,483 --> 00:14:22,466
+>> This is a powerful editor.
+
+231
+00:14:23,483 --> 00:14:27,466
+>> On the right side I've got all my pre-built functions. So I
+
+232
+00:14:27,483 --> 00:14:32,466
+can go out and grab string functions, for example, and then just
+
+233
+00:14:32,200 --> 00:14:35,300
+drag, drop, and configure.
+
+234
+00:14:35,483 --> 00:14:39,466
+You don't have to program the heck out of this stuff.
+
+235
+00:14:39,483 --> 00:14:43,466
+Yeah, it's nice to program too. Don't get me wrong. I'm a developer.
+
+236
+00:14:43,483 --> 00:14:44,466
+I like to play in code.
+
+237
+00:14:45,483 --> 00:14:48,466
+But this makes it much easier frequently.
+
+238
+00:14:48,483 --> 00:14:53,183
+So, like I said, I'm going to add as a new column. The expression
+
+239
+00:14:53,483 --> 00:14:55,466
+is going to be the name.
+
+240
+00:14:55,483 --> 00:14:56,466
+>> Drag and drop.
+
+241
+00:14:56,483 --> 00:15:00,466
+>> Drag and drop, and then what I'm going to do with it,
+
+242
+00:15:04,483 --> 00:15:07,466
+and then the description.
+
+243
+00:15:09,483 --> 00:15:13,250
+Well, I forgot my plus sign so let me put that in there.
+
+244
+00:15:13,333 --> 00:15:15,333
+And I got a good one, right?
+
+245
+00:15:15,450 --> 00:15:15,466
+>> Looks like it's good.
+
+246
+00:15:15,483 --> 00:15:18,400
+>> All right. So let's get... wait a minute.
+
+247
+00:15:18,483 --> 00:15:19,466
+>> Wait a minute.
+
+248
+00:15:19,483 --> 00:15:22,166
+>> Red is bad, isn't it?
+
+249
+00:15:22,450 --> 00:15:22,466
+>> Red is bad.
+
+250
+00:15:23,483 --> 00:15:25,400
+>> Okay. So I gotta problem here.
+
+251
+00:15:26,333 --> 00:15:29,466
+If you're a SQL Server developer, this problem is going to be
+
+252
+00:15:29,483 --> 00:15:32,466
+a recurring one for you that's going to drive you crazy. A little
+
+253
+00:15:32,483 --> 00:15:34,466
+tip for all those folks that are coming into this.
+
+254
+00:15:36,483 --> 00:15:39,466
+SQL Server uses a tic mark for strings.
+
+255
+00:15:40,483 --> 00:15:45,466
+Yeah, well, SSIS is more like C#, C++.
+
+256
+00:15:45,483 --> 00:15:47,466
+>> It's a different expression language.
+
+257
+00:15:47,483 --> 00:15:52,466
+>> It is. It uses double quotes. So as soon as I change that,
+
+258
+00:15:52,483 --> 00:15:55,466
+batta-bing, my expression is black and we are off to the races.
+
+259
+00:15:55,483 --> 00:15:56,466
+I hit okay.
+
+260
+00:15:57,483 --> 00:16:01,466
+I now have my derived column. If I go out and I create a destination
+
+261
+00:16:02,400 --> 00:16:07,333
+to take that, we're going to throw this into a flat file destination.
+
+262
+00:16:07,416 --> 00:16:11,466
+I hook it up, I go to configure, I'm going to create a new flat
+
+263
+00:16:11,483 --> 00:16:16,300
+file connection manager which is going to go out to the desktop
+
+264
+00:16:16,383 --> 00:16:22,466
+and is going to put it into myproducts.text.
+
+265
+00:16:25,483 --> 00:16:26,466
+I think I hit caps lock there somewhere.
+
+266
+00:16:26,483 --> 00:16:27,466
+>> That's going to work.
+
+267
+00:16:27,483 --> 00:16:29,466
+>> Yeah, I know. I'm not going to worry about it, but I hate it
+
+268
+00:16:29,483 --> 00:16:32,466
+when that happens. I always feel like I'm yelling at people when
+
+269
+00:16:33,483 --> 00:16:34,466
+I do that...
+
+270
+00:16:34,483 --> 00:16:35,466
+>> Why are you yelling...
+
+271
+00:16:36,483 --> 00:16:37,0
+[Laughter]
+
+272
+00:16:37,166 --> 00:16:41,466
+>> Easy, George. Easy. Got my columns now. The product key, the
+
+273
+00:16:41,483 --> 00:16:46,466
+product alternate key, the name, the description, and look at this.
+
+274
+00:16:47,483 --> 00:16:49,466
+My name description column.
+
+275
+00:16:50,483 --> 00:16:56,466
+When I now go in and I hit okay, I come over to my mappings,
+
+276
+00:16:56,483 --> 00:16:59,466
+there's my name description. I have now added that new column
+
+277
+00:16:59,483 --> 00:17:00,466
+into the flow.
+
+278
+00:17:02,216 --> 00:17:04,466
+When I run this, we go out.
+
+279
+00:17:07,316 --> 00:17:10,466
+Everything looks good from here. Let's go to the desktop.
+
+280
+00:17:11,166 --> 00:17:11,466
+>> Looks good.
+
+281
+00:17:11,483 --> 00:17:17,466
+>> And my products, yelling at me to be looked at.
+
+282
+00:17:17,483 --> 00:17:21,466
+Eventually it's going to open up, I hope. There we go. And there
+
+283
+00:17:21,483 --> 00:17:22,466
+it is. Here's cycling,
+
+284
+00:17:24,483 --> 00:17:30,466
+here's cycling helmet, there's clothing, and here is my name
+
+285
+00:17:30,483 --> 00:17:34,466
+description, helmet, cycling helmet. Cool?
+
+286
+00:17:34,483 --> 00:17:36,466
+>> You've derived something from thin air!
+
+287
+00:17:36,483 --> 00:17:41,466
+>> I have. I have. And you know what? The others are very cool
+
+288
+00:17:41,483 --> 00:17:46,350
+as well, the look-ups and things like that. There are actually
+
+289
+00:17:46,433 --> 00:17:50,466
+a large number... I was trying to think of a good word to use.
+
+290
+00:17:50,483 --> 00:17:53,466
+The only one that came to mind was bajillion, but I'm not sure
+
+291
+00:17:53,483 --> 00:17:55,466
+people actually know that that's a big number.
+
+292
+00:17:55,483 --> 00:17:56,300
+>> Yeah.
+
+293
+00:17:56,383 --> 00:17:56,466
+Okay.
+
+294
+00:17:57,483 --> 00:18:00,466
+>> At any rate, if you look at some of these, I've got conditional
+
+295
+00:18:00,483 --> 00:18:04,466
+splits, I've got my data conversion where I can change data types.
+
+296
+00:18:05,483 --> 00:18:10,466
+I can go in, I've got SharePoint list destinations and sorts,
+
+297
+00:18:10,200 --> 00:18:14,466
+I've got sort transforms I can put in there. If I wanted to
+
+298
+00:18:14,483 --> 00:18:18,166
+put a sort in there in front of my derived column, well, pretty
+
+299
+00:18:18,483 --> 00:18:22,366
+easy to do. I'm going to delete the connection there.
+
+300
+00:18:22,450 --> 00:18:26,466
+Notice I now have problems. I'm going to throw my sort transform
+
+301
+00:18:26,483 --> 00:18:30,466
+in the middle. We'll come in, we will grab it, and then we will
+
+302
+00:18:30,483 --> 00:18:31,466
+connect it downstream.
+
+303
+00:18:32,483 --> 00:18:35,466
+Hopefully that's going to fix it. It should.
+
+304
+00:18:36,216 --> 00:18:40,466
+I have all of mine here. I'm going to take my input column, product
+
+305
+00:18:40,483 --> 00:18:44,466
+key, and now I define my sort type.
+
+306
+00:18:45,483 --> 00:18:46,466
+Sort order
+
+307
+00:18:48,483 --> 00:18:51,466
+and any comparison flags that are necessary.
+
+308
+00:18:52,483 --> 00:18:57,233
+I hit okay, I've got my sort configured, and notice it cleans
+
+309
+00:18:57,316 --> 00:19:01,466
+up all of the downstream errors because I've put my pipeline
+
+310
+00:19:01,483 --> 00:19:02,466
+in place.
+
+311
+00:19:02,483 --> 00:19:07,400
+>> No metadata changed up the pipeline, so everything else bowed
+
+312
+00:19:08,483 --> 00:19:10,466
+down in compliance.
+
+313
+00:19:10,483 --> 00:19:12,466
+>> Absolutely. I will say, though, George, and I'll give you a
+
+314
+00:19:12,483 --> 00:19:16,466
+heads-up on this one, if you start doing what I just did, throwing
+
+315
+00:19:16,483 --> 00:19:20,466
+transforms in the middle of a pipe that's already been established,
+
+316
+00:19:20,483 --> 00:19:23,466
+you'd better make sure that you've got the right connections
+
+317
+00:19:23,483 --> 00:19:27,466
+at either end. Because if one of the connections is wrong, just
+
+318
+00:19:27,483 --> 00:19:32,466
+like the wrong connection on a hose, they don't go together real well.
+
+319
+00:19:34,266 --> 00:19:35,466
+So what have we got next there, George?
+
+320
+00:19:35,483 --> 00:19:40,466
+>> So next up, we've been look at moving rows through the pipeline.
+
+321
+00:19:41,483 --> 00:19:44,466
+And let's just say rows moving through the pipeline don't always
+
+322
+00:19:44,483 --> 00:19:47,466
+fit downstream, so we have to handle that.
+
+323
+00:19:47,483 --> 00:19:50,466
+>> You mean I'm going to keep on down with that little one I gave
+
+324
+00:19:50,483 --> 00:19:53,366
+you tip on or the preview of?
+
+325
+00:19:53,450 --> 00:19:53,466
+>> That's right.
+
+326
+00:19:53,483 --> 00:19:55,183
+>> Error rows.
+
+327
+00:19:55,266 --> 00:19:59,466
+>> So when we're dealing with error rows, error rows occur because
+
+328
+00:19:59,483 --> 00:20:03,466
+there's a problem with data when you're working with it in an
+
+329
+00:20:03,483 --> 00:20:07,383
+expected form as it's going through the pipeline.
+
+330
+00:20:07,483 --> 00:20:14,466
+Maybe on my derived column I've got two columns that have values
+
+331
+00:20:14,483 --> 00:20:18,466
+that can't be manipulated to do the calculation. They don't
+
+332
+00:20:18,483 --> 00:20:24,466
+match up. Or maybe I'm doing a data conversion from character
+
+333
+00:20:24,483 --> 00:20:27,466
+to number and somebody put the letter z
+
+334
+00:20:30,483 --> 00:20:35,383
+in the character column. I can't convert a z to a number.
+
+335
+00:20:35,466 --> 00:20:41,466
+So what happens? What happens is that row causes an error when
+
+336
+00:20:41,483 --> 00:20:48,466
+it hits the data conversion. Now, normal setup is that when the
+
+337
+00:20:48,483 --> 00:20:52,466
+transform kicks an error on a record, that
+
+338
+00:20:53,483 --> 00:20:57,333
+causes the entire data flow to crash.
+
+339
+00:20:57,483 --> 00:20:58,466
+>> That was a crashing sound.
+
+340
+00:20:58,483 --> 00:21:02,316
+>> I couldn't tell It almost made me crash.
+
+341
+00:21:02,333 --> 00:21:02,466
+[Laughter]
+
+342
+00:21:03,483 --> 00:21:08,466
+So when the transform crashes, when the pipeline can't put it
+
+343
+00:21:08,483 --> 00:21:13,366
+through, unless you've told it something special to do, it stops
+
+344
+00:21:13,450 --> 00:21:17,466
+it dead in its tracks and causes the entire package to fail.
+
+345
+00:21:18,483 --> 00:21:21,466
+Now, if I've got a half a million records going through the pipeline
+
+346
+00:21:22,333 --> 00:21:23,466
+and I've got one record with an error,
+
+347
+00:21:25,483 --> 00:21:28,466
+yeah, that's going to be a problem, because that means that if
+
+348
+00:21:28,483 --> 00:21:31,166
+that one record is the 499,373rd
+
+349
+00:21:33,483 --> 00:21:38,350
+record, I'm got to go back and redo all those 1s because it blew
+
+350
+00:21:38,433 --> 00:21:39,466
+up and nothing got saved.
+
+351
+00:21:41,183 --> 00:21:45,333
+What you want to be able to do is take that record out of the
+
+352
+00:21:45,483 --> 00:21:48,466
+data flow and redirect it somewhere else so that one of your
+
+353
+00:21:48,483 --> 00:21:52,466
+data stewards, one of your business analysts has the ability
+
+354
+00:21:52,483 --> 00:21:57,466
+to deal with the exception as an exception instead of having
+
+355
+00:21:57,483 --> 00:22:02,383
+to redo an entire workflow that worked correctly for everything
+
+356
+00:22:02,466 --> 00:22:07,183
+but that one record. So that is the error rows. Now, there are
+
+357
+00:22:07,266 --> 00:22:09,466
+two kinds of errors that can occur.
+
+358
+00:22:09,483 --> 00:22:12,466
+You can have data conversion errors.
+
+359
+00:22:13,483 --> 00:22:18,283
+Data conversion errors means just what I said earlier. You can't
+
+360
+00:22:18,366 --> 00:22:21,466
+make it a number. You can't make it whatever you're trying to
+
+361
+00:22:22,450 --> 00:22:22,466
+make it into.
+
+362
+00:22:22,483 --> 00:22:24,466
+>> Like a round peg in a square hole.
+
+363
+00:22:24,483 --> 00:22:30,466
+>> You got it. The other type of error, however, is a truncation error.
+
+364
+00:22:31,300 --> 00:22:32,466
+>> That sounds scary.
+
+365
+00:22:32,166 --> 00:22:35,466
+>> Well, it is, but not so much.
+
+366
+00:22:36,483 --> 00:22:41,466
+Truncation errors have to deal with when a value does not fit
+
+367
+00:22:41,483 --> 00:22:43,466
+into its destination.
+
+368
+00:22:44,400 --> 00:22:49,466
+So if I had a VARCHAR 50 column, has the potential to hold up
+
+369
+00:22:49,483 --> 00:22:54,466
+to 50 characters, if I were to try and put that into a VARCHAR
+
+370
+00:22:54,483 --> 00:22:59,466
+30 destination, there's your truncation. It doesn't mean that
+
+371
+00:22:59,483 --> 00:23:02,466
+every record is going to be chopped. It means that there's a
+
+372
+00:23:02,483 --> 00:23:07,283
+possibility that that record is going to get chopped. When the
+
+373
+00:23:07,366 --> 00:23:11,466
+record actually does get chopped, that's when you get the truncation error.
+
+374
+00:23:12,166 --> 00:23:15,466
+Now, that could also happen if you're going from BIGINT to INT,
+
+375
+00:23:15,483 --> 00:23:21,466
+from a high decimal... a high number of digit decimal configuration
+
+376
+00:23:21,483 --> 00:23:24,466
+to a smaller number of digits. Anytime you're trying to take
+
+377
+00:23:24,483 --> 00:23:29,333
+a value that is potentially bigger than its destination you've
+
+378
+00:23:29,416 --> 00:23:32,466
+got the possibility for truncation errors. Now, that's not the
+
+379
+00:23:32,483 --> 00:23:33,466
+only thing that can happen, George.
+
+380
+00:23:33,483 --> 00:23:34,466
+>> No. One more.
+
+381
+00:23:34,483 --> 00:23:40,466
+>> Yep. We also have what's called the on error event. Now, and
+
+382
+00:23:40,483 --> 00:23:45,466
+event is something that happens inside of the package.
+
+383
+00:23:45,483 --> 00:23:47,466
+There are lots of different kinds of events, and we're going
+
+384
+00:23:47,483 --> 00:23:50,466
+to need to talk about those in a lot more detail this afternoon.
+
+385
+00:23:50,483 --> 00:23:51,400
+>> Yep.
+
+386
+00:23:51,483 --> 00:23:56,466
+>> But the on error event is a specific event that occurs that
+
+387
+00:23:57,333 --> 00:24:01,466
+gets fired when an error occurs. Now, the cool thing is that
+
+388
+00:24:01,483 --> 00:24:07,466
+when you have an on error event, you can actually configure a
+
+389
+00:24:07,483 --> 00:24:12,333
+control flow that's going to execute in response to the event.
+
+390
+00:24:12,483 --> 00:24:16,466
+And that control flow will occur
+
+391
+00:24:17,483 --> 00:24:25,466
+only when the event occurs. With the error event, it only happens...
+
+392
+00:24:25,483 --> 00:24:31,466
+it's only triggered if there is an error on a record. But, like
+
+393
+00:24:31,483 --> 00:24:34,366
+I said, there are a bunch of others as well.
+
+394
+00:24:34,483 --> 00:24:38,466
+>> And you have some things to show us, specifically some pipeline
+
+395
+00:24:38,483 --> 00:24:39,266
+error handling.
+
+396
+00:24:39,350 --> 00:24:43,466
+>> Yeah, I do. I do. And you know what? We're going to configure
+
+397
+00:24:43,483 --> 00:24:48,466
+that derived column that we had there to pump any errors that
+
+398
+00:24:48,483 --> 00:24:51,333
+it's got out to another file.
+
+399
+00:24:51,483 --> 00:24:56,466
+So the first thing I need to do is I need to create a destination.
+
+400
+00:24:58,483 --> 00:25:02,466
+Actually, yeah, I do. I need a create a flat file destination.
+
+401
+00:25:02,483 --> 00:25:07,400
+So in this case I'm going to put all of the errors that occur
+
+402
+00:25:07,483 --> 00:25:13,400
+out to a text file so that they can be dealt with by our data stewards.
+
+403
+00:25:13,483 --> 00:25:17,466
+Are you familiar with that term, George?
+
+404
+00:25:17,483 --> 00:25:18,283
+>> I am.
+
+405
+00:25:18,366 --> 00:25:20,466
+>> I wonder if everybody else is.
+
+406
+00:25:20,233 --> 00:25:21,466
+>> Go ahead and help everybody else out.
+
+407
+00:25:21,483 --> 00:25:26,466
+>> All right. So many times we have folks whose primarily responsibility
+
+408
+00:25:26,483 --> 00:25:32,466
+is to manage the data in the data warehouse. Not necessarily
+
+409
+00:25:32,233 --> 00:25:37,466
+operational, but in the data warehouse as well. So those folks,
+
+410
+00:25:37,483 --> 00:25:43,233
+their title is data steward, in many ways. So that's what we
+
+411
+00:25:43,316 --> 00:25:47,466
+want to deal with. So I've created my flat file destination.
+
+412
+00:25:48,483 --> 00:25:52,416
+It has no input column. So before I can really configure it what
+
+413
+00:25:52,483 --> 00:25:56,466
+I'm going to do is take the error output from derive column,
+
+414
+00:25:56,483 --> 00:26:00,466
+the red arrow, and I'm going to connect it to the flat file,
+
+415
+00:26:00,483 --> 00:26:04,466
+and it immediately brings up a dialogue box because I have not
+
+416
+00:26:04,483 --> 00:26:11,200
+configured that error output. So here I have choices. I have
+
+417
+00:26:11,283 --> 00:26:16,466
+error choices and truncation choices, and I can say what I want
+
+418
+00:26:16,483 --> 00:26:21,466
+to happen. The default is fail the component, which means interrupt
+
+419
+00:26:21,483 --> 00:26:26,466
+processing and send a failure message. I also, however, can
+
+420
+00:26:26,483 --> 00:26:30,266
+ignore the failure... yeah, well, that doesn't make a lot of
+
+421
+00:26:30,350 --> 00:26:33,466
+sense because then nobody finds out about it and it doesn't get fixed.
+
+422
+00:26:33,483 --> 00:26:36,283
+Or... and this is the one I like...
+
+423
+00:26:36,483 --> 00:26:39,333
+I get to redirect the row.
+
+424
+00:26:42,0 --> 00:26:47,300
+>> So you can configure this per column per problem or per problem
+
+425
+00:26:47,383 --> 00:26:47,466
+per column.
+
+426
+00:26:48,333 --> 00:26:54,283
+>> In many cases you have a very, very, very fine level of control.
+
+427
+00:26:54,483 --> 00:26:59,466
+Absolutely. Now that I've got my error output configured, let's
+
+428
+00:26:59,483 --> 00:27:01,466
+go configure our flat file destination.
+
+429
+00:27:02,483 --> 00:27:07,416
+Now, I don't have any records that are actually going to error.
+
+430
+00:27:07,483 --> 00:27:12,466
+What I want to show you on here, though, is the mappings.
+
+431
+00:27:12,483 --> 00:27:16,366
+Notice how the input columns have a couple of added
+
+432
+00:27:18,383 --> 00:27:18,466
+to it.
+
+433
+00:27:18,483 --> 00:27:19,466
+>> Error codes.
+
+434
+00:27:19,483 --> 00:27:22,466
+>> Error code and error column.
+
+435
+00:27:23,483 --> 00:27:29,466
+So when you get a value, a row, that ends up in error, it doesn't
+
+436
+00:27:29,483 --> 00:27:33,466
+just pop it out to the destination, it actually tells you what
+
+437
+00:27:33,483 --> 00:27:34,466
+happened as well.
+
+438
+00:27:34,483 --> 00:27:36,466
+>> Nice. Good forensics.
+
+439
+00:27:37,316 --> 00:27:43,466
+>> It is helpful. It is very helpful. So what have we got next?
+
+440
+00:27:43,483 --> 00:27:46,466
+>> Next up... well, in particular, you being a .NET guy, you're
+
+441
+00:27:46,483 --> 00:27:48,466
+going to have some fun stuff to show us here.
+
+442
+00:27:49,483 --> 00:27:52,466
+We have another kind of a task called the script task.
+
+443
+00:27:52,483 --> 00:27:58,466
+>> Yeah. The script task. So one of the things that's really cool
+
+444
+00:27:58,483 --> 00:28:06,466
+about SSIS is the fact that it is very, very easy to extend functionality.
+
+445
+00:28:07,483 --> 00:28:11,466
+Now, there is a whole lot... don't get me wrong. You're not
+
+446
+00:28:11,216 --> 00:28:14,466
+going to be playing in that script task day in and day out.
+
+447
+00:28:14,483 --> 00:28:19,450
+But the script task itself is a building block that we have available
+
+448
+00:28:19,483 --> 00:28:25,466
+to us where we can create functionality that does not currently
+
+449
+00:28:25,483 --> 00:28:32,466
+exist in SSIS, and it uses standard .NET development. It uses
+
+450
+00:28:32,483 --> 00:28:38,433
+either Visual Basic or C# and gives you the ability to create
+
+451
+00:28:38,483 --> 00:28:43,466
+not just new transformations, George, but new destinations and
+
+452
+00:28:43,483 --> 00:28:45,466
+new sources as well.
+
+453
+00:28:46,483 --> 00:28:50,416
+>> So I can use this in control flow and I can use it in the pipeline.
+
+454
+00:28:51,483 --> 00:28:55,466
+>> Absolutely. You can do both. And in the pipeline you can use
+
+455
+00:28:56,483 --> 00:29:01,466
+it as a source, as a transform, or as a destination. The only
+
+456
+00:29:01,483 --> 00:29:08,466
+limit to what you can do with a script transform is that limit
+
+457
+00:29:08,483 --> 00:29:09,466
+right there.
+
+458
+00:29:10,483 --> 00:29:12,466
+The one between your ears.
+
+459
+00:29:13,483 --> 00:29:19,466
+If you can dream it and you can design it, then you can code it.
+
+460
+00:29:19,483 --> 00:29:22,466
+It is literally that powerful.
+
+461
+00:29:23,483 --> 00:29:26,466
+>> And the framework that is provided is huge.
+
+462
+00:29:26,483 --> 00:29:30,466
+>> Oh, you've got access to the entire .NET framework.
+
+463
+00:29:31,483 --> 00:29:37,466
+You've got access to all of the class library functionality that
+
+464
+00:29:37,483 --> 00:29:41,466
+Microsoft provides pre-built and ready for you to use.
+
+465
+00:29:43,383 --> 00:29:48,466
+Now, scripts, as I said, can transform data as it's going through
+
+466
+00:29:48,483 --> 00:29:53,466
+the pipeline, you can create custom code to reach out to technologies
+
+467
+00:29:54,483 --> 00:29:59,466
+that you cannot create connection managers for, you can go out
+
+468
+00:29:59,483 --> 00:30:04,466
+and provide destinations, you can create hooks into an application
+
+469
+00:30:04,483 --> 00:30:10,466
+so that SSIS could literal be used to bring data directly into
+
+470
+00:30:11,333 --> 00:30:15,466
+an executing application without having to go through a database,
+
+471
+00:30:15,483 --> 00:30:19,466
+without having to go through a flat file or anything else.
+
+472
+00:30:20,483 --> 00:30:25,466
+To build a script, the first thing you need to do is know what language.
+
+473
+00:30:25,483 --> 00:30:29,466
+I certainly wouldn't want to try and write a book in French when
+
+474
+00:30:29,483 --> 00:30:36,466
+I only speak German. So, please, understand, C# and VB, very different.
+
+475
+00:30:36,483 --> 00:30:39,466
+If you like curly braces and double equals, which I'm going to
+
+476
+00:30:39,483 --> 00:30:45,466
+forgot later, if you like semicolons and brevity, C# is for you.
+
+477
+00:30:46,483 --> 00:30:50,466
+If you like a more language-friendly
+
+478
+00:30:52,483 --> 00:30:57,266
+development, something that's more self-documenting and readable,
+
+479
+00:30:57,483 --> 00:30:59,466
+maybe VB is the way you go.
+
+480
+00:31:00,483 --> 00:31:08,216
+It uses the VBA.NET editor and has the ability to communicate
+
+481
+00:31:08,300 --> 00:31:15,300
+back with the package to access variables and provide success
+
+482
+00:31:15,383 --> 00:31:19,466
+and failure so that if you've got a problem, you have the ability
+
+483
+00:31:19,483 --> 00:31:23,466
+to notify SSIS that it's out there.
+
+484
+00:31:24,483 --> 00:31:26,433
+>> And you have some things to show.
+
+485
+00:31:26,450 --> 00:31:26,466
+>> I do.
+
+486
+00:31:27,483 --> 00:31:29,333
+I absolutely do.
+
+487
+00:31:29,483 --> 00:31:38,183
+So let us go out, and I am going to close out this project that
+
+488
+00:31:38,266 --> 00:31:41,333
+I'm in because I have another one out there.
+
+489
+00:31:43,483 --> 00:31:46,283
+Come on. Yeah, we'll save it. What the heck.
+
+490
+00:31:48,283 --> 00:31:52,333
+And we open up our new project, which is down here...
+
+491
+00:31:52,483 --> 00:31:54,466
+nope. Wrong one.
+
+492
+00:31:56,200 --> 00:31:56,466
+There it is.
+
+493
+00:31:57,483 --> 00:31:58,466
+>> It says script demo.
+
+494
+00:31:58,483 --> 00:31:59,466
+>> It does.
+
+495
+00:32:00,383 --> 00:32:04,466
+And there is in here a data flow task. And in the data flow
+
+496
+00:32:04,483 --> 00:32:06,466
+task I've got some scripts.
+
+497
+00:32:07,466 --> 00:32:11,450
+I've got a script that's acting as a data source, I've got a
+
+498
+00:32:11,483 --> 00:32:15,466
+script that's acting as a transformation, I've got a script that's
+
+499
+00:32:15,483 --> 00:32:22,450
+acting as a destination, and I've got a script that's going to
+
+500
+00:32:22,483 --> 00:32:26,466
+run after the data flow task in the control flow. So we're going
+
+501
+00:32:26,483 --> 00:32:29,466
+to give you examples of all four types.
+
+502
+00:32:29,483 --> 00:32:30,466
+>> Excellent.
+
+503
+00:32:30,483 --> 00:32:34,466
+>> So let's start out with our script source. Now, the script
+
+504
+00:32:34,483 --> 00:32:37,466
+source, when you go to configure it, the first choice you have
+
+505
+00:32:37,483 --> 00:32:42,250
+to make is what language you're going to be using.
+
+506
+00:32:42,483 --> 00:32:44,466
+Script language down here.
+
+507
+00:32:45,483 --> 00:32:50,466
+Visual C# 2010, so that works for me because I'm a C# kind of guy.
+
+508
+00:32:51,483 --> 00:32:53,466
+I click on the edit script
+
+509
+00:32:55,483 --> 00:32:58,466
+button, and it now launches VBA, it
+
+510
+00:33:00,483 --> 00:33:04,466
+launches the application script editor and brings you in.
+
+511
+00:33:04,483 --> 00:33:09,466
+Now, we've got some things here that we need to explain. If you're
+
+512
+00:33:09,183 --> 00:33:12,466
+not a C# developer, don't worry about this.
+
+513
+00:33:12,483 --> 00:33:16,466
+But there are some things, and I just want to point out in C#
+
+514
+00:33:16,483 --> 00:33:21,466
+we have brought in some of the pre-built functionality from the
+
+515
+00:33:21,483 --> 00:33:27,466
+system name space, the data name space, the DTS name space, so
+
+516
+00:33:27,483 --> 00:33:32,466
+it provides us access to pre-built Microsoft functionality.
+
+517
+00:33:32,483 --> 00:33:33,466
+>> A bunch of references.
+
+518
+00:33:33,216 --> 00:33:37,466
+>> You got it. We have some methods. Methods are the equivalent
+
+519
+00:33:37,483 --> 00:33:45,466
+of scripts in T-SQL. They are little packages of executing code
+
+520
+00:33:45,483 --> 00:33:50,466
+that you call by name. One of them, acquire connections, is code
+
+521
+00:33:50,483 --> 00:33:55,433
+that's going to run when a connection to an outside source is
+
+522
+00:33:55,483 --> 00:33:59,466
+brought and opened. I've got a pre-execute which is going to
+
+523
+00:33:59,233 --> 00:34:02,466
+happen before the transform executes.
+
+524
+00:34:03,483 --> 00:34:07,466
+And then I've got create new output rows, which is the method
+
+525
+00:34:07,483 --> 00:34:12,333
+that's responsible for going out, grabbing the data from wherever
+
+526
+00:34:12,483 --> 00:34:16,216
+it is, and putting it into the pipeline. It uses
+
+527
+00:34:17,483 --> 00:34:19,166
+the output buffer
+
+528
+00:34:20,483 --> 00:34:25,466
+.AddRow method. The AddRow method is what is adds the row into
+
+529
+00:34:25,483 --> 00:34:30,466
+the connection. So I could go out and access, I don't know, an
+
+530
+00:34:30,483 --> 00:34:33,216
+FTP site somewhere out in...
+
+531
+00:34:34,483 --> 00:34:38,466
+across the ocean in another country, authenticate to it using
+
+532
+00:34:38,483 --> 00:34:43,400
+the script, go out, grab information, process it because it's
+
+533
+00:34:43,483 --> 00:34:47,466
+in a custom form, strip out the individual values, add them to
+
+534
+00:34:47,483 --> 00:34:49,466
+the row, and put them into the pipeline.
+
+535
+00:34:50,483 --> 00:34:51,466
+>> Go!
+
+536
+00:34:51,483 --> 00:34:52,466
+>> All that.
+
+537
+00:34:53,483 --> 00:34:57,350
+And then, of course, the clean-up. When you're done, there is
+
+538
+00:34:57,433 --> 00:34:58,166
+a post-execute.
+
+539
+00:34:59,483 --> 00:35:02,466
+That's where you would put up any cleaned-up code. And there
+
+540
+00:35:02,483 --> 00:35:06,466
+is a release connections which happens when the connection is
+
+541
+00:35:06,483 --> 00:35:07,466
+closed out.
+
+542
+00:35:10,483 --> 00:35:15,200
+Second piece of this, I have a script transform.
+
+543
+00:35:16,483 --> 00:35:19,466
+Now, again, here I've got input columns. Those are the ones
+
+544
+00:35:19,483 --> 00:35:25,466
+that were added into the output buffer by the input script.
+
+545
+00:35:26,483 --> 00:35:30,466
+And I have inputs and outputs which define what's coming into
+
+546
+00:35:30,483 --> 00:35:33,466
+the script and what's going to be sent out again.
+
+547
+00:35:35,483 --> 00:35:41,466
+When I'm in my script again I go to my edit script. It brings
+
+548
+00:35:41,483 --> 00:35:46,383
+up the script editor and loads in the functionality that's already
+
+549
+00:35:46,466 --> 00:35:47,166
+been built.
+
+550
+00:35:48,283 --> 00:35:51,466
+In here, again, I've got pre-execute and I've got post-execute.
+
+551
+00:35:52,383 --> 00:35:56,466
+Those are going to be in every script in the pipeline.
+
+552
+00:35:58,483 --> 00:36:03,466
+Here, though, I've got process input row. Now, notice it says
+
+553
+00:36:03,483 --> 00:36:04,466
+input 0.
+
+554
+00:36:06,266 --> 00:36:10,466
+I can have multiple inputs coming into this script from different
+
+555
+00:36:10,483 --> 00:36:16,466
+sources and do custom processing to combine them into a single output.
+
+556
+00:36:17,483 --> 00:36:21,316
+Now, this one happens to be a very simple script. It's going
+
+557
+00:36:21,400 --> 00:36:26,400
+to take the row from the data buffer, it's going to act on the
+
+558
+00:36:26,483 --> 00:36:31,466
+second column, putting it to upper case. So it's going to take
+
+559
+00:36:31,483 --> 00:36:35,466
+the input and it's going to put it all into upper case.
+
+560
+00:36:36,483 --> 00:36:43,466
+Finally, I have my destination script. The destination script now...
+
+561
+00:36:43,483 --> 00:36:45,466
+I'm going to show you something a little different.
+
+562
+00:36:46,300 --> 00:36:48,466
+We can have variables in our packages.
+
+563
+00:36:49,483 --> 00:36:53,466
+And the scripts have access to the variables, but only
+
+564
+00:36:54,483 --> 00:36:59,466
+if I add them to the read-only variables if it's going to be
+
+565
+00:36:59,483 --> 00:37:03,466
+read-only or the read-write variables if I need to be able to
+
+566
+00:37:03,483 --> 00:37:09,233
+write a value back to that variable. Here I've specified the
+
+567
+00:37:09,316 --> 00:37:14,466
+UserResults variable as a read-write variable... and I hope
+
+568
+00:37:14,200 --> 00:37:19,466
+I'm not giving away the farm here... but when I go into my script,
+
+569
+00:37:19,483 --> 00:37:20,466
+guess what it's going to do?
+
+570
+00:37:21,483 --> 00:37:22,333
+>> What?
+
+571
+00:37:22,483 --> 00:37:24,466
+>> It's going to put the output
+
+572
+00:37:26,483 --> 00:37:36,466
+into the variable. Okay. So I've got my pre-execute.
+
+573
+00:37:38,483 --> 00:37:40,466
+I've got my process input row.
+
+574
+00:37:42,483 --> 00:37:47,466
+In my pre-execute I'm creating an array called myResults.
+
+575
+00:37:48,483 --> 00:37:52,466
+MyResults is going to be a string array with six members.
+
+576
+00:37:54,483 --> 00:37:58,466
+In the process input row I'm going to take the current row and
+
+577
+00:37:58,483 --> 00:37:59,466
+put it in
+
+578
+00:38:01,483 --> 00:38:05,466
+myResults, the value of column two of that current row.
+
+579
+00:38:06,483 --> 00:38:10,466
+And then when I'm done executing, when I'm done processing all
+
+580
+00:38:10,483 --> 00:38:16,466
+the rows, I'm going to access the read-write variables, UserResults
+
+581
+00:38:16,483 --> 00:38:20,466
+variable, and I'm going to assign myResults to the value.
+
+582
+00:38:22,483 --> 00:38:29,466
+Now, that's all set up because once I'm done what I end up with
+
+583
+00:38:29,183 --> 00:38:33,466
+is whatever what came in from the input going through and ending
+
+584
+00:38:33,483 --> 00:38:36,466
+up in the UserResults variable.
+
+585
+00:38:39,483 --> 00:38:42,466
+When I come back out to the control flow, I go into my script
+
+586
+00:38:42,483 --> 00:38:44,366
+task, notice
+
+587
+00:38:45,483 --> 00:38:49,466
+UserResults is listed in the read-only variables.
+
+588
+00:38:50,483 --> 00:38:53,466
+So when I go in to edit the script here,
+
+589
+00:38:55,483 --> 00:38:59,466
+it now is going to take
+
+590
+00:39:00,483 --> 00:39:03,466
+in the main method,
+
+591
+00:39:05,483 --> 00:39:07,466
+create a results message,
+
+592
+00:39:09,483 --> 00:39:13,466
+the results message is going to loop through... remember, UserResults
+
+593
+00:39:13,483 --> 00:39:18,466
+has an array of strings. So it's going to go and it's going to
+
+594
+00:39:18,483 --> 00:39:22,466
+loop through all the strings and append them to the results message.
+
+595
+00:39:22,483 --> 00:39:28,466
+And then it's going to show that message and tell SQL Integration
+
+596
+00:39:28,483 --> 00:39:32,466
+Services that it was successful when it's done.
+
+597
+00:39:32,483 --> 00:39:36,466
+>> Now, Rich, I'm not a .NET guy. Can I make sure I got this right?
+
+598
+00:39:36,233 --> 00:39:37,466
+>> You can. Go for it.
+
+599
+00:39:37,483 --> 00:39:42,283
+>> So you derive some variables dynamically in the pipeline and
+
+600
+00:39:42,366 --> 00:39:45,466
+then you're passing that output from variable then back to the
+
+601
+00:39:45,483 --> 00:39:49,466
+task and you're going to use the task to show it? Did I get that right?
+
+602
+00:39:49,483 --> 00:39:51,266
+>> You've got that absolutely right.
+
+603
+00:39:51,350 --> 00:39:51,466
+>> All right.
+
+604
+00:39:51,483 --> 00:39:53,466
+>> As a matter of fact, would you like me to prove it to you?
+
+605
+00:39:53,483 --> 00:39:57,333
+>> I would. And this has reminded me of Mouse Trap all over again
+
+606
+00:39:57,350 --> 00:39:58,333
+[Laughter]
+
+607
+00:39:58,483 --> 00:40:01,466
+>> Yeah, but you know what I like about this? It's a better mouse trap.
+
+608
+00:40:02,450 --> 00:40:02,466
+>> Yep.
+
+609
+00:40:02,483 --> 00:40:04,466
+>> So let's run this.
+
+610
+00:40:04,483 --> 00:40:08,466
+When we run it you can see the data flow task ran, the script
+
+611
+00:40:08,483 --> 00:40:13,250
+task is running, here's my results, and, yes, I have values 0
+
+612
+00:40:13,333 --> 00:40:14,466
+through five, all caps.
+
+613
+00:40:14,483 --> 00:40:16,416
+[Applause]
+
+614
+00:40:16,483 --> 00:40:19,0
+I love it when a plan comes together.
+
+615
+00:40:19,450 --> 00:40:19,466
+>> There you go.
+
+616
+00:40:20,450 --> 00:40:20,466
+>> All right.
+
+617
+00:40:21,0 --> 00:40:22,466
+>> You're referencing The A-Team.
+
+618
+00:40:23,250 --> 00:40:27,466
+>> Yeah, that's the American TV show that has a little bit of
+
+619
+00:40:27,483 --> 00:40:29,466
+a cult following, shall we say.
+
+620
+00:40:30,483 --> 00:40:33,466
+All right. So what do you think, George? What's the next thing
+
+621
+00:40:33,483 --> 00:40:35,466
+on our agenda?
+
+622
+00:40:35,483 --> 00:40:37,200
+>> We have more mouse trap stuff.
+
+623
+00:40:37,283 --> 00:40:37,466
+>> We do.
+
+624
+00:40:37,483 --> 00:40:40,466
+>> Especially with this next line of transformation.
+
+625
+00:40:41,266 --> 00:40:44,466
+We have fuzzy transforms, and we have a couple of those, and
+
+626
+00:40:44,483 --> 00:40:47,466
+I know you have some enthusiasm about those.
+
+627
+00:40:47,483 --> 00:40:48,266
+>> I do.
+
+628
+00:40:48,483 --> 00:40:51,466
+Although I'm a little unclear on how they work sometimes.
+
+629
+00:40:52,483 --> 00:40:53,466
+Get it?
+
+630
+00:40:53,483 --> 00:40:54,466
+>> You're fuzzy on those?
+
+631
+00:40:54,483 --> 00:40:59,466
+>> Yeah. Hey, I got a groan from the peanut gallery.
+
+632
+00:41:00,433 --> 00:41:03,433
+I was wondering if they were awake. Now I know they are.
+
+633
+00:41:03,483 --> 00:41:06,466
+>> They were fuzzy too...
+
+634
+00:41:07,483 --> 00:41:08,466
+[Laughter]
+
+635
+00:41:08,483 --> 00:41:13,466
+>> Fuzzy grouping and fuzzy look-up.  Fuzzy grouping is all about taking
+
+636
+00:41:13,483 --> 00:41:19,466
+records that you're trying to say they have the same logical
+
+637
+00:41:19,483 --> 00:41:24,466
+entity, they represent the same logical entity, but they were
+
+638
+00:41:24,483 --> 00:41:29,166
+defined a little bit differently. Maybe... like I'm Rich Currey,
+
+639
+00:41:29,250 --> 00:41:32,466
+but maybe I'm in a couple of different systems. In System 1
+
+640
+00:41:32,483 --> 00:41:37,466
+I'm Rich Currey, in System 2 I'm Richard Currey, in System 3
+
+641
+00:41:37,483 --> 00:41:39,466
+I'm Fred Currey.
+
+642
+00:41:40,483 --> 00:41:45,166
+In all of those it could be the same person. There are other
+
+643
+00:41:45,483 --> 00:41:49,216
+values in the record that can contribute to figuring out, oh,
+
+644
+00:41:49,300 --> 00:41:52,466
+yeah, that is the same one. Maybe it's the same address, the
+
+645
+00:41:52,483 --> 00:41:57,466
+same phone number, the same city or state, whatever it might be.
+
+646
+00:41:57,483 --> 00:42:03,183
+So fuzzy grouping is a transform that you can use to take all
+
+647
+00:42:03,266 --> 00:42:08,0
+of those records that logically represent the same entity even
+
+648
+00:42:08,483 --> 00:42:12,266
+though they don't have the same values and associate them together.
+
+649
+00:42:12,483 --> 00:42:17,266
+It does require that you have a SQL Server connection because
+
+650
+00:42:17,350 --> 00:42:23,466
+it uses temp tables in the connection target to hold intermediate
+
+651
+00:42:23,483 --> 00:42:27,466
+results and work with the data as it's trying figure it out.
+
+652
+00:42:27,483 --> 00:42:32,433
+As you might guess, this is not necessarily a processor-free occurrence.
+
+653
+00:42:32,450 --> 00:42:32,466
+>> Sure.
+
+654
+00:42:33,483 --> 00:42:37,466
+>> There's a little work going on. So if you're going to use
+
+655
+00:42:37,483 --> 00:42:40,466
+this, you do... your identity or the identity that's running
+
+656
+00:42:40,483 --> 00:42:44,466
+the package needs to have the create table permission because
+
+657
+00:42:44,483 --> 00:42:47,466
+it does... it uses temp tables only.
+
+658
+00:42:48,283 --> 00:42:52,466
+Now, the fuzzy grouping goes through and it identifies what's
+
+659
+00:42:52,483 --> 00:42:56,466
+called a lead record. That's the record that has the values that
+
+660
+00:42:56,483 --> 00:43:03,466
+it identifies as being the right ones and then a matching record,
+
+661
+00:43:03,483 --> 00:43:08,466
+which contains the values that aren't exact matches but it thinks
+
+662
+00:43:08,483 --> 00:43:12,466
+match up with that lead record. It returns the key of the lead
+
+663
+00:43:12,483 --> 00:43:16,466
+record, the key of the matching record. It also gives you an
+
+664
+00:43:16,483 --> 00:43:21,466
+idea of how close it is by going with a similarity score.
+
+665
+00:43:21,483 --> 00:43:25,466
+So just because SQL Server thinks they belong together doesn't
+
+666
+00:43:25,483 --> 00:43:29,466
+necessarily mean that they do, but it certainly gives you an
+
+667
+00:43:29,483 --> 00:43:34,466
+idea of what happens... of what the possibilities are.
+
+668
+00:43:35,450 --> 00:43:35,466
+>> All right.
+
+669
+00:43:35,483 --> 00:43:39,416
+>> The other transform that we've got that works on this kind
+
+670
+00:43:39,483 --> 00:43:45,316
+of fuzzy logic is called the fuzzy look-up. Now, again, if I've
+
+671
+00:43:45,400 --> 00:43:49,466
+got data that exists in multiple source systems representing
+
+672
+00:43:49,483 --> 00:43:55,466
+the same logical entity but with different physical values, then
+
+673
+00:43:55,233 --> 00:43:58,466
+it's going to be a lot harder to match that data together.
+
+674
+00:43:58,483 --> 00:44:03,233
+So, again, you do have to have a SQL Server connection, but this
+
+675
+00:44:03,316 --> 00:44:07,466
+one, instead of providing for temporary tables, is going to provide
+
+676
+00:44:07,483 --> 00:44:12,400
+the location of the data that you're looking against to try and
+
+677
+00:44:12,483 --> 00:44:13,466
+find a match.
+
+678
+00:44:14,283 --> 00:44:19,416
+Now, you have to define one column as your fuzzy column.
+
+679
+00:44:19,483 --> 00:44:22,316
+You can have more than one, but there has to be at least one.
+
+680
+00:44:23,333 --> 00:44:26,466
+Those are the columns, when they're identified as fuzzy, that
+
+681
+00:44:26,483 --> 00:44:32,466
+are going to allow the inexact matching. You can only use string
+
+682
+00:44:32,483 --> 00:44:36,466
+data types or text data types. You can't use numerics or anything
+
+683
+00:44:36,483 --> 00:44:37,433
+like that.
+
+684
+00:44:37,483 --> 00:44:38,466
+>> That makes sense.
+
+685
+00:44:38,483 --> 00:44:41,466
+>> It does. It really does, because if the numbers are different,
+
+686
+00:44:41,483 --> 00:44:45,466
+the numbers are different. But if one says 3 Main Street and
+
+687
+00:44:45,483 --> 00:44:51,466
+one says 30 Main Street, yeah, that could be a typo. It absolutely
+
+688
+00:44:51,483 --> 00:44:54,200
+could be. So those are the kinds of things we're trying to find.
+
+689
+00:44:54,483 --> 00:44:58,466
+Now, similarity and confidence are kind of like...
+
+690
+00:44:59,483 --> 00:45:02,466
+we'll call them lines in the sand.
+
+691
+00:45:02,483 --> 00:45:03,466
+>> Okay.
+
+692
+00:45:03,483 --> 00:45:09,466
+>> They provide you the ability to say a match must have values
+
+693
+00:45:09,483 --> 00:45:13,450
+that are 95 percent similar.
+
+694
+00:45:14,483 --> 00:45:19,466
+In other words, it's got to have most of the characters the same.
+
+695
+00:45:19,483 --> 00:45:23,466
+Like 30 Main Street and 3 Main Street, they're pretty similar.
+
+696
+00:45:24,216 --> 00:45:27,466
+There's a good likelihood, if all the other columns are the same,
+
+697
+00:45:27,483 --> 00:45:29,466
+that that's a matching value.
+
+698
+00:45:30,483 --> 00:45:36,466
+Confidence is more of a representation of how confident you are
+
+699
+00:45:36,483 --> 00:45:37,466
+that they are the same.
+
+700
+00:45:38,483 --> 00:45:40,466
+If I've got, for example, St.
+
+701
+00:45:41,483 --> 00:45:50,466
+and Saint, then the values are significantly different.
+
+702
+00:45:50,483 --> 00:45:52,466
+>> Yeah. Of the list of characters is quite different.
+
+703
+00:45:53,333 --> 00:45:58,466
+>> Yeah. But when you actually look at the data logically, at
+
+704
+00:45:58,483 --> 00:46:04,266
+least in English, St. is an abbreviation for the word Saint.
+
+705
+00:46:05,483 --> 00:46:10,466
+So I have a confidence level that kind of reminds me that, yeah,
+
+706
+00:46:10,483 --> 00:46:14,166
+I'm pretty happy with this match. It's pretty good.
+
+707
+00:46:14,483 --> 00:46:18,466
+So let's go take a quick look at a fuzzy look-up and see what
+
+708
+00:46:18,483 --> 00:46:20,466
+we've got going here.
+
+709
+00:46:21,483 --> 00:46:28,466
+I've got my virtual machine squared away, and I'm in my fuzzy package.
+
+710
+00:46:28,483 --> 00:46:34,466
+In my fuzzy package I have an OLEDB source that I've defined
+
+711
+00:46:34,483 --> 00:46:38,466
+that goes out to demo DW and grabs my customers.
+
+712
+00:46:39,483 --> 00:46:46,433
+Now, that then acts as an input for fuzzy grouping. Now, fuzzy
+
+713
+00:46:46,483 --> 00:46:52,466
+grouping requires a connection manager. And guess what?
+
+714
+00:46:53,483 --> 00:46:59,466
+There's my demo DW. It's going to go out and it is going to look
+
+715
+00:46:59,483 --> 00:47:01,466
+up and it is going to base...
+
+716
+00:47:03,400 --> 00:47:06,466
+in the customer table we are going to put an input column of
+
+717
+00:47:07,483 --> 00:47:08,466
+customer name.
+
+718
+00:47:10,300 --> 00:47:15,466
+There's an output alias, there's a grouping youth alias, the
+
+719
+00:47:15,483 --> 00:47:19,466
+match type, and, yes, you can determine exact or inexact.
+
+720
+00:47:19,483 --> 00:47:25,466
+So if I have some columns, for example, a name column, the names
+
+721
+00:47:25,216 --> 00:47:29,200
+may be similar, but I want the city, state, and zip to be identical
+
+722
+00:47:29,483 --> 00:47:32,466
+because I know that it's not a match if they're different.
+
+723
+00:47:33,333 --> 00:47:36,283
+>> Yeah, then I have a very high degree of match confidence.
+
+724
+00:47:36,366 --> 00:47:39,466
+>> Exactly. So I can define... for example,
+
+725
+00:47:40,483 --> 00:47:46,466
+I could put in here my city and define this one as an exact match.
+
+726
+00:47:46,483 --> 00:47:51,466
+So now my look-up is based on two columns, a fuzzy match on the
+
+727
+00:47:51,483 --> 00:47:54,466
+name and an exact match on the city.
+
+728
+00:47:56,166 --> 00:48:00,416
+As I come over, I've got my similarity number. This is where
+
+729
+00:48:00,483 --> 00:48:05,466
+you define the similarity threshold which is calculated by the
+
+730
+00:48:05,483 --> 00:48:11,466
+transform and say I need this to be .85,
+
+731
+00:48:13,483 --> 00:48:20,466
+85 percent similar, in order for that to be defined as a match.
+
+732
+00:48:21,483 --> 00:48:24,466
+Now, George, have you ever run into a situation where you've
+
+733
+00:48:24,483 --> 00:48:26,466
+got leading or trailing numbers?
+
+734
+00:48:26,483 --> 00:48:27,466
+>> Oh, yeah.
+
+735
+00:48:27,483 --> 00:48:29,183
+>> Like on an address, for example.
+
+736
+00:48:29,266 --> 00:48:30,333
+>> Sure.
+
+737
+00:48:30,483 --> 00:48:33,466
+>> 123 Main Street versus 456 Main Street.
+
+738
+00:48:33,483 --> 00:48:34,333
+>> Sure.
+
+739
+00:48:34,416 --> 00:48:38,466
+>> Well, there are times when those numbers are meaningful.
+
+740
+00:48:38,483 --> 00:48:43,466
+There are other times where they're noise to the matching process.
+
+741
+00:48:44,350 --> 00:48:48,466
+So in this numerals column I have the ability to configure whether
+
+742
+00:48:48,483 --> 00:48:55,366
+I want to deal with neither leading nor trailing numbers, just
+
+743
+00:48:55,450 --> 00:48:58,466
+leading numbers, just trailing numbers, or both.
+
+744
+00:48:59,483 --> 00:49:03,400
+And then, finally, I have the ability to tell it whether case
+
+745
+00:49:03,483 --> 00:49:08,466
+sensitivity is important, whether Kana type is important, non-spacing
+
+746
+00:49:08,483 --> 00:49:11,466
+characters, character width, all that kind of stuff.
+
+747
+00:49:11,483 --> 00:49:12,466
+>> Lots of control.
+
+748
+00:49:13,333 --> 00:49:16,466
+>> Okay. Now, again, this is one of those transforms... I don't
+
+749
+00:49:16,483 --> 00:49:19,466
+have a real database here that's got a lot of differences where
+
+750
+00:49:19,216 --> 00:49:22,416
+fuzzy is going to make a difference, but this gives you a real
+
+751
+00:49:22,483 --> 00:49:25,166
+good idea of how the configuration goes.
+
+752
+00:49:25,450 --> 00:49:25,466
+>> Good.
+
+753
+00:49:26,233 --> 00:49:32,283
+>> All right. So this module we have spent a lot of time talking
+
+754
+00:49:32,366 --> 00:49:38,433
+about how you manipulate data as it goes through the data flow pipeline.
+
+755
+00:49:38,483 --> 00:49:41,466
+We've talked about some of the standard transforms like a derive
+
+756
+00:49:41,483 --> 00:49:47,466
+column, the look-ups, the merges, we've talked about some of the...
+
+757
+00:49:47,483 --> 00:49:49,466
+am I missing a whole set?
+
+758
+00:49:49,483 --> 00:49:51,466
+>> Yeah. We have more. We have more.
+
+759
+00:49:51,483 --> 00:49:54,466
+>> We have more. I forgot all about that. My goodness. You know,
+
+760
+00:49:54,483 --> 00:49:59,466
+I looked at the splitter before. We do. Let's go look at the splits.
+
+761
+00:49:59,483 --> 00:50:03,250
+Splitting the flow. And we've got two transforms that we're going
+
+762
+00:50:03,333 --> 00:50:04,466
+to be dealing with here...
+
+763
+00:50:05,400 --> 00:50:07,466
+>> These are useful.
+
+764
+00:50:07,483 --> 00:50:09,466
+>> They are. And I can't believe I forgot about them.
+
+765
+00:50:09,483 --> 00:50:14,466
+They're some of my favorites. Multicast which takes the data
+
+766
+00:50:14,483 --> 00:50:19,466
+flow and duplicates it to multiple destinations, and we've also
+
+767
+00:50:19,483 --> 00:50:21,283
+got the conditional split.
+
+768
+00:50:21,483 --> 00:50:27,466
+Conditional split allows me to formulaically determine where
+
+769
+00:50:28,483 --> 00:50:33,466
+a record is going to go, into which of the output pipelines.
+
+770
+00:50:34,483 --> 00:50:39,466
+So multicast, like I said, duplication of data, multiple pipelines.
+
+771
+00:50:39,483 --> 00:50:46,466
+Each pipeline has its own transformations after the duplication occurs.
+
+772
+00:50:46,483 --> 00:50:48,466
+>> So process some rows...
+
+773
+00:50:48,483 --> 00:50:49,466
+>> Absolutely....
+
+774
+00:50:49,200 --> 00:50:52,383
+>> or process one set of rows in the pipeline and I have another
+
+775
+00:50:52,466 --> 00:50:53,466
+pipeline unprocessed.
+
+776
+00:50:53,483 --> 00:50:58,466
+>> You could. Absolutely. And you could even, if you had, for
+
+777
+00:50:58,483 --> 00:51:02,466
+example, sales information that was going to the financial group
+
+778
+00:51:02,483 --> 00:51:06,366
+and sales information that was going to the sales group, maybe
+
+779
+00:51:06,450 --> 00:51:09,466
+they have different calculations that need to be applied.
+
+780
+00:51:09,483 --> 00:51:14,466
+So I do a multicast and then I do the sales calculations to the
+
+781
+00:51:14,483 --> 00:51:20,433
+sales destination, I do the financial calculations to the financial destination.
+
+782
+00:51:20,450 --> 00:51:20,466
+>> Good example.
+
+783
+00:51:20,483 --> 00:51:25,466
+>> The key is that out of that multicast... it's very simple...
+
+784
+00:51:25,483 --> 00:51:29,466
+you drop the transform in, you connect transforms after the fact.
+
+785
+00:51:29,483 --> 00:51:32,466
+There's no other configuration required.
+
+786
+00:51:33,483 --> 00:51:36,466
+The other transform we've got is the conditional split.
+
+787
+00:51:36,483 --> 00:51:41,466
+This is the one where I can take records from the data flow and
+
+788
+00:51:41,483 --> 00:51:47,433
+direct them out to different hoses, different pipelines.
+
+789
+00:51:47,450 --> 00:51:47,466
+>> So divide... sorry.
+
+790
+00:51:47,483 --> 00:51:49,466
+>> Yeah, divide and conquer.
+
+791
+00:51:49,483 --> 00:51:54,466
+Exactly. So now maybe let's take that sales example again, but
+
+792
+00:51:54,483 --> 00:51:59,466
+now I've got sales reps who are in different regions of the world,
+
+793
+00:52:00,483 --> 00:52:05,466
+and I've got managers that deal with the sales for only that region.
+
+794
+00:52:06,250 --> 00:52:10,466
+They don't need to see the rest of the world. So I can direct
+
+795
+00:52:10,483 --> 00:52:15,466
+the sales records to the appropriate pipeline based on the region
+
+796
+00:52:15,483 --> 00:52:17,466
+that's going to receive them.
+
+797
+00:52:17,483 --> 00:52:18,466
+>> Good example.
+
+798
+00:52:18,483 --> 00:52:22,466
+>> So let's flip back over to the virtual machine because what
+
+799
+00:52:22,483 --> 00:52:27,466
+I'm going to do is I'm going to take this OLEDB source that I've
+
+800
+00:52:27,483 --> 00:52:34,466
+got here and I am going to now split it. So we're going to come
+
+801
+00:52:34,483 --> 00:52:38,466
+back up, we are going to grab our conditional split.
+
+802
+00:52:38,483 --> 00:52:41,466
+I connect the two together. That gives the conditional split
+
+803
+00:52:41,483 --> 00:52:44,466
+awareness of what it's going to be working with.
+
+804
+00:52:44,483 --> 00:52:46,466
+>> Upstream metadata.
+
+805
+00:52:46,483 --> 00:52:52,416
+>> You got it. Now I go into my transformation editor. Now, let
+
+806
+00:52:52,483 --> 00:52:53,466
+me ask you a question, George.
+
+807
+00:52:53,483 --> 00:52:54,466
+>> Go ahead.
+
+808
+00:52:54,483 --> 00:53:00,300
+>> Does this GUI look at all familiar to you?
+
+809
+00:53:00,383 --> 00:53:02,166
+>> Very familiar scent to me.
+
+810
+00:53:02,483 --> 00:53:08,166
+>> Absolutely. It is the same GUI that you get for a derived column
+
+811
+00:53:08,250 --> 00:53:13,366
+because you are building calculations, building expressions.
+
+812
+00:53:13,450 --> 00:53:17,466
+This is the expression editor. Now, what I'm going to do is I'm
+
+813
+00:53:17,483 --> 00:53:23,466
+going to come in here and I'm going to grab country and drop
+
+814
+00:53:23,483 --> 00:53:28,466
+it into my condition, and I'm going to say country equal to,
+
+815
+00:53:29,483 --> 00:53:31,466
+and we'll say USA.
+
+816
+00:53:33,483 --> 00:53:39,466
+And the output name is going to be... oh, I have a problem here.
+
+817
+00:53:39,483 --> 00:53:41,466
+I'm not sure what it is yet.
+
+818
+00:53:42,483 --> 00:53:44,466
+I'm going to have to look at it. Give me a minute. But the
+
+819
+00:53:45,0 --> 00:53:49,266
+name we're going to take it US Customers.
+
+820
+00:53:50,283 --> 00:53:53,466
+Oh, I know
+
+821
+00:53:55,483 --> 00:54:00,466
+what the... didn't I tell you on the last one? Single equals
+
+822
+00:54:00,166 --> 00:54:04,466
+versus double equals. So I have done that and I will continue
+
+823
+00:54:04,483 --> 00:54:07,466
+to do that even when I remember not to do that.
+
+824
+00:54:07,483 --> 00:54:10,466
+>> No, I thought you were leading us into a brick wall only to
+
+825
+00:54:10,483 --> 00:54:11,466
+show us the rescue.
+
+826
+00:54:11,483 --> 00:54:14,466
+>> Oh, no. No, no, no. I literally forgot it.
+
+827
+00:54:14,483 --> 00:54:15,250
+>> All right.
+
+828
+00:54:15,333 --> 00:54:19,466
+>> In the expression language in SSIS there are two things you
+
+829
+00:54:19,483 --> 00:54:24,466
+really need to be aware of. Thing one, it's case sensitive.
+
+830
+00:54:25,483 --> 00:54:27,466
+If you notice, I drag and drop everything.
+
+831
+00:54:27,483 --> 00:54:28,300
+>> Please.
+
+832
+00:54:28,383 --> 00:54:32,466
+>> Thing two, assignment is one equals sign, comparison is two
+
+833
+00:54:32,483 --> 00:54:35,466
+equals sign. If you keep those in the front of your head, you'll
+
+834
+00:54:35,483 --> 00:54:37,333
+get it right most times.
+
+835
+00:54:37,483 --> 00:54:41,466
+So US Customers is country equal to USA.
+
+836
+00:54:42,483 --> 00:54:46,466
+I'm now going to get all other customers
+
+837
+00:54:48,366 --> 00:54:51,400
+and my condition here is going to be...
+
+838
+00:54:52,0 --> 00:54:53,466
+and I was about to type it...
+
+839
+00:54:54,483 --> 00:54:55,466
+actually, you know what?
+
+840
+00:54:55,483 --> 00:55:03,466
+Watch. Just to prove my point, and we're going to say not equals USA.
+
+841
+00:55:06,483 --> 00:55:07,466
+Notice the red?
+
+842
+00:55:08,483 --> 00:55:10,466
+>> Danger, Will Robinson.
+
+843
+00:55:10,483 --> 00:55:14,466
+>> You got it. The red indicates I've got a problem. To fix it
+
+844
+00:55:14,483 --> 00:55:20,466
+I capitalize country, it comes in, it's now fixed. So I have
+
+845
+00:55:20,483 --> 00:55:27,433
+two outputs. Those two outputs now are going to have US customers
+
+846
+00:55:27,483 --> 00:55:29,466
+and all other customers. I hit okay.
+
+847
+00:55:30,483 --> 00:55:33,466
+When I come out of my conditional split >> Perfect....
+
+848
+00:55:34,0 --> 00:55:39,400
+>> I can now create two destinations, destination 1 flat file...
+
+849
+00:55:39,483 --> 00:55:40,466
+>> This is the fun part....
+
+850
+00:55:40,483 --> 00:55:44,466
+>> I click in connect, it asks me which output I want, I choose
+
+851
+00:55:44,483 --> 00:55:50,466
+my US customers, hit okay, I drop a second flat file destination...
+
+852
+00:55:52,283 --> 00:55:56,466
+whoops. I grabbed the error. That's not what I wanted.
+
+853
+00:55:56,483 --> 00:55:58,466
+We will delete that one.
+
+854
+00:56:00,283 --> 00:56:05,333
+We will grab our second one, and now for that one we will grab
+
+855
+00:56:05,483 --> 00:56:09,466
+all other customers. And notice it is marked in the GUI so that
+
+856
+00:56:09,483 --> 00:56:10,466
+you know which one which.
+
+857
+00:56:10,483 --> 00:56:11,466
+>> Handy.
+
+858
+00:56:11,483 --> 00:56:12,466
+>> It is.
+
+859
+00:56:13,450 --> 00:56:13,466
+All right.
+
+860
+00:56:14,483 --> 00:56:15,466
+Now can we wrap up?
+
+861
+00:56:15,483 --> 00:56:18,266
+>> Yeah. Now it's wrap-up. We looked at a lot in this module.
+
+862
+00:56:18,350 --> 00:56:22,466
+>> Yeah, we did. We talked about the transforms, we talked about
+
+863
+00:56:22,166 --> 00:56:27,466
+building that data pipeline, not just the source and the destination
+
+864
+00:56:28,183 --> 00:56:31,466
+but rather all of the manipulation of the information that can
+
+865
+00:56:31,483 --> 00:56:36,466
+occur in between the two. Transforms like the derive column,
+
+866
+00:56:36,483 --> 00:56:40,466
+like the fuzzy grouping and fuzzy look-up and the conditional
+
+867
+00:56:40,483 --> 00:56:45,333
+splits, things of that nature. You've got ultimate flexibility
+
+868
+00:56:45,483 --> 00:56:48,466
+to do the T in the ETL.
+
+869
+00:56:48,483 --> 00:56:52,466
+>> Excellent. So thanks, everyone, for watching the Implementing
+
+870
+00:56:52,483 --> 00:56:56,466
+a Data Warehouse with SQL Server 2012 Jump Start. I'm hungry,
+
+871
+00:56:56,483 --> 00:56:59,466
+and it's time for a meal break, so we'll see you at the top of
+
+872
+00:56:59,483 --> 00:57:02,466
+the hour. Again, make sure you get up and move around a little
+
+873
+00:57:02,483 --> 00:57:05,183
+bit, and we'll see you back at the top of the hour.
+
+874
+00:57:05,266 --> 00:57:05,466
+>> Have one.
+

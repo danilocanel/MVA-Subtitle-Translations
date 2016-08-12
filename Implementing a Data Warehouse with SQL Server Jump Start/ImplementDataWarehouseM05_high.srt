@@ -1,0 +1,3340 @@
+1
+00:00:00,333 --> 00:00:07,333
+[Music]
+
+2
+00:00:18,166 --> 00:00:20,450
+Welcome back after a brief
+
+3
+00:00:20,483 --> 00:00:24,466
+stretch to implementing a Data Warehouse with SQL Server 2012
+
+4
+00:00:24,483 --> 00:00:28,466
+Jump Start. I'm George Squillace and here we have a Rich Currey.
+
+5
+00:00:28,483 --> 00:00:32,466
+>> Howdy, howdy. Guess what George? We are getting close to the
+
+6
+00:00:33,333 --> 00:00:34,283
+end of development time.
+
+7
+00:00:34,366 --> 00:00:38,216
+>> We are. We are. And there's only a couple of things left that
+
+8
+00:00:38,300 --> 00:00:42,450
+we need to talk about. We need to talk about configuration and
+
+9
+00:00:42,483 --> 00:00:44,466
+we need to talk about deployment.
+
+10
+00:00:45,483 --> 00:00:49,466
+And that's where we are headed. But before you could actually
+
+11
+00:00:49,483 --> 00:00:53,466
+do deployment you better make sure that your set up for production,
+
+12
+00:00:53,483 --> 00:00:56,466
+that you have troubleshot the package to make sure everything
+
+13
+00:00:56,483 --> 00:01:00,466
+is there, and that you configure it so that if something happens
+
+14
+00:01:00,483 --> 00:01:04,466
+down the road you have the ability to check it out. We need
+
+15
+00:01:04,483 --> 00:01:08,466
+to be able to do debugging, we need to be able to set up logging,
+
+16
+00:01:09,333 --> 00:01:14,466
+and event handlers, and only George, after that's all done, then
+
+17
+00:01:14,483 --> 00:01:16,466
+we actually do our deployment.
+
+18
+00:01:17,483 --> 00:01:20,466
+>> So first up, troubleshooting.
+
+19
+00:01:22,333 --> 00:01:28,466
+>> And troubleshooting, folks, is as much an art form as it is
+
+20
+00:01:29,483 --> 00:01:30,466
+an approach.
+
+21
+00:01:30,483 --> 00:01:31,466
+>> Well put.
+
+22
+00:01:31,483 --> 00:01:37,466
+>> Troubleshooting is about being the person who can't quit, the
+
+23
+00:01:37,483 --> 00:01:42,283
+one who never gives up until they understand and are able to
+
+24
+00:01:42,366 --> 00:01:45,466
+fix whatever it was that just went wrong.
+
+25
+00:01:46,483 --> 00:01:48,466
+You've got to be able to think out-of-the-box, you've got to
+
+26
+00:01:48,483 --> 00:01:53,466
+be able to be imaginative because many times the problems that
+
+27
+00:01:53,483 --> 00:01:59,466
+occur are not issues with a package, per se, but are issues due
+
+28
+00:01:59,483 --> 00:02:04,466
+to the environment supporting the package breaking down.
+
+29
+00:02:04,483 --> 00:02:08,466
+Maybe files that haven't been put where they're supposed to,
+
+30
+00:02:08,483 --> 00:02:13,466
+maybe invalid values set for parameters and things like that.
+
+31
+00:02:13,483 --> 00:02:15,466
+>> There's a lot of moving parts here.
+
+32
+00:02:15,483 --> 00:02:19,283
+>> Oh, yeah. There are a ton of them. So we really want to talk
+
+33
+00:02:19,366 --> 00:02:24,300
+about in here what troubleshooting in SSIS is all about as well
+
+34
+00:02:24,383 --> 00:02:27,466
+as the different approaches that are available.
+
+35
+00:02:28,300 --> 00:02:34,466
+Now in SSIS, when we are trying to figure out what problems have
+
+36
+00:02:34,483 --> 00:02:38,466
+occurred, that's what troubleshooting is all about. It's about
+
+37
+00:02:38,483 --> 00:02:44,466
+package execution and whether or not or something has executed successfully.
+
+38
+00:02:45,483 --> 00:02:50,466
+If something does go wrong we might need to figure out where
+
+39
+00:02:50,483 --> 00:02:54,450
+execution paths are pointing, we might need to find out what
+
+40
+00:02:54,483 --> 00:02:58,466
+variable values are at the time it failed, we might want to go
+
+41
+00:02:58,483 --> 00:03:03,466
+out and find out what events have transpired during the execution
+
+42
+00:03:03,483 --> 00:03:09,466
+process, and we may even want to just know was it successful
+
+43
+00:03:10,483 --> 00:03:12,466
+or was it not successful?
+
+44
+00:03:13,483 --> 00:03:16,350
+Now the approach that you use there are a couple.
+
+45
+00:03:16,483 --> 00:03:17,466
+>> I like that word approach.
+
+46
+00:03:18,483 --> 00:03:20,466
+>> And that's what it is. It's an approach.
+
+47
+00:03:20,483 --> 00:03:25,466
+It is a way that you deal with problems. Now that doesn't mean
+
+48
+00:03:25,483 --> 00:03:26,466
+that it's
+
+49
+00:03:28,333 --> 00:03:31,416
+all about how you deal with it, you also have to set yourself
+
+50
+00:03:31,483 --> 00:03:34,466
+up to be able to deal with it by setting up things like logging
+
+51
+00:03:35,233 --> 00:03:38,466
+and event handlers to be able to track through what's happening
+
+52
+00:03:38,483 --> 00:03:44,233
+as your package executes. But debugging is an interactive process
+
+53
+00:03:44,316 --> 00:03:48,466
+of monitoring things as it's running. You might want to be able
+
+54
+00:03:48,483 --> 00:03:52,466
+to pause a package as it's executing when it gets to a certain
+
+55
+00:03:52,483 --> 00:03:54,316
+point in its execution.
+
+56
+00:03:54,483 --> 00:03:58,466
+I want to stop it when it goes to look at that directory to grab
+
+57
+00:03:58,483 --> 00:04:01,466
+a file and see what that file value is.
+
+58
+00:04:02,483 --> 00:04:08,466
+You may want to watch the execution as it goes through step-by-step
+
+59
+00:04:08,483 --> 00:04:11,466
+and see what kinds of progress it's making.
+
+60
+00:04:12,483 --> 00:04:18,466
+You may want to examine what certain variable values are like
+
+61
+00:04:18,483 --> 00:04:23,466
+maybe, I don't know, the execution time, the username, if you're
+
+62
+00:04:23,483 --> 00:04:24,466
+debugging a security issue- >> Oh,
+
+63
+00:04:24,483 --> 00:04:25,466
+all kinds of things.
+
+64
+00:04:25,483 --> 00:04:31,333
+>> All kinds of stuff. Even programmed user variables and what
+
+65
+00:04:31,416 --> 00:04:34,433
+they have at the time. And here's the cool part George- >> What's
+
+66
+00:04:34,450 --> 00:04:34,466
+that?
+
+67
+00:04:34,483 --> 00:04:40,466
+>> You can even modify the values in the middle of execution to
+
+68
+00:04:40,483 --> 00:04:43,400
+see if that really does fix the problem.
+
+69
+00:04:43,483 --> 00:04:45,166
+>> Oh, you don't want to steal thunder for later though.
+
+70
+00:04:45,250 --> 00:04:45,466
+>> Okay.
+
+71
+00:04:45,483 --> 00:04:46,466
+>> I know we have some things to show.
+
+72
+00:04:46,483 --> 00:04:48,466
+>> Okay. We'll wait.
+
+73
+00:04:48,483 --> 00:04:53,466
+Now here's the other piece of this, data flows are not executions,
+
+74
+00:04:54,483 --> 00:04:58,466
+they're data flows. It's data going from point A to point B and
+
+75
+00:04:58,483 --> 00:05:03,466
+going through the pipeline. A control flow is an executable.
+
+76
+00:05:03,483 --> 00:05:08,466
+A data flow or the pieces inside the data flow, I should say,
+
+77
+00:05:08,483 --> 00:05:10,466
+are not executables themselves.
+
+78
+00:05:11,483 --> 00:05:17,466
+I may want to examine the records as they go from one transform
+
+79
+00:05:18,366 --> 00:05:22,466
+to the next, and I have the ability to set up what are called
+
+80
+00:05:22,483 --> 00:05:24,433
+Data Viewers to do that.
+
+81
+00:05:25,483 --> 00:05:30,466
+We also have the ability to configure logging. Logging is an
+
+82
+00:05:30,483 --> 00:05:35,466
+ability to record the messages that are being generated by the
+
+83
+00:05:35,483 --> 00:05:39,466
+execution as they occur and put them out somewhere so that they
+
+84
+00:05:39,483 --> 00:05:43,466
+can be viewed later on. We also have the ability to configure
+
+85
+00:05:43,483 --> 00:05:46,466
+Event Handlers. Remember I talked earlier about that On Error
+
+86
+00:05:46,483 --> 00:05:47,200
+Event George?
+
+87
+00:05:47,283 --> 00:05:47,466
+>> Yeah, I do.
+
+88
+00:05:48,483 --> 00:05:51,350
+>> Okay. So On Error is just a single event.
+
+89
+00:05:51,483 --> 00:05:57,466
+There are lots of other events that we can also configure it
+
+90
+00:05:57,483 --> 00:05:58,466
+to do the same thing.
+
+91
+00:05:59,483 --> 00:06:07,366
+Now, let us go and now we are going to delve into debugging.
+
+92
+00:06:07,450 --> 00:06:07,466
+What do you think?
+
+93
+00:06:07,483 --> 00:06:08,466
+>> Sounds good.
+
+94
+00:06:08,483 --> 00:06:12,466
+>> All right. So debugging itself, there are really a couple of
+
+95
+00:06:12,483 --> 00:06:17,466
+pieces here. We've got breakpoints which can be used to pause
+
+96
+00:06:17,216 --> 00:06:21,466
+execution, we've got watches which can be used to examine variables,
+
+97
+00:06:21,483 --> 00:06:26,466
+and we've got Data Viewers which are used to examine the data
+
+98
+00:06:26,483 --> 00:06:28,466
+flow in between transforms.
+
+99
+00:06:29,483 --> 00:06:33,466
+Now a breakpoint, as I mentioned, is an indication that when
+
+100
+00:06:33,483 --> 00:06:39,300
+I get to this specific task I want execution to kind of go okay,
+
+101
+00:06:39,383 --> 00:06:43,466
+hey Rich I'm here. Hang out here for a minute. And Rich goes
+
+102
+00:06:43,483 --> 00:06:45,466
+okay, I'll tell you when to continue.
+
+103
+00:06:46,483 --> 00:06:51,350
+It pauses it. It gives me a chance to see what's going on before
+
+104
+00:06:51,433 --> 00:06:54,333
+I get to that next step in the process.
+
+105
+00:06:54,483 --> 00:06:57,466
+>> And this sounds more like a development time activity than
+
+106
+00:06:57,483 --> 00:06:58,466
+a runtime activity.
+
+107
+00:06:58,483 --> 00:07:03,433
+>> Absolutely. You really do not want to have breakpoints kicking
+
+108
+00:07:03,483 --> 00:07:04,466
+in in a production package.
+
+109
+00:07:04,483 --> 00:07:05,466
+>> Ah, no.
+
+110
+00:07:05,483 --> 00:07:08,466
+>> And actually once you get into the server they're not going
+
+111
+00:07:08,483 --> 00:07:14,466
+to anyway. As long as you're in Data Tools that's when those
+
+112
+00:07:14,483 --> 00:07:19,466
+breakpoints will be effective. You can set a breakpoint on any
+
+113
+00:07:19,483 --> 00:07:26,333
+container, any control flow task in a container, you can configure
+
+114
+00:07:26,416 --> 00:07:30,466
+it to stop every time it gets there, you can configure it to
+
+115
+00:07:30,483 --> 00:07:35,466
+stop on a multiple of times that it gets there, so like every
+
+116
+00:07:35,483 --> 00:07:41,466
+5th or every 10th or every 25th, you could even set it where
+
+117
+00:07:42,333 --> 00:07:45,433
+it's going to stop only after it gets to the 100th
+
+118
+00:07:46,483 --> 00:07:48,216
+time that it got there.
+
+119
+00:07:48,483 --> 00:07:49,466
+Okay?
+
+120
+00:07:50,483 --> 00:07:51,466
+>> A ton of control.
+
+121
+00:07:51,483 --> 00:07:55,466
+>> Yeah, it is. It's very, very fine grained control.
+
+122
+00:07:56,483 --> 00:08:03,416
+Now a watch, no it's not something that you tell time with, although
+
+123
+00:08:03,483 --> 00:08:07,466
+that works too; a watch, okay it's getting late George. I'm sorry.
+
+124
+00:08:07,483 --> 00:08:10,466
+I tried for the good joke, but apparently it didn't work.
+
+125
+00:08:11,333 --> 00:08:11,466
+>> Shhh.
+
+126
+00:08:11,183 --> 00:08:14,466
+>> You should have seen the looks from the peanut gallery in the
+
+127
+00:08:14,483 --> 00:08:17,466
+room on that one. My apologies everyone.
+
+128
+00:08:18,266 --> 00:08:26,466
+So a watch is the ability to put a window up in SQL Server Data
+
+129
+00:08:26,483 --> 00:08:31,183
+Tools that is going to continuously display the value of a variable
+
+130
+00:08:31,266 --> 00:08:36,466
+and notify you if that variable changes by highlighting the value
+
+131
+00:08:36,483 --> 00:08:37,466
+in red.
+
+132
+00:08:38,183 --> 00:08:43,466
+I can set up watches for any variable defined that is currently
+
+133
+00:08:43,483 --> 00:08:45,466
+in the scope. Here's that word again.
+
+134
+00:08:45,483 --> 00:08:49,466
+>> Yep. And I see both users and system variables listed here.
+
+135
+00:08:49,483 --> 00:08:53,350
+>> Absolutely because it's not just user variables that you may
+
+136
+00:08:53,433 --> 00:08:56,466
+be interested in the value. You may have functionality that's
+
+137
+00:08:57,166 --> 00:09:02,383
+dependent on specific variable values for system variables as well.
+
+138
+00:09:02,483 --> 00:09:07,466
+Now the Watch Window is only for requested variables that are
+
+139
+00:09:07,483 --> 00:09:14,266
+currently in the scope. The Locals Window will display all variables
+
+140
+00:09:14,483 --> 00:09:16,466
+that are currently in the scope.
+
+141
+00:09:17,483 --> 00:09:21,466
+Now the last thing that we really want to talk about in here
+
+142
+00:09:21,166 --> 00:09:26,466
+about examining what's going on is how to delve into the process
+
+143
+00:09:26,483 --> 00:09:32,466
+that's occurring within the inside of a data flow. I can set
+
+144
+00:09:32,483 --> 00:09:37,466
+a breakpoint on a data flow task, but that then is going to break
+
+145
+00:09:37,483 --> 00:09:42,466
+when it gets to the task. I can't interrupt it. I can't set
+
+146
+00:09:42,483 --> 00:09:47,466
+breakpoints on the individual transformations within a data flow task.
+
+147
+00:09:48,166 --> 00:09:52,466
+The only methodology that I've got, the only technology available
+
+148
+00:09:52,483 --> 00:09:56,466
+to do it in there is what's called a Data Viewer. Now some of
+
+149
+00:09:56,483 --> 00:10:00,466
+you who used SSIS in earlier versions- >> Insert
+
+150
+00:10:00,483 --> 00:10:02,466
+sighs and cries.
+
+151
+00:10:02,483 --> 00:10:06,466
+>> Yeah. This is one that I personally was kind of disappointed.
+
+152
+00:10:06,483 --> 00:10:09,366
+It was cool but the reality is I never used it.
+
+153
+00:10:09,450 --> 00:10:09,466
+>> Yeah, yeah.
+
+154
+00:10:09,483 --> 00:10:13,466
+>> Not for real. You had the ability to set up histograms; you
+
+155
+00:10:13,483 --> 00:10:16,433
+had the ability to set up three or four different ways to look
+
+156
+00:10:16,450 --> 00:10:16,466
+at the- >> Scattered
+
+157
+00:10:17,450 --> 00:10:17,466
+plots.
+
+158
+00:10:17,483 --> 00:10:24,333
+>> Data. Now a Data Viewer is just that. It shows you the data.
+
+159
+00:10:24,483 --> 00:10:29,283
+Data Viewers do interrupt the data flow. So if you have a Data
+
+160
+00:10:29,366 --> 00:10:34,466
+Viewer that's in between two transforms when the data goes through
+
+161
+00:10:34,483 --> 00:10:39,466
+that pipeline it's going to be displayed, the first X number
+
+162
+00:10:39,483 --> 00:10:43,466
+of records, you can configure that, and then it's going to stop,
+
+163
+00:10:43,483 --> 00:10:46,466
+and it's going to wait for you to say okay, continue on and show
+
+164
+00:10:46,483 --> 00:10:47,466
+me the rest.
+
+165
+00:10:48,333 --> 00:10:52,466
+Now you can also disconnect the Data Viewer so that once it's
+
+166
+00:10:52,483 --> 00:10:56,466
+captured that block of records you disconnect it. The data flow
+
+167
+00:10:56,483 --> 00:10:59,466
+then picks up and continues. You can continue to look at the
+
+168
+00:10:59,483 --> 00:11:03,466
+records that it captured at the same time. Now those are copies
+
+169
+00:11:03,483 --> 00:11:04,433
+of records.
+
+170
+00:11:04,450 --> 00:11:04,466
+>> Yes.
+
+171
+00:11:05,333 --> 00:11:09,466
+>> They are not extracted from the data flow.
+
+172
+00:11:09,483 --> 00:11:15,466
+Okay? So let's go and take a look at debugging a package.
+
+173
+00:11:15,483 --> 00:11:19,466
+And in my Virtual Machine here I've got a couple of tasks.
+
+174
+00:11:19,483 --> 00:11:24,466
+I've got a Copy Source File, I've got a Load Data, and I've got
+
+175
+00:11:24,483 --> 00:11:26,466
+a Delete Copied File.
+
+176
+00:11:26,483 --> 00:11:31,466
+The Copy Source File task, I'm going to right-click on it and
+
+177
+00:11:31,483 --> 00:11:37,466
+when I get to the right-click I've got Edit Breakpoints. If I
+
+178
+00:11:37,483 --> 00:11:42,466
+go to the breakpoints notice it's now displaying a list of the
+
+179
+00:11:42,483 --> 00:11:47,466
+events that can happen to that particular task. Okay? Now I'm
+
+180
+00:11:48,483 --> 00:11:49,466
+going to give you a little preview here real quick.
+
+181
+00:11:49,483 --> 00:11:50,466
+>> There you go.
+
+182
+00:11:50,483 --> 00:11:55,333
+>> This is also going to play a part in my Event Handlers.
+
+183
+00:11:55,483 --> 00:11:56,316
+>> Aha.
+
+184
+00:11:56,400 --> 00:11:56,466
+>> Uh-huh.
+
+185
+00:11:57,483 --> 00:12:05,166
+So I now choose which of the events that I want it to stop on.
+
+186
+00:12:05,483 --> 00:12:10,466
+If I choose, for example, a Pre-execute then it's going to stop
+
+187
+00:12:11,466 --> 00:12:18,433
+prior to that event actually, before anything else happens to
+
+188
+00:12:18,483 --> 00:12:19,466
+that container.
+
+189
+00:12:19,483 --> 00:12:23,466
+>> Can I ask a favor? Will you widen that dialog box just a little bit?
+
+190
+00:12:23,483 --> 00:12:24,333
+>> I can.
+
+191
+00:12:24,483 --> 00:12:28,366
+>> There you go. Perfect. All right, thanks. I don't want to
+
+192
+00:12:28,450 --> 00:12:29,466
+interrupt you any further.
+
+193
+00:12:29,483 --> 00:12:31,466
+>> You were giving away my thunder.
+
+194
+00:12:31,483 --> 00:12:33,466
+>> Oh, bad, bad, bad.
+
+195
+00:12:33,483 --> 00:12:37,466
+>> I wanted to leave that hidden so we didn't distract everybody.
+
+196
+00:12:37,216 --> 00:12:37,466
+>> Mayday.
+
+197
+00:12:37,483 --> 00:12:41,466
+>> Oh, well. So, I can set up multiple events; so I could pause
+
+198
+00:12:41,483 --> 00:12:47,466
+this prior to it running and after it has run by setting a break
+
+199
+00:12:47,483 --> 00:12:50,466
+on both Pre-execute and Post-execute.
+
+200
+00:12:50,200 --> 00:12:50,466
+>> There you go.
+
+201
+00:12:50,483 --> 00:12:54,383
+>> So now I can look at the status of variables or things like
+
+202
+00:12:54,466 --> 00:12:59,466
+that before it runs and then again after it runs to see what
+
+203
+00:12:59,483 --> 00:13:02,466
+kind of effect there was during execution.
+
+204
+00:13:03,483 --> 00:13:08,466
+I also can set my Hit Count Type. The Hit Count Type always,
+
+205
+00:13:09,483 --> 00:13:15,416
+again Hit Count Equals, stop it on the third time it hits, Hit
+
+206
+00:13:15,483 --> 00:13:20,466
+Count Greater Than Or Equal To every time above five or Hit Count
+
+207
+00:13:20,483 --> 00:13:26,466
+Multiple Every Other. So every second one depending on and if
+
+208
+00:13:26,483 --> 00:13:30,466
+I choose, for example, Hit Count Equals then I can choose the
+
+209
+00:13:30,483 --> 00:13:33,466
+value I want to hit it on the third time through- >> There
+
+210
+00:13:33,483 --> 00:13:34,466
+you go.
+
+211
+00:13:34,483 --> 00:13:37,250
+>> I'm going to leave the other one on Always.
+
+212
+00:13:37,483 --> 00:13:38,466
+So now- >> And
+
+213
+00:13:38,483 --> 00:13:39,466
+there's the red symbol.
+
+214
+00:13:39,483 --> 00:13:44,466
+>> Yes sir. That little red symbol tells me I've got a breakpoint.
+
+215
+00:13:44,483 --> 00:13:47,466
+There's no X in it so it's not a configuration issue.
+
+216
+00:13:48,450 --> 00:13:48,466
+>> Nope.
+
+217
+00:13:49,483 --> 00:13:53,466
+>> So now I start my debugging and what happens?
+
+218
+00:13:54,483 --> 00:13:56,466
+I've got an error.
+
+219
+00:13:58,183 --> 00:13:58,466
+>> Error.
+
+220
+00:13:58,483 --> 00:14:04,266
+>> I've got a red X and I've got my breakpoint. Notice how there's
+
+221
+00:14:04,350 --> 00:14:05,466
+a yellow arrow there.
+
+222
+00:14:05,483 --> 00:14:06,316
+>> I see.
+
+223
+00:14:06,483 --> 00:14:10,466
+>> Okay? Now what I'm going to do is I'm going to scroll down.
+
+224
+00:14:11,483 --> 00:14:16,466
+I apologize because of display incompatibilities. I can't show
+
+225
+00:14:16,483 --> 00:14:18,366
+you a whole window at once but- >> Oh,
+
+226
+00:14:18,450 --> 00:14:18,466
+this works.
+
+227
+00:14:19,483 --> 00:14:24,250
+>> You can now see my Watch Window. I've got a Watch Window on
+
+228
+00:14:24,333 --> 00:14:30,466
+the Copied File and it shows me the value so I can examine to
+
+229
+00:14:31,483 --> 00:14:35,466
+see what kind of, what the name and path of the file is that
+
+230
+00:14:35,483 --> 00:14:37,466
+it's going to go and grab.
+
+231
+00:14:38,483 --> 00:14:42,466
+If I go to the Locals Window you can see I've got variables,
+
+232
+00:14:42,483 --> 00:14:48,266
+duration, status, execution result; if I expand variables now
+
+233
+00:14:48,350 --> 00:14:53,466
+I can see all of my variables, both user and system.
+
+234
+00:14:54,483 --> 00:14:58,283
+If I wanted to create a watch on a variable that I haven't put
+
+235
+00:14:58,366 --> 00:15:04,466
+in there already I can right-click on it and Add Watch and it
+
+236
+00:15:04,483 --> 00:15:07,466
+now shows up in there as well.
+
+237
+00:15:08,450 --> 00:15:08,466
+>> I see it.
+
+238
+00:15:08,483 --> 00:15:09,466
+>> You like that?
+
+239
+00:15:09,483 --> 00:15:10,383
+>> I like it.
+
+240
+00:15:10,466 --> 00:15:13,216
+>> All right. Once we've gotten through and we've been able to
+
+241
+00:15:13,300 --> 00:15:16,466
+evaluate, oh, you know what George? I forgot one important thing.
+
+242
+00:15:17,0 --> 00:15:17,466
+>> What's that?
+
+243
+00:15:18,483 --> 00:15:20,466
+>> I want to change the value.
+
+244
+00:15:20,183 --> 00:15:21,466
+>> Aha. That's right. You mentioned that.
+
+245
+00:15:21,483 --> 00:15:24,466
+>> Yeah. So I'm going to come down here
+
+246
+00:15:25,483 --> 00:15:28,283
+and notice you can click in there.
+
+247
+00:15:31,483 --> 00:15:32,466
+What happened?
+
+248
+00:15:33,483 --> 00:15:34,166
+>> It's now red.
+
+249
+00:15:34,483 --> 00:15:39,350
+>> Notifying me that the value has been modified. Cool?
+
+250
+00:15:39,433 --> 00:15:39,466
+>> Cool.
+
+251
+00:15:39,483 --> 00:15:42,400
+>> All right. I'm going to come back up to the top; I'm going
+
+252
+00:15:42,483 --> 00:15:46,466
+to stop debugging. You can do that at any time because I don't
+
+253
+00:15:46,483 --> 00:15:49,466
+want to keep right on trucking through here. What I'm going
+
+254
+00:15:49,483 --> 00:15:56,466
+to do next is removed this breakpoint, okay? So I'm going to
+
+255
+00:15:56,483 --> 00:16:00,466
+go to Edit Breakpoints and uncheck the Enabled
+
+256
+00:16:02,483 --> 00:16:07,466
+and now I'm going to go into Load Data because here I have a transform.
+
+257
+00:16:08,483 --> 00:16:12,166
+Now again, I can't set a breakpoint here, but what I can do is
+
+258
+00:16:12,483 --> 00:16:17,466
+right-click and Enable Data Viewer. I get my little magnifying
+
+259
+00:16:18,0 --> 00:16:22,166
+glass to tell me that there is a Data Viewer there, and now when
+
+260
+00:16:22,483 --> 00:16:26,466
+I go to run it hopefully it gets to that point.
+
+261
+00:16:27,300 --> 00:16:31,466
+No, I have an error. Where's my error? I actually do have an error.
+
+262
+00:16:31,483 --> 00:16:34,466
+>> I think you forgot an extension on the Products File when you
+
+263
+00:16:35,0 --> 00:16:35,466
+renamed it.
+
+264
+00:16:35,483 --> 00:16:37,466
+>> Well, you know what? I'm going to show you a little trick here.
+
+265
+00:16:37,483 --> 00:16:38,466
+>> All right.
+
+266
+00:16:38,483 --> 00:16:41,466
+>> I changed that during execution and not a variable value so
+
+267
+00:16:41,483 --> 00:16:46,333
+I'm not sure that that's going to do it, but that's go to Progress-
+
+268
+00:16:46,483 --> 00:16:48,316
+>> Perfect troubleshooting tip.
+
+269
+00:16:48,400 --> 00:16:51,466
+>> Oh. Remember I talked about viewing execution progress?
+
+270
+00:16:51,483 --> 00:16:55,466
+Here it is. You go to the Progress tab while you're in there
+
+271
+00:16:55,483 --> 00:16:59,466
+and it shows you everything that's happened, and there's my red
+
+272
+00:16:59,483 --> 00:17:03,466
+X on task Copy Source File failed. Right above it is telling
+
+273
+00:17:03,483 --> 00:17:07,166
+me, could not find Mod6products.text.
+
+274
+00:17:08,483 --> 00:17:11,466
+So I think what I'm going to do is just very quickly go out of
+
+275
+00:17:11,483 --> 00:17:15,466
+here and see if there is a Mod6,
+
+276
+00:17:16,483 --> 00:17:22,466
+Demo Files Mod6, and I don't. I've got Product CSV.
+
+277
+00:17:23,483 --> 00:17:24,466
+>> Well, that matters.
+
+278
+00:17:24,483 --> 00:17:31,466
+>> It does. It does, it does, it does. So let's change this to TXT.
+
+279
+00:17:33,483 --> 00:17:36,466
+Yes, I'm going to change it. And now we'll come back.
+
+280
+00:17:37,483 --> 00:17:43,466
+We will stop debugging. We will execute one more time.
+
+281
+00:17:43,216 --> 00:17:46,466
+We've got our Progress up. Hey, what just popped up with George?
+
+282
+00:17:46,483 --> 00:17:47,466
+>> Data Viewer.
+
+283
+00:17:47,483 --> 00:17:52,466
+>> You got it. So I have the ability to view what's going in between
+
+284
+00:17:52,483 --> 00:17:57,466
+my packages. When I go to the data flow you can see with a visual
+
+285
+00:17:57,200 --> 00:17:59,466
+indicator of which task is waiting.
+
+286
+00:18:00,483 --> 00:18:01,466
+If I detach
+
+287
+00:18:03,483 --> 00:18:05,466
+the flow then continues.
+
+288
+00:18:05,483 --> 00:18:07,466
+I'm not going to worry about the error. You've seen what I wanted
+
+289
+00:18:08,333 --> 00:18:08,466
+you to see.
+
+290
+00:18:08,483 --> 00:18:09,466
+>> That wasn't the point.
+
+291
+00:18:09,483 --> 00:18:14,466
+>> No. It wasn't. And my Data Viewer shows me what has been going
+
+292
+00:18:14,483 --> 00:18:15,466
+down the pipeline.
+
+293
+00:18:15,483 --> 00:18:16,466
+>> Bravo, bravo.
+
+294
+00:18:18,483 --> 00:18:21,466
+>> Bellissimo. And no. I'm not Italian.
+
+295
+00:18:21,483 --> 00:18:22,300
+>> Right.
+
+296
+00:18:22,383 --> 00:18:24,466
+>> I don't know where that came from actually.
+
+297
+00:18:25,483 --> 00:18:26,466
+>> Maybe it's catchy.
+
+298
+00:18:27,483 --> 00:18:29,466
+>> I don't know. All right. Let's head back to the slide deck.
+
+299
+00:18:29,483 --> 00:18:30,466
+What do you think George?
+
+300
+00:18:30,483 --> 00:18:34,300
+>> Excellent. So next up, logging. Record keeping.
+
+301
+00:18:34,383 --> 00:18:37,466
+>> Logging. So you saw the Progress tab there right?
+
+302
+00:18:37,483 --> 00:18:38,466
+>> Yep.
+
+303
+00:18:38,483 --> 00:18:42,466
+>> And one of the things that I might be interested in doing is
+
+304
+00:18:42,483 --> 00:18:45,333
+taking all those messages that are showing up in the Progress
+
+305
+00:18:45,416 --> 00:18:50,466
+tab and writing them out somewhere where they can be reviewed
+
+306
+00:18:50,483 --> 00:18:56,466
+at a later time. And that, ladies and gentlemen, is what logging
+
+307
+00:18:56,233 --> 00:18:57,433
+is all about.
+
+308
+00:18:57,483 --> 00:19:02,466
+>> I like to think of SSIS as a very detailed record keeper.
+
+309
+00:19:02,483 --> 00:19:07,350
+>> If you wanted to. Yeah, you can generate gigabytes of log files
+
+310
+00:19:07,433 --> 00:19:14,466
+very quickly in an active SSIS implementation and you generate them.
+
+311
+00:19:14,483 --> 00:19:16,433
+You got to read them at some point.
+
+312
+00:19:16,450 --> 00:19:16,466
+>> Yeah.
+
+313
+00:19:17,483 --> 00:19:21,466
+>> So one of the things that I kind of recommend is that you only
+
+314
+00:19:21,483 --> 00:19:27,466
+generate logging for the information that really crucial otherwise
+
+315
+00:19:27,483 --> 00:19:31,466
+you're going to end up with a management process that requires
+
+316
+00:19:31,483 --> 00:19:35,466
+a lot of attention to detail to make sure that you're saving
+
+317
+00:19:35,483 --> 00:19:39,166
+an appropriate amount of logs, that you're not filling up disk
+
+318
+00:19:39,250 --> 00:19:43,466
+files and all that kind of stuff. So logging, again, is the
+
+319
+00:19:43,483 --> 00:19:48,466
+process of persisting the details of a package,
+
+320
+00:19:49,483 --> 00:19:54,466
+execution, all that stuff that we saw in the Progress tab is
+
+321
+00:19:54,483 --> 00:19:55,466
+what's going to show up in the logs.
+
+322
+00:19:56,483 --> 00:20:02,466
+You have the ability to determine using logs, when a package
+
+323
+00:20:02,483 --> 00:20:06,466
+failed, why it failed, it can put error messages in, there are
+
+324
+00:20:06,483 --> 00:20:08,466
+all sorts of things that logging can help with.
+
+325
+00:20:08,483 --> 00:20:09,466
+>> Very powerful.
+
+326
+00:20:09,483 --> 00:20:13,466
+>> And it is very, very much a tool to help you troubleshoot.
+
+327
+00:20:13,483 --> 00:20:17,466
+Now the first thing you need to understand about logging is events.
+
+328
+00:20:17,483 --> 00:20:19,466
+Now I've mentioned those a bunch of times, right?
+
+329
+00:20:19,483 --> 00:20:23,466
+>> You have. I'm Pre-execute, on Post Execute, on Error.
+
+330
+00:20:23,483 --> 00:20:27,216
+>> Yeah. And those are all things that happened during the course
+
+331
+00:20:27,300 --> 00:20:28,466
+of a package execution.
+
+332
+00:20:29,433 --> 00:20:33,466
+It has to execute, it has to do things before it executes to
+
+333
+00:20:33,483 --> 00:20:38,466
+configure, it has to do things after it's executing, post execute,
+
+334
+00:20:38,483 --> 00:20:41,466
+an error can happen, there are error information messages, warning
+
+335
+00:20:41,483 --> 00:20:47,466
+messages, error messages, all of those things are things that
+
+336
+00:20:47,483 --> 00:20:51,166
+occurred during the course of an execution, and each of them
+
+337
+00:20:51,483 --> 00:20:56,466
+has properties when they happen. The information about that
+
+338
+00:20:56,483 --> 00:21:01,466
+event, maybe the time of occurrence, maybe how long it took,
+
+339
+00:21:01,483 --> 00:21:06,283
+there are all sorts of different things. Those are the properties
+
+340
+00:21:06,366 --> 00:21:11,466
+that expose the information to the developer to make it accessible
+
+341
+00:21:11,483 --> 00:21:17,350
+to determine what's going on. Now some properties have events,
+
+342
+00:21:17,483 --> 00:21:22,466
+sorry, excuse me, let's back up here. Some events have Property
+
+343
+00:21:22,483 --> 00:21:27,466
+Set A, some events might have Property Set B, each event may
+
+344
+00:21:28,333 --> 00:21:33,333
+have a different set of properties, each event may have some
+
+345
+00:21:33,483 --> 00:21:35,433
+properties in common with all others.
+
+346
+00:21:35,450 --> 00:21:35,466
+>> Sure.
+
+347
+00:21:35,483 --> 00:21:40,466
+>> It really does depend on what events are available before you
+
+348
+00:21:40,483 --> 00:21:44,466
+can, sorry, what properties are available for an event as to
+
+349
+00:21:44,483 --> 00:21:47,333
+what kind of information is accessible.
+
+350
+00:21:47,483 --> 00:21:50,466
+>> Yeah. So like a data flow task has lots of pipeline related
+
+351
+00:21:50,483 --> 00:21:53,466
+events that don't apply to any of the other tasks.
+
+352
+00:21:53,483 --> 00:21:56,466
+>> Absolutely. Because let's face it, a file system task doesn't
+
+353
+00:21:57,333 --> 00:21:58,0
+have a pipeline.
+
+354
+00:21:58,450 --> 00:21:58,466
+>> There you go.
+
+355
+00:21:58,483 --> 00:22:04,466
+>> That's the one. So any time that you are going to configure
+
+356
+00:22:04,483 --> 00:22:08,466
+logging you need to have somewhere to put the messages. And that's
+
+357
+00:22:08,483 --> 00:22:13,466
+what a Log Provider does. It is a destination for the information
+
+358
+00:22:13,483 --> 00:22:17,466
+being generated by the logging configuration.
+
+359
+00:22:18,250 --> 00:22:23,466
+Now because it's a destination it is a data destination, and
+
+360
+00:22:23,483 --> 00:22:27,466
+we learned earlier that all data destinations require- >> A
+
+361
+00:22:27,483 --> 00:22:29,466
+Connection Manager.
+
+362
+00:22:29,483 --> 00:22:33,466
+>> That would be correct. Now Connection Managers can be Event
+
+363
+00:22:33,483 --> 00:22:38,466
+Logs, it can write to the Windows Application Event Log, not
+
+364
+00:22:38,483 --> 00:22:44,283
+really what I would recommend for two reasons, number one, the
+
+365
+00:22:44,366 --> 00:22:47,466
+Application Event Log is visible to anybody that can get on the
+
+366
+00:22:47,483 --> 00:22:52,466
+machine, and number two, the Application Event Log is space constrained
+
+367
+00:22:53,483 --> 00:22:56,466
+which means you're going to lose a lot of the messages that get
+
+368
+00:22:56,483 --> 00:23:00,350
+written in there if you don't archive them off on a relatively
+
+369
+00:23:00,433 --> 00:23:01,466
+frequent basis.
+
+370
+00:23:02,483 --> 00:23:07,466
+You can go to an XML file, a text file, you can even write to
+
+371
+00:23:07,483 --> 00:23:10,466
+them to SQL Server if you want George, if you want to put them
+
+372
+00:23:10,483 --> 00:23:11,466
+into a table.
+
+373
+00:23:11,483 --> 00:23:12,466
+>> There you go.
+
+374
+00:23:12,483 --> 00:23:15,466
+>> That would make them queriable later, but again, be careful.
+
+375
+00:23:16,483 --> 00:23:20,466
+I would not recommend using a SQL Server connection that's to
+
+376
+00:23:20,183 --> 00:23:24,466
+a production instance. You might want to have some sort of a
+
+377
+00:23:24,483 --> 00:23:26,466
+management instance set up.
+
+378
+00:23:27,483 --> 00:23:29,433
+We learned about those on Wednesday, didn't we?
+
+379
+00:23:29,450 --> 00:23:29,466
+>> Yep.
+
+380
+00:23:29,483 --> 00:23:33,466
+>> Management Data Warehouse; that's a great spot in a centralized
+
+381
+00:23:34,166 --> 00:23:37,466
+environment to put something like that. And then finally, you
+
+382
+00:23:37,483 --> 00:23:42,300
+have a SQL Server Profiler destination which would send the messages
+
+383
+00:23:42,383 --> 00:23:44,466
+to a profiler trace.
+
+384
+00:23:45,166 --> 00:23:49,466
+To configure and set up logging you first figure out which of
+
+385
+00:23:49,483 --> 00:23:54,300
+the executables in the package that you are interested in seeing
+
+386
+00:23:54,383 --> 00:23:55,466
+the messages on- >> So
+
+387
+00:23:55,483 --> 00:24:00,466
+I don't want to log every activity. I do want to log on every executable.
+
+388
+00:24:00,483 --> 00:24:04,466
+>> No. I would not. I would only configure logging for the executables
+
+389
+00:24:04,483 --> 00:24:07,466
+that contain what I called mission-critical steps- >> There
+
+390
+00:24:07,483 --> 00:24:08,266
+you go.
+
+391
+00:24:08,350 --> 00:24:12,466
+>> Things that absolutely you have to capture and must be successful.
+
+392
+00:24:13,483 --> 00:24:16,466
+Then you configure the Log Provider or providers.
+
+393
+00:24:17,483 --> 00:24:22,466
+And this is cool because you can set up multiple Log Providers
+
+394
+00:24:22,166 --> 00:24:26,466
+for a package and to take all of the messages from one executable
+
+395
+00:24:26,483 --> 00:24:31,466
+to one Log Provider and all of the messages from other executables
+
+396
+00:24:31,483 --> 00:24:36,166
+to a different one. You're not restricted to one log per package.
+
+397
+00:24:36,483 --> 00:24:41,466
+Then you choose the events for each executable that you want
+
+398
+00:24:41,483 --> 00:24:45,466
+to configure and choose the information for each event that you
+
+399
+00:24:46,483 --> 00:24:47,216
+want to save.
+
+400
+00:24:47,483 --> 00:24:51,466
+>> And you're going to show us this now Rich, and you have something,
+
+401
+00:24:51,483 --> 00:24:55,466
+a clever way of explaining this. I find that students can get
+
+402
+00:24:55,483 --> 00:24:58,466
+confused by the user interface here, but you have a great tip.
+
+403
+00:24:58,483 --> 00:25:00,466
+So I don't want to say any more.
+
+404
+00:25:00,183 --> 00:25:03,466
+>> I do. But I got to tell you, you're kind of telling me what
+
+405
+00:25:03,483 --> 00:25:04,433
+to do here, George.
+
+406
+00:25:04,450 --> 00:25:04,466
+>> Am I?
+
+407
+00:25:05,483 --> 00:25:11,450
+>> All right. So let's go in. I'm going to close out of that previous
+
+408
+00:25:11,483 --> 00:25:12,466
+demo that I had going.
+
+409
+00:25:14,200 --> 00:25:17,466
+Come on. Too many flash-up menus there.
+
+410
+00:25:18,483 --> 00:25:25,466
+Yeah, I do. So now we are going to go in and look at our logging
+
+411
+00:25:25,483 --> 00:25:30,466
+demo, and in our logging demo I have a package appropriately
+
+412
+00:25:30,483 --> 00:25:36,166
+named the Logging Demo. And again, it has our Copy Source File,
+
+413
+00:25:36,483 --> 00:25:39,466
+it has our Load Data, it has our Delete Copied File.
+
+414
+00:25:39,483 --> 00:25:43,466
+Now what I'm going to do is I'm going to go up here to the SSIS
+
+415
+00:25:43,483 --> 00:25:48,466
+menu because that's where you start for configuring logging.
+
+416
+00:25:48,483 --> 00:25:54,466
+Once I've got it configured, George, if you look at those checkboxes
+
+417
+00:25:54,483 --> 00:25:55,466
+what you see?
+
+418
+00:25:55,483 --> 00:25:58,466
+>> I see an empty white checkbox- >> Yup.
+
+419
+00:25:58,483 --> 00:26:02,466
+>> Some gray background check boxes that are checked.
+
+420
+00:26:02,483 --> 00:26:08,466
+>> Okay. So if I told you that I can turn on and off checking,
+
+421
+00:26:08,483 --> 00:26:12,466
+logging, by just checking that box that's pretty cool, huh?
+
+422
+00:26:12,483 --> 00:26:14,466
+>> Pretty cool, pretty straightforward.
+
+423
+00:26:14,483 --> 00:26:18,466
+>> But gray kind of tells me it's not available for configuration, right?
+
+424
+00:26:18,483 --> 00:26:20,466
+>> It's something in the middle.
+
+425
+00:26:20,483 --> 00:26:22,433
+>> Okay. But it's got a check.
+
+426
+00:26:22,450 --> 00:26:22,466
+>> It does.
+
+427
+00:26:22,483 --> 00:26:26,466
+>> So what it's trying to tell me there, anytime you see a grayed
+
+428
+00:26:26,483 --> 00:26:30,466
+out selection with the check in it means it's inheriting its
+
+429
+00:26:31,0 --> 00:26:33,466
+settings from its parent.
+
+430
+00:26:34,483 --> 00:26:40,166
+So I've got my logging demo and each of these executables is
+
+431
+00:26:40,250 --> 00:26:45,466
+going to inherit the logging configuration of the parent, the
+
+432
+00:26:45,483 --> 00:26:51,466
+same events, the same properties of the events, the same log
+
+433
+00:26:51,483 --> 00:26:52,466
+provider destinations.
+
+434
+00:26:53,333 --> 00:26:53,466
+>> Got it.
+
+435
+00:26:54,483 --> 00:26:58,466
+>> So I'm going to, first off, the first thing we need to do is
+
+436
+00:26:58,483 --> 00:27:03,466
+set up our Log Provider. So I'm going to add in a Text File Log Provider.
+
+437
+00:27:03,483 --> 00:27:09,433
+It requires a configuration which is a Connection Manager.
+
+438
+00:27:09,483 --> 00:27:14,466
+I'm going to give it a Create File and then we just choose where
+
+439
+00:27:14,483 --> 00:27:17,300
+it's going to go. I'm going to put it up here on the desktop
+
+440
+00:27:17,483 --> 00:27:19,466
+and I'm going to give it a name,
+
+441
+00:27:20,483 --> 00:27:22,466
+Logging Demo.log.
+
+442
+00:27:25,483 --> 00:27:29,216
+>> Boy, that was rocket science, wasn't it?
+
+443
+00:27:29,300 --> 00:27:30,466
+>> At any rate,
+
+444
+00:27:32,0 --> 00:27:37,466
+now before it will actually, right there I need to say yes, I
+
+445
+00:27:37,483 --> 00:27:39,466
+want you to use this one. Because remember I said we can have
+
+446
+00:27:40,333 --> 00:27:45,233
+multiple providers and you can choose which one is going to.
+
+447
+00:27:45,316 --> 00:27:50,383
+So I check off my Log Provider, now I can go over to Details
+
+448
+00:27:50,466 --> 00:27:55,233
+and it shows me all of the errors, all of the errors, yeah right,
+
+449
+00:27:55,316 --> 00:27:59,466
+all of the events that are available to be configured for this
+
+450
+00:27:59,483 --> 00:28:03,466
+executable which is the package. And you can see we've got a
+
+451
+00:28:03,483 --> 00:28:04,466
+lot of them.
+
+452
+00:28:04,483 --> 00:28:05,466
+>> Lot of them.
+
+453
+00:28:05,483 --> 00:28:10,466
+>> Now, not every event is going to fire for every executable
+
+454
+00:28:10,483 --> 00:28:14,466
+in the package, but yet every event is listed.
+
+455
+00:28:14,483 --> 00:28:20,466
+What happens is if the event is not your main to the executable
+
+456
+00:28:20,483 --> 00:28:26,466
+that's currently running it will not log because the event will
+
+457
+00:28:26,483 --> 00:28:30,466
+never happen. So it's not a problem that they're all there, they'll
+
+458
+00:28:30,483 --> 00:28:36,433
+only fire for the ones that it makes sense to. So I can choose
+
+459
+00:28:36,483 --> 00:28:41,466
+my On Post Execute, On Pre-execute, On Progress
+
+460
+00:28:42,483 --> 00:28:50,466
+and we can now go over to the details.
+
+461
+00:28:52,216 --> 00:28:56,466
+And in the Details I can go to my advanced page which then opens
+
+462
+00:28:57,0 --> 00:29:01,233
+up all of the properties on each of the events.
+
+463
+00:29:01,316 --> 00:29:02,466
+>> Ton of columns.
+
+464
+00:29:02,483 --> 00:29:06,466
+>> There are, there are. And you can look. All of the properties
+
+465
+00:29:06,483 --> 00:29:11,383
+for the events that I've selected have been checked already.
+
+466
+00:29:11,466 --> 00:29:17,466
+So the default value is to be able to get all of the properties
+
+467
+00:29:17,233 --> 00:29:21,433
+for the event that selected. I can deselect for that particular
+
+468
+00:29:21,483 --> 00:29:25,466
+one because I don't care about the execution ID or the source
+
+469
+00:29:25,483 --> 00:29:31,466
+ID, and now when I hit my okay button it will save that.
+
+470
+00:29:31,483 --> 00:29:32,466
+>> But George, there's more.
+
+471
+00:29:33,383 --> 00:29:38,466
+>> There is because now by clicking on the checkbox for the individual
+
+472
+00:29:38,483 --> 00:29:46,466
+executable I've now separated it from the configuration of its parent.
+
+473
+00:29:46,233 --> 00:29:51,466
+When I check it, it now gives me the ability to configure a different
+
+474
+00:29:51,483 --> 00:29:55,466
+set of events for that executable than the one that's configured
+
+475
+00:29:55,483 --> 00:29:57,466
+for everything else.
+
+476
+00:29:57,483 --> 00:30:05,466
+And additionally, I can add in Log Providers but only at the parents.
+
+477
+00:30:06,483 --> 00:30:12,466
+At the child level I only have the ability to select which Log
+
+478
+00:30:12,483 --> 00:30:17,466
+Provider I want the messages to go to. Okay? Cool?
+
+479
+00:30:17,483 --> 00:30:18,400
+>> Cool.
+
+480
+00:30:18,483 --> 00:30:22,466
+>> All right. I'm going to go back to my parent configuration.
+
+481
+00:30:22,483 --> 00:30:23,466
+Let's run this.
+
+482
+00:30:26,483 --> 00:30:31,333
+As I run it you can see my Copy Source File failed just like
+
+483
+00:30:31,416 --> 00:30:37,466
+it did in the old one, so I am now going to go out to my desktop,
+
+484
+00:30:37,483 --> 00:30:42,466
+if I can get there eventually, I have a few windows open, and
+
+485
+00:30:42,483 --> 00:30:47,466
+there's my Logging Demo.log. I'm going to open it with Notepad,
+
+486
+00:30:49,483 --> 00:30:52,466
+and there are all of my messages.
+
+487
+00:30:52,483 --> 00:30:55,466
+>> On Progress, on Information-
+
+488
+00:30:56,450 --> 00:30:58,466
+>> On Blitzen, on Prancer, on Dancer.
+
+489
+00:30:59,483 --> 00:31:02,466
+>> Tag, you're it.
+
+490
+00:31:02,483 --> 00:31:04,466
+>> It is Friday afternoon, isn't it folks?
+
+491
+00:31:05,483 --> 00:31:09,466
+So all of those events you can see just by looking at this.
+
+492
+00:31:09,483 --> 00:31:12,466
+If you're not careful about what you configure to go into your
+
+493
+00:31:12,483 --> 00:31:16,466
+log you're going to be digging through a lot of extraneous information.
+
+494
+00:31:17,416 --> 00:31:24,250
+We've got GUI IDs, we got repeating messages, we've got a very,
+
+495
+00:31:24,333 --> 00:31:25,350
+very a wide
+
+496
+00:31:26,483 --> 00:31:31,466
+series of information and that's just on one execution.
+
+497
+00:31:31,483 --> 00:31:32,433
+>> Yeah.
+
+498
+00:31:32,483 --> 00:31:37,466
+>> Imagine if you had three weeks' worth of 10 times a day execution
+
+499
+00:31:37,483 --> 00:31:40,350
+and you needed to find something specific.
+
+500
+00:31:42,450 --> 00:31:42,466
+>> Exactly.
+
+501
+00:31:42,483 --> 00:31:46,466
+>> So logging. That's what it's all about.
+
+502
+00:31:46,483 --> 00:31:50,466
+>> And I've seen some take the logging data and then build SSRS
+
+503
+00:31:50,483 --> 00:31:54,466
+reports off the log data. So you can be very clever with this
+
+504
+00:31:54,483 --> 00:31:55,466
+if you really need it.
+
+505
+00:31:55,483 --> 00:31:56,466
+>> Oh, absolutely.
+
+506
+00:31:56,483 --> 00:32:01,300
+Absolutely. That does require though, George, if you're going
+
+507
+00:32:01,383 --> 00:32:06,466
+to build the SSRS reports you probably want to put it into a database.
+
+508
+00:32:06,166 --> 00:32:06,466
+>> Yeah.
+
+509
+00:32:07,483 --> 00:32:11,466
+>> All right. Let's go and talk about our next topic.
+
+510
+00:32:11,483 --> 00:32:12,466
+>> Next up, Event Handlers.
+
+511
+00:32:12,483 --> 00:32:17,166
+>> Oh. So we are going to go right on with this event theme are we?
+
+512
+00:32:18,483 --> 00:32:19,466
+Event Handlers.
+
+513
+00:32:20,483 --> 00:32:29,466
+An Event Handler is very simply, a workflow, a control flow that
+
+514
+00:32:29,483 --> 00:32:35,466
+executes in response to one of those events occurring. So instead
+
+515
+00:32:35,483 --> 00:32:42,466
+of writing a log message out I can actually react to and execute
+
+516
+00:32:42,483 --> 00:32:49,466
+functionality and maybe a control flow or a data flow to move
+
+517
+00:32:49,183 --> 00:32:54,466
+data around in response to that event. That's what an Event
+
+518
+00:32:54,483 --> 00:32:59,466
+Handler is. They are tied to an event; they're tied to an executable.
+
+519
+00:33:00,483 --> 00:33:04,250
+Error Events, George, are the most common ones that are configured- >> Sure.
+
+520
+00:33:04,333 --> 00:33:07,466
+>> But they are by far not the only ones.
+
+521
+00:33:08,183 --> 00:33:11,466
+A control flow is defined and executed, you can do anything.
+
+522
+00:33:11,483 --> 00:33:15,466
+You can do cleanups of files; there are all sorts of things that
+
+523
+00:33:16,0 --> 00:33:21,466
+go in. Now to configure Event Handlers you choose the executable,
+
+524
+00:33:21,483 --> 00:33:25,466
+you go to the Event Handlers tab, you choose the executable,
+
+525
+00:33:26,483 --> 00:33:31,466
+you choose the event that needs the response, and then you drag,
+
+526
+00:33:31,483 --> 00:33:36,466
+drop, and configure a control flow just like you would for any
+
+527
+00:33:36,483 --> 00:33:38,466
+other package.
+
+528
+00:33:38,483 --> 00:33:41,466
+>> So scope, condition, control flow.
+
+529
+00:33:41,483 --> 00:33:47,466
+>> Absolutely. So I have in my VM an error handling demo that
+
+530
+00:33:47,483 --> 00:33:49,466
+we're going to look at real quick.
+
+531
+00:33:50,383 --> 00:33:53,466
+And, again, it looks very similar to the one that we've been
+
+532
+00:33:53,483 --> 00:33:57,466
+dealing with right along. But now I've got an Event Handler that
+
+533
+00:33:57,483 --> 00:34:01,466
+I'm going to specify. So in the tabs I click on Event Handler,
+
+534
+00:34:02,250 --> 00:34:07,466
+I choose the executable, you can see you can choose any of the
+
+535
+00:34:08,0 --> 00:34:13,466
+executables in that particular workflow. Once I've chosen the
+
+536
+00:34:13,483 --> 00:34:18,466
+executable I then choose the event that I want it to fire on.
+
+537
+00:34:18,216 --> 00:34:23,466
+Now that event list will change depending on the executable that
+
+538
+00:34:23,483 --> 00:34:24,466
+you've selected.
+
+539
+00:34:24,483 --> 00:34:25,466
+>> Sure.
+
+540
+00:34:25,483 --> 00:34:33,466
+>> I'm going to choose the On Error Event of the, let's see, Copy
+
+541
+00:34:33,200 --> 00:34:34,466
+Source File
+
+542
+00:34:35,483 --> 00:34:40,466
+and now, once I've chosen the intersection, I click on the link
+
+543
+00:34:40,483 --> 00:34:44,466
+and it allows me to create a workflow. I'm going to drop a simple
+
+544
+00:34:44,483 --> 00:34:49,466
+script task on here and I'm going to go into that script task,
+
+545
+00:34:50,450 --> 00:34:53,466
+I'm going to write a quick C sharp script that's going to display
+
+546
+00:34:53,483 --> 00:34:56,466
+a message that says, Houston, we have a problem.
+
+547
+00:34:57,333 --> 00:34:58,466
+>> Oh, you.net show-off.
+
+548
+00:34:58,483 --> 00:35:01,466
+>> Hey, you know I've got to show what I can do somehow.
+
+549
+00:35:02,483 --> 00:35:07,466
+So I am very simply going to say inside of my main message box
+
+550
+00:35:07,483 --> 00:35:10,466
+.show and again, Houston,
+
+551
+00:35:12,483 --> 00:35:19,183
+we have a problem. And additionally I'm going to get fancy and
+
+552
+00:35:19,266 --> 00:35:20,433
+put a caption on it that says- >> Oh,
+
+553
+00:35:20,450 --> 00:35:20,466
+nice.
+
+554
+00:35:20,483 --> 00:35:28,433
+>> Error. You can see the script result comes in. What did I do?
+
+555
+00:35:28,483 --> 00:35:29,466
+Oh, I know what I did.
+
+556
+00:35:30,483 --> 00:35:32,466
+I missed- >> Did
+
+557
+00:35:32,483 --> 00:35:34,466
+IntelliSense go crazy on you?
+
+558
+00:35:34,483 --> 00:35:37,466
+>> No, IntelliSense didn't go crazy. It told me I messed up because
+
+559
+00:35:38,483 --> 00:35:39,433
+I forgot a double quote.
+
+560
+00:35:39,450 --> 00:35:39,466
+>> Got it.
+
+561
+00:35:39,483 --> 00:35:44,466
+>> So now I've got my message box configured, I close it, I save
+
+562
+00:35:45,483 --> 00:35:47,466
+my script task configuration,
+
+563
+00:35:50,333 --> 00:35:54,316
+and now I have an Event Handler that's going to run when I execute
+
+564
+00:35:54,400 --> 00:35:55,433
+the package- >> Drum
+
+565
+00:35:55,450 --> 00:35:55,466
+roll.
+
+566
+00:35:56,483 --> 00:35:59,466
+>> I hope so; there is my message.
+
+567
+00:35:59,483 --> 00:36:00,466
+>> Nice.
+
+568
+00:36:00,483 --> 00:36:01,466
+>> Houston, we have a problem.
+
+569
+00:36:01,483 --> 00:36:04,166
+>> Will you entertain me and go to control flow?
+
+570
+00:36:04,250 --> 00:36:07,466
+>> Yeah. I will be happy to. What's up?
+
+571
+00:36:07,483 --> 00:36:09,300
+>> Kaboom, we had our error.
+
+572
+00:36:09,383 --> 00:36:09,466
+>> Yeah.
+
+573
+00:36:09,483 --> 00:36:10,466
+>> So that's what triggered it.
+
+574
+00:36:10,483 --> 00:36:13,366
+>> Oh, thank you. I would've forgotten to show them that.
+
+575
+00:36:13,450 --> 00:36:14,166
+>> Oh, that's okay.
+
+576
+00:36:14,250 --> 00:36:16,466
+>> But it is good to know that it only happens when the error
+
+577
+00:36:16,483 --> 00:36:20,466
+happens because if I went out and fixed that that message box
+
+578
+00:36:20,483 --> 00:36:21,466
+would not appear.
+
+579
+00:36:21,483 --> 00:36:22,316
+>> That's right.
+
+580
+00:36:22,400 --> 00:36:25,466
+>> So let's take a quick look because I think I want to show that.
+
+581
+00:36:25,483 --> 00:36:26,466
+>> Okay.
+
+582
+00:36:26,483 --> 00:36:30,466
+>> We're going out to User Source File. User Source File I think
+
+583
+00:36:30,483 --> 00:36:33,466
+is looking for, let's go to
+
+584
+00:36:35,483 --> 00:36:39,466
+SSIS and variables which brings us down to the bottom, and it's
+
+585
+00:36:39,483 --> 00:36:45,466
+looking for a source file that is looking for a CSV. I have,
+
+586
+00:36:45,483 --> 00:36:50,466
+I change that to a text, remember? So now if I executed this
+
+587
+00:36:50,483 --> 00:36:56,466
+package hopefully, hopefully, let's stop current execution, we
+
+588
+00:36:56,483 --> 00:36:57,466
+run it again,
+
+589
+00:36:59,483 --> 00:37:03,466
+now I didn't get my message box because I didn't have an Error
+
+590
+00:37:03,483 --> 00:37:07,466
+Handler on the Load Data, just on the Copy Source Flow.
+
+591
+00:37:07,483 --> 00:37:09,466
+>> You scoped it just to that task.
+
+592
+00:37:09,483 --> 00:37:10,466
+>> Awesome.
+
+593
+00:37:10,483 --> 00:37:11,466
+>> Did just what you told it to.
+
+594
+00:37:11,483 --> 00:37:14,466
+>> I like the fact that it worked the way I wanted it to.
+
+595
+00:37:14,483 --> 00:37:15,466
+>> There you go.
+
+596
+00:37:15,483 --> 00:37:17,466
+>> All right. What's next on the agenda George?
+
+597
+00:37:17,483 --> 00:37:21,466
+>> So the final segment here is going to different environments deployment.
+
+598
+00:37:21,483 --> 00:37:25,466
+>> Ah. Package deployment and- >> And
+
+599
+00:37:25,483 --> 00:37:30,466
+if I can interrupt for just a sec, lots of new changes here in
+
+600
+00:37:30,483 --> 00:37:34,466
+SSIS 2012. Really, to me, one of the biggest areas of change.
+
+601
+00:37:35,483 --> 00:37:42,466
+>> This really does bring in some very, very new things; and if
+
+602
+00:37:42,483 --> 00:37:46,466
+you've been around for a while, if you've played with SSIS before,
+
+603
+00:37:46,483 --> 00:37:51,466
+you're going to recognize the second topic which is package configurations;
+
+604
+00:37:51,483 --> 00:37:54,466
+and we're going to show you how to do it. But first we need
+
+605
+00:37:54,483 --> 00:37:58,233
+to do talk about the different types of deployments, and that
+
+606
+00:37:58,316 --> 00:38:02,466
+is package deployment and project deployment.
+
+607
+00:38:04,483 --> 00:38:06,466
+So package deployment
+
+608
+00:38:08,466 --> 00:38:12,466
+is the process of taking only an individual package and moving
+
+609
+00:38:12,483 --> 00:38:18,466
+it from the Dev environment to the production environment, for example.
+
+610
+00:38:19,483 --> 00:38:24,166
+Project deployment, however, occurs or is used when you have
+
+611
+00:38:24,483 --> 00:38:28,466
+multiple packages in that project and you want to move them as
+
+612
+00:38:28,483 --> 00:38:33,466
+a unit. And the cool thing is, remember I created project level
+
+613
+00:38:33,483 --> 00:38:34,466
+Connection Managers before?
+
+614
+00:38:34,483 --> 00:38:35,400
+>> Yup.
+
+615
+00:38:35,483 --> 00:38:38,333
+>> And I created project level parameters?
+
+616
+00:38:38,483 --> 00:38:44,183
+We talked about that; it also moves those resources to production
+
+617
+00:38:44,483 --> 00:38:45,466
+at the same time.
+
+618
+00:38:46,483 --> 00:38:51,466
+All right? Now deployment has three possible destinations.
+
+619
+00:38:52,483 --> 00:38:57,466
+We can deploy it the file system. In deploying to the file system
+
+620
+00:38:57,483 --> 00:39:03,466
+I'm not going to utilize SQL Server as the storage medium for
+
+621
+00:39:03,483 --> 00:39:07,466
+the package. It's going to exist on a directory, on the file
+
+622
+00:39:07,483 --> 00:39:11,466
+system, it's going to be accessible by SSIS, by the server, it's
+
+623
+00:39:11,483 --> 00:39:16,416
+going to be accessible by SQL Agent, but it's going to be managed
+
+624
+00:39:16,483 --> 00:39:19,466
+by the file backups and the file resources.
+
+625
+00:39:20,483 --> 00:39:25,466
+If I deploy to SQL Server now that package is going to be stored
+
+626
+00:39:25,483 --> 00:39:32,283
+in the MSDB database and is going to be backed up and managed
+
+627
+00:39:32,483 --> 00:39:38,466
+by the SQL Server backup process instead. Now new with SQL Server
+
+628
+00:39:38,483 --> 00:39:45,466
+2012 we've got to the SSIS Catalog. The catalog is a special
+
+629
+00:39:45,483 --> 00:39:49,466
+database that you can create in Management Studio that is the
+
+630
+00:39:49,483 --> 00:39:55,383
+repository for package and project level deployments.
+
+631
+00:39:55,483 --> 00:39:57,466
+Now package configurations
+
+632
+00:39:59,316 --> 00:40:04,466
+are only available in an individual package. If you're deploying,
+
+633
+00:40:05,483 --> 00:40:11,216
+if you have a project deployment level, project deployment approach
+
+634
+00:40:11,483 --> 00:40:15,183
+you are not going to have package configurations available.
+
+635
+00:40:16,0 --> 00:40:23,466
+They are used to set property values of any object inside SSIS
+
+636
+00:40:23,483 --> 00:40:28,466
+with values that are configured externally and stored in places
+
+637
+00:40:28,200 --> 00:40:33,466
+like the Registry, an environment variable, an XML file, SQL
+
+638
+00:40:33,483 --> 00:40:39,466
+Server itself, or a parent package variable. Now one thing about
+
+639
+00:40:39,483 --> 00:40:41,466
+configurations George- >> Yup.
+
+640
+00:40:41,483 --> 00:40:46,466
+>> They can be direct where you've got one level of abstraction- >> Abstraction.
+
+641
+00:40:47,333 --> 00:40:48,466
+>> Or they can be indirect.
+
+642
+00:40:49,483 --> 00:40:50,466
+>> Double abstraction.
+
+643
+00:40:51,300 --> 00:40:55,466
+>> Oh, yeah. Because when you've got an indirect configuration
+
+644
+00:40:56,200 --> 00:41:00,466
+the configuration doesn't contain the property of value to be assigned.
+
+645
+00:41:00,483 --> 00:41:06,466
+It contains the location of the property value that you want
+
+646
+00:41:06,483 --> 00:41:07,416
+to assign.
+
+647
+00:41:07,483 --> 00:41:08,466
+>> A pointer to a pointer.
+
+648
+00:41:08,483 --> 00:41:12,466
+>> That would be right. A pointer to the actual value.
+
+649
+00:41:13,483 --> 00:41:19,466
+So let's go and take a look at package configurations real quick.
+
+650
+00:41:19,483 --> 00:41:24,466
+I've got my Virtual Machine up and going; and I'm going to access
+
+651
+00:41:25,483 --> 00:41:28,466
+another project. Yes, I've got more George.
+
+652
+00:41:28,483 --> 00:41:29,466
+>> All right.
+
+653
+00:41:29,483 --> 00:41:35,466
+>> And we are, first off, going to go to the SSIS menu and,
+
+654
+00:41:37,383 --> 00:41:37,466
+do I
+
+655
+00:41:39,0 --> 00:41:41,466
+have it running here? No, I don't.
+
+656
+00:41:42,483 --> 00:41:47,466
+I've got my Get Logins Package, I'm going to go to my SSIS menu,
+
+657
+00:41:47,483 --> 00:41:52,466
+there it is. And I'm going to go to package, wait a minute.
+
+658
+00:41:52,483 --> 00:41:53,466
+What's the problem here?
+
+659
+00:41:54,483 --> 00:41:56,466
+I don't see Package Configurations George.
+
+660
+00:41:56,483 --> 00:41:57,466
+>> Uh-oh.
+
+661
+00:41:57,483 --> 00:41:58,466
+>> Oh.
+
+662
+00:41:58,483 --> 00:42:06,466
+Son of a gun. Remember I said it's only available when you are
+
+663
+00:42:06,483 --> 00:42:10,466
+doing package deployment. So let's go take a look at the project.
+
+664
+00:42:10,483 --> 00:42:12,466
+>> I knew you were leading us somewhere.
+
+665
+00:42:12,483 --> 00:42:18,466
+>> Yeah. So it is currently in the project deployment. I'm going
+
+666
+00:42:18,483 --> 00:42:21,466
+to convert it over to package deployment.
+
+667
+00:42:25,483 --> 00:42:31,466
+It looks like it is not compatible. Why is that George?
+
+668
+00:42:31,483 --> 00:42:33,466
+>> One or more features is not compatible.
+
+669
+00:42:33,483 --> 00:42:36,233
+>> Yes. I have a Connection Manager- >> That's
+
+670
+00:42:36,316 --> 00:42:36,466
+right.
+
+671
+00:42:36,483 --> 00:42:40,466
+>> At the project level. So you can't just convert anything over
+
+672
+00:42:40,200 --> 00:42:42,333
+to package configurations- >> No.
+
+673
+00:42:42,416 --> 00:42:46,366
+>> But here's what I am going to do. I have another project here
+
+674
+00:42:46,483 --> 00:42:49,466
+that I'm going to open up real quick and we're just going to
+
+675
+00:42:49,483 --> 00:42:51,466
+do a new project- >> Perfect.
+
+676
+00:42:51,483 --> 00:42:55,466
+>> It's going to be in Integration Services and we will
+
+677
+00:42:57,483 --> 00:43:01,466
+just drive, I don't even have to drop. Actually, you know what?
+
+678
+00:43:01,483 --> 00:43:05,466
+I'm not going to create a Connection Manager, and we're just
+
+679
+00:43:05,483 --> 00:43:11,466
+going to do an OLEDB connection. It's going to go to Demo DW- >> Perfect.
+
+680
+00:43:11,483 --> 00:43:14,466
+>> And now I've got something I can configure, and it's at the
+
+681
+00:43:14,483 --> 00:43:20,466
+package level. I'm going to go to Project, uh-oh.
+
+682
+00:43:22,483 --> 00:43:26,433
+I have a frozen Virtual Machine.
+
+683
+00:43:26,483 --> 00:43:27,466
+>> It will take a sec.
+
+684
+00:43:28,0 --> 00:43:29,466
+>> There it goes. It caught up.
+
+685
+00:43:30,483 --> 00:43:34,466
+Visual Studio is busy. Well, not as busy as I am, folks.
+
+686
+00:43:34,200 --> 00:43:34,466
+>> Really.
+
+687
+00:43:34,483 --> 00:43:36,466
+>> You keep up with me.
+
+688
+00:43:36,166 --> 00:43:36,466
+>> Uh-oh.
+
+689
+00:43:37,216 --> 00:43:37,466
+>> Give it a sec.
+
+690
+00:43:38,483 --> 00:43:43,466
+So to insert a tip here, like there often is there are five ways
+
+691
+00:43:43,483 --> 00:43:47,466
+to get the same thing done, I could also right-click on the project
+
+692
+00:43:47,483 --> 00:43:49,466
+in Solution Explorer and convert there.
+
+693
+00:43:49,483 --> 00:43:53,466
+>> Absolutely you can. So I'm going to convert this over to package
+
+694
+00:43:53,483 --> 00:43:54,466
+deployment model.
+
+695
+00:43:55,350 --> 00:43:59,416
+Everything passed this time because I did not have any project
+
+696
+00:43:59,483 --> 00:44:00,466
+level resources.
+
+697
+00:44:01,233 --> 00:44:05,466
+So just goes to show you not all packages can go that way.
+
+698
+00:44:05,483 --> 00:44:09,166
+So what I'm going to do now is I'm going to go to SSIS, Package
+
+699
+00:44:09,250 --> 00:44:13,466
+Configurations is now available, first thing I do is enable them-
+
+700
+00:44:13,483 --> 00:44:14,466
+>> Looks obvious.
+
+701
+00:44:14,483 --> 00:44:18,466
+>> Yeah, it does. But, you know, it's not always obvious Mister Captain.
+
+702
+00:44:18,483 --> 00:44:21,183
+>> Well, the rest of this is not totally obvious.
+
+703
+00:44:21,266 --> 00:44:25,466
+>> It isn't. So it now I needed to add a package configuration.
+
+704
+00:44:25,483 --> 00:44:29,466
+And it brings up the Wizard, it's nice to have a Wizard, I choose
+
+705
+00:44:29,483 --> 00:44:32,466
+the configuration type, whether it's going to be stored in a
+
+706
+00:44:32,483 --> 00:44:36,466
+configuration file, an environment variable, a registry entry,
+
+707
+00:44:36,483 --> 00:44:40,200
+whatever it is, I'm going to choose environment variable and
+
+708
+00:44:40,283 --> 00:44:44,466
+then you specify the name of the environment variable you want.
+
+709
+00:44:44,483 --> 00:44:46,466
+I'm going to call it Computer Name.
+
+710
+00:44:47,483 --> 00:44:51,466
+Then, now that I've identified where to retrieve the value from
+
+711
+00:44:51,483 --> 00:44:56,466
+I need to identify where to put it. So you can see in this package
+
+712
+00:44:56,483 --> 00:45:01,233
+there's my Demo DW Connection Manager. If I were to take this
+
+713
+00:45:01,316 --> 00:45:05,466
+connection, this package and move it to another machine I can
+
+714
+00:45:05,216 --> 00:45:09,466
+go into the Properties and I can assign the Computer Name Property
+
+715
+00:45:09,483 --> 00:45:15,266
+to the Server Name Property of the variable, and we can give
+
+716
+00:45:15,350 --> 00:45:21,466
+that configuration a name called Server Name, but a bing, but
+
+717
+00:45:21,483 --> 00:45:27,466
+a bang, individual configurations typically store individual values.
+
+718
+00:45:27,483 --> 00:45:30,466
+There are two exceptions. You can have multiple values in an
+
+719
+00:45:30,483 --> 00:45:32,466
+XML configuration- >> And-
+
+720
+00:45:33,483 --> 00:45:37,466
+>> In SQL Server. But other than that, if you're doing an environment
+
+721
+00:45:37,483 --> 00:45:44,316
+variable, registry, it has to be one value, one configuration.
+
+722
+00:45:45,483 --> 00:45:49,466
+Okay? Now, going back to the slides we have one more thing to
+
+723
+00:45:49,483 --> 00:45:54,466
+talk about here and that's the difference between package configurations
+
+724
+00:45:54,483 --> 00:45:56,466
+and environments.
+
+725
+00:45:56,483 --> 00:45:58,466
+>> Lots new here. All new.
+
+726
+00:45:58,483 --> 00:46:03,466
+>> This is where it really gets fun because with package configurations
+
+727
+00:46:03,483 --> 00:46:06,466
+I've got one thing that travels with the package.
+
+728
+00:46:07,483 --> 00:46:08,466
+With environments
+
+729
+00:46:10,0 --> 00:46:15,466
+I now have the ability to set up an environment independent of
+
+730
+00:46:15,483 --> 00:46:20,466
+a package and then point to the package to the environment.
+
+731
+00:46:21,333 --> 00:46:26,466
+So now I can configure an environment in Dev that has one set
+
+732
+00:46:26,483 --> 00:46:30,466
+of values and in Prod that has a different set of values but
+
+733
+00:46:30,483 --> 00:46:32,466
+the same environment name.
+
+734
+00:46:33,366 --> 00:46:35,466
+And now when that package migrates
+
+735
+00:46:37,316 --> 00:46:40,350
+it automatically picks up the new values.
+
+736
+00:46:40,433 --> 00:46:41,466
+>> Just way more portability.
+
+737
+00:46:42,166 --> 00:46:47,166
+>> It really is. It really is. And it provides that external mapping
+
+738
+00:46:47,483 --> 00:46:54,166
+so that you can then determine which property goes to which value.
+
+739
+00:46:54,250 --> 00:46:58,466
+You can use property expressions, and at execution time, you
+
+740
+00:46:58,483 --> 00:47:02,466
+can also specify the environment to be used.
+
+741
+00:47:02,483 --> 00:47:04,466
+>> And you have some stuff to show here too?
+
+742
+00:47:04,483 --> 00:47:09,466
+>> Absolutely. We absolutely do. Let's flip over, and we've got
+
+743
+00:47:09,483 --> 00:47:17,466
+our project deployment which is called Deployment Demo, and we
+
+744
+00:47:17,483 --> 00:47:22,466
+have our project in Project Deployment. What I'm going to do
+
+745
+00:47:23,0 --> 00:47:27,466
+is I am going to, before I deploy this, watch, I'm going to jump
+
+746
+00:47:27,483 --> 00:47:33,466
+into Management Studio because in order to deploy we really want
+
+747
+00:47:33,483 --> 00:47:35,466
+to have an IS Catalog.
+
+748
+00:47:35,200 --> 00:47:37,333
+>> Got to have the SSIS Catalog.
+
+749
+00:47:37,416 --> 00:47:39,266
+>> So I'm going to create a catalog.
+
+750
+00:47:40,483 --> 00:47:41,466
+I give it
+
+751
+00:47:43,166 --> 00:47:43,466
+a password.
+
+752
+00:47:44,483 --> 00:47:49,466
+The password is going to protect things using encryption and
+
+753
+00:47:49,483 --> 00:47:51,466
+that is the encryption password.
+
+754
+00:47:52,483 --> 00:47:56,466
+It set it up when you create the catalog, and that's all there
+
+755
+00:47:56,483 --> 00:48:02,466
+is to it. And now I have SSIS DB. And that's my SSIS Catalog.
+
+756
+00:48:02,483 --> 00:48:09,466
+I come back over to Data Tools and now I choose Project Deploy
+
+757
+00:48:09,483 --> 00:48:13,466
+or, as you were saying before, I can right-click and go to Deploy,
+
+758
+00:48:14,483 --> 00:48:21,466
+and it is now going to take all of the packages and their resources,
+
+759
+00:48:23,483 --> 00:48:28,466
+their project parameters and their project level Connection Managers,
+
+760
+00:48:30,483 --> 00:48:35,466
+so it loads and validates it, it's not deploying to the right area.
+
+761
+00:48:35,483 --> 00:48:40,466
+So I need to browse through. It connects me in, and I choose
+
+762
+00:48:40,483 --> 00:48:45,466
+the folder that I want. Now I can say New Folder and create one
+
+763
+00:48:45,483 --> 00:48:47,466
+right here which I'm going to call Demos.
+
+764
+00:48:48,483 --> 00:48:52,466
+>> And a folder's a container where you can dictate administrative
+
+765
+00:48:52,483 --> 00:48:56,466
+capabilities on that folder, security, etc.
+
+766
+00:48:56,483 --> 00:48:59,466
+>> Absolutely. It's what gives you the ability to control and
+
+767
+00:48:59,483 --> 00:49:02,466
+manage who can do what with these packages.
+
+768
+00:49:03,250 --> 00:49:08,366
+So now I've created, I'm going to choose my Demos Folder,
+
+769
+00:49:09,483 --> 00:49:14,466
+and I hit Next, it tells me this is what you're going to do,
+
+770
+00:49:14,483 --> 00:49:21,466
+you hit Deploy, and it puts everything out on the SSIS Server.
+
+771
+00:49:21,483 --> 00:49:22,466
+>> Perfect.
+
+772
+00:49:22,483 --> 00:49:25,466
+>> All right? So now we're going to head back over to Management
+
+773
+00:49:26,483 --> 00:49:29,466
+Sudio, and we're going to refresh the catalog,
+
+774
+00:49:31,483 --> 00:49:37,466
+and now we can see our Demos Folder, here's our projects, there's
+
+775
+00:49:37,483 --> 00:49:40,466
+Deployment Demo, and here's our environments.
+
+776
+00:49:41,483 --> 00:49:43,466
+Now we are talking about environments weren't we George?
+
+777
+00:49:43,483 --> 00:49:45,466
+>> Yep. Now it's time to show.
+
+778
+00:49:45,483 --> 00:49:50,466
+>> Yeah. So I've got my Extract DB List and what I'm going to
+
+779
+00:49:50,483 --> 00:49:56,466
+do is I'm going to go to Configure because in Configure I have
+
+780
+00:49:56,483 --> 00:50:01,466
+parameters listed, I have Connection Managers listed. So it
+
+781
+00:50:01,483 --> 00:50:06,466
+gives me the ability to go in and configure this specific package
+
+782
+00:50:07,483 --> 00:50:09,466
+for what it's going to do when it's executing.
+
+783
+00:50:10,266 --> 00:50:14,466
+If I look at my Extract Login List and go to Configure, again,
+
+784
+00:50:14,483 --> 00:50:18,466
+I don't have parameters but I have my Connection Managers.
+
+785
+00:50:19,483 --> 00:50:23,466
+Now when I create an environment I can right-click and say Create
+
+786
+00:50:23,483 --> 00:50:28,0
+Environment, and now what I'm doing is I have to give it a name.
+
+787
+00:50:28,483 --> 00:50:34,466
+So I can create a Prod environments, I could also create a
+
+788
+00:50:35,483 --> 00:50:42,466
+Dev environment, for example, and now when I right-click and
+
+789
+00:50:42,200 --> 00:50:45,466
+I need to scroll down a little bit here so I get to Properties,
+
+790
+00:50:45,483 --> 00:50:50,0
+when I get to the Properties here's my variables, and I can now
+
+791
+00:50:50,483 --> 00:50:55,466
+configure a variable. For example, I could say Server Mame and
+
+792
+00:50:55,483 --> 00:50:57,466
+the type being String.
+
+793
+00:50:59,483 --> 00:51:02,466
+Give it a value, MIA dash SQL BI,
+
+794
+00:51:03,483 --> 00:51:10,450
+I hit Okay, I've now created one there. When I go to Dev, do
+
+795
+00:51:10,483 --> 00:51:16,200
+the same thing, I create the same of variable, in this case Server
+
+796
+00:51:16,283 --> 00:51:23,250
+Name, I go to my type, String, the value here I've got a different
+
+797
+00:51:23,333 --> 00:51:24,466
+server out there, SQL
+
+798
+00:51:26,316 --> 00:51:30,466
+Dev, I don't really, but you know I had to give it a different
+
+799
+00:51:30,483 --> 00:51:31,433
+name to make a point.
+
+800
+00:51:31,450 --> 00:51:31,466
+>> Sure.
+
+801
+00:51:32,483 --> 00:51:39,466
+>> Now when I go to execute that package notice I've got parameters,
+
+802
+00:51:39,166 --> 00:51:43,466
+I've got an Output Folder, I've got Connection Managers, I can
+
+803
+00:51:43,483 --> 00:51:49,300
+go in, I can grab, I've got Property paths I can set in there,
+
+804
+00:51:50,483 --> 00:51:55,166
+when I go to Choose I can go and I'm going to go back in here
+
+805
+00:51:55,250 --> 00:51:59,466
+I'm going to set that and change that variable so that I can
+
+806
+00:51:59,183 --> 00:52:01,466
+map it, actually I don't even need to. We'll just do it right
+
+807
+00:52:01,483 --> 00:52:02,466
+in here.
+
+808
+00:52:03,483 --> 00:52:08,466
+I'm going to go to Execute, here's my parameter, I can set it,
+
+809
+00:52:09,483 --> 00:52:11,466
+what am I doing? Oh, gosh.
+
+810
+00:52:16,483 --> 00:52:22,466
+I have the ability to specify in here to use the Dev value from
+
+811
+00:52:22,483 --> 00:52:23,466
+the package or,
+
+812
+00:52:26,483 --> 00:52:29,466
+this is not showing up the way I wanted it to.
+
+813
+00:52:31,483 --> 00:52:33,466
+Where is Edit Value?
+
+814
+00:52:34,483 --> 00:52:37,433
+>> Is that the right parameter?
+
+815
+00:52:40,266 --> 00:52:43,466
+Do you want the Server Name or Connection String or- >> Yeah.
+
+816
+00:52:43,483 --> 00:52:47,466
+That's where I'm going to go. I'm going to go down and it's Extract
+
+817
+00:52:47,483 --> 00:52:48,466
+DB List,
+
+818
+00:52:49,483 --> 00:52:53,466
+that's what happens when it gets late in the afternoon.
+
+819
+00:52:53,483 --> 00:52:59,466
+I don't have my parameters set up. So I need to set up the parameter.
+
+820
+00:52:59,483 --> 00:53:01,466
+But any rate, you can specify
+
+821
+00:53:03,166 --> 00:53:06,466
+the environment that's being used and
+
+822
+00:53:09,483 --> 00:53:15,466
+I go to my value, I can specify the value directly at execution
+
+823
+00:53:15,483 --> 00:53:20,466
+time there. So I'm going to have to come back to this in a little
+
+824
+00:53:20,483 --> 00:53:24,466
+bit; so let's wrap it up. We've kind of been going long here.
+
+825
+00:53:25,483 --> 00:53:29,466
+We will come back to that and square that one away. How's that?
+
+826
+00:53:29,483 --> 00:53:30,466
+>> Awesome.
+
+827
+00:53:30,483 --> 00:53:34,466
+>> So in this module we talked about deployment with configurations
+
+828
+00:53:35,0 --> 00:53:38,466
+and environments. We talked about logging and error handling.
+
+829
+00:53:38,483 --> 00:53:43,466
+We talked about troubleshooting being a process and all that
+
+830
+00:53:43,483 --> 00:53:47,250
+good stuff. We've got one more module coming don't we, George?
+
+831
+00:53:47,333 --> 00:53:50,216
+>> Yep. We hope you've been enjoying the Implementing A Data Warehouse
+
+832
+00:53:50,300 --> 00:53:54,316
+with SQL Server 2012 Jump Start. Let's got up, move around,
+
+833
+00:53:54,400 --> 00:53:57,466
+take a stretch, and then final module of the day.
+
+834
+00:53:57,483 --> 00:53:59,466
+>> You've got it. Enterprise Data.
+
+835
+00:54:00,483 --> 00:54:01,466
+Stay tuned.
+

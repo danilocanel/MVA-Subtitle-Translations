@@ -1,0 +1,3184 @@
+1
+00:00:00,333 --> 00:00:07,333
+[Music]
+
+2
+00:00:17,483 --> 00:00:20,466
+Welcome back, everyone, to implementing a data
+
+3
+00:00:21,183 --> 00:00:24,466
+warehouse with SQL server 2012 Jumpstart.
+
+4
+00:00:25,483 --> 00:00:29,400
+I'm George Squillace, notice S-q-l is in the name. And I'm here
+
+5
+00:00:29,483 --> 00:00:32,466
+with Rich Currey. Rich, you like to cook, and curry is in your name.
+
+6
+00:00:33,483 --> 00:00:36,466
+>> It's a spicy combination, I will tell you that.
+
+7
+00:00:37,233 --> 00:00:40,466
+>> So what's up for this module, Rich? Our final segment of the day.
+
+8
+00:00:40,483 --> 00:00:44,466
+>> Yep. And this one kind of deviates a little bit from what we've
+
+9
+00:00:44,483 --> 00:00:49,466
+been talking about right along. However, it is completely, completely
+
+10
+00:00:49,483 --> 00:00:54,466
+appropriate in this discussion because it's talking about enterprise data.
+
+11
+00:00:54,483 --> 00:00:59,466
+Now, enterprise data, as you are well aware, George, is the lifeblood
+
+12
+00:01:00,483 --> 00:01:01,466
+of a company.
+
+13
+00:01:02,333 --> 00:01:05,466
+So what we're going to be talking about in this module is two
+
+14
+00:01:06,483 --> 00:01:13,200
+relative new pieces of SQL Server, Master Data Services and Data
+
+15
+00:01:13,283 --> 00:01:14,466
+Quality Services.
+
+16
+00:01:15,483 --> 00:01:18,466
+Now, Master Data Services is...
+
+17
+00:01:19,483 --> 00:01:24,350
+first came in with SQL Server 2008. We were going to give you
+
+18
+00:01:24,433 --> 00:01:28,466
+an overview of what it's all about, talk about the data models
+
+19
+00:01:28,483 --> 00:01:33,466
+and entities and attributes, hierarchies, business rules.
+
+20
+00:01:33,483 --> 00:01:35,266
+>> Lots of moving parts.
+
+21
+00:01:35,350 --> 00:01:39,466
+>> Yeah. There are lots of moving parts. So Master Data Services
+
+22
+00:01:39,483 --> 00:01:45,466
+is the SQL Server solution that was developed enterprise-level data.
+
+23
+00:01:45,483 --> 00:01:49,466
+Now, we talked about and I had a slide up way back at the beginning
+
+24
+00:01:49,483 --> 00:01:56,466
+of this today that talked about the fact that data needs to be
+
+25
+00:01:56,483 --> 00:02:01,466
+matched from different systems. We have lots of operational systems
+
+26
+00:02:01,483 --> 00:02:07,466
+that consume the same data, and it is a really good idea to have
+
+27
+00:02:07,483 --> 00:02:11,466
+a single source. Because, let's face, it, if I'm a customer in
+
+28
+00:02:11,483 --> 00:02:17,0
+an organization and I'm a customer of, say, three different subsidiaries
+
+29
+00:02:17,483 --> 00:02:21,466
+of that company, that means that I might have registered as a
+
+30
+00:02:21,483 --> 00:02:27,466
+customer three separate times. Maybe I used Rich Currey one time,
+
+31
+00:02:27,216 --> 00:02:30,466
+Richard Currey one time, and R.
+
+32
+00:02:30,483 --> 00:02:35,466
+Currey one time, each of those is me, but because I put my name
+
+33
+00:02:35,483 --> 00:02:36,466
+in differently,
+
+34
+00:02:37,483 --> 00:02:42,466
+the systems think I'm three different people. So Master Data
+
+35
+00:02:42,483 --> 00:02:46,383
+Services allows me to create a single source
+
+36
+00:02:47,483 --> 00:02:48,466
+for all...
+
+37
+00:02:49,416 --> 00:02:54,466
+for the information that's used by multiple solutions within
+
+38
+00:02:54,483 --> 00:02:55,466
+the enterprise.
+
+39
+00:02:56,483 --> 00:03:00,466
+It allows an organization do centralized storage of data rather
+
+40
+00:03:00,483 --> 00:03:06,233
+than distributed storage. It allows us to create a single spot
+
+41
+00:03:06,316 --> 00:03:09,466
+for a data steward to go clean things up.
+
+42
+00:03:09,483 --> 00:03:10,466
+>> A data steward?
+
+43
+00:03:10,483 --> 00:03:13,466
+>> A data steward. We talked about him earlier today.
+
+44
+00:03:14,333 --> 00:03:20,466
+And we also now have a single spot for ETL to go to take and
+
+45
+00:03:20,483 --> 00:03:24,466
+get all of those... all of that information distributed to the
+
+46
+00:03:24,483 --> 00:03:29,466
+systems that need to consume it. Now, Master Data Services uses
+
+47
+00:03:29,483 --> 00:03:36,466
+data models and business rules to not just define but also manage
+
+48
+00:03:36,483 --> 00:03:39,466
+the correctness or validity of the data.
+
+49
+00:03:40,266 --> 00:03:44,166
+Now, a data model is a container, George. It is a container
+
+50
+00:03:44,483 --> 00:03:50,466
+that has entities in it. Now, an entity is a real-world thing.
+
+51
+00:03:51,483 --> 00:03:55,466
+The data in a data model represents all of the entities.
+
+52
+00:03:55,483 --> 00:04:01,466
+So, for example, a product could be an entity. A customer could
+
+53
+00:04:01,483 --> 00:04:02,466
+be an entity.
+
+54
+00:04:03,483 --> 00:04:08,466
+A supplier could be an entity. A shipper. All of those entities
+
+55
+00:04:09,483 --> 00:04:10,466
+have attributes.
+
+56
+00:04:11,483 --> 00:04:14,466
+Attributes are the pieces of information that describe them,
+
+57
+00:04:14,483 --> 00:04:19,466
+just like in a dimension, George. A dimension has attributes
+
+58
+00:04:19,483 --> 00:04:24,216
+that are used to describe the entities there. So I create entities,
+
+59
+00:04:24,300 --> 00:04:25,466
+I create attributes.
+
+60
+00:04:26,483 --> 00:04:30,466
+Then I have the ability to create hierarchies. Hierarchies express
+
+61
+00:04:30,483 --> 00:04:33,466
+the relationships between entities.
+
+62
+00:04:34,483 --> 00:04:37,466
+Now, you might be...
+
+63
+00:04:38,483 --> 00:04:40,466
+you might be templed to
+
+64
+00:04:42,283 --> 00:04:46,466
+create one big data model. Nah. Don't to that.
+
+65
+00:04:47,483 --> 00:04:53,466
+Create smaller data models that are purposed to a specific part
+
+66
+00:04:53,483 --> 00:04:55,166
+of the business.
+
+67
+00:04:55,483 --> 00:05:01,466
+Don't try and do one size fits all; do different pieces that
+
+68
+00:05:01,483 --> 00:05:06,466
+are purposed specifically to the part of the information that
+
+69
+00:05:06,483 --> 00:05:07,466
+they're covering.
+
+70
+00:05:07,483 --> 00:05:09,466
+>> So I have to create a data model.
+
+71
+00:05:09,483 --> 00:05:10,200
+>> You do.
+
+72
+00:05:10,283 --> 00:05:14,400
+>> And I want to compartmentalize using some sort of rule book.
+
+73
+00:05:14,416 --> 00:05:14,433
+>> Yep.
+
+74
+00:05:14,450 --> 00:05:14,466
+>> Okay.
+
+75
+00:05:14,483 --> 00:05:18,466
+>> I may have, for example, a customers data model, a products
+
+76
+00:05:18,483 --> 00:05:21,466
+data model, a suppliers data model.
+
+77
+00:05:22,483 --> 00:05:26,466
+Each one is going to have all of the entities, all of the hierarchies,
+
+78
+00:05:26,483 --> 00:05:32,466
+all of the business rules necessary to validate what is going
+
+79
+00:05:32,483 --> 00:05:34,333
+on with the data.
+
+80
+00:05:34,483 --> 00:05:38,166
+>> An honest question here, Rich. So if I have multiple systems
+
+81
+00:05:38,483 --> 00:05:41,466
+that might have product data, I might create a products model.
+
+82
+00:05:42,0 --> 00:05:44,466
+If I had multiple systems that had customer data, I might create
+
+83
+00:05:45,166 --> 00:05:46,333
+a customer model.
+
+84
+00:05:46,416 --> 00:05:50,466
+>> Absolutely. And it doesn't even have to be multiple systems.
+
+85
+00:05:50,483 --> 00:05:54,466
+You can create a data model to control the information in a single
+
+86
+00:05:54,483 --> 00:06:00,466
+system with the thought that there might be more systems coming later.
+
+87
+00:06:00,483 --> 00:06:02,166
+>> Aha. So set it up ahead of time.
+
+88
+00:06:02,250 --> 00:06:05,433
+>> Absolutely. Plan to succeed.
+
+89
+00:06:05,450 --> 00:06:05,466
+>> All right.
+
+90
+00:06:05,483 --> 00:06:08,383
+>> And then you will succeed when you plan.
+
+91
+00:06:08,450 --> 00:06:08,466
+>> All right.
+
+92
+00:06:09,483 --> 00:06:16,466
+>> Anyway. So a data model contains both entities and attributes.
+
+93
+00:06:17,466 --> 00:06:22,466
+The entity represents a business object, a logical business object
+
+94
+00:06:22,483 --> 00:06:27,466
+like a customer, like a supplier, like a product, that can be
+
+95
+00:06:27,200 --> 00:06:32,466
+consumed in one or more systems. And each entity has multiple
+
+96
+00:06:32,483 --> 00:06:36,466
+attributes, the pieces of information that describe that entity.
+
+97
+00:06:36,483 --> 00:06:40,466
+It might be, for a customer, first name, last name, address,
+
+98
+00:06:40,483 --> 00:06:45,466
+e-mail, city, region, postal code. There could be a bunch of them.
+
+99
+00:06:45,483 --> 00:06:50,466
+And then the collection, each entity has members. You could
+
+100
+00:06:50,483 --> 00:06:55,300
+be a customer. I could be a customer. Danny could a customer.
+
+101
+00:06:55,383 --> 00:06:57,433
+Even Alise could be a customer.
+
+102
+00:06:58,483 --> 00:06:59,466
+>> Woohoo.
+
+103
+00:06:59,166 --> 00:07:01,466
+>> You know, the peanut gallery likes it when they get included
+
+104
+00:07:01,483 --> 00:07:04,466
+in the broadcast, so I had to do it.
+
+105
+00:07:04,200 --> 00:07:04,466
+>> There you go.
+
+106
+00:07:05,483 --> 00:07:09,466
+>> Now, each of those members has to have values assigned for
+
+107
+00:07:09,483 --> 00:07:14,466
+each of the attributes that represent that entity. Now, when
+
+108
+00:07:14,483 --> 00:07:17,466
+you're designing it, George, each entity is typically going to
+
+109
+00:07:17,483 --> 00:07:22,466
+map to tables in RDBMSs and the attributes are going to map to
+
+110
+00:07:22,483 --> 00:07:26,466
+the column. So if I've got five different systems that each use
+
+111
+00:07:26,483 --> 00:07:30,466
+product data, I'm going to create a product entity and I want
+
+112
+00:07:30,483 --> 00:07:36,466
+to make sure that I define an attribute for every column that
+
+113
+00:07:36,483 --> 00:07:38,466
+exists in every table.
+
+114
+00:07:39,483 --> 00:07:43,466
+It doesn't mean that I'm going to have the product name five times.
+
+115
+00:07:44,483 --> 00:07:48,466
+I'm going to make sure that I have an attribute for name and
+
+116
+00:07:48,483 --> 00:07:53,466
+it appears in all five systems so I have a single source for
+
+117
+00:07:53,483 --> 00:07:54,466
+that attribute value.
+
+118
+00:07:54,483 --> 00:07:56,466
+>> Master data.
+
+119
+00:07:56,216 --> 00:08:01,466
+>> You got it. And then the members will map to the individual
+
+120
+00:08:02,216 --> 00:08:04,466
+records in each table.
+
+121
+00:08:05,416 --> 00:08:10,466
+Now, next step is relationships between those entities.
+
+122
+00:08:11,300 --> 00:08:14,433
+And typically that's going to be the same thing as setting up
+
+123
+00:08:14,483 --> 00:08:20,466
+foreign key relationships. The analogy holds true. It is a parent-child relationship.
+
+124
+00:08:21,483 --> 00:08:26,466
+Hierarchies represent either the relationship between entities
+
+125
+00:08:26,483 --> 00:08:30,466
+themselves or between individual members of entities.
+
+126
+00:08:31,483 --> 00:08:34,466
+And that kind of falls into the difference between a derived
+
+127
+00:08:34,483 --> 00:08:40,466
+hierarchy and an explicit hierarchy. A derived hierarchy is
+
+128
+00:08:40,483 --> 00:08:46,466
+one that is determined by the relationship between entities.
+
+129
+00:08:46,483 --> 00:08:52,400
+You can look at it and say, hey, guess what, this category relates
+
+130
+00:08:52,483 --> 00:08:57,466
+to these products. There is a way to derive the relationship.
+
+131
+00:08:58,333 --> 00:09:00,466
+It's based on attribute values.
+
+132
+00:09:01,483 --> 00:09:06,466
+An explicit hierarchy is one that you're putting together.
+
+133
+00:09:06,483 --> 00:09:13,466
+For example, maybe I have continents like North America and Europe
+
+134
+00:09:13,483 --> 00:09:16,466
+and I've got countries to map to it, but I don't necessarily
+
+135
+00:09:16,483 --> 00:09:20,466
+have a continent in my databases.
+
+136
+00:09:21,483 --> 00:09:25,183
+I don't have an attribute called continent that it would make
+
+137
+00:09:25,266 --> 00:09:26,316
+sense to build.
+
+138
+00:09:26,483 --> 00:09:32,466
+So what I do is I create a... what's called a consolidated member
+
+139
+00:09:32,483 --> 00:09:36,466
+and I give it a name, such as what you see here on the slide,
+
+140
+00:09:37,483 --> 00:09:42,466
+with the consolidated member code cust US, consolidated member
+
+141
+00:09:42,483 --> 00:09:43,466
+code cust EU.
+
+142
+00:09:44,483 --> 00:09:49,466
+Now, when you've got explicit hierarchies, you also have the
+
+143
+00:09:49,483 --> 00:09:55,466
+ability to specify whether they are mandatory hierarchies or
+
+144
+00:09:55,483 --> 00:10:01,466
+whether they are not. A mandatory hierarchy is one where all
+
+145
+00:10:01,483 --> 00:10:08,466
+members of that entity must be assigned to one of the consolidated members.
+
+146
+00:10:08,483 --> 00:10:14,166
+If it is nonmandatory, then they don't need to be. So, for example,
+
+147
+00:10:14,250 --> 00:10:18,466
+if all I wanted for consolidated member, George, was the U.S.
+
+148
+00:10:18,483 --> 00:10:21,466
+and my European customers and the rest of the world I was going
+
+149
+00:10:22,0 --> 00:10:26,466
+let them go and just say, you know, they're not a part of the U.S.
+
+150
+00:10:26,483 --> 00:10:32,466
+or European customer groups, that would be a nonmandatory hierarchy.
+
+151
+00:10:33,483 --> 00:10:40,466
+If I then created a consolidated member called all others where
+
+152
+00:10:40,183 --> 00:10:44,466
+my U.S. customers were in one, my European in another, and then
+
+153
+00:10:44,483 --> 00:10:48,466
+everybody else was assigned to all other, I could then make that
+
+154
+00:10:48,483 --> 00:10:49,466
+a mandatory hierarchy.
+
+155
+00:10:50,483 --> 00:10:52,183
+>> And you have some things to show us now.
+
+156
+00:10:52,266 --> 00:10:57,466
+>> I do. I do. We are going to drop over to our virtual machine
+
+157
+00:10:57,483 --> 00:11:01,466
+now, and the first thing we're going to do is... I got to tell
+
+158
+00:11:01,483 --> 00:11:02,466
+you, George.
+
+159
+00:11:02,483 --> 00:11:03,466
+>> What's that?
+
+160
+00:11:03,483 --> 00:11:08,466
+>> You're not going to find Master Data Services in SQL Server
+
+161
+00:11:08,483 --> 00:11:09,466
+Management Studio.
+
+162
+00:11:09,483 --> 00:11:10,466
+>> Different management tool?
+
+163
+00:11:10,483 --> 00:11:15,466
+>> It is. It is. And it's one of our favorite ones.
+
+164
+00:11:16,483 --> 00:11:18,466
+Internet Explorer.
+
+165
+00:11:18,483 --> 00:11:20,466
+>> Browser-based admin.
+
+166
+00:11:20,483 --> 00:11:25,233
+>> You got it. It means no installing tools on the desktop.
+
+167
+00:11:25,483 --> 00:11:29,466
+And there are advantages to that, although not necessarily a
+
+168
+00:11:29,483 --> 00:11:34,466
+lot of them. I'm going to set my browser to .2, the installed
+
+169
+00:11:34,483 --> 00:11:40,166
+instance, and you're going to configure this when you install
+
+170
+00:11:40,483 --> 00:11:44,216
+Master Data Services on your network. I'm going to local host
+
+171
+00:11:44,300 --> 00:11:46,466
+port 81/MDS, and
+
+172
+00:11:47,483 --> 00:11:51,466
+that brings up the homepage for Master Data Services.
+
+173
+00:11:51,483 --> 00:11:52,466
+>> There you go.
+
+174
+00:11:52,483 --> 00:11:55,466
+>> Let me get it scrolled over so you can actually see the whole thing.
+
+175
+00:11:56,483 --> 00:12:00,466
+Now, the first thing that I want to do is I want to go into system
+
+176
+00:12:00,483 --> 00:12:05,466
+administration because I have not yet created a model.
+
+177
+00:12:05,483 --> 00:12:10,466
+So I am going to create a model. Notice I'm in add model.
+
+178
+00:12:11,433 --> 00:12:13,466
+I'm going to call that model customers.
+
+179
+00:12:14,266 --> 00:12:17,466
+>> Just for a sec, could you slide your VM title bar over a little
+
+180
+00:12:17,483 --> 00:12:20,383
+to the right? It looks like that's being clipped at the left.
+
+181
+00:12:20,450 --> 00:12:20,466
+>> It's not.
+
+182
+00:12:21,166 --> 00:12:22,200
+>> It's not? Okay.
+
+183
+00:12:22,283 --> 00:12:22,466
+>> No.
+
+184
+00:12:22,483 --> 00:12:23,466
+>> All right.
+
+185
+00:12:24,483 --> 00:12:27,466
+>> Yeah. I'm fully all the way over.
+
+186
+00:12:27,483 --> 00:12:28,250
+>> Okay.
+
+187
+00:12:28,333 --> 00:12:30,466
+>> Let's see.
+
+188
+00:12:30,483 --> 00:12:31,466
+>> There you go. Perfect.
+
+189
+00:12:32,450 --> 00:12:32,466
+>> Okay.
+
+190
+00:12:32,483 --> 00:12:33,266
+>> That's it.
+
+191
+00:12:33,350 --> 00:12:35,466
+>> Yeah. Screen looks like it's getting clipped there. Sorry about
+
+192
+00:12:35,483 --> 00:12:36,466
+that, folks.
+
+193
+00:12:37,183 --> 00:12:41,466
+So what I'm going to do now is I'm not going to create an entity
+
+194
+00:12:41,483 --> 00:12:44,466
+at this point because I'm going to go and do that at a later point.
+
+195
+00:12:44,483 --> 00:12:49,466
+When I save it, my model is now in there with the name of customers.
+
+196
+00:12:49,483 --> 00:12:54,466
+It shows up with metadata. I'm next going to go to manage and
+
+197
+00:12:54,483 --> 00:12:55,466
+choose entities.
+
+198
+00:12:56,483 --> 00:13:00,466
+First thing I need to do is choose the correct model. So I'm
+
+199
+00:13:00,483 --> 00:13:06,416
+in model, and now I add an entity. The entity I'm going to put
+
+200
+00:13:06,483 --> 00:13:08,466
+in there is customers.
+
+201
+00:13:10,283 --> 00:13:15,466
+I can assign a staging table for that entity. I can create code values.
+
+202
+00:13:16,483 --> 00:13:20,466
+I can enable explicit hierarchies and connections. That's what
+
+203
+00:13:20,483 --> 00:13:21,450
+you do here.
+
+204
+00:13:23,483 --> 00:13:28,316
+My choice here, I am going to not enable them.
+
+205
+00:13:29,483 --> 00:13:32,466
+I add my entity in by saving it.
+
+206
+00:13:36,483 --> 00:13:38,466
+And now I have my customers.
+
+207
+00:13:39,483 --> 00:13:41,466
+And notice over here
+
+208
+00:13:43,383 --> 00:13:44,466
+my entities.
+
+209
+00:13:44,483 --> 00:13:45,466
+>> There you go.
+
+210
+00:13:47,166 --> 00:13:49,466
+>> Now what I'm going to do is I'm going to head back over
+
+211
+00:13:51,483 --> 00:13:59,416
+and I need to now add in hierarchy. I need to add in attributes.
+
+212
+00:14:00,433 --> 00:14:05,166
+So back to system, manage...
+
+213
+00:14:05,483 --> 00:14:07,466
+I clicked too quick. Sorry about that.
+
+214
+00:14:09,433 --> 00:14:10,466
+Manage entities.
+
+215
+00:14:12,483 --> 00:14:16,466
+I choose my customer entity and notice I now get a new set of
+
+216
+00:14:16,483 --> 00:14:17,466
+buttons up here.
+
+217
+00:14:18,483 --> 00:14:21,466
+As I choose that, one of my buttons
+
+218
+00:14:23,483 --> 00:14:30,466
+is to edit the selected entity. And when I do, now I get my leaf members.
+
+219
+00:14:31,350 --> 00:14:33,466
+Another word for attributes.
+
+220
+00:14:34,483 --> 00:14:37,466
+>> And I don't know about you, Rich, but I think it's going to
+
+221
+00:14:37,483 --> 00:14:40,466
+take people that are new to this to get a little... it's going
+
+222
+00:14:41,483 --> 00:14:43,466
+to take some time to the user interface.
+
+223
+00:14:43,483 --> 00:14:49,466
+>> Yeah. I absolutely agree with that. This is one of those things
+
+224
+00:14:49,483 --> 00:14:53,466
+where practice is going to make you better and better. Now, I
+
+225
+00:14:53,483 --> 00:14:57,400
+know George brought that up because I searched for a moment there
+
+226
+00:14:57,483 --> 00:15:00,466
+because I went back to the homepage and I didn't need to, because
+
+227
+00:15:00,483 --> 00:15:03,466
+honestly I forget where it was for a second.
+
+228
+00:15:03,483 --> 00:15:07,466
+>> Actually, that's not why. I'm not contradicting; I found that
+
+229
+00:15:07,183 --> 00:15:08,466
+I had to wrestle with it a lot.
+
+230
+00:15:08,483 --> 00:15:11,466
+>> Oh, yeah. I wrestled with it all the time. And sometimes I
+
+231
+00:15:12,166 --> 00:15:16,466
+still wrestle with that interface. So now that I've got my entity
+
+232
+00:15:16,483 --> 00:15:21,466
+set up, I've got my leaf members displaying, I'm going to add
+
+233
+00:15:21,483 --> 00:15:25,466
+in a new leaf attribute. I give it a name. Now, because it's
+
+234
+00:15:25,483 --> 00:15:31,350
+a customer, guess what, we can put in a city, and that is going
+
+235
+00:15:31,433 --> 00:15:36,300
+to be text with a length of we'll say 400.
+
+236
+00:15:37,183 --> 00:15:43,466
+And when I'm done I hit save. It brings me back. I can add in
+
+237
+00:15:43,483 --> 00:15:48,466
+another leaf on this one, maybe I'll do phone.
+
+238
+00:15:49,483 --> 00:15:54,466
+And on phone I'm going to do a data type of text with a length
+
+239
+00:15:54,483 --> 00:15:56,466
+of call it 20 characters.
+
+240
+00:15:57,483 --> 00:16:00,333
+I save it. And what do you say we do one more, George?
+
+241
+00:16:00,416 --> 00:16:01,216
+>> Let's do one more.
+
+242
+00:16:01,300 --> 00:16:04,466
+>> All right. I'm going to put in credit limit.
+
+243
+00:16:05,483 --> 00:16:11,450
+Credit limit is going to be a number that's going to be zero
+
+244
+00:16:12,350 --> 00:16:16,466
+decimals, and now I choose my input mask which tells me how I'm
+
+245
+00:16:16,483 --> 00:16:19,166
+going to represent negative values.
+
+246
+00:16:19,483 --> 00:16:23,466
+Now, I'm just going to choose the minus sign here. I save it.
+
+247
+00:16:24,483 --> 00:16:28,466
+And now I have a list of columns
+
+248
+00:16:30,233 --> 00:16:31,466
+for my table.
+
+249
+00:16:32,233 --> 00:16:33,383
+>> Have your attributes.
+
+250
+00:16:33,466 --> 00:16:36,466
+>> Or attributes for my entities. Cool?
+
+251
+00:16:37,450 --> 00:16:37,466
+>> Cool.
+
+252
+00:16:38,450 --> 00:16:38,466
+>> All right.
+
+253
+00:16:38,483 --> 00:16:39,466
+>> We're underway.
+
+254
+00:16:39,483 --> 00:16:43,466
+>> We are. So what's next on our journey?
+
+255
+00:16:43,483 --> 00:16:45,466
+>> Next up, business rules.
+
+256
+00:16:47,483 --> 00:16:53,466
+>> Mmm. Because, let's face it, Master Data is nothing if it isn't correct.
+
+257
+00:16:55,166 --> 00:17:00,416
+The biggest myth in IT: My data's clean. You want to hear a
+
+258
+00:17:00,450 --> 00:17:00,466
+story, George?
+
+259
+00:17:00,483 --> 00:17:03,466
+>> I would. And you have a bunch of good ones.
+
+260
+00:17:03,483 --> 00:17:07,266
+>> I do. But I've got one in particular that I want to do here,
+
+261
+00:17:07,350 --> 00:17:13,466
+because I did a project back in my professional days for a multinational,
+
+262
+00:17:13,483 --> 00:17:18,450
+well-known, very large corporation with lots of subsidiaries,
+
+263
+00:17:18,483 --> 00:17:22,466
+and it was a business IntelliSense project that was going to
+
+264
+00:17:22,483 --> 00:17:28,266
+do business analysis to do projections for future business.
+
+265
+00:17:28,350 --> 00:17:33,416
+Forecasting. It was about a 14-month project. We spent the first
+
+266
+00:17:33,483 --> 00:17:38,416
+two months of the project working on the design of the hierarchies
+
+267
+00:17:38,483 --> 00:17:42,350
+and the dimensions. I say that because it is probably one of
+
+268
+00:17:42,433 --> 00:17:47,466
+the most critical points. We then spent the next seven months...
+
+269
+00:17:48,483 --> 00:17:49,466
+>> Did you say seven?...
+
+270
+00:17:49,483 --> 00:17:54,466
+>> trying to take data from all of these different systems and
+
+271
+00:17:54,483 --> 00:18:00,466
+get it so that it all correlated and was usable. There were
+
+272
+00:18:00,483 --> 00:18:04,466
+mismatches, there was bad information, there was no cleansing
+
+273
+00:18:04,483 --> 00:18:09,0
+done, so we had to do all of the analysis of the data itself
+
+274
+00:18:09,483 --> 00:18:13,466
+and build the cleansing. Master Data would have been a huge help
+
+275
+00:18:13,483 --> 00:18:18,466
+to make that happen, to create that centralized spot that we
+
+276
+00:18:18,483 --> 00:18:21,466
+could have then driven everything out to. Just to give you an
+
+277
+00:18:22,333 --> 00:18:26,466
+idea of how complex the cleansing was, the project lasted for
+
+278
+00:18:26,483 --> 00:18:31,466
+about five more months and we did six rollouts of functionality
+
+279
+00:18:31,483 --> 00:18:36,466
+in the five months compared to seven months of doing nothing
+
+280
+00:18:36,483 --> 00:18:40,466
+but data cleansing. So that's the level of effort that Master
+
+281
+00:18:40,483 --> 00:18:42,466
+Data Services will provide.
+
+282
+00:18:42,483 --> 00:18:46,466
+So going on back to the slide for a minute, we are going to be
+
+283
+00:18:47,483 --> 00:18:50,466
+talking about the business rules because they're what ensures
+
+284
+00:18:50,483 --> 00:18:55,466
+that data is valid and correct. Now, valid is one thing.
+
+285
+00:18:55,483 --> 00:19:00,200
+Validation happens at many levels in a database in an application.
+
+286
+00:19:00,483 --> 00:19:04,466
+Correct, however, is something else entirely. Because correct
+
+287
+00:19:04,483 --> 00:19:10,466
+has meaning, it has substance behind it, about determining whether
+
+288
+00:19:10,483 --> 00:19:17,466
+a value is the appropriate value for the entity being tracked.
+
+289
+00:19:17,483 --> 00:19:22,383
+Now, you set up the business rules in MDS and then you can use
+
+290
+00:19:22,466 --> 00:19:27,466
+either the MDS Web interface or, you're going to love this, for
+
+291
+00:19:27,483 --> 00:19:31,333
+our data stewards who maybe are not as technically inclined as
+
+292
+00:19:31,483 --> 00:19:37,466
+some of us IT folks, you can also use Microsoft Excel as a front-end plug-in.
+
+293
+00:19:38,483 --> 00:19:40,350
+>> A new plug-in that came with 2012.
+
+294
+00:19:40,433 --> 00:19:43,466
+>> It is. So let's go take a look at a business rule real quick.
+
+295
+00:19:43,483 --> 00:19:48,466
+We are going to bounce back into our virtual machine and we are
+
+296
+00:19:48,483 --> 00:19:51,466
+going to go back to our models.
+
+297
+00:19:51,483 --> 00:19:56,466
+I'm going to choose my customers model and now...
+
+298
+00:19:57,483 --> 00:20:00,466
+oh, I take it back. I'm going to go back to entities, my apologies,
+
+299
+00:20:01,483 --> 00:20:06,466
+and when I choose the customer entity, I now have my business rules.
+
+300
+00:20:07,483 --> 00:20:13,466
+So in my business rules, this is where I'm going to derive what
+
+301
+00:20:14,483 --> 00:20:21,466
+the validation policy is for specific records. So I create a
+
+302
+00:20:21,483 --> 00:20:28,466
+new business rule. This business rule is going to be check valid...
+
+303
+00:20:30,483 --> 00:20:34,466
+typing is a challenge at times when you have fingers as big as mine...
+
+304
+00:20:34,483 --> 00:20:37,466
+valid credit limit.
+
+305
+00:20:38,483 --> 00:20:45,300
+Okay. I've now named it and I go into expression and in this
+
+306
+00:20:45,383 --> 00:20:48,250
+expression I'm now going to define
+
+307
+00:20:49,483 --> 00:20:53,466
+what it is I want to do. So I edit my selected business rule.
+
+308
+00:20:54,483 --> 00:21:01,233
+Now, this is not exactly the most intuitive thing you've ever
+
+309
+00:21:01,316 --> 00:21:02,316
+seen, is it?
+
+310
+00:21:02,483 --> 00:21:04,466
+>> That's well stated, Rich.
+
+311
+00:21:04,483 --> 00:21:09,216
+>> Okay. So there's a couple of pieces here. The if qualifies
+
+312
+00:21:09,483 --> 00:21:17,250
+when I'm going to look at a particular entity.
+
+313
+00:21:17,483 --> 00:21:21,466
+So I can say if this is true, then apply the rule.
+
+314
+00:21:22,483 --> 00:21:25,466
+If it's not true, then don't apply the rule.
+
+315
+00:21:26,483 --> 00:21:30,466
+In here I'm going to grab an action and my action is going to
+
+316
+00:21:30,483 --> 00:21:35,466
+be must be greater than.
+
+317
+00:21:36,483 --> 00:21:39,466
+I'm going to drop that under my actions.
+
+318
+00:21:41,483 --> 00:21:49,166
+Now I have no condition, so then everything must be greater than.
+
+319
+00:21:49,483 --> 00:21:51,466
+If I wanted to grab, for example,
+
+320
+00:21:54,483 --> 00:22:00,466
+is equal to, I could say if, for example, customer type equals
+
+321
+00:22:01,266 --> 00:22:04,466
+X, then must be greater than,
+
+322
+00:22:05,483 --> 00:22:08,466
+and then down here I choose my attribute,
+
+323
+00:22:10,483 --> 00:22:15,466
+my attribute value that I want in there, so the first thing I
+
+324
+00:22:15,483 --> 00:22:20,316
+need to do is grab the attribute that I want. It is the credit limit.
+
+325
+00:22:20,400 --> 00:22:23,466
+I drop it onto my attribute.
+
+326
+00:22:25,483 --> 00:22:26,466
+The value
+
+327
+00:22:29,483 --> 00:22:31,466
+must be greater than...
+
+328
+00:22:31,483 --> 00:22:34,466
+mmm, come on there.
+
+329
+00:22:35,483 --> 00:22:37,466
+Oh, I'm sorry. I put that in the wrong spot.
+
+330
+00:22:37,483 --> 00:22:40,466
+>> Exactly what I was talking about.
+
+331
+00:22:40,233 --> 00:22:43,466
+>> Yep. This is where it gets funky. So now I got to start all
+
+332
+00:22:43,483 --> 00:22:47,250
+over again because I had to delete it. It's not easy to get it.
+
+333
+00:22:47,333 --> 00:22:50,466
+So I'm going to drop the must be greater than.
+
+334
+00:22:51,233 --> 00:22:55,466
+I'm going to drop my credit limit into select attribute this time.
+
+335
+00:22:55,483 --> 00:22:58,466
+>> Before you drop, though, look at right where you're going to
+
+336
+00:22:58,200 --> 00:23:01,466
+let go, it says select attribute. And then below and to the
+
+337
+00:23:01,483 --> 00:23:05,433
+right it says the same thing, but they don't do the same thing.
+
+338
+00:23:05,450 --> 00:23:05,466
+Argh.
+
+339
+00:23:05,483 --> 00:23:10,466
+>> Absolutely correct. And that's why I got it messed up the first time.
+
+340
+00:23:10,166 --> 00:23:14,466
+Because what I'm trying to do is say that the credit limit must
+
+341
+00:23:14,483 --> 00:23:19,466
+be greater than so it reads top to bottom. And now I'm going
+
+342
+00:23:19,483 --> 00:23:23,466
+to assign a specific value and say credit limit must be greater
+
+343
+00:23:23,483 --> 00:23:25,316
+than 500.
+
+344
+00:23:26,483 --> 00:23:32,266
+I save it. My business rule is now in place, and you can see
+
+345
+00:23:32,350 --> 00:23:38,333
+credit limit must be greater than 500. It is unconditional.
+
+346
+00:23:38,450 --> 00:23:38,466
+Cool, George?
+
+347
+00:23:38,483 --> 00:23:39,466
+>> Cool.
+
+348
+00:23:39,483 --> 00:23:43,466
+>> All right. So now let's go back and very quickly, what we want
+
+349
+00:23:43,483 --> 00:23:49,166
+to do now, is we're going to go back to our homepage and now
+
+350
+00:23:49,250 --> 00:23:53,166
+we're going to go to Explorer because Explorer is where we can
+
+351
+00:23:53,483 --> 00:23:56,316
+actually manually enter some data.
+
+352
+00:23:56,483 --> 00:24:00,466
+Now, there's two ways to populate a model. You can use standard
+
+353
+00:24:00,483 --> 00:24:04,466
+ETL because it's tables in a database. So you just take data
+
+354
+00:24:05,0 --> 00:24:09,466
+from point A to point B. Or if you've got some specific ones,
+
+355
+00:24:09,483 --> 00:24:13,466
+I can add a member. Now, I clicked on add member, it brings all
+
+356
+00:24:14,333 --> 00:24:17,383
+the details over here. And I can say Rich,
+
+357
+00:24:19,483 --> 00:24:22,466
+the city, I am currently in...
+
+358
+00:24:25,383 --> 00:24:27,300
+yeah, I can spell, huh?
+
+359
+00:24:29,250 --> 00:24:31,466
+There we go. That's better. A phone
+
+360
+00:24:35,300 --> 00:24:36,466
+and a credit limit.
+
+361
+00:24:39,483 --> 00:24:44,466
+I got a credit limit of 5,000. I'm a good customer. I'm going
+
+362
+00:24:44,483 --> 00:24:48,366
+to say that this is an original entry.
+
+363
+00:24:50,450 --> 00:24:50,466
+I hit okay.
+
+364
+00:24:52,483 --> 00:24:54,466
+Code value cannot be blank.
+
+365
+00:24:55,200 --> 00:24:57,466
+I'll put in a code value of 1.
+
+366
+00:24:57,483 --> 00:24:59,433
+>> Good object lesson there.
+
+367
+00:24:59,450 --> 00:24:59,466
+>> Oh, yeah.
+
+368
+00:25:00,483 --> 00:25:04,466
+>> And now Rich is in there, a code of 1, Seattle.
+
+369
+00:25:06,483 --> 00:25:11,466
+I'm going to go back in. I'm now going to change this from 5,000
+
+370
+00:25:11,483 --> 00:25:13,466
+to 500 and hit okay.
+
+371
+00:25:13,483 --> 00:25:15,466
+>> Still valid.
+
+372
+00:25:15,483 --> 00:25:19,466
+>> Still valid. If I change it down to 50...
+
+373
+00:25:20,483 --> 00:25:25,466
+still valid. That shouldn't have worked.
+
+374
+00:25:25,483 --> 00:25:27,183
+>> Nope, that should not have worked.
+
+375
+00:25:27,266 --> 00:25:30,466
+>> All right. So I guess we got a little troubleshooting to do.
+
+376
+00:25:30,166 --> 00:25:32,466
+Ah. What did I not do?
+
+377
+00:25:33,483 --> 00:25:35,466
+I did not apply the rules.
+
+378
+00:25:36,483 --> 00:25:38,466
+>> So let's see what happens.
+
+379
+00:25:39,483 --> 00:25:41,333
+>> Business rules will be applied.
+
+380
+00:25:41,416 --> 00:25:47,433
+Yes. I think what I forgot is to deploy the rules. So let's
+
+381
+00:25:47,450 --> 00:25:47,466
+go back.
+
+382
+00:25:48,483 --> 00:25:51,466
+Let's go back to our system admin because you know what I didn't
+
+383
+00:25:52,483 --> 00:25:58,466
+do, I think once I got to my business rules I did not save it.
+
+384
+00:25:58,483 --> 00:26:02,466
+So manage entities, manage, business rules.
+
+385
+00:26:03,483 --> 00:26:06,0
+Yep, I did not publish.
+
+386
+00:26:06,416 --> 00:26:07,400
+>> There you go.
+
+387
+00:26:07,483 --> 00:26:10,466
+>> You got to remember to publish the rule, George.
+
+388
+00:26:11,400 --> 00:26:14,466
+Now that I've published it, we're going to go back. Notice the
+
+389
+00:26:14,483 --> 00:26:16,466
+status is now active.
+
+390
+00:26:17,0 --> 00:26:21,466
+When we come back through here, we're going to go to Explorer.
+
+391
+00:26:21,483 --> 00:26:24,466
+Notice I have a member in here. See the question?
+
+392
+00:26:24,483 --> 00:26:25,466
+>> Well, what do you know?
+
+393
+00:26:25,483 --> 00:26:29,466
+>> It's waiting for re-evaluation. So now if I apply the rule,
+
+394
+00:26:29,483 --> 00:26:34,466
+I've got an exclamation next to it, it tells me that validation failed.
+
+395
+00:26:34,483 --> 00:26:35,466
+>> That's right.
+
+396
+00:26:35,483 --> 00:26:39,466
+>> If I come over, notice the validation errors. If I now change
+
+397
+00:26:39,483 --> 00:26:46,466
+this to 501 and hit okay, it immediately evaluates and gives
+
+398
+00:26:46,200 --> 00:26:47,466
+me a green check.
+
+399
+00:26:47,483 --> 00:26:48,466
+>> Good tool.
+
+400
+00:26:48,483 --> 00:26:52,466
+>> It is. It's a very, very, very cool tool.
+
+401
+00:26:53,483 --> 00:26:56,433
+There's a lot more that you can do with it. Trust me, George.
+
+402
+00:26:56,450 --> 00:26:56,466
+>> Wow.
+
+403
+00:26:56,483 --> 00:26:58,466
+>> There is a ton of stuff.
+
+404
+00:26:59,483 --> 00:27:02,466
+>> Now, what about those circumstances where I don't feel like
+
+405
+00:27:02,483 --> 00:27:06,466
+manually entering in all of those entities
+
+406
+00:27:08,283 --> 00:27:11,466
+into the Master Data Services form there? Is there any way we
+
+407
+00:27:11,483 --> 00:27:13,466
+can improve our efficiency?
+
+408
+00:27:14,483 --> 00:27:17,466
+>> Absolutely. Just a little bit. I mean, let's face it, most
+
+409
+00:27:17,483 --> 00:27:20,466
+times you're going to have lots of business systems already in
+
+410
+00:27:20,483 --> 00:27:26,166
+place when you're implemented MDS. So consuming Master Data
+
+411
+00:27:26,250 --> 00:27:28,416
+is all about setting up
+
+412
+00:27:29,483 --> 00:27:34,466
+hooks between all of your systems. You've got a hub and spoke architecture.
+
+413
+00:27:35,483 --> 00:27:40,466
+You've got the Master Data Services as the central hub of your
+
+414
+00:27:40,483 --> 00:27:46,466
+solution and it then goes out to all of the different systems,
+
+415
+00:27:46,483 --> 00:27:52,466
+all of the different databases and using SSIS can now manage
+
+416
+00:27:52,483 --> 00:27:57,466
+the movement of the data from enterprise out to operational,
+
+417
+00:27:57,483 --> 00:28:01,466
+from operational back into the enterprise. With MDS you can
+
+418
+00:28:01,483 --> 00:28:06,283
+do your validation and cleansing, you can use that cleansed data
+
+419
+00:28:06,366 --> 00:28:10,466
+then to update the operational systems. Cool?
+
+420
+00:28:10,483 --> 00:28:15,466
+>> Very cool. So we have another part of having trustworthy and
+
+421
+00:28:15,483 --> 00:28:17,466
+cleansed data. And what's up next?
+
+422
+00:28:17,483 --> 00:28:23,466
+>> Data Quality Services is the next part of this enterprise data solution.
+
+423
+00:28:24,483 --> 00:28:30,466
+And Data Quality Services is, again, relatively new to SQL Server.
+
+424
+00:28:30,483 --> 00:28:34,466
+It is available in 2008 and 2012.
+
+425
+00:28:36,166 --> 00:28:39,466
+We're going to show you how to build the solution, how to access
+
+426
+00:28:39,483 --> 00:28:43,466
+reference data or talk about reference data. We're going to
+
+427
+00:28:43,483 --> 00:28:49,466
+talk about data validation using DQS and show you a little bit
+
+428
+00:28:49,483 --> 00:28:50,466
+with SSIS.
+
+429
+00:28:50,483 --> 00:28:55,383
+>> And I do want to give a test-taking tip, and that is if you're
+
+430
+00:28:55,466 --> 00:28:58,250
+planning on passing the certification exam, you're going to want
+
+431
+00:28:58,333 --> 00:29:03,466
+to have some hands-on time with both MDS and DQS. You can download
+
+432
+00:29:03,483 --> 00:29:05,466
+trial versions of the software to help you get there.
+
+433
+00:29:05,483 --> 00:29:09,466
+>> And I agree with George. It's one of those that I would highly,
+
+434
+00:29:09,483 --> 00:29:14,466
+highly recommend that you go out and play with it. It's out there.
+
+435
+00:29:14,483 --> 00:29:15,466
+It's good.
+
+436
+00:29:16,450 --> 00:29:19,466
+Well, like we've been talking right along, data is the lifeblood
+
+437
+00:29:20,450 --> 00:29:25,450
+of an organization. Incorrect data lead to incorrect analysis
+
+438
+00:29:25,483 --> 00:29:29,366
+which leads to incorrect decision-making which leads to, for
+
+439
+00:29:29,450 --> 00:29:31,466
+many businesses, bankruptcy.
+
+440
+00:29:32,383 --> 00:29:37,466
+So really and truly it is in our best interest to make sure that
+
+441
+00:29:37,483 --> 00:29:44,0
+that data is accurate and correct. Data Quality Services implements
+
+442
+00:29:44,450 --> 00:29:50,350
+the tools that do that for us. It gives us access to a knowledge base.
+
+443
+00:29:50,433 --> 00:29:54,466
+A knowledge base can contain information that's used to validate
+
+444
+00:29:55,483 --> 00:30:01,466
+our organizational data, not as a source of our organizational data.
+
+445
+00:30:01,483 --> 00:30:06,466
+And that's the big difference between MDS and DQS.
+
+446
+00:30:07,483 --> 00:30:09,466
+MDS is the source of enterprise information,
+
+447
+00:30:11,216 --> 00:30:17,200
+DQS allows us to correct that information and make it good.
+
+448
+00:30:17,483 --> 00:30:22,466
+We have what are called reference data services that provide
+
+449
+00:30:22,483 --> 00:30:28,450
+that ability to access data. Now, the first thing you need to
+
+450
+00:30:28,483 --> 00:30:32,466
+do when you're creating a solution is to create a knowledge base.
+
+451
+00:30:32,483 --> 00:30:38,466
+The knowledge base provides access to specific areas of information.
+
+452
+00:30:38,483 --> 00:30:42,466
+A knowledge base can have multiple pieces of information, it
+
+453
+00:30:42,483 --> 00:30:46,466
+can have a single piece of information, and inside of that knowledge
+
+454
+00:30:46,483 --> 00:30:48,466
+base you create domains.
+
+455
+00:30:49,166 --> 00:30:56,466
+Domains house the rules that are applied, the way that you can
+
+456
+00:30:56,483 --> 00:30:57,466
+correct data.
+
+457
+00:30:58,483 --> 00:31:02,466
+So once you've got your domain, which is the responsibility of
+
+458
+00:31:02,483 --> 00:31:06,400
+data, you define the rules that are going to relate to whether
+
+459
+00:31:06,483 --> 00:31:11,466
+a value is correct or incorrect, valid or invalid, and you can
+
+460
+00:31:11,483 --> 00:31:16,466
+even set up matching rules, George, to fix all those typos that happen.
+
+461
+00:31:16,483 --> 00:31:17,466
+>> There you go.
+
+462
+00:31:17,483 --> 00:31:22,200
+>> I know I can't type to save my life, so if I'm typing wholesaler,
+
+463
+00:31:22,283 --> 00:31:23,466
+I may get w-h-i-l
+
+464
+00:31:25,483 --> 00:31:30,466
+stead of o-l because it hit the wrong key. So matching policies
+
+465
+00:31:30,483 --> 00:31:34,466
+allow me to take values and figure out how they go together.
+
+466
+00:31:35,483 --> 00:31:36,466
+We ready?
+
+467
+00:31:36,483 --> 00:31:37,283
+>> We're ready.
+
+468
+00:31:37,366 --> 00:31:41,416
+>> All right. Let's see what we can do with this one.
+
+469
+00:31:41,483 --> 00:31:46,466
+>> So in the same way MDS requires some base object setup, DQS
+
+470
+00:31:46,483 --> 00:31:48,466
+is going to require some base object setup as well.
+
+471
+00:31:49,0 --> 00:31:52,466
+>> It is. Now, unlike MDS,
+
+472
+00:31:53,483 --> 00:32:00,466
+DQS is a client tool. The DQS client is accessible from the SQL
+
+473
+00:32:00,483 --> 00:32:06,366
+Server group of tools in the start menu.
+
+474
+00:32:06,450 --> 00:32:07,466
+>> Start menu access.
+
+475
+00:32:07,483 --> 00:32:12,466
+>> Here is Data Quality Services. Here is my Data Quality client
+
+476
+00:32:12,166 --> 00:32:13,466
+that gives me access.
+
+477
+00:32:14,483 --> 00:32:17,466
+Now, the first thing you need to do, George, is connect to the
+
+478
+00:32:17,483 --> 00:32:21,166
+server that's got all the information, which in this case is
+
+479
+00:32:21,250 --> 00:32:24,183
+Miami-SQL BI.
+
+480
+00:32:24,266 --> 00:32:24,466
+>> There you go.
+
+481
+00:32:25,483 --> 00:32:28,466
+>> Now, I just want to show you something really quick. I'm going
+
+482
+00:32:28,216 --> 00:32:28,466
+to go into...
+
+483
+00:32:29,483 --> 00:32:33,466
+well, I hate it when it does that. I am going to go into management
+
+484
+00:32:33,483 --> 00:32:35,466
+studio and I'm going to display databases.
+
+485
+00:32:36,466 --> 00:32:37,466
+>> Oh, I see something there.
+
+486
+00:32:38,483 --> 00:32:42,466
+>> DQS main, DQS projects, DQS data.
+
+487
+00:32:43,300 --> 00:32:47,466
+There's an MDS database. So I am going to tell you, it ain't free.
+
+488
+00:32:47,483 --> 00:32:49,466
+It's never free.
+
+489
+00:32:50,483 --> 00:32:55,466
+But it is well worth the price of admission. So the first thing
+
+490
+00:32:55,483 --> 00:32:59,466
+I need to do in this process is to create a knowledge base.
+
+491
+00:32:59,483 --> 00:33:03,466
+So my knowledge base, I am going to create a
+
+492
+00:33:04,483 --> 00:33:09,466
+DQS demo knowledge base and I am going to
+
+493
+00:33:11,483 --> 00:33:15,466
+create it from an existing knowledge base called DGS data.
+
+494
+00:33:16,483 --> 00:33:22,466
+Now, it shows me the domains that are available, so I need to
+
+495
+00:33:22,483 --> 00:33:27,466
+go to next in the wizard because I'm going to do domain management.
+
+496
+00:33:28,483 --> 00:33:35,466
+It now brings me to the next page, which is where I am going
+
+497
+00:33:35,483 --> 00:33:36,466
+to select
+
+498
+00:33:38,483 --> 00:33:42,466
+the domains that I want in my database. Notice there is a bunch
+
+499
+00:33:43,483 --> 00:33:44,466
+of them listed.
+
+500
+00:33:44,483 --> 00:33:48,466
+>> It's nice the product comes with one knowledge base that you
+
+501
+00:33:48,233 --> 00:33:50,466
+can work with, and it's some address-related data.
+
+502
+00:33:50,483 --> 00:33:54,466
+>> It is. So the first thing I need to do is I am going to be
+
+503
+00:33:54,483 --> 00:34:00,466
+focusing in on the U.S. state domain. Now, that means I want
+
+504
+00:34:00,483 --> 00:34:04,466
+to get rid of all these others. So you highlight it, you click
+
+505
+00:34:04,483 --> 00:34:06,466
+the X, you say yes.
+
+506
+00:34:06,483 --> 00:34:09,466
+>> And I don't think there's a trick for multiselecting that I found.
+
+507
+00:34:09,483 --> 00:34:15,466
+>> Unfortunately, George, you better hope you don't have 300 domains.
+
+508
+00:34:15,483 --> 00:34:20,466
+You only want ten of them. Because you've got to do this for
+
+509
+00:34:20,483 --> 00:34:26,0
+every domain that you don't want to use. So while I'm clicking
+
+510
+00:34:26,483 --> 00:34:31,400
+and waiting, we need to keep talking so these folks don't get
+
+511
+00:34:31,483 --> 00:34:35,466
+bored out of their mind watching me get rid of the extraneous information.
+
+512
+00:34:35,483 --> 00:34:37,466
+>> All right. While you're mentioning that, here's one rule of
+
+513
+00:34:37,483 --> 00:34:42,466
+thumb that helped me divide between where MDS helps and where
+
+514
+00:34:42,483 --> 00:34:47,466
+DQS helps. In fact, with DQS you want to think of having correct
+
+515
+00:34:47,483 --> 00:34:52,283
+column values. Whereas with MDS... and, again, this is broad,
+
+516
+00:34:52,366 --> 00:34:55,466
+big picture. And with MDS, you want to make sure that you have
+
+517
+00:34:55,483 --> 00:34:59,466
+correct rows when you might have different rows from different systems.
+
+518
+00:34:59,483 --> 00:35:03,466
+I can different rows from different systems that are all valid,
+
+519
+00:35:03,200 --> 00:35:06,466
+they are correct data, but one I want to be the winning row,
+
+520
+00:35:06,483 --> 00:35:10,466
+the master. So for whatever that's worth, let's go back to the demo.
+
+521
+00:35:10,483 --> 00:35:14,466
+>> You got it. And that's actually a great piece of advice, George.
+
+522
+00:35:14,483 --> 00:35:16,316
+>> I think it got it from somewhere else.
+
+523
+00:35:16,400 --> 00:35:18,466
+>> Well, hey, you remembered it. That's a good thing.
+
+524
+00:35:18,483 --> 00:35:19,466
+>> All right.
+
+525
+00:35:19,483 --> 00:35:22,466
+>> All right. So I'm going to change the domain name here from U.S.
+
+526
+00:35:22,483 --> 00:35:27,166
+state to just state. I've gotten rid of all the others. And now
+
+527
+00:35:27,483 --> 00:35:30,466
+what I want to do is go over to domain values. Because, guess
+
+528
+00:35:30,483 --> 00:35:35,466
+what, there are already some prepopulated values in there.
+
+529
+00:35:35,483 --> 00:35:40,466
+So you can see the state name and you can see some pretty common
+
+530
+00:35:40,483 --> 00:35:42,466
+occurrences that might show up.
+
+531
+00:35:43,483 --> 00:35:48,466
+AL is correct. But we're going to correct it too Alabama.
+
+532
+00:35:50,216 --> 00:35:55,166
+ALA period is not a correct value, it's an error value, but it's
+
+533
+00:35:55,250 --> 00:35:57,466
+still going to be corrected to Alabama.
+
+534
+00:35:57,483 --> 00:36:01,466
+>> So if I see ALA show up in my data, I can set up a rule that
+
+535
+00:36:01,483 --> 00:36:04,466
+says force it into becoming Alabama.
+
+536
+00:36:04,483 --> 00:36:09,466
+>> That is exactly correct. So this is just an example of some
+
+537
+00:36:10,333 --> 00:36:12,466
+of the things you've got. I'm going to finish her off now.
+
+538
+00:36:13,483 --> 00:36:17,166
+When I finish building in the knowledge base, then it asks me
+
+539
+00:36:17,250 --> 00:36:20,466
+if I want to publish it. For now I'm going to say no. We're going
+
+540
+00:36:20,483 --> 00:36:22,466
+to hold off on that. Okay?
+
+541
+00:36:22,483 --> 00:36:23,433
+>> Sounds good.
+
+542
+00:36:23,450 --> 00:36:23,466
+>> All right.
+
+543
+00:36:24,483 --> 00:36:29,466
+>> And how would an IT person, a BI developer like myself, possibly
+
+544
+00:36:29,483 --> 00:36:32,466
+know what typically invalid values will be?
+
+545
+00:36:32,483 --> 00:36:35,466
+>> Well, you're going to have to have some business knowledge,
+
+546
+00:36:35,483 --> 00:36:42,466
+number one. But, number two, there are... out in the Azure marketplace
+
+547
+00:36:43,483 --> 00:36:48,466
+there are publically available databases that you can bring into
+
+548
+00:36:48,483 --> 00:36:51,466
+Data Quality Services as a source of information.
+
+549
+00:36:52,483 --> 00:36:55,316
+Some of those are subscription cost.
+
+550
+00:36:55,483 --> 00:37:00,366
+Some of them are subscription free of charge. It depends, but
+
+551
+00:37:00,450 --> 00:37:05,216
+they are available out there. Many of them are public domain
+
+552
+00:37:05,300 --> 00:37:10,466
+and freely available. Others you might need to contact a representative
+
+553
+00:37:10,483 --> 00:37:13,466
+to get it. But that's called reference data.
+
+554
+00:37:14,483 --> 00:37:18,466
+All of that is referred to as reference data. And that's what
+
+555
+00:37:18,483 --> 00:37:25,250
+you set up as the source that you're going to use to get some
+
+556
+00:37:25,333 --> 00:37:29,466
+of this information. So if I need a listing of all the cities
+
+557
+00:37:29,483 --> 00:37:33,466
+in every country in the world, yeah, that would be kind of tough
+
+558
+00:37:33,483 --> 00:37:34,466
+to type in. Don't you think?
+
+559
+00:37:34,483 --> 00:37:37,466
+>> Yeah, you don't have that in your back pocket already.
+
+560
+00:37:37,483 --> 00:37:41,466
+>> Nope. So nicely enough there is probably a database out there.
+
+561
+00:37:41,483 --> 00:37:45,466
+I don't know for sure. But there is probably a database out there
+
+562
+00:37:45,483 --> 00:37:49,466
+that lists every country, its valid abbreviations, and every
+
+563
+00:37:49,483 --> 00:37:56,466
+city as well with valid spellings. Now, when you're going in
+
+564
+00:37:56,483 --> 00:38:02,466
+and setting up these projects, you need to do data validation.
+
+565
+00:38:02,483 --> 00:38:06,466
+And that's called a data cleansing project. The data cleansing
+
+566
+00:38:06,483 --> 00:38:12,266
+project is what gives our data stewards the ability to analyze
+
+567
+00:38:12,483 --> 00:38:18,466
+data in a database and manage the validity and correctness of it.
+
+568
+00:38:18,483 --> 00:38:22,466
+So you've got a knowledge base and you've got a data source.
+
+569
+00:38:23,483 --> 00:38:26,450
+The knowledge base we just talked about, the reference data.
+
+570
+00:38:26,483 --> 00:38:30,466
+The data source is the data that I want to check. Cleansing can
+
+571
+00:38:30,483 --> 00:38:35,466
+include validation, making sure values are correct. It can also
+
+572
+00:38:35,216 --> 00:38:41,466
+include matching, finding records that actually mean the same thing.
+
+573
+00:38:41,483 --> 00:38:46,233
+And it can do both at the same time. Now, here's the nice thing.
+
+574
+00:38:46,483 --> 00:38:52,400
+It is not assumed that just because DQS says it's right means
+
+575
+00:38:52,483 --> 00:38:58,466
+it's right. It does output, as a result of the cleansing process,
+
+576
+00:38:59,483 --> 00:39:02,466
+the records that have been affected as well as what the effects
+
+577
+00:39:03,0 --> 00:39:08,466
+were, showing you original values and corrected values.
+
+578
+00:39:08,483 --> 00:39:11,466
+>> Some great IntelliSense that it provides there.
+
+579
+00:39:11,483 --> 00:39:15,466
+>> Absolutely, George. So let's go take a look at a data cleansing
+
+580
+00:39:15,483 --> 00:39:20,466
+project and what it does. So in my virtual machine, what I need
+
+581
+00:39:20,483 --> 00:39:26,466
+to do now is access a new data quality project. So just like
+
+582
+00:39:26,483 --> 00:39:30,466
+before I need to give it a name. In my name I'm going to just
+
+583
+00:39:30,483 --> 00:39:31,466
+call this,
+
+584
+00:39:33,450 --> 00:39:34,466
+really inventive here,
+
+585
+00:39:36,333 --> 00:39:37,400
+cleanse project.
+
+586
+00:39:38,483 --> 00:39:41,400
+It's late. I can't think of any good names anymore, George.
+
+587
+00:39:41,483 --> 00:39:42,466
+>> That's a great name.
+
+588
+00:39:42,483 --> 00:39:49,466
+>> The knowledge base that I'm going to use is DQS data.
+
+589
+00:39:51,0 --> 00:39:53,466
+Now it's a wizard.
+
+590
+00:39:54,483 --> 00:39:58,300
+I choose my cleansing project. I say next.
+
+591
+00:39:59,450 --> 00:39:59,466
+>> Next.
+
+592
+00:40:01,483 --> 00:40:02,466
+>> And we wait.
+
+593
+00:40:02,483 --> 00:40:03,466
+>> You said say next.
+
+594
+00:40:04,483 --> 00:40:07,466
+>> Yeah, but I said I say next. So be quiet.
+
+595
+00:40:08,483 --> 00:40:09,400
+Oh, lord.
+
+596
+00:40:09,483 --> 00:40:15,466
+So now I've got my data source. My data source here is going
+
+597
+00:40:15,483 --> 00:40:21,466
+to be an Excel file. So I have... I just happen to have out
+
+598
+00:40:21,483 --> 00:40:28,466
+here, George, at the tip of my fingers a stores.xls spreadsheet
+
+599
+00:40:29,466 --> 00:40:31,466
+which contains a bunch of information.
+
+600
+00:40:33,483 --> 00:40:38,466
+Now, what I need to do now is map things in. I've got a city.
+
+601
+00:40:39,483 --> 00:40:41,466
+The city is going to map to...
+
+602
+00:40:42,483 --> 00:40:47,466
+and I don't have city in here. So I think what I'll do is I'm
+
+603
+00:40:47,483 --> 00:40:51,466
+going to add a column mapping. Okay. I'm going to...
+
+604
+00:40:52,483 --> 00:40:57,466
+oh, I'm sorry. What am I doing here? I'm going to validate that state.
+
+605
+00:40:58,483 --> 00:40:59,333
+>> There you go.
+
+606
+00:40:59,483 --> 00:41:00,366
+>> Been a long day, hasn't it?
+
+607
+00:41:00,450 --> 00:41:00,466
+>> Long day.
+
+608
+00:41:00,483 --> 00:41:06,466
+>> And I'm going to map it to the U.S. state. So my source column,
+
+609
+00:41:06,483 --> 00:41:13,466
+my domain, now I go in and I go to the next step in the process
+
+610
+00:41:13,483 --> 00:41:16,466
+which is the analysis of the two.
+
+611
+00:41:17,400 --> 00:41:24,466
+I run my analysis. It takes the inputs and it uploads in and
+
+612
+00:41:24,483 --> 00:41:25,466
+it processes.
+
+613
+00:41:26,483 --> 00:41:31,466
+As it processes, it's going through, it cleanses the records.
+
+614
+00:41:32,483 --> 00:41:37,316
+And it's showing me statistics about those cleanses. So how
+
+615
+00:41:37,400 --> 00:41:40,466
+many were correct, how many were incorrect, et cetera. Now, this
+
+616
+00:41:40,483 --> 00:41:43,316
+one is running for a while here.
+
+617
+00:41:43,400 --> 00:41:43,466
+>> Curious.
+
+618
+00:41:44,483 --> 00:41:48,233
+>> It is, because it typically runs much quicker than this.
+
+619
+00:41:50,483 --> 00:41:54,466
+>> What do we have, 11 whole rows in the stores spreadsheet I think?
+
+620
+00:41:54,483 --> 00:41:55,466
+>> Yeah.
+
+621
+00:41:55,483 --> 00:41:57,316
+>> Whatever, not a whole lot. And there you go.
+
+622
+00:41:57,400 --> 00:42:00,233
+>> Okay. We got preprocessing done.
+
+623
+00:42:00,316 --> 00:42:00,466
+>> Preprocessing done.
+
+624
+00:42:01,483 --> 00:42:05,466
+>> And there we go. Now we got our cleansing done. And it shows
+
+625
+00:42:05,483 --> 00:42:10,466
+you there were nine correct records. There were two corrected records.
+
+626
+00:42:10,483 --> 00:42:17,366
+When I go to the next step, I can see suggesteds, new, invalid.
+
+627
+00:42:17,450 --> 00:42:22,466
+I can see the corrected records. You can see CA and WA were
+
+628
+00:42:22,483 --> 00:42:26,466
+corrected to California and Washington.
+
+629
+00:42:26,483 --> 00:42:27,233
+>> Did what we told it to do.
+
+630
+00:42:27,316 --> 00:42:32,200
+>> And here are the ones that were valid and what their values were.
+
+631
+00:42:32,483 --> 00:42:33,466
+Pretty cool, huh?
+
+632
+00:42:34,450 --> 00:42:34,466
+>> Beautiful.
+
+633
+00:42:35,316 --> 00:42:36,466
+>> All right.
+
+634
+00:42:36,483 --> 00:42:38,466
+So headed back to the sides.
+
+635
+00:42:39,416 --> 00:42:41,466
+We have next...
+
+636
+00:42:42,483 --> 00:42:44,466
+>> Validating data with SSIS.
+
+637
+00:42:44,483 --> 00:42:47,466
+So... well, I have to let you tell the story.
+
+638
+00:42:47,483 --> 00:42:48,466
+>> No, no, no, no, no. Please.
+
+639
+00:42:48,483 --> 00:42:52,466
+>> Well, rather than having such a manual process of validating
+
+640
+00:42:52,483 --> 00:42:56,166
+data, maybe we want to raise the bar a bit.
+
+641
+00:42:56,483 --> 00:42:57,433
+>> Automate it.
+
+642
+00:42:57,450 --> 00:42:57,466
+>> Automate.
+
+643
+00:42:58,483 --> 00:43:04,466
+>> Because as good dBAs, I want to have all the things that happen...
+
+644
+00:43:04,483 --> 00:43:10,466
+that happen repetitively be automated and take all of that manual
+
+645
+00:43:10,483 --> 00:43:12,466
+labor out of the process. So I've got
+
+646
+00:43:14,483 --> 00:43:21,166
+validating tools using a data source and data cleansing project
+
+647
+00:43:21,483 --> 00:43:26,466
+and then a data cleansing transform, which can take and do the
+
+648
+00:43:26,483 --> 00:43:31,466
+exact same thing that I just did manually. You need to have
+
+649
+00:43:31,483 --> 00:43:36,466
+data destinations to hold the cleansed data, and you need to...
+
+650
+00:43:36,483 --> 00:43:41,466
+and you can also pipe it through other transformations after
+
+651
+00:43:41,483 --> 00:43:42,466
+the fact.
+
+652
+00:43:42,483 --> 00:43:49,0
+Now, SSIS is the best place to do this because now as you're
+
+653
+00:43:49,483 --> 00:43:53,466
+pulling your data from point A to point B, from source systems
+
+654
+00:43:53,483 --> 00:43:58,466
+through into destination systems, you can do the cleansing in
+
+655
+00:43:58,483 --> 00:44:06,466
+transit and end up with clean data with no manual intervention.
+
+656
+00:44:07,483 --> 00:44:08,466
+You like that?
+
+657
+00:44:08,200 --> 00:44:10,466
+>> I do. And it looks like you have something to show here.
+
+658
+00:44:11,166 --> 00:44:15,466
+>> We are going to give this one a shot. Let's head on over.
+
+659
+00:44:16,483 --> 00:44:21,466
+And I have a knowledge base, I have a cleansing project, so I
+
+660
+00:44:21,483 --> 00:44:24,316
+am going to close out of
+
+661
+00:44:26,333 --> 00:44:30,466
+my DQS client.
+
+662
+00:44:31,483 --> 00:44:35,350
+And now we are going to create... come on.
+
+663
+00:44:35,433 --> 00:44:38,466
+Where... I'm not at the top. That's why.
+
+664
+00:44:38,483 --> 00:44:41,466
+>> Your mouse by the Hyper-V buttons has made my hair stand up
+
+665
+00:44:41,483 --> 00:44:43,366
+on end a couple of times.
+
+666
+00:44:44,483 --> 00:44:45,200
+>> Yeah.
+
+667
+00:44:45,283 --> 00:44:46,466
+>> Because if you power those down...
+
+668
+00:44:47,350 --> 00:44:51,466
+>> Yeah. I've kind of... notice I haven't clicked very often.
+
+669
+00:44:51,483 --> 00:44:53,466
+>> You haven't. You've been very careful.
+
+670
+00:44:53,483 --> 00:44:58,466
+>> I got to tell you, I am the king of closing windows accidentally.
+
+671
+00:44:58,483 --> 00:45:04,466
+I am absolutely flabbergasted that I have not closed that Hyper-V
+
+672
+00:45:04,483 --> 00:45:06,466
+window once all day.
+
+673
+00:45:07,483 --> 00:45:09,466
+All right. So let's go back to the virtual machine here.
+
+674
+00:45:09,483 --> 00:45:13,166
+We're going to do a new project. It's going to be an integration
+
+675
+00:45:13,483 --> 00:45:18,316
+services project. And very simply what I want to do is show you
+
+676
+00:45:18,400 --> 00:45:24,466
+that DQS transform. So I'm going to drop a dataflow task onto
+
+677
+00:45:24,483 --> 00:45:25,466
+our designer.
+
+678
+00:45:26,250 --> 00:45:27,466
+>> Star of the opera.
+
+679
+00:45:27,483 --> 00:45:31,466
+>> Yep. And then we're going to come over here and we are going
+
+680
+00:45:31,200 --> 00:45:36,466
+to go to DQS cleansing and drop it in place. Now, first thing
+
+681
+00:45:36,483 --> 00:45:41,266
+is, it has no available input column. So guess what I need to do?
+
+682
+00:45:41,350 --> 00:45:42,466
+>> That means it's a source.
+
+683
+00:45:42,483 --> 00:45:48,466
+>> I need to go and grab some data to put into it. So I am going
+
+684
+00:45:49,0 --> 00:45:54,466
+to create a source, a data source that is going to be an OLE D...
+
+685
+00:45:54,483 --> 00:45:57,466
+yeah, I'm going to grab a data source, so what do I do, a grab
+
+686
+00:45:57,483 --> 00:45:58,466
+a destination.
+
+687
+00:45:59,483 --> 00:46:03,466
+I'm going to grab an OLE DB source, we're going to configure
+
+688
+00:46:03,483 --> 00:46:07,266
+that source up, we're going to grab a new connection manager
+
+689
+00:46:07,483 --> 00:46:11,466
+that's going to go out to our demo DQS,
+
+690
+00:46:14,400 --> 00:46:17,466
+and we are going to grab... all right.
+
+691
+00:46:17,483 --> 00:46:23,416
+Let's create a new connection manager.
+
+692
+00:46:23,483 --> 00:46:25,466
+>> Or... sorry.
+
+693
+00:46:25,483 --> 00:46:30,466
+>> No, got to... first... it didn't like the one that I just got.
+
+694
+00:46:30,483 --> 00:46:34,466
+So I'm going to create a new one that's going to go out to, I
+
+695
+00:46:34,483 --> 00:46:38,466
+clicked on the arrow... I haven't done that all day either, not once.
+
+696
+00:46:38,483 --> 00:46:40,466
+>> No, but now we can wait for that to happen.
+
+697
+00:46:40,483 --> 00:46:43,466
+>> And you know what? I misspoke. The DQS is a transform, so
+
+698
+00:46:43,483 --> 00:46:44,466
+it's going to have inputs.
+
+699
+00:46:44,483 --> 00:46:46,466
+>> It is. So I'm going to go out
+
+700
+00:46:47,483 --> 00:46:52,166
+to MIA-SQL BI. I'm going to go out and I'm going to grab data
+
+701
+00:46:52,250 --> 00:46:58,466
+from demo DQS. Ah, that's why. I missed a...
+
+702
+00:46:59,400 --> 00:47:05,466
+I did not run a script that I need to run. So my demo DQ database
+
+703
+00:47:05,483 --> 00:47:10,366
+isn't in there. So we're going to go back out real quick to management studio.
+
+704
+00:47:10,450 --> 00:47:16,383
+We are going to run a script that's out there that's going to
+
+705
+00:47:16,466 --> 00:47:21,466
+create it. I need to go out and grab from
+
+706
+00:47:23,400 --> 00:47:24,466
+mod 9.
+
+707
+00:47:26,450 --> 00:47:26,466
+>> Says setup.
+
+708
+00:47:29,483 --> 00:47:35,466
+>> My setup script. Yep. And there's my demo DQS. We'll execute it.
+
+709
+00:47:36,483 --> 00:47:40,316
+Now I've got my data. So I should be able to go back in.
+
+710
+00:47:40,400 --> 00:47:41,466
+Sorry about that, folks.
+
+711
+00:47:43,0 --> 00:47:44,466
+We are going to go back in.
+
+712
+00:47:45,483 --> 00:47:50,466
+We now have in here, or we should, anyway... I'm going to cancel
+
+713
+00:47:50,183 --> 00:47:50,466
+it out.
+
+714
+00:47:51,483 --> 00:47:54,466
+I'm going to choose my demo DQS.
+
+715
+00:47:56,383 --> 00:47:56,466
+>> Perfect.
+
+716
+00:47:56,483 --> 00:47:58,466
+>> There's my store's table.
+
+717
+00:47:59,483 --> 00:48:03,466
+I go to columns. It grabs the columns in the store table.
+
+718
+00:48:04,483 --> 00:48:09,433
+We now have our data source that we're going to put through the cleansing.
+
+719
+00:48:09,450 --> 00:48:09,466
+>> Perfect.
+
+720
+00:48:09,483 --> 00:48:10,466
+>> I connect the two.
+
+721
+00:48:11,483 --> 00:48:15,466
+Now I go to my DQS cleansing. The first thing it needs to know
+
+722
+00:48:15,233 --> 00:48:19,183
+is the Data Quality connection manager. I don't have one, so
+
+723
+00:48:19,266 --> 00:48:23,466
+I'm going to define a new one. It says where is your DQS server.
+
+724
+00:48:24,483 --> 00:48:28,466
+I'm going to point it to the one I've got on SQL BI, we test
+
+725
+00:48:28,483 --> 00:48:30,250
+it, we got the right one...
+
+726
+00:48:30,333 --> 00:48:30,466
+>> That's good....
+
+727
+00:48:30,483 --> 00:48:34,316
+>> we're good to go. Now, what knowledge base are we going to use?
+
+728
+00:48:34,400 --> 00:48:35,466
+>> Well, we only have one right now, so...
+
+729
+00:48:35,483 --> 00:48:40,466
+>> That's a good thing. We'll do our DQS data. These are our
+
+730
+00:48:40,483 --> 00:48:44,466
+available domains. Now I'm going to set up my mapping,
+
+731
+00:48:46,333 --> 00:48:50,300
+my available input columns. I'm going to choose my state.
+
+732
+00:48:51,483 --> 00:48:54,466
+The domain that it's going to map to is U.S.
+
+733
+00:48:54,483 --> 00:48:58,466
+state. I now have my mapping setup.
+
+734
+00:48:59,483 --> 00:49:00,466
+I can save
+
+735
+00:49:01,483 --> 00:49:06,466
+my component. At least I can once I get to where the save button is.
+
+736
+00:49:08,483 --> 00:49:09,466
+There's my okay.
+
+737
+00:49:09,483 --> 00:49:10,466
+>> Perfect.
+
+738
+00:49:10,483 --> 00:49:14,266
+>> And now I can take that output and put it somewhere.
+
+739
+00:49:14,483 --> 00:49:18,466
+We're going to create a flat file destination real quick.
+
+740
+00:49:19,483 --> 00:49:20,466
+>> Oh, that was a source.
+
+741
+00:49:21,416 --> 00:49:23,466
+>> Huh. I'm just all over it today, aren't I?
+
+742
+00:49:24,166 --> 00:49:24,466
+>> Just trying to cover.
+
+743
+00:49:24,483 --> 00:49:28,300
+>> Here's my destinations. Flat file destination. We're going
+
+744
+00:49:28,383 --> 00:49:29,466
+to hook the two up.
+
+745
+00:49:31,183 --> 00:49:35,250
+Define the output. So I'm going to create my connection manager.
+
+746
+00:49:35,483 --> 00:49:42,466
+It is delimited. It is going to go to the desktop.
+
+747
+00:49:42,483 --> 00:49:43,466
+>> Excitement's building.
+
+748
+00:49:43,483 --> 00:49:47,350
+>> It is. I'm getting there. Slowly but surely.
+
+749
+00:49:47,483 --> 00:49:52,466
+We give it a file name, which is going to be cleansed stores.
+
+750
+00:49:52,483 --> 00:49:53,466
+>> Nice.
+
+751
+00:49:53,483 --> 00:49:57,316
+>> .out, .text.
+
+752
+00:49:58,483 --> 00:50:04,466
+I hit open now. And that destination could be a SQL Server destination
+
+753
+00:50:04,483 --> 00:50:07,316
+to populate a table if I want it to.
+
+754
+00:50:08,383 --> 00:50:12,166
+Here are all my columns. Notice the store ID, the name, street,
+
+755
+00:50:12,483 --> 00:50:15,466
+city, state. I've got state source, state out, state status,
+
+756
+00:50:16,483 --> 00:50:19,466
+the record status, everything is there.
+
+757
+00:50:20,483 --> 00:50:24,166
+Now I do my mappings.
+
+758
+00:50:25,483 --> 00:50:29,466
+That ties it all together. When I execute the package, it reads
+
+759
+00:50:32,483 --> 00:50:37,466
+the data from the table, runs it through the cleansing output.
+
+760
+00:50:38,483 --> 00:50:40,466
+Come on, folks, I know you got it.
+
+761
+00:50:43,483 --> 00:50:46,466
+There we go. It goes through the cleansing.
+
+762
+00:50:48,483 --> 00:50:54,466
+When the cleansing has completed, it goes out to the flat file
+
+763
+00:50:54,483 --> 00:50:57,466
+destination where it gets written.
+
+764
+00:50:57,216 --> 00:51:02,366
+This is taking way too long.
+
+765
+00:51:02,450 --> 00:51:03,466
+>> It's working, it's working.
+
+766
+00:51:04,450 --> 00:51:08,366
+>> If I could put more horsepower on this virtual machine, folks,
+
+767
+00:51:08,450 --> 00:51:10,466
+trust me, I'd put it on there.
+
+768
+00:51:11,483 --> 00:51:13,466
+But at this point we can only wait, sir.
+
+769
+00:51:15,483 --> 00:51:18,466
+There we go. We have success.
+
+770
+00:51:18,483 --> 00:51:19,466
+>> Liftoff.
+
+771
+00:51:20,233 --> 00:51:21,466
+>> Now I go out to
+
+772
+00:51:24,250 --> 00:51:28,466
+my desktop. There is cleansed stores. And you can see Store
+
+773
+00:51:28,483 --> 00:51:33,466
+1, New York, New York, New York. It's correct. California, California.
+
+774
+00:51:34,483 --> 00:51:37,466
+WA, W-A, Washington is corrected.
+
+775
+00:51:38,483 --> 00:51:43,466
+And it says it out at the end as well. So, again, that transform
+
+776
+00:51:43,483 --> 00:51:49,466
+gives you the fully corrected data and you can take it, you're
+
+777
+00:51:49,483 --> 00:51:53,466
+doing a transform later on, use those corrected values to load
+
+778
+00:51:54,483 --> 00:51:56,466
+downstream data destinations.
+
+779
+00:51:56,483 --> 00:51:59,416
+>> All right. Everybody take a deep breath and exhale.
+
+780
+00:52:00,483 --> 00:52:02,183
+>> Enterprise data.
+
+781
+00:52:02,266 --> 00:52:03,466
+>> We looked at Master Data Services.
+
+782
+00:52:03,483 --> 00:52:04,233
+>> We did.
+
+783
+00:52:04,316 --> 00:52:05,433
+>> Data Quality Services.
+
+784
+00:52:05,450 --> 00:52:05,466
+>> We did.
+
+785
+00:52:05,483 --> 00:52:09,466
+>> A whole bunch of things today. And now it's time for a survey.
+
+786
+00:52:09,483 --> 00:52:13,466
+You'll see a poll down at the very bottom of your screen. A lot
+
+787
+00:52:13,483 --> 00:52:17,350
+of resources went into making this available today and they're
+
+788
+00:52:17,433 --> 00:52:21,466
+interested, the powers that be, in getting your feedback. So please...
+
+789
+00:52:21,483 --> 00:52:23,333
+>> As are we, quite honestly.
+
+790
+00:52:23,416 --> 00:52:26,466
+>> We are too. Sure. We want to make sure that it was worthwhile
+
+791
+00:52:26,483 --> 00:52:30,466
+for you. So please take the survey at the bottom. And on behalf
+
+792
+00:52:30,483 --> 00:52:34,466
+of Rich Currey and myself, George Squillace, thank you for attending.
+
+793
+00:52:34,483 --> 00:52:38,466
+And we hope to have you come back for some of the other Jumpstarts
+
+794
+00:52:38,483 --> 00:52:39,466
+that will be available.
+
+795
+00:52:39,483 --> 00:52:42,466
+>> Absolutely. Keep your eyes out on MVA. Thanks, folks.
+
+796
+00:52:42,483 --> 00:52:45,466
+Have a great rest of the day wherever you may be.
+
