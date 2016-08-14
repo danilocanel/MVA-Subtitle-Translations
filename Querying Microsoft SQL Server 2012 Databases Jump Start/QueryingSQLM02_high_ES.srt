@@ -124,151 +124,151 @@ mantener, por lo que cuanto mayor sea el conjunto, mas trabajo tendríamos que h
 
 32
 00:02:07,483 --> 00:02:11,466
-aprobar estos duplicados. It typically includes sorting the result
+aprobar estos duplicados. Por lo general incluye clasificar el resultado
 
 33
 00:02:11,483 --> 00:02:14,466
-first and then walking through and removing it, so kind of like
+primero y luego ir a través de la eliminacion y que, como era de esperarse
 
 34
 00:02:14,483 --> 00:02:17,466
-you would imagine if you would need to remove duplicates from
+si lo que se necesita para eliminar los duplicados de un conjunto,
 
 35
 00:02:17,233 --> 00:02:19,466
-a set, you would have to do something like that.
+que tendría que hacer algo asi.
 
 36
 00:02:20,483 --> 00:02:25,466
->> All right. And then here's an example of using a SELECT DISTINCT StoreID.
+>> Efectivamente. Y entonces aquí hay un ejemplo de la utilización de un StoreID SELECT DISTINCT .
 
 37
 00:02:25,483 --> 00:02:28,466
-So if I just did a SELECT StoreID from Sales.Customer, it's going
+Así que si acabo de hacer un SELECT desde StoreID Sales.Customer, que va
 
 38
 00:02:28,483 --> 00:02:32,466
-to display multiple occurrences of StoreID. By throwing the
+a mostrar múltiples ocurrencias de StoreID. Al arrojar la
 
 39
 00:02:32,483 --> 00:02:35,466
-DISTINCT clause in there, now it's going to just show me every
+cláusula DISTINCT allí, ahora que va a mostrarme cada
 
 40
 00:02:35,183 --> 00:02:38,466
-StoreID, or it's going to show it just once, every StoreID, which
+StoreID, o que va a mostrar que una vez, cada StoreID, que
 
 41
 00:02:38,483 --> 00:02:40,466
-makes it like you said. It's a little bit more overhead, but
+sea como usted dijo. Es un poco más arriba, pero
 
 42
 00:02:40,483 --> 00:02:43,466
-my result set is going to have fewer items returned to me.
+mi conjunto de resultados va a tener uno mas pequeño.
 
 43
 00:02:43,483 --> 00:02:46,466
->> And it's important, this thing about performance. We'll probably
+>> Y es importante, esto de rendimiento. Probablemente vamos a
 
 44
 00:02:46,483 --> 00:02:48,466
-talk a bit about performance over the day.
+hablar un poco acerca de rendimiento a lo largo del día.
 
 45
 00:02:49,483 --> 00:02:53,250
-But first comes functionality, right? You first need to get the
+Pero primero viene funcionalidad, ¿verdad? Primero tiene que obtener los
 
 46
 00:02:53,333 --> 00:02:55,466
-results that you're actually interested in, and then you want
+resultados que usted está realmente interesado, y luego desea
 
 47
 00:02:55,483 --> 00:02:59,466
-to optimize this. And obviously, with regards to your results,
+optimizar esto. Y, obviamente, en lo que respecta a los resultados,
 
 48
 00:02:59,483 --> 00:03:01,466
-the more you can constrain it and the more you can understand
+cuanto más se puede restringir y cuanto más se puede entender 
 
 49
 00:03:01,483 --> 00:03:06,200
-exactly what's needed, probably the more you can tweak the performance.
+exactamente lo que se necesita, probablemente, el más usted puede ajustar el rendimiento.
 
 50
 00:03:06,283 --> 00:03:09,250
-But at the end of the day, you can't use a blanket statement
+Pero al final del día, no se puede utilizar una declaración general
 
 51
 00:03:09,333 --> 00:03:12,466
-like never use DISTINCT, because if you don't want the duplicates
+como nunca para uso distinto, porque si no desea que los duplicados
 
 52
 00:03:12,483 --> 00:03:15,466
-in there, presumably you should use DISTINCT.
+de allí, es de suponer que se deben utilizar DISTINCT.
 
 53
 00:03:15,483 --> 00:03:17,466
->> Yes. As long as you understand the overhead involved, as I
+>> Sí. Siempre y cuando se entienda la sobrecarga que implica, como ya
 
 54
 00:03:17,483 --> 00:03:19,466
-said, there are going to be times when you're going to have to
+dijimos, no van a haber momentos en los que vas a tener que
 
 55
 00:03:19,483 --> 00:03:23,466
-use it, but as long as you understand the overhead that's involved
+usarlo, pero siempre y cuando usted entienda la sobrecarga que está involucrado
 
 56
 00:03:23,483 --> 00:03:26,466
-with that, you're going to be able to run with that. Here's some
+con eso, vas a ser capaz de ejecutar con eso. He aquí algunos
 
 57
 00:03:26,483 --> 00:03:30,466
-using aliases. Those help kind of format. Again, we're going
+utilizando aliases. Aquellos ayuda tipo de formato. Una vez más, vamos
 
 58
 00:03:30,183 --> 00:03:33,466
-to look at the different ways we could control the results and
+a mirar las diferentes formas en las que podríamos controlar los resultados y
 
 59
 00:03:33,483 --> 00:03:36,466
-our result set, so we have calling the aliases here, where we've
+nuestro conjunto de resultados, por lo que hemos llamando a los aliases de aquí, donde tenemos
 
 60
 00:03:36,483 --> 00:03:41,466
-got select SalesOrderID, UnitPrice, order quantity, as quantity.
+got seleccionar la cantidad SalesOrderID, UnitPrice, orden, como la cantidad.
 
 61
 00:03:41,483 --> 00:03:43,466
-So that's how that's going to display that. So this is using
+Así que esa es la forma en que se va a mostrar eso. Así que esto es mediante
 
 62
 00:03:43,483 --> 00:03:47,466
-adding an alias for a column by using the AS clause. We can
+la adición de un aliases para una columna mediante el uso de la cláusula AS. Podemos
 
 63
 00:03:47,483 --> 00:03:52,466
-do something very similar by just using the new column editor.
+hacer algo muy similar con sólo utilizar el nuevo editor de columnas.
 
 64
 00:03:52,483 --> 00:03:56,466
-We put Quantity = OrderQty, so we kind of flipped these around
+Ponemos Cantidad = OrderQty, por lo que echó por tipo de estos en todo
 
 65
 00:03:56,483 --> 00:03:59,466
-without the AS clause, so where the new column header is to the
+sin la cláusula AS, por lo que la nueva cabecera de la columna está a la
 
 66
 00:03:59,483 --> 00:04:03,466
-left of the equal sign, as it is in comparison to the right of
+izquierda del signo igual, como lo es en comparación con el derecho de
 
 67
 00:04:03,483 --> 00:04:07,466
-the AS. You can also accidental column aliases. I like this one.
+el AS. También puede aliases de columna accidentales. Me gusta este.
 
 68
 00:04:07,483 --> 00:04:12,316
-We have sales order ID, unit price and quantity from Sales.SalesOrderDetail.
+Tenemos identificación de la orden de venta, el precio unitario y la cantidad de Sales.SalesOrderDetail.
 
 69
 00:04:12,483 --> 00:04:17,466
@@ -276,31 +276,31 @@ Notice I didn't put a comma after unit price, so this is why
 
 70
 00:04:17,483 --> 00:04:21,466
-it's an accidental alias. What this will do is it will actually
+Note que no puse una coma después de precio por unidad, por lo que esta es la razón por
 
 71
 00:04:21,483 --> 00:04:26,466
-give me content that is the unit price with the header of Quantity.
+la que me dan contenido que es el precio unitario con la cabecera de la cantidad.
 
 72
 00:04:26,483 --> 00:04:29,466
-Is that the right order, or am I going the other way? I can't remember.
+Es el orden correcto, ¿O voy a la inversa? No puedo recordar.
 
 73
 00:04:29,483 --> 00:04:30,466
-We'll see it.
+Lo veremos.
 
 74
 00:04:31,483 --> 00:04:35,466
-Because there's content in there without the comma, it's identifying
+Porque hay contenidos allí sin la coma, es la identificación de
 
 75
 00:04:35,483 --> 00:04:38,183
-Quantity as the column header, but it's going to actually display
+cantidad como encabezado de la columna, pero va a mostrar en realidad
 
 76
 00:04:38,266 --> 00:04:39,466
-the UnitPrice in there.
+UnitPrice alli.
 
 77
 00:04:40,483 --> 00:04:42,466
