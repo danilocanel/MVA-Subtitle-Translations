@@ -600,259 +600,260 @@ hablamos de ello, por lo que tendremos que ejecutar ahora, y que veremos ahora
 
 151
 00:09:12,450 --> 00:09:16,466
-that we've got ProductID, we've got Name, ProductSubCategoryID,
+que tenemos ProductID, tenemos Name, ProductSubCategoryID,
 
 152
 00:09:16,483 --> 00:09:19,466
-so that's an unknown. If I scroll down, remember, we're looking
+así que eso es una incógnita. Si me desplazo hacia abajo, recuerde, estamos buscando
 
 153
 00:09:19,483 --> 00:09:24,466
-for Win 1, so if I scroll down here, we could have multiple items here.
+para Win 1, por lo que si me desplazo hasta aquí, podríamos tener varios artículos aquí.
 
 154
 00:09:24,483 --> 00:09:28,466
-You'll see now, when I see number one, we're getting Beverages displayed.
+Vas a ver ahora, cuando veo número uno, nos estamos bebidas que se exponen.
 
 155
 00:09:29,483 --> 00:09:32,466
-Everything else, twos, threes through whatever other number,
+Todo lo demás, de dos en dos, de tres en tres a través de cualquier otro número,
 
 156
 00:09:32,483 --> 00:09:36,200
-no values are going to display Unknown Category. So it allows
+sin valores van a mostrar Categoría Desconocida. Por lo tanto, nos permite
 
 157
 00:09:36,283 --> 00:09:39,466
-us to control what's actually shown here when we're actually
+controlar lo que realmente se muestra aquí cuando estamos en realidad
 
 158
 00:09:39,483 --> 00:09:43,466
-performing or running a CASE statement. We can control what's
+estamos realizando o de ejecutar una instrucción CASE. Podemos controlar lo que se
 
 159
 00:09:44,0 --> 00:09:45,466
-displayed in that column.
+muestra en esa columna.
 
 160
 00:09:45,483 --> 00:09:48,466
->> And it's important to know that the CASE statement, it's not
+>> Y es importante saber que la sentencia CASE, no es
 
 161
 00:09:48,483 --> 00:09:51,466
-a statement, it's an expression. It's a function, so you can
+una declaración, es una expresión. Es una función, por lo que se puede
 
 162
 00:09:51,483 --> 00:09:56,466
-use it in any statement, more or less. You can use it in update,
+utilizar en cualquier declaración, más o menos. Se puede utilizar en la actualización,
 
 163
 00:09:56,483 --> 00:09:59,466
-set something equals to CASE something or in the ORDER BY clause
+establezca algo es igual al caso de que algo o en la cláusula ORDER BY
 
 164
 00:09:59,483 --> 00:10:04,400
-or in the group by clause or in the ON clause, or whatever.
+o en la cláusula GROUP BY o en la cláusula ON, o lo que sea.
 
 165
 00:10:04,483 --> 00:10:07,466
-So wherever you can run a function, you can sue the CASE expression.
+Así que donde quiera se puede ejecutar una función, puede demandar la expresión CASE.
 
 166
 00:10:08,483 --> 00:10:12,466
->> JOINs. JOINs are powerful, maybe a little bit confusing sometimes.
+>> JOINs. Las combinaciones se alcance, tal vez un poco confuso a veces.
 
 167
 00:10:12,483 --> 00:10:14,466
-We're going to talk about JOINs next.
+Vamos a seguir hablando de JOINs.
 
 168
 00:10:15,316 --> 00:10:18,266
-And in the JOINs, we've got a few different flavors of JOINs.
+y en los JOINs, tenemos diferentes formas de JOINs.
 
 169
 00:10:18,350 --> 00:10:22,466
-We have CROSS JOINs, INNER JOINs and OUTER JOINs, and it can
+Tenemos CROSS JOINs, INNER JOINs y OUTER JOINs, y puede ser
 
 170
 00:10:22,483 --> 00:10:25,466
-be a little overwhelming, but just as an introduction, CROSS
+un poco abrumador, pero sólo como una introducción, CROSS
 
 171
 00:10:25,183 --> 00:10:30,333
-JOINs combines all rolls in both tables, sometimes creates what's
+JOINs combina todas las tiradas de ambas tablas, a veces crea lo que se
 
 172
 00:10:30,416 --> 00:10:34,466
-called a Cartesian product. INNER JOINs provides filter to match
+llama un producto cartesiano. Los INNER JOINs proporciona filtro para que coincidan
 
 173
 00:10:34,483 --> 00:10:39,466
-rows between the tables, and then the OUTER JOINs display all
+las filas en las tablas, y luego los OUTER JOINs muestran todas
 
 174
 00:10:39,483 --> 00:10:43,466
-rows from a designated table, and then it matches rows from the
+las filas de una tabla determinada y después de que coincide filas de los
 
 175
 00:10:43,483 --> 00:10:46,466
-other contents being retrieved from.
+otros contenidos están recuperados.
 
 176
 00:10:46,483 --> 00:10:50,466
-So INNER JOINs, as we just introduced, are just rows where a
-
+Asi INNER JOINs, como ahora hemos introducido, son sólo unas filas en las que
 177
 00:10:50,483 --> 00:10:55,466
-match is found in both tables. An example of this is we'll start
+un partido se encuentra en ambas tablas. Un ejemplo de esto es como el que vamos a empezar
 
 178
 00:10:55,483 --> 00:10:59,166
-from the bottom... so I mentioned the idea of having an alias,
+desde el fondo ... así que menciona la idea de tener un alias,
 
 179
 00:10:59,250 --> 00:11:02,466
-so I'm going to just jump down to here, where we've got FROM
+así que voy a sólo saltar hasta aquí, donde tenemos FROM
 
 180
 00:11:02,200 --> 00:11:06,466
-Sales.SalesOrderHeader AS SOH. That's where the SOH is coming from.
+Sales.SalesOrderHeader AS SOH. Ahí es donde el SOH está viniendo.
 
 181
 00:11:06,483 --> 00:11:12,466
-And then we're JOINing a Sales.SalesOrderDetail AS SOD, and then
+Y entonces JOINing a Sales.SalesOrderDetail AS SOD, y luego
 
 182
 00:11:12,483 --> 00:11:14,466
-what we're going to do is we want to return content. These first
+lo que vamos a hacer es que queremos devolver contenido. Estas primeras
 
 183
 00:11:14,483 --> 00:11:18,383
-two columns are coming from the header table. These remaining
+dos columnas son procedentes de la tabla de cabecera. Estas restantes
 
 184
 00:11:18,466 --> 00:11:21,466
-three columns are coming from the details table. So we're going
+tres columnas son procedentes de la tabla de detalles. Así que vamos
 
 185
 00:11:21,483 --> 00:11:25,466
-to JOIN the tables based on the SalesOrderID. They have to have
+Para hacer JOIN en las tablas basadas en la SalesOrderID. Tienen que tener
 
 186
 00:11:25,483 --> 00:11:29,400
-that common column. We're going to JOIN the tables on that SalesOrderID,
+esa columna común. Vamos a hacer JOIN en las tablas de SalesOrderID,
 
 187
 00:11:29,483 --> 00:11:33,166
-and that's going to return the content or individual columns
+y eso va a devolver el contenido o columnas individuales
 
 188
 00:11:33,483 --> 00:11:34,466
-from both of those tables
+de estos dos tablas
 
 189
 00:11:36,483 --> 00:11:37,466
-in the same result set.
+en el mismo conjunto de resultados.
 
 190
 00:11:38,483 --> 00:11:42,233
->> And, as you can see here, it says JOIN rather than INNER JOIN,
+>> Y, como se puede ver en donde, se dice JOIN en lugar de INNER JOIN,
 
 191
 00:11:42,316 --> 00:11:45,466
-and INNER JOIN is the default. So if you just say JOIN, it will
+y INNER JOIN es el valor predeterminado. Así que si usted acaba de decir JOIN,
 
 192
 00:11:45,483 --> 00:11:49,466
-go and do an INNER JOIN. The other thing is, the ON clause is
+y hacer un INNER JOIN. La otra cosa es, es la cláusula ON
 
 193
 00:11:49,483 --> 00:11:51,466
-the second filter clause.
+la segunda cláusula de filtro.
 
 194
 00:11:52,483 --> 00:11:56,466
-Sorry, it's the filter clause. So before WHERE happens, ON happens, logically.
+Lo siento, es la cláusula de filtro. Asi que WHERE sucede, ON sucede, logicamente.
 
 195
 00:11:57,366 --> 00:12:00,466
-And the ON clause is just like the WHERE clause. You could put
+
+Y la cláusula ON es igual que la cláusula WHERE. Se puede poner
 
 196
 00:12:00,483 --> 00:12:03,466
-basically any predicate in that. It doesn't have to be JOINed
+básicamente cualquier predicado en eso. No tiene que ser JOINed
 
 197
 00:12:03,483 --> 00:12:06,466
-on the actual primary key, foreign key relationship. It could
+en la clave principal real, relación de clave externa. Podria
 
 198
 00:12:06,483 --> 00:12:11,450
-be JOIN on this function of this column like something.
+ser JOIN en esta función de esta columna como algo.
 
 199
 00:12:12,300 --> 00:12:16,466
-That's whatever you put there. Obviously, the results may not
+Eso es lo que puso en su lugar. Obviamente, los resultados pueden no
 
 200
 00:12:16,483 --> 00:12:20,466
-be what you're expecting, but JOIN actually fairly frequently
+ser lo que estás esperando, sino que se reúnen en realidad bastante frecuencia
 
 201
 00:12:20,483 --> 00:12:24,466
-you can have lots of benefits from JOINing... or answer interesting
+que puede tener un montón de beneficios de unirse a ... o responder interesantes
 
 202
 00:12:24,483 --> 00:12:29,466
-questions from your data when you're actually not JOINing on
+ddatos cuando en realidad estás que no se incorporan en
 
 203
 00:12:29,483 --> 00:12:31,466
-the primary key, foreign key relationship.
+las llaves primarias, relaciones de llaves foranéas.
 
 204
 00:12:31,483 --> 00:12:34,183
->> What's the difference between an INNER JOIN and an OUTER JOIN?
+>> ¿Cuál es la diferencia entre un INNER JOIN y un OUTER JOIN?
 
 205
 00:12:34,483 --> 00:12:39,466
->> So INNER JOIN, you get only the actual combinations across
+>> El INNER JOIN, se obtiene sólo a través de las combinaciones reales
 
 206
 00:12:39,483 --> 00:12:45,233
-the table or the tables involved, so what you can look at it
+a través de la tabla o las tablas involucradas, así que lo que puede ver
 
 207
 00:12:45,316 --> 00:12:49,466
-logically is, you take two tables and you get the massive set
+en ello, lógicamente es, se toman dos tablas y se obtiene el conjunto masivo
 
 208
 00:12:49,483 --> 00:12:53,466
-of all rows combined with all other rows, and then you apply
+de todas las filas combinadas con todas las otras filas, y entonces aplicar
 
 209
 00:12:53,483 --> 00:12:55,466
-the filter in the ON clause.
+el filtro en la cláusula ON.
 
 210
 00:12:56,316 --> 00:12:59,466
-Obviously, if you apply this, you say this ID equals that ID,
+
+Obviamente, si se aplica esto, se dice que este ID es igual al ID,
 
 211
 00:12:59,483 --> 00:13:03,466
-it will only return whatever rows are actually matching across
+que sólo devolverá lo filas en realidad están emparejando a través
 
 212
 00:13:04,333 --> 00:13:09,466
-these two tables. So what if, as an example will be, hey, Brian,
+de estas dos tablas. Entonces, ¿qué si, como un ejemplo que será, bueno, Brian,
 
 213
 00:13:09,483 --> 00:13:14,183
-please give me all customers and their orders, so you probably
+por favor, dame todos los clientes y sus pedidos, por lo que probablemente
 
 214
 00:13:14,266 --> 00:13:19,466
-will JOIN customer table with order table on customer ID.
+se hace un JOIN de la tabla clientes a la tabla de ordenes para el ID del cliente.
 
 215
 00:13:20,483 --> 00:13:24,433
