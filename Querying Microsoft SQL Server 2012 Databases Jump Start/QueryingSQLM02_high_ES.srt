@@ -304,111 +304,111 @@ UnitPrice alli.
 
 77
 00:04:40,483 --> 00:04:42,466
->> So with regards to this, you may wonder, why do I have three
+>> Así, con respecto a esto, usted puede preguntarse, ¿por qué tengo tres
 
 78
 00:04:43,333 --> 00:04:47,466
-different ways to do the same thing? Is it just that people are confused?
+maneras diferentes de hacer la misma cosa? ¿Es justo que la gente se confunda?
 
 79
 00:04:48,483 --> 00:04:52,466
-No. So, basically, AS is what you should use. AS is what is
+No. Entonces, básicamente, como es lo que debes usar. AS es lo que se
 
 80
 00:04:52,483 --> 00:04:57,466
-defined in the ANSI SQL standard. Why we support equals and
+define en el estándar ANSI SQL. Por eso apoyamos iguales y
 
 81
 00:04:57,483 --> 00:05:01,466
-basically without making AS optional, so that's what you see
+básicamente, sin hacer de forma adicional, así que eso es lo que se ve
 
 82
 00:05:02,166 --> 00:05:05,466
-at the bottom there, is because of legacy reasons. So one of
+en la parte inferior existe, es debido a razones de herencia. Así que una de
 
 83
 00:05:05,483 --> 00:05:09,400
-the things that we do very well in SQL Server is keep backwards
+las cosas que hacemos muy bien en SQL Server es mantener la
 
 84
 00:05:09,483 --> 00:05:13,383
-compatibility working for you. So basically, if we introduce
+compatibilidad hacia atrás trabajando para usted. Así que, básicamente, si introducimos
 
 85
 00:05:13,466 --> 00:05:17,466
-something, even if it's a long, long time ago, you can still
+algo, aunque sea hace mucho, mucho tiempo, todavía se puede
 
 86
 00:05:19,183 --> 00:05:22,166
-run the command today. The only time we go and remove it is basically
+ejecutar el comando en la actualidad. La única vez que vamos y quitarlo es básicamente
 
 87
 00:05:22,250 --> 00:05:26,200
-if it's causing problems. So we highly recommend you use AS,
+si causa problemas. Por lo que es muy aconsejable utilizar AS,
 
 88
 00:05:26,283 --> 00:05:29,466
-as that's the ANSI SQL way of writing it, but these other ways
+ya que es la forma en ANSI SQL de escribirlo, pero estas otras
 
 89
 00:05:29,483 --> 00:05:30,466
-exist, as well.
+maneras, también.
 
 90
 00:05:32,233 --> 00:05:35,466
->> All right, so kind of the idea of aliases is it makes the column
+>> Muy bien, la bondad de la idea de aliases se hace la columna
 
 91
 00:05:35,483 --> 00:05:37,466
-headers a little bit more manageable, because sometimes whoever
+de cabeceras un poco más manejable, porque a veces el que
 
 92
 00:05:37,483 --> 00:05:41,466
-designed the database may not have the most user-friendly column headers.
+diseñó la base de datos no puede tener los títulos de las columnas más fácil de usar.
 
 93
 00:05:41,483 --> 00:05:44,466
-Now we can define those a little bit differently. Aliases to
+Ahora podemos definir aquellos un poco diferente. Aliases para
 
 94
 00:05:44,483 --> 00:05:46,466
-refer to tables, you saw how we did that a little bit earlier.
+hacer referencia a las tablas, que vio cómo lo hicimos un poco antes.
 
 95
 00:05:46,483 --> 00:05:51,466
-We've got SELECT SalesOrderID, ProductID, from this table Sales.SalesOrderDetail
+Tenemos SELECT SalesOrderID, ProductID, a partir de esta tabla Sales.SalesOrderDetail
 
 96
 00:05:52,333 --> 00:05:57,466
-AS SalesOrders. Now I can reference this table as SalesOrders
+AS SalesOrders. Ahora puedo hacer referencia a esta tabla tiene órdenes de venta
 
 97
 00:05:57,483 --> 00:06:00,466
-in future statements here. This is some more to the columns.
+en futuras declaraciones aquí. Esto es un poco más para las columnas.
 
 98
 00:06:00,483 --> 00:06:03,466
-Now it's without the AS, and then we have table aliases in a
+Ahora es sin el AS, y luego tenemos los aliases de tabla en una
 
 99
 00:06:03,483 --> 00:06:08,466
-SELECT clause, and that's what we did earlier, in my demo earlier.
+cláusula SELECT, y eso es lo que hicimos antes, en mi demo anterior.
 
 100
 00:06:08,483 --> 00:06:12,466
-Once I define, or if I identify SalesOrders up here with the
+Una vez defino, o si me identifico órdenes de venta hasta aquí con la
 
 101
 00:06:13,333 --> 00:06:16,466
-AS clause, or if I use an AS clause, I have to specify that in
+cláusula AS, o si uso una cláusula AS, tengo que especificar que en
 
 102
 00:06:16,483 --> 00:06:21,466
-the SELECT statement. So that's just the use of the tables as
+la instrucción SELECT. Así que eso es sólo el uso de las tablas como
 
 103
 00:06:21,483 --> 00:06:22,466
-an alias.
+un aliases.
 
 104
 00:06:22,483 --> 00:06:25,466
