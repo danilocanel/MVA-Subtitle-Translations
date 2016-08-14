@@ -44,87 +44,87 @@ con algunas de las opciones avanzadas que tenemos a nuestra disposición.
 
 12
 00:00:53,483 --> 00:00:55,250
-And we kind of introduced a little bit... we did a little bit
+Anteriormente dimos una pequeña introducción... hablamos acerca
 
 13
 00:00:55,333 --> 00:00:57,466
-of the sorting and the filtering when we used the Where clause
+de la clasificación y el filtrado cuando se utiliza la cláusula WHERE,
 
 14
 00:00:57,483 --> 00:01:00,466
-already, didn't do much with JOINs, but now we're going to talk
+que no hizo mucho con JOINs, Peor ahora hablaremos
 
 15
 00:01:00,483 --> 00:01:03,466
-about a few of these other more advanced clauses that we can
+de cláusulas mas avanzadas que podemos
 
 16
 00:01:03,483 --> 00:01:06,333
-use with the SELECT statement.
+utilizar con la intrucción SELECT.
 
 17
 00:01:06,483 --> 00:01:09,466
-Tobias, how does this DISTINCT statement help me out here?
+Tobias, ¿Cómo me ayudará esta sentencia DISTINCT aqui?
 
 18
 00:01:10,0 --> 00:01:15,466
->> The DISTINCT is all about removing duplicates in a set, and
+>> La sentencia DISTINCT se refiere a tolo lo relacionado a la eliminación de duplicados en un conjunto, y
 
 19
 00:01:16,483 --> 00:01:18,466
-you typically use it for
+normalmente se utiliza por
 
 20
 00:01:19,483 --> 00:01:24,466
-you want to list all of the first names in a table, and you have
+si deseas tener todos los primeros nombres de una tabla, y tiene
 
 21
 00:01:24,483 --> 00:01:27,466
-lots of Johns and even more Tobiases, because it's obviously
+bastantes Jonh y aun más Tobias, porque es obvio que es
 
 22
 00:01:27,483 --> 00:01:32,400
-a very common name. And so if you just say SELECT first name
+un nombre muy común. Y asi, si solo dices SELECT primer nombre
 
 23
 00:01:32,483 --> 00:01:36,466
-from employees or whatever, it will just give you all of the
+de los empleados o lo que sea, simplemente le dara toda los
 
 24
 00:01:36,166 --> 00:01:38,466
-names in no particular order, but if you say DISTINCT, it will
+nombres sin ningun orden en particular, pero si usted dice DISTINCT, se
 
 25
 00:01:38,483 --> 00:01:41,466
-give you the unique combination across all columns, so that's
+le dará la combinación única en todas las columnas, por lo que es
 
 26
 00:01:41,483 --> 00:01:45,466
-an important thing to remember. DISTINCT goes across the entire row.
+algo importante que debemos recordar. DISTINCT ira a través de toda la fila.
 
 27
 00:01:45,483 --> 00:01:49,233
-It doesn't look at for a specific column. So it's across the
+No se ve en una columna especifica. si no que es a través de
 
 28
 00:01:49,316 --> 00:01:52,466
-entire row that you've selected that you're projecting, and then
+toda la fila que va a proyectar, y luego
 
 29
 00:01:52,483 --> 00:01:58,466
-gives you the result back without the duplicates. It's important
+da el resultado de nuevo sin los duplicados. Es importante
 
 30
 00:01:58,483 --> 00:02:03,466
-to know the DISTINCT is typically a fairly expensive statement
+conocer que DISTINCT es normalmente una declaracion bastante grande de
 
 31
 00:02:03,483 --> 00:02:07,466
-to run, so the larger the set, the more work we have to do to
+mantener, por lo que cuanto mayor sea el conjunto, mas trabajo tendríamos que hacer para
 
 32
 00:02:07,483 --> 00:02:11,466
-approve these duplicates. It typically includes sorting the result
+aprobar estos duplicados. It typically includes sorting the result
 
 33
 00:02:11,483 --> 00:02:14,466
