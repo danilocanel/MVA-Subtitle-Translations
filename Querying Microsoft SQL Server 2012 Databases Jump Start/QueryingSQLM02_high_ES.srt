@@ -412,63 +412,63 @@ un aliases.
 
 104
 00:06:22,483 --> 00:06:25,466
->> So why would you use these table aliases?
+>> Así que ¿para qué usar estos alias de tabla?
 
 105
 00:06:25,483 --> 00:06:27,466
->> Well, if you're doing... we're going to talk about JOINs.
+>> Bueno, si estás haciendo ... vamos a hablar de uniones.
 
 106
 00:06:27,483 --> 00:06:30,466
-If you're going to be able to reference, maybe, a table or multiple
+Si vas a ser capaz de hacer referencia, tal vez, una mesa o varias
 
 107
 00:06:30,483 --> 00:06:34,466
-tables or a table multiple times using different names, like
+tablas o una tabla varias veces usando diferentes nombres, como
 
 108
 00:06:34,483 --> 00:06:37,466
-within a JOIN, these are going to be beneficial when we see the
+dentro de una combinación, estos van a ser beneficioso cuando vemos la
 
 109
 00:06:37,483 --> 00:06:39,166
-JOINs a little bit later.
+une a un poco más tarde.
 
 110
 00:06:39,483 --> 00:06:42,466
->> Yes, and it will also help you from typing too much. If you
+>> Sí, y también le ayudará de escribir demasiado. Si
 
 111
 00:06:42,483 --> 00:06:46,416
-need to reference this table name all the time, it will help
+necesita hacer referencia a este nombre de la tabla todo el tiempo, que le ayudará
 
 112
 00:06:46,483 --> 00:06:48,466
-you if you use aliases and make them shorter.
+si utiliza los alias y los hacen más cortos.
 
 113
 00:06:51,200 --> 00:06:53,466
->> CASE expressions. A simple CASE expression, we'll talk about those.
+>> Expresiones CASE. Una expresión CASE sencilla, vamos a hablar de ellos.
 
 114
 00:06:53,483 --> 00:06:58,433
-This allows us to compare a value to a list of possible values
+Esto nos permite comparar un valor de una lista de posibles valores
 
 115
 00:06:58,483 --> 00:07:00,466
-and then perform some...
+y luego realizar alguna ...
 
 116
 00:07:01,483 --> 00:07:05,466
-a statement based on the results of that. CASE expressions may
+una declaración sobre la base de los resultados de esa. Expresiones CASE
 
 117
 00:07:05,483 --> 00:07:09,466
-be used in your SELECT column, where having clauses or your ORDER
+se pueden utilizar en su columna de SELECT, donde tienen cláusulas ORDER BY.
 
 118
 00:07:09,483 --> 00:07:14,466
-BY clause. And an example of these is shown here, where we have
+Y se muestra un ejemplo de estos aquí, donde tenemos
 
 119
 00:07:14,483 --> 00:07:15,466
@@ -476,127 +476,127 @@ SelectProductID, Name
 
 120
 00:07:17,250 --> 00:07:20,466
-and ProductSubCategoryID, CASE ProductSubCategoryID, WHEN 1,
+y ProductSubCategoryID, CASE ProductSubCategoryID, WHEN 1,
 
 121
 00:07:20,483 --> 00:07:23,466
-then it equals to Beverages. ELSE, it's an unknown category.
+entonces es igual a las bebidas. ELSE, es una categoría desconocida.
 
 122
 00:07:23,483 --> 00:07:26,466
-So pretty much it's going to go down through, and when it finds
+Así que más o menos se va a ir hacia abajo a través, y cuando se encuentra
 
 123
 00:07:26,483 --> 00:07:30,433
-that the ProductSubCategoryID is equal to 1, we're going to know
+que los ProductSubCategoryID es igual a 1, vamos a saber
 
 124
 00:07:30,483 --> 00:07:34,466
-that it's Beverages. Otherwise, it's going to show it as an Unknown Category.
+que es bebidas. De lo contrario, se va a mostrar como una categoría desconocida.
 
 125
 00:07:34,483 --> 00:07:37,416
-So when I do a demo, I'll show you this command specifically
+Así que cuando hago una demo, te voy a mostrar este comando específicamente
 
 126
 00:07:37,483 --> 00:07:40,466
-so that you have a better idea here as to what this looks like
+para que tenga una mejor idea aquí en cuanto a cómo se ve
 
 127
 00:07:40,183 --> 00:07:40,466
-in action.
+en acción.
 
 128
 00:07:43,416 --> 00:07:44,466
-In fact, let's do that now.
+De hecho, vamos a hacer eso ahora.
 
 129
 00:07:46,400 --> 00:07:50,466
-So what I'm going to do is I'm going to go back into my image,
+Entonces, ¿qué voy a hacer? es que voy a volver a mi imagen,
 
 130
 00:07:53,483 --> 00:07:54,466
-and so
+y así
 
 131
 00:07:57,300 --> 00:08:01,350
-I'm going to go in and I'm going to load a statement up, a query
+voy a ir y voy a cargar una declaración hacia arriba, una consulta
 
 132
 00:08:02,366 --> 00:08:05,466
-that I had written already. You guys don't want to watch me fat
+que ya había escrito. Ustedes no me quieren ver todo lo que eo
 
 133
 00:08:06,483 --> 00:08:08,466
-finger everything, so I've got some statements here. We talked
+dedo gordo, así que tengo algunas declaraciones aquí. Hablamos
 
 134
 00:08:08,483 --> 00:08:11,466
-a little bit about the DISTINCT here, so we can just run that
+un poco sobre la DISTINCT aquí, así que sólo podemos correr muy
 
 135
 00:08:11,483 --> 00:08:15,466
-real quick so we can see that in action. So SELECT DISTINCT StoreID.
+rápido por lo que podemos ver que en la acción. Así SELECT DISTINCT StoreID.
 
 136
 00:08:15,483 --> 00:08:19,466
-Let me grab this. So we can run this one here.
+Permítanme aprovechar esta. Así que podemos ejecutar este de aquí.
 
 137
 00:08:22,483 --> 00:08:25,466
-Click again. Here's the StoreID is null. Then we start getting...
+Haga clic de nuevo. Aquí está la tienda de identificación es nula. Entonces comenzamos a conseguir ...
 
 138
 00:08:26,333 --> 00:08:29,466
-wrong window. Then you'll see that we've got some... well, first
+ventana equivocada. Entonces verá que tenemos algunas ... bueno, en primer
 
 139
 00:08:29,483 --> 00:08:32,466
-off, let's look at this. We've got 711 rows.
+lugar, vamos a ver esto. Tenemos 711 filas.
 
 140
 00:08:33,216 --> 00:08:35,466
-So if we ran this again,
+Así que si nos encontramos con esto de nuevo,
 
 141
 00:08:36,483 --> 00:08:38,466
-and let's just remove this temporarily,
+y permite que se puede eliminar este temporal,
 
 142
 00:08:40,483 --> 00:08:42,466
-and then we run this same statement
+y luego se corre esta misma declaración
 
 143
 00:08:44,300 --> 00:08:47,466
-and we return it. Now we have 19,820 rows. That's the idea of
+y lo volvemos. Ahora tenemos 19.820 filas. Esa es la idea de
 
 144
 00:08:47,483 --> 00:08:50,466
-removing those duplicates that we discussed a little bit ago.
+eliminar los duplicados que discutimos hace un poco.
 
 145
 00:08:51,483 --> 00:08:55,466
-So we can do that. These are the aliases. We've already seen
+Por lo que podemos hacer eso. Estos son los alias. Ya hemos visto
 
 146
 00:08:55,483 --> 00:08:59,0
-these in action, so we won't worry about these too much.
+esto en acción, por lo que no se preocupe de éstos demasiado.
 
 147
 00:08:59,483 --> 00:09:03,466
-Let's go ahead and take a look at here's that CASE statement.
+Vamos a seguir adelante y echar un vistazo a esta es que la instrucción CASE.
 
 148
 00:09:03,483 --> 00:09:05,466
-I want to show you that actually in action. So I'm going to
+Quiero mostrarles que realmente en acción. Así que voy a
 
 149
 00:09:05,483 --> 00:09:08,466
-go ahead and execute this. We've already walked you through and
+seguir adelante y ejecutar este. Ya que hemos caminado a través y
 
 150
 00:09:08,483 --> 00:09:12,366
-talked about it, so we'll execute that now, and you'll see now
+hablamos de ello, por lo que tendremos que ejecutar ahora, y que veremos ahora
 
 151
 00:09:12,450 --> 00:09:16,466
