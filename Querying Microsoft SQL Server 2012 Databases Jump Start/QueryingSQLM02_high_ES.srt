@@ -1,46 +1,46 @@
 1
 00:00:00,333 --> 00:00:06,333
-[Music]
+[Música]
 
 2
 00:00:12,483 --> 00:00:20,466
->> Let's go into our next module and kind of take it up a notch here.
+>> Vamos a entrar en nuestro próximon módulo y avanzar a un nivel superior.
 
 3
 00:00:20,483 --> 00:00:23,466
-We're going to go up into the advanced SELECT statements,
+Vamos a introducirnos en las instrucciones SELECT avanzadas,
 
 4
 00:00:24,483 --> 00:00:26,466
-and in the advanced SELECT statements, we're going to talk in
+y en las instrucciones SELECT avanzadas, vamos a hablar
 
 5
 00:00:26,483 --> 00:00:29,466
-here, as we move down through here, we're going to talk about
+aqui, a medida que avanzamos, iremos hablando acerca
 
 6
 00:00:29,483 --> 00:00:34,466
-things like the DISTINCT clause, the aliases, scalar functions,
+de cosas como la clausula DISTINCT, la aliases, la funcion scalar,
 
 7
 00:00:35,333 --> 00:00:39,466
-using a CASE, JOINs and MERGEs. We're going to introduce those.
+uso de CASE, JOINS y MERGEs. Empezaremos con eso.
 
 8
 00:00:39,483 --> 00:00:44,383
-Filtering data, sorting data and how we work with the null values.
+Filtracion de datos, clasificacion de datos y como trabajamos con los valores nulos.
 
 9
 00:00:44,483 --> 00:00:46,466
-So we're going to take down what we just introduced in module
+Asi que aqui finalizamos con el primer modulo,
 
 10
 00:00:46,483 --> 00:00:49,466
-one, and we're going to take it up a notch and start working
+y vamos a avanzar a un nivel superior e iniciar a trabajar
 
 11
 00:00:49,483 --> 00:00:53,466
-with some of these advanced options that we have available to us.
+con algunas de las opciones avanzadas que tenemos a nuestra disposición.
 
 12
 00:00:53,483 --> 00:00:55,250
