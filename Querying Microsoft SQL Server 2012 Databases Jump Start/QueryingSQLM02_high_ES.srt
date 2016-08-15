@@ -1081,31 +1081,31 @@ antes, debería decir.
 
 271
 00:16:29,483 --> 00:16:33,200
-Trying to get it to slide down. There we go. So this is the
+Tratando de conseguir que se deslice hacia abajo. Aquí vamos. Así que este es el
 
 272
 00:16:33,283 --> 00:16:36,466
-one that I had written earlier, or discussed earlier, so this
+que yo había escrito antes, o se señaló anteriormente, por lo que esto
 
 273
 00:16:36,483 --> 00:16:40,466
-is that sample INNER JOIN, and as Tobias pointed out, I don't
+es muestra de que INNER JOIN, y como Tobias señaló, no hacer
 
 274
 00:16:40,483 --> 00:16:43,366
-have INNER JOIN in there. I could make it a little clearer by
+INNER JOIN alli. Yo podría hacerlo un poco más claro
 
 275
 00:16:43,450 --> 00:16:47,466
-putting it as INNER JOIN, so you can see exactly the type of
+poniéndolo como INNER JOIN, para que pueda ver exactamente el tipo de
 
 276
 00:16:47,483 --> 00:16:50,466
-JOIN it is, but it's the default. So we're going to go ahead
+JOIN que es, pero es el valor predeterminado. Así que vamos a seguir adelante
 
 277
 00:16:50,483 --> 00:16:51,466
-and execute this.
+y ejecutar este.
 
 278
 00:16:52,483 --> 00:16:55,466
