@@ -1660,7 +1660,7 @@ chicos todos tienen el mismo precio de lista, así que por accidente he mostrado
 un ejemplo aún mejor. Esto es increíble.
 
 416
-00: 25: 25,483 --> 00: 25: 26.283
+00:25:25,483 --> 00:25:26,283
 >> Exactamente.
 
 417
@@ -1840,7 +1840,7 @@ Así que ahora, vemos que hay una serpenteante roja aquí, ¿verdad?
 Así que si intento esto, que comenzará a quejarse y decir, hey, Tobias,
 
 461
-00:28:16,483 --> 00:28:21.466
+00:28:16,483 --> 00:28:21,466
 esto no tiene ningún sentido. Debido ORDER BY es en el nivel establecido.
 
 462
@@ -1988,7 +1988,7 @@ a continuación, concatenar que con la
 dos productos más caras rojas.
 
 498
-00:30:28,483 --> 0030:32,233
+00:30:28,483 --> 00:30:32,233
 Tenemos que tener alias aquí en las tablas aquí o en estos conjuntos.
 
 499
@@ -2076,7 +2076,7 @@ uno está en la unión interna, y tenemos la combinaciones externas. Nosotros vi
 en el ORDER BY y la cláusula WHERE. Tuvimos una bonita demostración de
 
 520
-00: 31: 39,433 --> 00: 31: 43.466
+00:31:39,433 --> 00:31:43,466
 Tobias en la cláusula UNION, y también hablaron sobre el TOP
 
 521
@@ -2088,7 +2088,7 @@ cláusula en esta zona, aquí. Así que vamos a seguir adelante y tomar a 10 min
 partimos, y lo que hacemos cuando volvamos, cuando volvamos, estamos
 
 523
-00:31:50,483 --> 00: 31:52,466
+00:31:50,483 --> 00:31:52,466
 va a entrar en el siguiente módulo.
 
 524
