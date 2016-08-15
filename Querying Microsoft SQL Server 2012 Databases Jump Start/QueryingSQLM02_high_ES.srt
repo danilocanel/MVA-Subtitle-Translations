@@ -1109,91 +1109,91 @@ y ejecutar este.
 
 278
 00:16:52,483 --> 00:16:55,466
-And notice we have our SalesOrderID. Remember, that's coming
+Y note que tenemos nuestro SalesOrderID. Recuerde, eso viene
 
 279
 00:16:55,483 --> 00:16:59,466
-from the SOH, which is the order header. We have the OrderDate.
+de la SOH, que es la cabecera de la orden. Tenemos la OrderDate.
 
 280
 00:16:59,483 --> 00:17:03,466
-That's also coming from the order header table. And then we
+Eso también es viniendo de la mesa cabecera de la orden. Y luego
 
 281
 00:17:03,483 --> 00:17:04,466
-have three SOD
+tenemos tres columnasSOD
 
 282
 00:17:05,483 --> 00:17:08,466
-columns we'll be returning. These are coming from the SalesOrderDetail,
+que volveremos. Estos son procedentes de la SalesOrderDetail,
 
 283
 00:17:08,483 --> 00:17:12,466
-so ProductID, UnitPrice and OrderQty. These are being returned
+de ProductID, UnitPrice y OrderQty. Estos están siendo devueltos
 
 284
 00:17:13,483 --> 00:17:16,466
-from the details. So it's a good way to take content that resides
+a partir de los datos. Así que es una buena manera de tomar el contenido que reside
 
 285
 00:17:16,483 --> 00:17:21,383
-in two different tables. We JOIN them on SalesOrderID... in this
+en dos tablas diferentes. Nos unen a ellos en SalesOrderID ... en este
 
 286
 00:17:21,466 --> 00:17:25,466
-case here, 43659, and return results from two different tables
+caso aquí, 43659, y los resultados de dos tablas diferentes
 
 287
 00:17:25,483 --> 00:17:27,350
-into one result set.
+en un conjunto de resultados.
 
 288
 00:17:28,450 --> 00:17:30,466
-So it's good that we're able to do that, because often, when
+Por eso es bueno que somos capaces de hacer eso, porque a menudo, cuando estamos
 
 289
 00:17:30,483 --> 00:17:32,466
-we're working with relational databases, we're going to have
+estamos trabajando con bases de datos relacionales, que vamos a tener
 
 290
 00:17:32,483 --> 00:17:35,383
-content multiple tables, and we're going to want to maybe return
+contenido varias tablas, y vamos a querer volver tal vez
 
 291
 00:17:35,466 --> 00:17:39,0
-that content into a single result set, and the use of JOINs will
+ese contenido en un único conjunto de resultados, y el uso de JOINs le
 
 292
 00:17:39,483 --> 00:17:42,466
-help you perform that. Here's one more example we'll do with
+ayudara a realizar eso. He aquí un ejemplo más que vamos a hacer con
 
 293
 00:17:42,483 --> 00:17:46,466
-a JOIN, and this is the LEFT OUTER JOIN here, and the LEFT OUTER
+un JOIN, y esta es LEFT OUTER JOIN aqui, y el LEFT OUTER
 
 294
 00:17:47,0 --> 00:17:49,466
-JOIN is going to return all customers... I just messed that up.
+JOIN se va a devolver todos los clientes ... Sólo hasta eso.
 
 295
 00:17:50,483 --> 00:17:53,466
-Where's my undo in this thing? Undo saves me. There we go.
+¿Dónde está mi deshacer en esta cosa? Deshacer me salva. Aquí vamos.
 
 296
 00:17:56,483 --> 00:17:59,466
-So here's an example of a LEFT OUTER JOIN. Again, we saw this
+Así que aquí está un ejemplo de un LEFT OUTER JOIN. Una vez más, vimos este
 
 297
 00:17:59,483 --> 00:18:04,466
-on the slide, but we have CustomerID and StoreID, SalesOrderID
+en la diapositiva, pero tenemos Identificación de Cliente y StoreID, SalesOrderID
 
 298
 00:18:04,483 --> 00:18:08,466
-and OrderDate. And you can see here that CUST.StoreID,
+y OrderDate. Y se puede ver aquí que CUST.StoreID,
 
 299
 00:18:10,483 --> 00:18:16,466
-these are coming in from the order table, and then the ORD, which
+éstos están llegando de la tabla de orden, y luego la palabra, que
 
 300
 00:18:16,483 --> 00:18:20,466
@@ -1201,905 +1201,904 @@ is the SalesOrder header, is the SalesOrderID. So we're grabbing
 
 301
 00:18:20,483 --> 00:18:24,466
-content from the left table or the first query in the statement
+es la cabecera de órdenes de venta, es SalesOrderID. Así que estamos agarrando
 
 302
 00:18:25,483 --> 00:18:29,466
-and we're adding additional content from the right statement.
+y estamos añadiendo contenido adicional de la declaración de la derecha.
 
 303
 00:18:29,166 --> 00:18:33,466
-So just a quick example just to show you that those do run and
+Por lo que sólo un ejemplo rápido sólo para mostrar que los que se ejecutan y
 
 304
 00:18:33,483 --> 00:18:36,433
-that when we're displaying them, so just want to show you how
+que cuando les estamos mostrando, por lo que sólo quiere que le muestre cómo
 
 305
 00:18:36,483 --> 00:18:40,466
-those JOINs actually work for you when we're executing those JOINs.
+un JOIN a los que realmente funciona para usted cuando estamos ejecutando los JOINs.
 
 306
 00:18:42,483 --> 00:18:46,466
-All right, so those are ways for retrieving content from inside
+Muy bien, así que esas son formas de recuperación de contenidos desde el interior
 
 307
 00:18:46,200 --> 00:18:50,466
-of SQL Server from different rows or different tables, if you will.
+de SQL Server desde diferentes filas o tablas diferentes, si se quiere.
 
 308
 00:18:50,483 --> 00:18:54,466
-We also have a lot of ways that we want to filter and sort data,
+También tenemos un montón de maneras que queremos filtrar y ordenar los datos,
 
 309
 00:18:54,483 --> 00:18:58,216
-and we use the ORDER BY clause, and I briefly did a demo of this already.
+y usamos la cláusula ORDER BY, y lo hice brevemente una demostración de esto ya.
 
 310
 00:18:58,300 --> 00:19:00,466
-The ORDER BY just sorts the rows,
+El ORDER BY simplemente ordena las filas,
 
 311
 00:19:01,483 --> 00:19:05,466
-and it's just a way to make the presentation of the content easier
+y es sólo una manera de hacer la presentación de los contenidos más fácil
 
 312
 00:19:05,483 --> 00:19:08,466
-for you. You want to be able to see SalesOrderID.
+para usted. Quieres ser capaz de ver SalesOrderID.
 
 313
 00:19:09,483 --> 00:19:15,466
-We want it in order, and as an integer. Maybe you want customer
+Queremos que el fin, y como un entero. Tal vez usted quiere cliente
 
 314
 00:19:15,483 --> 00:19:18,433
-by last name, you want to sort them alphabetically. Maybe you
+por apellido, que desea ordenar alfabéticamente. Tal vez usted
 
 315
 00:19:18,483 --> 00:19:21,466
-want order date. We want to know the most recent order or the
+quiere fecha de la orden. Queremos saber el orden más reciente o la
 
 316
 00:19:21,483 --> 00:19:27,466
-order that came in in the past. These are examples of ORDER BYs.
+Para que entró en el pasado. Estos son ejemplos de apartaderos orden.
 
 317
 00:19:27,483 --> 00:19:30,166
-So we're doing a SELECT SalesOrderID, CustomerID and OrderDate
+Así que estamos haciendo un SELECT SalesOrderID, CustomerID y OrderDate
 
 318
 00:19:30,250 --> 00:19:33,466
-from the SalesOrderHeader, and we're going to order it by OrderDate,
+del SalesOrderHeader, y van a ser ordenados por OrderDate,
 
 319
 00:19:33,483 --> 00:19:38,466
-so we're going to give us three columns, SalesOrderID, CustomerID
+por lo que vamos a darnos tres columnas, SalesOrderID, CustomerID
 
 320
 00:19:38,483 --> 00:19:41,466
-and OrderDate, and we're going to order it chronologically, I
+y OrderDate, y vamos a ordenar cronológicamente, que
 
 321
 00:19:41,483 --> 00:19:44,183
-think is the right word, by OrderDate.
+creo que es lo correcto, por OrderDate.
 
 322
 00:19:44,483 --> 00:19:47,466
-We could also go in and do a SELECT SalesOrderID, CustomerID.
+También pudimos entrar y hacer un SELECT SalesOrderID, CustomerID.
 
 323
 00:19:47,483 --> 00:19:50,433
-Now we're gathering the year, and we're going to create a column,
+Ahora estamos reuniendo el año, y vamos a crear una columna,
 
 324
 00:19:50,483 --> 00:19:55,416
-the YEAR from the OrderDate, AS OrderYear, again from the SalesOrderHeader,
+el YEAR de la OrderDate, AS OrderYear, de nuevo desde el SalesOrderHeader,
 
 325
 00:19:55,483 --> 00:19:59,466
-and we're going to ORDER BY OrderYear. This is an alias we created
+y vamos al ORDER BY OrderYear. Este es un aliases creado
 
 326
 00:19:59,483 --> 00:20:01,466
-because we're grabbing just the year from the OrderDate.
+porque estamos agarrando sólo el año desde la OrderDate.
 
 327
 00:20:01,483 --> 00:20:04,466
-We're not worried about the time or the date.
+No estamos preocupados por la hora o la fecha.
 
 328
 00:20:04,483 --> 00:20:07,466
->> So here's there's something that's just worth mentioning that
+>> Así que aquí es que hay algo que es importante mencionar que
 
 329
 00:20:07,483 --> 00:20:12,466
-many people typically ask. So you can say AS OrderYear and then
+muchas personas suelen pedir. Por lo tanto se puede decir AS OrderYear y luego
 
 330
 00:20:12,483 --> 00:20:17,466
-ORDER BY this alias OrderYear, but you can't do it as OrderYear
+ORDER BY este alias OrderYear, pero no se puede hacer como OrderYear
 
 331
 00:20:17,483 --> 00:20:20,466
-and then in the WHERE clause say WHERE OrderYear is equal to
+y luego en la cláusula WHERE decir WHERE OrderYear es igual a
 
 332
 00:20:20,483 --> 00:20:23,466
-something, and that has to do with this logical query processing
+algo, y eso tiene que ver con esta lógica de procesamiento de consultas
 
 333
 00:20:23,483 --> 00:20:26,466
-that we talked about earlier, because ORDER BY is the only thing
+lógico que hemos hablado antes, porque ORDER BY es lo único
 
 334
 00:20:26,483 --> 00:20:31,416
-that happens after SELECT. So when ORDER BY happens, we know
+esto sucede después de SELECT. Así que cuando ORDER BY sucede, sabemos
 
 335
 00:20:31,483 --> 00:20:34,466
-what the column aliases are, but when WHERE happens, we don't
+lo que los alias de columna son, pero cuando WHERE sucede, que no lo hacen
 
 336
 00:20:34,483 --> 00:20:36,466
-know, because SELECT hasn't happened yet.
+saber, porque SELECT no ha sucedido todavía.
 
 337
 00:20:36,483 --> 00:20:38,466
->> Great point. Definitely great point. And the cool thing is,
+>> Gran punto. Definitivamente gran punto. Y lo más interesante es,
 
 338
 00:20:38,483 --> 00:20:40,466
-we can reverse this. We've got the same...
+que podemos revertir esto. Tenemos la misma ...
 
 339
 00:20:42,483 --> 00:20:45,466
-the top example here is OrderDate. We could do it in reverse
+el ejemplo arriba es aquí Fecha de pedido. Podríamos hacerlo en el orden inverso
 
 340
 00:20:45,483 --> 00:20:49,466
-order just by using the descending clause down here. And that
+sólo mediante el uso de la cláusula descendente aquí abajo. Y eso
 
 341
 00:20:49,233 --> 00:20:52,466
-gives us the same content, but in reverse order of the dates,
+nos da el mismo contenido, pero en orden inverso al de las fechas,
 
 342
 00:20:53,0 --> 00:20:56,466
-so instead of the most recent... or instead of the earliest
+así que en vez de la más reciente ... o en lugar de los primeros
 
 343
 00:20:56,483 --> 00:21:00,466
-one, we'll have the most recent one on top. We filter data using
+uno, tendremos la más reciente en la parte superior. Vamos a filtrar datos usando
 
 344
 00:21:00,183 --> 00:21:02,466
-the WHERE clause. That's one way that we do that. We've seen
+la cláusula WHERE. Esa es una forma en que lo hacemos. Hemos visto
 
 345
 00:21:02,483 --> 00:21:05,466
-an example of that, where we had all the rows being dumped out.
+un ejemplo de ello, donde habíamos todas las filas para estar en las.
 
 346
 00:21:05,483 --> 00:21:08,466
-A little bit overwhelming. So what we've got here is we've got
+Un poco abrumadora. Así que lo que tenemos aquí es que tenemos
 
 347
 00:21:08,483 --> 00:21:12,466
-CustomerID, TerritoryID from the Sales.Customer. If I just stop
+CustomerID, TerritoryID de la Sales.Customer. Si acabo de dejar de
 
 348
 00:21:12,483 --> 00:21:15,466
-there and not have a WHERE clause, every row is going to be returned
+allí y no tienen una cláusula WHERE, cada fila va a ser devuelto
 
 349
 00:21:15,183 --> 00:21:17,466
-from the Customers table. Well, we're going to throw WHERE TerritoryID
+de la tabla Customers. Bueno, vamos a escribir WHERE TerritoryID
 
 350
 00:21:17,483 --> 00:21:21,433
-= 6, so I want to know where all the customers are that belong
+= 6, por lo que quieren saber donde todos los clientes son que pertenecen
 
 351
 00:21:21,483 --> 00:21:24,466
-in TerritoryID = 6, or I don't have to use equal. I could say
+en el TerritoryID = 6, o que no tenga que usar el mismo valor. yo podría decir
 
 352
 00:21:24,483 --> 00:21:29,350
-WHERE TerritoryID >= 6. So now I want all the customers in territories
+WHERE TerritoryID = 6. Así que ahora quiero que todos los clientes en los territorios
 
 353
 00:21:29,433 --> 00:21:32,466
-seven through whatever number it goes through. We could also
+siete a cualquier número que pasa a través. También pudimos
 
 354
 00:21:32,483 --> 00:21:35,266
-mix some of these up. In the bottom one, we talk about WHERE
+mezclar algunas de estas arriba. En la parte inferior, hablamos acerca de WHERE
 
 355
 00:21:35,350 --> 00:21:37,466
-StoreID >= 1000 AND StoreID <= 1200.
+StoreID >= 1000 Y StoreID <= 1200.
 
 356
 00:21:40,483 --> 00:21:43,466
-So I want everything where the StoreID... now, I've moved away
+Así que quiero todo lo que el estratificados ... ahora, me he trasladado
 
 357
 00:21:43,483 --> 00:21:48,466
-from the TerritoryID. The StoreID is 1000 or higher, but no higher
+lejos del TerritoryID. El StoreID es 1000 o más alto, pero no más alto
 
 358
 00:21:48,483 --> 00:21:54,466
-than 1200, so we've got that little gap area or range that we
+que 1200, así que tenemos esa pequeña zona de discontinuidad o rango que nosotros
 
 359
 00:21:54,483 --> 00:21:57,466
-want that StoreID or the content for that StoreID to be returned in.
+quiera que StoreID o el contenido para que StoreID de ser devueltos con.
 
 360
 00:21:57,483 --> 00:22:00,466
-So again, it's controlling what's happening in a result set and
+Así que de nuevo, es el control de lo que está sucediendo en un conjunto de resultados y
 
 361
 00:22:01,166 --> 00:22:02,466
-how that content is being displayed to you.
+la forma en que el contenido se visualiza en su caso.
 
 362
 00:22:04,166 --> 00:22:06,466
-Other ways we can filter data. Maybe I want more controls.
+Otras formas en las que pueden filtrar los datos. Tal vez quiero más controles.
 
 363
 00:22:06,483 --> 00:22:11,466
-I don't want to see every item. Maybe I've got 100,000 or 500,000
+No quiero ver cada elemento. Tal vez tengo 100.000 o 500.000
 
 364
 00:22:11,483 --> 00:22:15,466
-rows, and I want just a portion of those rows. But what we can
+filas, y quiero que sólo una parte de esas filas. Pero lo que podamos
 
 365
 00:22:15,483 --> 00:22:20,333
-do here is use what's called the SELECT TOP option, and we specify
+hacemos aquí es utilizar lo que se llama la opción TOP SELECT, y especificamos
 
 366
 00:22:20,483 --> 00:22:23,466
-the number of items that we want to see. If I do this SELECT
+el número de elementos que se quieren ver. Si hago esto SELECT
 
 367
 00:22:23,483 --> 00:22:26,466
-SalesOrderID, CustomerID, from the SalesOrderHeader, and did
+SalesOrderID, CustomerID, desde el SalesOrderHeader, y lo hizo
 
 368
 00:22:26,483 --> 00:22:31,466
-ORDER BY TotalDue DESC, I could get 20,000 records. I don't know.
+ORDER BY DESC TotalDue, que podría conseguir 20.000 registros. No lo sé.
 
 369
 00:22:31,483 --> 00:22:34,216
-But what I'm saying here is just give me the top 20.
+Pero lo que estoy diciendo aquí es sólo dame la parte superior 20.
 
 370
 00:22:34,483 --> 00:22:37,466
-So in this SELECT TOP (20), say, I don't what 100,000 records.
+Así que en este TOP SELECT (20), por ejemplo, yo no lo 100.000 registros.
 
 371
 00:22:37,483 --> 00:22:40,466
-I want 20 records or whatever number I put in there, so I could
+Quiero 20 fichas o cualquier número que puse ahí, por lo que podía
 
 372
 00:22:40,483 --> 00:22:43,416
-change that to 50 and get the top 50 records. Now, the thing
+cambiar eso a 50 y obtener los 50 primeros registros. Ahora, la cosa
 
 373
 00:22:43,483 --> 00:22:46,466
-with that is, if I have 100,000 or 200,000 records and I'm trying
+con lo que es, si tengo 100.000 o 200.000 registros y estoy tratando
 
 374
 00:22:46,483 --> 00:22:51,466
-to do this SELECT TOP (20), what if I had 15 and there's eight
+hacer este TOP SELECT (20), lo que si tuviera 15 y hay ocho
 
 375
 00:22:51,483 --> 00:22:55,466
-more that match, that are exactly identical. What this will
+más que partido, que son exactamente idénticos. Lo que esto va
 
 376
 00:22:55,483 --> 00:22:57,466
-do is it will SELECT TOP (20) WITH TIES.
+hacer es SELECT TOP (20) WITH TIES.
 
 377
 00:22:58,316 --> 00:23:01,466
-Now, instead of displaying just 20, if it hits the 20, if there
+Ahora, en vez de mostrar sólo 20 años, si llega al 20, si hay
 
 378
 00:23:01,483 --> 00:23:04,466
-happens to be 23 because we have some ties, it's going to show
+pasa a ser 23 porque tenemos algunos lazos, que va a mostrar
 
 379
 00:23:04,483 --> 00:23:07,466
-you 23 items, because it doesn't want to show you 20. Let's say,
+encontrado 23 artículos, ya que no quiere que le muestre 20. digamos,
 
 380
 00:23:07,483 --> 00:23:11,466
-for instance, we have a salesperson, and the top 20 salespeople
+por ejemplo, tenemos un vendedor, y el 20 mejores vendedores
 
 381
 00:23:11,483 --> 00:23:13,466
-in sales get a bonus.
+en las ventas de obtener un bono.
 
 382
 00:23:13,483 --> 00:23:17,466
-Well, if I just did a SELECT TOP (20) and there were 25 people
+Bueno, si yo acabo de hacer un SELECT TOP (20) y había 25 personas
 
 383
 00:23:17,483 --> 00:23:21,300
-or 23 people that had the top sales but I didn't put the WITH
+o 23 personas que tenían las ventas superiores pero no puso a los WITH
 
 384
 00:23:21,383 --> 00:23:24,466
-TIES, there's three people that are not going to get that bonus.
+TIES, hay tres personas que no van a conseguir que la bonificación.
 
 385
 00:23:25,0 --> 00:23:26,466
-There's three people that are going to be upset with me and the
+Hay tres personas que van a estar molesto conmigo y con el
 
 386
 00:23:26,483 --> 00:23:27,466
-way I wrote the code.
+forma en que escribió el código.
 
 387
 00:23:28,283 --> 00:23:32,300
-So we can be careful about that. We can avoid the information
+Así que podemos tener cuidado con eso. Podemos evitar la información
 
 388
 00:23:32,383 --> 00:23:36,466
-being ignored or not displayed by using the WITH TIES option.
+ser ignorado o no se muestran mediante el uso de la opción WITH TIES.
 
 389
 00:23:36,483 --> 00:23:39,466
-We could just go a percentage. I have 20,000 rows. Instead of
+Podríamos ir a un porcentaje. Tengo 20.000 filas. En lugar de
 
 390
 00:23:39,483 --> 00:23:43,466
-going a finite number of rows being returned, we could just do
+va siendo devuelto un número finito de filas, podríamos hacer
 
 391
 00:23:44,166 --> 00:23:47,466
-a percentage of items that are returned. So if I have 20,000
+un porcentaje de artículos que se devuelvan. Así que si tengo 20.000
 
 392
 00:23:47,483 --> 00:23:52,466
-items, I'll get 20 items. Don't hold me on the math, so we'll
+artículos, voy a conseguir 20 artículos. No me mantenga en las matemáticas, por lo que vamos
 
 393
 00:23:52,483 --> 00:23:53,466
-have to see on that here.
+tiene que ver en eso aquí.
 
 394
 00:23:53,483 --> 00:23:57,216
->> So I'll show a bit of a demo I thought on TOP, because TOP
+>> Por lo tanto voy a mostrar un poco de una demostración pensé en TOP, porque TOP
 
 395
 00:23:57,300 --> 00:23:58,466
-is somewhat interesting.
+es algo interesante.
 
 396
 00:23:59,483 --> 00:24:05,466
-So if we switch over to my machine here, what I'd like to show
+Así que si cambiamos a mi máquina de aquí, lo que me gustaría para mostrar
 
 397
 00:24:05,483 --> 00:24:09,466
-is, first of all, you already saw TOP, right? We also have support
+es, en primer lugar, ya vimos TOP, de derecha? También tenemos el apoyo
 
 398
 00:24:09,483 --> 00:24:14,466
-now in SQL Server 2012 for OFFSET and the FETCH keywords, which
+ahora en SQL Server 2012 para offset y la FETCH palabras clave, que
 
 399
 00:24:14,483 --> 00:24:18,466
-helps you page through the results, which is very common in web applications.
+La página de ayuda a través de los resultados, lo cual es muy común en las aplicaciones web.
 
 400
 00:24:18,483 --> 00:24:23,466
-So let's say I just go for Production.Product and
+Así que digamos que solo voy a Production.Product y
 
 401
 00:24:24,483 --> 00:24:26,466
-then I say ORDER BY,
+entonces digo ORDER BY,
 
 402
 00:24:28,483 --> 00:24:32,466
-I don't know, UnitPrice, is it ListPrice? There we go, ListPrice.
+No sé, PrecioUnidad, es ListPrice? Aquí vamos, ListPrice.
 
 403
 00:24:32,483 --> 00:24:35,466
-Now, this will give me the full result set back. What I can
+Ahora bien, esto me dará el resultado conjunto completo de nuevo. Lo que puedo
 
 404
 00:24:35,483 --> 00:24:40,466
-now go and do is say, well, please OFFSET 10 ROWS
+Ahora ve a hacer es decir, bien, por favor OFFSET 10 filas
 
 405
 00:24:41,483 --> 00:24:43,466
-and FETCH
+y FETCH
 
 406
 00:24:45,483 --> 00:24:47,466
-NEXT 10 ROWS ONLY,
+PRÓXIMOS 10, sólo las filas
 
 407
 00:24:49,483 --> 00:24:53,466
-and that will actually give me the rows 11 through 20, and now
+y que en realidad me dará las filas 11 a 20, y ahora
 
 408
 00:24:53,483 --> 00:24:59,466
-I can go and say you see the first one here is Chainring, apparently.
+Puedo ir y decir que vea el primero en llegar es plato, al parecer.
 
 409
 00:24:59,483 --> 00:25:04,466
-If I go and say, well, SKIP 20 ROWS, it's still...
+Si voy y digo, bueno, PASE 20 filas, sigue siendo ...
 
 410
 00:25:06,483 --> 00:25:08,466
->> Or OFFSET 20 ROWS.
+>> O desplazamiento al 20 filas.
 
 411
 00:25:10,483 --> 00:25:11,466
->> Oh, sorry.
+>> Oh, lo siento.
 
 412
 00:25:11,483 --> 00:25:14,266
-Let's see here.
+Vamos a ver aquí.
 
 413
 00:25:15,483 --> 00:25:18,466
-Now there is something. So what's going on here? Well, these
+Ahora hay algo. Entonces, ¿qué está pasando aquí? Bueno, estos
 
 414
 00:25:18,483 --> 00:25:23,466
-guys all have the same list price, so by accident I showed you
+chicos todos tienen el mismo precio de lista, así que por accidente he mostrado
 
 415
 00:25:23,483 --> 00:25:25,466
-an even better example. This is amazing.
+un ejemplo aún mejor. Esto es increíble.
 
 416
-00:25:25,483 --> 00:25:26,283
->> Exactly.
+00: 25: 25,483 --> 00: 25: 26.283
+>> Exactamente.
 
 417
 00:25:26,366 --> 00:25:32,450
->> Oh, how good we are, Brian. This is really good. So here we
+>> Ah, lo buenos que somos, Brian. Esto es realmente bueno. Así que aquí estamos
 
 418
 00:25:32,483 --> 00:25:37,466
-see a problem that is common with basically both TOP and OFFSET
+ver un problema que es común con básicamente la parte superior e OFFSET
 
 419
 00:25:37,483 --> 00:25:39,466
-and FETCH, which is what happens if I don't order by something
+y FETCH, que es lo que sucede si no pedir por algo
 
 420
 00:25:40,0 --> 00:25:44,466
-that's unique. So let's go and add ProductID in here, which will
+eso es único. Así que vamos a ir y añadir ProductID aquí, que será
 
 421
 00:25:44,483 --> 00:25:46,333
-make it make some more sense.
+hacer que tenga un poco más de sentido.
 
 422
 00:25:46,483 --> 00:25:50,466
-Now, okay, Fork Crown is apparently the top row, and then I'll
+Ahora, bien, Tenedor Corona es aparentemente la fila superior, y entonces voy a
 
 423
 00:25:50,483 --> 00:25:51,466
-go and say, well, 40...
+y dirán, bueno, 40 ...
 
 424
 00:25:52,483 --> 00:25:56,0
-I'm jumping now forward. And you obviously can use variables
+Ahora estoy saltando hacia adelante. Y es obvio que se pueden utilizar variables
 
 425
 00:25:56,483 --> 00:26:02,233
-and expressions, so I could say here @ OFFSET as I'm passing in.
+y las expresiones, por lo que podrían decir aquí @ OFFSET como estoy pasando.
 
 426
 00:26:02,316 --> 00:26:04,466
-So that's one thing I wanted to show you guys, which is interesting.
+Así que eso es una cosa que quería mostrar chicos, lo cual es interesante.
 
 427
 00:26:04,483 --> 00:26:08,166
-The other thing, which is a bit special and we haven't talked
+La otra cosa, que es un poco especial y no hemos hablado
 
 428
 00:26:08,483 --> 00:26:11,466
-about UNION, because we don't have it particularly in any of
+Acerca de la unión, porque no lo tenemos todo en cualquiera de
 
 429
 00:26:11,483 --> 00:26:17,466
-our slides, but UNION is the combination of result sets by concatenating
+nuestras diapositivas, pero UNION es la combinación de conjuntos de resultados mediante la concatenación
 
 430
 00:26:17,483 --> 00:26:22,233
-them rather than JOIN, which is combining them horizontally.
+ellos en lugar de UNEN, lo que les está combinando horizontalmente.
 
 431
 00:26:22,316 --> 00:26:28,466
-So I have an example query that let's say Brian just asked me,
+Así que tengo una consulta de ejemplo digamos que Brian me preguntó:
 
 432
 00:26:28,483 --> 00:26:33,466
-hello, Tobias, can I get the two most expensive black products
+hola, Tobias, puedo obtener los dos productos de negro más caras
 
 433
 00:26:33,483 --> 00:26:37,466
-and the two most expensive red products in a query. And you
+y los dos productos más caras rojas en una consulta. Y tu
 
 434
 00:26:37,483 --> 00:26:39,466
-go, okay, that sounds like a reasonable question, Brian.
+ir, está bien, que suena como una pregunta razonable, Brian.
 
 435
 00:26:39,483 --> 00:26:40,466
->> For a Lamborghini.
+>> Para un Lamborghini.
 
 436
 00:26:41,483 --> 00:26:45,466
->> Yes, yes. So I'll go, okay, let's get Name and
+>> Sí, sí. Así que voy a ir, está bien, vamos a Nombre y
 
 437
 00:26:47,483 --> 00:26:49,466
-ListPrice and Color.
+ListPrice y color.
 
 438
 00:26:50,483 --> 00:26:53,466
-It must be a fairly boring product, since the only have one color,
+Debe ser un producto bastante aburrida, ya que la única tienen un color,
 
 439
 00:26:53,483 --> 00:27:00,466
-but anyhow. And I probably want top two, right, and then WHERE
+pero de todas maneras. Y yo quiero probablemente la parte superior de dos, a la derecha, y luego DONDE
 
 440
 00:27:00,483 --> 00:27:06,250
-Color = "Black" in this case, and I don't know if black is actually
+Color = "Negro" en este caso, y no sé si es realmente negro
 
 441
 00:27:06,333 --> 00:27:11,466
-a color and how that works, but at any rate. And obviously ORDER
+un color y la forma en que funciona, pero en todo caso. Y, obviamente PEDIDO
 
 442
 00:27:11,483 --> 00:27:16,233
-BY is important here. You say ORDER BY ListPrice DESC, since
+POR es importante aquí. Usted dice ORDER BY DESC ListPrice, ya
 
 443
 00:27:16,316 --> 00:27:19,466
-we want the most expensive products. Okay, so that happens to
+queremos que los productos más caros. Bueno, por lo que pasa a
 
 444
 00:27:19,483 --> 00:27:21,466
-be this Mountain 100 Black.
+ser de esta montaña 100 Negro.
 
 445
 00:27:21,483 --> 00:27:23,466
->> I think it's a mountain bike or something.
+>> Creo que es una bicicleta de montaña o algo así.
 
 446
 00:27:24,483 --> 00:27:25,466
->> Well, you never know.
+>> Bueno, nunca se sabe.
 
 447
 00:27:25,483 --> 00:27:26,466
->> Never know.
+>> Nunca se sabe.
 
 448
 00:27:26,483 --> 00:27:30,466
->> And the I also wanted the red product, so that seemed like
+>> Y el también quería el producto de color rojo, por lo que parecieron
 
 449
 00:27:30,183 --> 00:27:35,466
-a separate query, so also give me the two most expensive red products.
+una consulta independiente, por lo que también me dan los dos productos más caras rojas.
 
 450
 00:27:36,0 --> 00:27:39,466
-Okay, there we have those. Now, this UNION clause will be very
+De acuerdo, no tenemos esos. Ahora bien, esta cláusula UNION será muy
 
 451
 00:27:39,483 --> 00:27:42,466
-interesting, because that's, again, just taking these without
+interesante, porque eso es, de nuevo, simplemente tomar estas sin
 
 452
 00:27:42,483 --> 00:27:47,466
-result sets and smashing them together, so I'll say UNION ALL.
+conjuntos de resultados y rompiendo juntos, así que diga UNION ALL.
 
 453
 00:27:47,483 --> 00:27:51,466
-UNION is implicitly a DISTINCT, so you will automatically go
+Unión Europea es implícitamente un DISTINCT, por lo que pasará automáticamente
 
 454
 00:27:51,483 --> 00:27:55,466
-and remove duplicates. That's per the standard, and obviously that's...
+y eliminar duplicados. Eso es por la norma, y ​​obviamente eso es ...
 
 455
 00:27:55,483 --> 00:27:58,466
-if you know there are no duplicates between the sets, why pay
+si usted sabe que no hay duplicados entre los conjuntos, ¿por qué pagar
 
 456
 00:27:58,483 --> 00:28:01,466
-the cost doing it, so UNION ALL means don't remove duplicates.
+el costo de hacerlo, por lo UNION ALL medios no eliminan duplicados.
 
 457
 00:28:01,483 --> 00:28:04,466
-Actually, the SELECT statement, you can say SELECT ALL, means
+En realidad, la instrucción SELECT, se puede decir seleccionar todo, medios
 
 458
 00:28:04,483 --> 00:28:08,466
-the same, but no one ever types it. So SELECT DISTINCT and SELECT ALL.
+el mismo, pero nadie lo escribe. Así SELECT DISTINCT y en Seleccionar todo.
 
 459
 00:28:08,483 --> 00:28:11,466
-So now, we see there is a red squiggly here, right?
+Así que ahora, vemos que hay una serpenteante roja aquí, ¿verdad?
 
 460
 00:28:12,483 --> 00:28:16,400
-So if I try this, it will start complaining and say, hey, Tobias,
+Así que si intento esto, que comenzará a quejarse y decir, hey, Tobias,
 
 461
-00:28:16,483 --> 00:28:21,466
-this doesn't really make sense. Because ORDER BY is at the set level.
+00:28:16,483 --> 00:28:21.466
+esto no tiene ningún sentido. Debido ORDER BY es en el nivel establecido.
 
 462
 00:28:21,483 --> 00:28:24,466
-It's at the result set level, so what we're going to actually return.
+Es a nivel de conjunto de resultados, así que lo que vamos a volver realidad.
 
 463
 00:28:25,283 --> 00:28:26,466
-So we know...
+Por lo que sabemos ...
 
 464
 00:28:28,483 --> 00:28:30,466
-something happened on my screen.
+algo pasó en mi pantalla.
 
 465
 00:28:30,483 --> 00:28:32,466
-Well, now
+Bien ahora
 
 466
 00:28:34,483 --> 00:28:35,466
-we see me, but not the screen.
+que me ven, pero no de la pantalla.
 
 467
 00:28:35,483 --> 00:28:38,466
->> We're back to you. Should we go back to the demo?
+>> Estamos de vuelta a usted. ¿Hay que volver a la demo?
 
 468
 00:28:38,483 --> 00:28:40,466
->> So now you can see me typing.
+>> Así que ahora se puede ver que me escribe.
 
 469
 00:28:41,216 --> 00:28:44,316
->> Pretend he's typing the keys that you were just looking at.
+>> Haga de cuenta que está escribiendo las teclas que se estarían viendo.
 
 470
 00:28:45,266 --> 00:28:49,466
->> Wonderful. Here we go. So, again, we saw this was the two most
+>> Maravilloso. Aquí vamos. Así, de nuevo, vimos que esto era los dos más
 
 471
 00:28:49,483 --> 00:28:54,466
-expensive black and these were the two most expensive, so about 3000.
+caro negro y éstos eran los dos más caros, por lo que alrededor de 3000.
 
 472
 00:28:54,483 --> 00:28:57,466
-So let's just remove this ORDER BY clause,
+Así que vamos a eliminar esta cláusula ORDER BY,
 
 473
 00:28:59,366 --> 00:29:01,466
-and we now get something completely different back. And this
+y ahora obtenemos algo completamente diferente de nuevo. Y esto
 
 474
 00:29:02,483 --> 00:29:06,350
-is because of the logical processing of the query, right, because
+es debido a la lógica de procesamiento de la consulta, a la derecha, porque
 
 475
 00:29:06,433 --> 00:29:07,466
-first we go and do
+primero vamos y hacemos
 
 476
 00:29:08,483 --> 00:29:12,466
-the FROM clause, the WHERE clause, so we get all of the black
+la cláusula FROM, la cláusula WHERE, por lo que tenemos todo el negro
 
 477
 00:29:12,483 --> 00:29:17,466
-products, and then we get just the top first two that we find.
+productos, y entonces tenemos sólo la parte superior dos primeros que encontramos.
 
 478
 00:29:17,483 --> 00:29:20,466
-And then we go and do the same with the red products, the top
+Y luego vamos y hacemos lo mismo con los productos rojo, la parte superior
 
 479
 00:29:20,483 --> 00:29:23,383
-first that we find, then we concatenate the result sets and then
+primero que nos encontramos, y luego se concatena los conjuntos de resultados y luego
 
 480
 00:29:23,466 --> 00:29:27,466
-we sort the result set. So if you turn on the query execution
+clasificamos el conjunto de resultados. Así que si a su vez en la ejecución de la consulta
 
 481
 00:29:27,483 --> 00:29:32,466
-plan that we can find up here, this is something also people
+plan que podemos encontrar aquí, esto es algo que también las personas
 
 482
 00:29:32,483 --> 00:29:35,466
-use to basically optimize their queries, but it can also be very
+utilizar para optimizar básicamente sus consultas, pero también puede ser muy
 
 483
 00:29:35,483 --> 00:29:38,466
-useful to actually just understand what's going on. So if I
+útil en realidad sólo entender lo que está pasando. Así que si yo
 
 484
 00:29:38,483 --> 00:29:41,466
-look at the execution plan here, we can see, we apparently go
+mirar el plan de ejecución aquí, podemos ver, nos vamos al parecer,
 
 485
 00:29:41,483 --> 00:29:45,466
-and scan an index here, which is the table, the clustered index.
+y escanear un índice aquí, que es la tabla, el índice agrupado.
 
 486
 00:29:45,483 --> 00:29:47,466
-Then we do top immediately.
+Entonces nosotros rematar inmediatamente.
 
 487
 00:29:48,183 --> 00:29:50,466
-There's no sorting that happens before that. Then we concatenate
+No hay clasificación que ocurre antes de eso. A continuación, se concatena
 
 488
 00:29:50,483 --> 00:29:54,466
-the result sets, and now we go sort based on color.
+el resultado se pone, y ahora nos vamos especie basada en el color.
 
 489
 00:29:55,483 --> 00:29:59,466
-So what I want to do is, instead of this, which there is no...
+Así que lo que quiero hacer es, en lugar de esto, lo que no hay ...
 
 490
 00:29:59,483 --> 00:30:02,466
-it's not a bug in the product, right? It's just the way that
+que no es un error en el producto, ¿verdad? Es sólo la forma en que
 
 491
 00:30:02,483 --> 00:30:06,333
-the language works. Instead I can do... and this we will get
+el lenguaje funciona. En cambio que pueda hacer ... y esto obtendremos
 
 492
 00:30:06,416 --> 00:30:09,466
-into more details on later, but I can do a derive table here
+en más detalles más adelante, pero puedo hacer una tabla derivan aquí
 
 493
 00:30:09,483 --> 00:30:12,466
-and say, well, FROM this SELECT clause.
+y decir, bueno, de esta cláusula SELECT.
 
 494
 00:30:13,483 --> 00:30:17,466
-Now, it's not ambiguous anymore. I'm saying, well, grab this
+Ahora, no es ambigua más. Yo digo, bueno, agarra esta
 
 495
 00:30:17,483 --> 00:30:21,466
-result set. Now it's the two most expensive black products, and
+conjunto resultante. Ahora son los dos productos más caras negras, y
 
 496
 00:30:21,483 --> 00:30:23,466
-then concatenate that with the
+a continuación, concatenar que con la
 
 497
 00:30:25,333 --> 00:30:28,466
-two most expensive red products.
+dos productos más caras rojas.
 
 498
-00:30:28,483 --> 00:30:32,233
-We have to have aliases here on the tables here or on these sets.
+00:30:28,483 --> 0030:32,233
+Tenemos que tener alias aquí en las tablas aquí o en estos conjuntos.
 
 499
 00:30:33,483 --> 00:30:36,416
-And now we'll get the right result. And now I can obviously
+Y ahora vamos a obtener el resultado correcto. Y ahora que puedo, evidentemente,
 
 500
 00:30:36,483 --> 00:30:38,466
-also add an ORDER BY down here and say, well, I would like to
+También añadir un ORDER BY aquí y digo, bueno, me gustaría
 
 501
 00:30:38,483 --> 00:30:44,183
-order by name. So that result set, I want those four rows sorted
+ordenar por nombre. Así que ese conjunto de resultados, quiero esos cuatro filas ordenadas
 
 502
 00:30:44,266 --> 00:30:44,466
-by name.
+por nombre.
 
 503
 00:30:45,483 --> 00:30:48,466
-So we get that back, seems to make sense, and now the execution
+Por lo que tenemos que volver, parece tener sentido, y ahora la ejecución
 
 504
 00:30:49,483 --> 00:30:51,466
-plan, we can see we have a different operator here, which is
+plan, podemos ver que tenemos un operador diferente aquí, que es
 
 505
 00:30:51,483 --> 00:30:54,466
-now the top sort operator.
+Ahora el operador de clase superior.
 
 506
 00:30:54,483 --> 00:30:57,333
-Then we concatenate and then we sort the result set.
+A continuación, se concatena y luego clasificamos el conjunto de resultados.
 
 507
 00:30:57,416 --> 00:30:57,466
->> Nice.
+>> Niza.
 
 508
 00:30:57,483 --> 00:31:02,466
->> So here we can just see, what does UNION do, which can clearly
+>> Así que aquí sólo podemos ver, qué hacer UNIÓN, que puede claramente
 
 509
 00:31:02,200 --> 00:31:07,466
-be useful, and actually how TOP intersects with ORDER BY.
+sea ​​útil, y en realidad la forma TOP cruza con ORDER BY.
 
 510
 00:31:07,483 --> 00:31:09,466
->> All right, excellent. Great demo. All right, so that's going
+>> Muy bien, excelente. Gran demostración. Muy bien, así que va
 
 511
 00:31:10,483 --> 00:31:13,466
-to wrap up module two here. We talked about the SELECT statement,
+para envolver el módulo dos aquí. Hablamos de la instrucción SELECT,
 
 512
 00:31:13,483 --> 00:31:16,466
-we introduced the DISTINCT, reduce. There is some overhead involved,
+introdujimos el claro, reduzca. No está implicado algo de sobrecarga,
 
 513
 00:31:16,483 --> 00:31:19,466
-as Tobias pointed out to us, about the DISTINCT removes those
+Tobias señaló a nosotros, acerca de la DISTINCT elimina los
 
 514
 00:31:19,483 --> 00:31:23,466
-redundant roles. We introduced both column and table aliases.
+funciones redundantes. Introdujimos los dos alias de columna y de tabla.
 
 515
 00:31:23,483 --> 00:31:26,466
-We talked about the CASE statement. We talked about the few
+Hablamos de la sentencia CASE. Hablamos de los pocos
 
 516
 00:31:26,483 --> 00:31:28,466
-different types of JOINs that we are going to be comfortable
+diferentes tipos de combinaciones que vamos a estar cómodo
 
 517
 00:31:28,483 --> 00:31:32,266
-or need to get comfortable working with. Specifically, the default
+o la necesidad de sentirse cómodo con el trabajo. En concreto, el valor predeterminado
 
 518
 00:31:32,350 --> 00:31:36,0
-one is the INNER JOIN, and we have the OUTER JOINs. We looked
+uno está en la unión interna, y tenemos la combinaciones externas. Nosotros vimos
 
 519
 00:31:36,483 --> 00:31:39,350
-at the ORDER BY and the WHERE clause. We had a nice demo from
+en el ORDER BY y la cláusula WHERE. Tuvimos una bonita demostración de
 
 520
-00:31:39,433 --> 00:31:43,466
-Tobias on the UNION clause, and we also talked about the TOP
+00: 31: 39,433 --> 00: 31: 43.466
+Tobias en la cláusula UNION, y también hablaron sobre el TOP
 
 521
 00:31:43,483 --> 00:31:47,466
-clause in this area, here. So let's go ahead and take a 10-minteu
+cláusula en esta zona, aquí. Así que vamos a seguir adelante y tomar a 10 minteu
 
 522
 00:31:47,483 --> 00:31:50,466
-break, and what we do when we come back, when we come back, we're
+partimos, y lo que hacemos cuando volvamos, cuando volvamos, estamos
 
 523
-00:31:50,483 --> 00:31:52,466
-going to go into the next module.
+00:31:50,483 --> 00: 31:52,466
+va a entrar en el siguiente módulo.
 
 524
 00:31:53,483 --> 00:31:56,466
-And when we go to the next module, we're going to start talking
+Y cuando vamos al siguiente módulo, vamos a empezar a hablar
 
 525
 00:31:56,483 --> 00:31:59,466
-about some additional... again, more advanced topics when we're
+sobre algunos temas ... de nuevo, más avanzadas adicionales cuando estamos
 
 526
 00:31:59,483 --> 00:32:05,250
-looking at ways for us to query content from SQL Server 2012.
-
+buscando la manera para nosotros para consultar el contenido de SQL Server 2012.
