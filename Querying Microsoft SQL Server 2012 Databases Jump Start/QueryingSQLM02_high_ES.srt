@@ -857,227 +857,227 @@ se hace un JOIN de la tabla clientes a la tabla de ordenes para el ID del client
 
 215
 00:13:20,483 --> 00:13:24,433
-If I change the question slightly, and this is a good way also
+Si cambio la pregunta un poco, y esta es una buena manera también
 
 216
 00:13:24,483 --> 00:13:27,466
-of kind of practicing SQL is actually translating a question
+de la clase de la práctica de SQL está traduciendo en realidad una pregunta
 
 217
 00:13:27,483 --> 00:13:35,166
-in English or preferably Swedish, where I'm from, to SQL.
+en Inglés o, preferiblemente, de Suecia, de donde soy, a SQL.
 
 218
 00:13:35,250 --> 00:13:38,466
-So if I instead say, hey, can you please give me the list of
+Así que si en lugar de decir, oye, ¿puedes por favor, dame la lista de.
 
 219
 00:13:38,483 --> 00:13:42,466
-all customers and their orders and also include customers that
+todos los clientes y sus pedidos? y también incluyen a los clientes que
 
 220
 00:13:42,483 --> 00:13:46,366
-don't have any orders, because those won't be returned if I use
+no tienen ninguna orden, porque los que no serán devueltas si uso
 
 221
 00:13:46,450 --> 00:13:50,466
-this INNER JOIN. So the I would instead, if I say FROM customers,
+este INNER JOIN. Así que el que lo haría en su lugar, si digo de los clientes,
 
 222
 00:13:51,300 --> 00:13:56,466
-JOIN orders, I would say LEFT JOIN, so LEFT OUTER JOIN, which
+JOIN pedidos, diría LEFT JOIN, por lo LEFT OUTER JOIN, que
 
 223
 00:13:56,483 --> 00:14:00,466
-is keep the rows that are not matching from the left table, so
+es mantener las filas que no se pongan en venta de la tabla de la izquierda, para que
 
 224
 00:14:00,483 --> 00:14:03,466
-customers you say first. That would be the left table, and orders
+los clientes se dice en primer lugar. Esa sería la tabla de la izquierda, y las ordenes
 
 225
 00:14:03,483 --> 00:14:06,466
-would be the right table. So we have LEFT JOIN, keep from the
+sería la tabla de la derecha. Así que hemos combinación izquierda, evitar que la
 
 226
 00:14:06,483 --> 00:14:08,466
-left table, RIGHT JOIN is just keep from the right table, and
+tabla de la izquierda, derecha JOIN es simplemente evitar que el cuadro de la derecha, y
 
 227
 00:14:09,333 --> 00:14:12,466
-FULL JOIN is also include orders that don't have a matching customers.
+FULL JOIN también se incluyen órdenes que no tienen un cliente coincidentes.
 
 228
 00:14:12,483 --> 00:14:15,466
-That sounds like a referential integrity issue in this case,
+Eso suena como un problema de integridad referencial en este caso,
 
 229
 00:14:15,483 --> 00:14:18,466
-but that's basically the OUTER JOINs.
+pero eso es básicamente los OUTER JOINs.
 
 230
 00:14:18,483 --> 00:14:22,466
->> Okay, excellent. And this is an example of how a LEFT OUTER
+>> Muy bien, excelente. Y este es un ejemplo de cómo un LEFT OUTER
 
 231
 00:14:22,200 --> 00:14:26,216
-JOIN as he just described it would be written. So we're looking
+JOIN ya que se acaba de describir se escribiría. Así que estamos buscando
 
 232
 00:14:26,300 --> 00:14:28,466
-at customers who did not place orders in this case here, so this
+a los clientes que no hacen pedidos en este caso aquí, por lo que esto
 
 233
 00:14:28,483 --> 00:14:32,466
-is an example of that command that Tobias just actually explained
+es un ejemplo de ese comando que acaba de Tobias en realidad nos explicó
 
 234
 00:14:32,483 --> 00:14:34,466
-to us. CROSS JOINs.
+CROSS JOINs.
 
 235
 00:14:35,483 --> 00:14:38,400
-CROSS JOINs combine each role from the first table with each
+CROSS JOINs combinar cada rol de la primera tabla con cada
 
 236
 00:14:38,483 --> 00:14:40,466
-row from the second table. What does that give us?
+la fila de la segunda tabla. ¿Que nos da eso?
 
 237
 00:14:43,483 --> 00:14:46,400
-We're combining all of the rows from one table to the other table.
+Estamos combinando todas las filas de una tabla a la otra mesa.
 
 238
 00:14:46,483 --> 00:14:47,466
-Why would I use a CROSS JOIN?
+¿Por qué debería utilizar un CROSS JOIN?
 
 239
 00:14:48,483 --> 00:14:54,366
->> Well, there's not all that many reasons. You could imagine...
+>> Bueno, no es todo lo que muchas razones. Se podría imaginar ...
 
 240
 00:14:54,483 --> 00:15:00,466
-so one thing is obviously just generating test data, it's very
+así que una cosa es, obviamente, sólo la generación de datos de prueba, es muy
 
 241
 00:15:00,216 --> 00:15:02,466
-practical, because you take one table with 10 rows, CROSS JOIN
+práctico, ya que se toma una tabla con 10 filas, CROSS JOIN
 
 242
 00:15:02,483 --> 00:15:06,466
-with another table with 10 rows, you get 100 rows back. But you
+con otra tabla con 10 filas, se obtiene 100 filas más atrás. Pero
 
 243
 00:15:06,483 --> 00:15:08,466
-could actually have an interesting example such as you have a
+en realidad se podría tener un ejemplo interesante, como usted tiene una
 
 244
 00:15:09,166 --> 00:15:12,466
-currency table with all of the currencies and you CROSS JOIN
+tabla de monedas con todas las monedas y CROSS JOIN
 
 245
 00:15:12,483 --> 00:15:15,216
-that with itself, now you get the product of all combinations
+que con ella misma, ya que usted consigue el producto de todas las combinaciones
 
 246
 00:15:15,300 --> 00:15:16,333
-of currencies.
+de monedas.
 
 247
 00:15:18,483 --> 00:15:22,466
->> All right, so not heavily used is what I heard, but it is nice
+>> Muy bien, así que no se utiliza en gran medida es lo que he oído, pero es bueno
 
 248
 00:15:22,483 --> 00:15:23,466
-to have it out there.
+tenerlo por ahí.
 
 249
 00:15:24,450 --> 00:15:25,466
-So now we have a SELF JOIN.
+Así que ahora tenemos un SELF JOIN.
 
 250
 00:15:26,483 --> 00:15:29,200
-So SELF JOIN, compare rows in the same table to each other.
+El SELF JOIN, compara las filas de la misma tabla a la otra.
 
 251
 00:15:29,283 --> 00:15:30,466
-Do I have an example of this? I do.
+¿Tengo un ejemplo de esto?.
 
 252
 00:15:30,483 --> 00:15:33,466
->> Well, the currency example I gave was an example of a SELF
+>> Pues bien, el ejemplo de divisas que di fue un ejemplo de un SELF
 
 253
 00:15:33,483 --> 00:15:35,466
-JOIN, with a CROSS JOIN.
+JOIN, con un CROSS JOIN.
 
 254
 00:15:35,483 --> 00:15:38,466
->> With a CROSS JOIN. So you can have SELF JOIN with CROSS JOINs.
+>> Con un CROSS JOIN. Para que pueda tener SELF JOIN con CROSS JOIN.
 
 255
 00:15:38,483 --> 00:15:41,466
->> Yes. SELF JOIN is just if you JOIN with yourself.
+>> Si. SELF JOIN es sólo si se usa JOIN con uno mismo.
 
 256
 00:15:41,483 --> 00:15:44,466
->> What are the ones most commonly used? I would say the INNER
+>> ¿Cuáles son los más utilizados? Yo diría que el INNER
 
 257
 00:15:44,166 --> 00:15:46,466
-JOIN, because that's the default. If you just type JOIN, you
+JOIN, porque esa es la forma predeterminada. Si sólo tiene que teclear el JOIN,
 
 258
 00:15:46,166 --> 00:15:49,466
-get INNER, and then your LEFT and RIGHT OUTER JOINs, most likely.
+se obtiene el INNER, y luego LEFT y RIGHT OUTER JOINs, lo más probable.
 
 259
 00:15:49,483 --> 00:15:50,466
->> Yes, absolutely.
+>> Si, absolutamente.
 
 260
 00:15:50,483 --> 00:15:54,466
->> Then, your SELF JOINs and your CROSs JOINs, they're options,
+>> Entonces, su SELF JOIN y su CROSS JOIN, son opciones,
 
 261
 00:15:54,483 --> 00:15:58,466
-but probably not heavily used. We do have, as you can see here,
+pero probablemente no se utiliza en gran medida. Tenemos, como se puede ver aquí,
 
 262
 00:15:58,483 --> 00:16:02,466
-examples available to you for how they would be written, but
+ejemplos disposición para la forma en que se escriben, pero
 
 263
 00:16:03,483 --> 00:16:07,466
-just to kind of give you some ideas on how they would be used.
+sólo para la clase de darle algunas ideas sobre cómo iban a ser utilizados.
 
 264
 00:16:07,483 --> 00:16:09,466
->> Yes. It's definitely in the order of INNER JOINs and then LEFT
+>> Sí. Es, definitivamente, en el orden del INNER JOINs Y LUEGO LEFT
 
 265
 00:16:09,483 --> 00:16:11,466
-JOINs and then FULL JOINs.
+JOINs y luego FULL JOINs.
 
 266
 00:16:11,483 --> 00:16:14,466
->> Let's just take a look at a few of these, if we can get just
+>> Vamos a echar un vistazo a algunos de ellos, si podemos conseguir sólo
 
 267
 00:16:14,483 --> 00:16:19,466
-a couple of these to execute. Again, I saved you guys all the
+un par de ellos para ejecutar. Una vez más, he salvado todo el
 
 268
 00:16:19,483 --> 00:16:23,466
-headache of me fat-fingering it and trying to type all of this in.
+dolor de cabeza de mí en grasa los dedos y tratando de escribir todo esto.
 
 269
 00:16:23,483 --> 00:16:26,466
-This is that statement that I created earlier, that I showed
+Se trata de que la declaración que he creado anteriormente, que te mostré
 
 270
 00:16:26,483 --> 00:16:27,466
-you earlier, I should say.
+antes, debería decir.
 
 271
 00:16:29,483 --> 00:16:33,200
