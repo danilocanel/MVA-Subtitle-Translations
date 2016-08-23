@@ -1,1728 +1,1728 @@
 1
-00:00:00,333 --> 00:00:06,333
-[Música]
-
-2
-00:00:17,433 --> 00:00:21,333
->> ¡Bien!, hola y bienvenidos, en vivo desde la sede de Microsoft aquí
-
-3
-00:00:21,416 --> 00:00:25,466
-en la zona de Bellevue/Redmond/Seattle. Vamos a estar presentando
-
-4
-00:00:25,483 --> 00:00:30,350
-una clase de Querying Microsoft SQL Server 2012 para ustedes hoy.
-
-5
-00:00:30,433 --> 00:00:33,466
-Muchas gracias por tomarse el tiempo de unirse a nosotros. Queremos algún
-
-6
-00:00:33,483 --> 00:00:37,466
-tipo de interacción para que sean capaces de darnos algún tipo de retroalimentación,
-
-7
-00:00:37,483 --> 00:00:41,333
-ya que estarán viendo la presentación en las próximas
-
-8
-00:00:41,483 --> 00:00:44,466
-horas, a la derecha de su pantalla hay una interfáz de chat, 
-
-9
-00:00:44,483 --> 00:00:48,416
-allí puedes sentirte cómodo respondiendo o enviado algunos mensajes
-
-10
-00:00:48,483 --> 00:00:51,466
-allí o para algunas conversaciones de allí. Tenemos toneladas de PYMES, expertos
-
-11
-00:00:51,483 --> 00:00:55,466
-en la materia, trabajando detrás de scena con nosotros. Y mi persona,
-
-12
-00:00:55,483 --> 00:00:59,466
-Brian Alderman, yo estaré presentando, nosotros también
-
-13
-00:00:59,483 --> 00:01:03,466
-estaremos monitoreando las conversaciones así cómo lo estarán haciendo desde el estudio.
-
-14
-00:01:03,483 --> 00:01:06,350
-Y los más interesante es que si nos pueden escribir una buena pregunta,
-
-15
-00:01:06,433 --> 00:01:09,466
-nos la van a enviar y nos vamos a tomar el tiempo en vivo y
-
-16
-00:01:09,483 --> 00:01:12,466
-les estaremos respondiendo. La buena noticias es que no vas a
-
-17
-00:01:12,483 --> 00:01:15,433
-esucharme solo a mi todo todo el día. Tambien se unió a mi en
-
-18
-00:01:15,483 --> 00:01:17,466
-el estudio Tobias. ¿Cómo estás?
-
-19
-00:01:18,483 --> 00:01:20,466
->> No está mal, Brian. Se siente bien estar aquí.
-
-20
-00:01:21,483 --> 00:01:24,300
->> Es bueno verte. Gracias por unirte a nosotros hoy. Y acerca de qué
-
-21
-00:01:24,383 --> 00:01:26,300
-vamos a hablar, Quiero estar seguro de que todos entienden
-
-22
-00:01:26,383 --> 00:01:30,466
-a lo que sean metido. Esto es más que una clase de nivel 300.
-
-23
-00:01:30,483 --> 00:01:32,466
-Y estámos tratando de conocer a la audiencia que quiere aprender
-
-24
-00:01:32,483 --> 00:01:36,466
-los conocimientos técnicos requeridos para algunas de las consultas Transact-SQL
-
-25
-00:01:37,233 --> 00:01:40,466
-avanzadas dentro de SQL Server. Por lo que deben tener un conocimiento básico
-
-26
-00:01:40,483 --> 00:01:44,466
-al menos de bases de datos relacionales, entender el uso de
-
-27
-00:01:44,483 --> 00:01:47,200
-SSMS, o de SQL Server Management Studio, porque vamos
-
-28
-00:01:47,283 --> 00:01:50,466
-a pasar mucho tiempo en ello, y entonces un conocimiento básico
-
-29
-00:01:50,483 --> 00:01:52,466
-de algo del sistema operativo Microsoft Windows y algo de
-
-30
-00:01:52,483 --> 00:01:55,466
-its core functionality. Let's take a look at what we're going
-
-31
-00:01:55,483 --> 00:01:58,466
-to discuss throughout the day here. Or evening, depending where
-
-32
-00:01:58,483 --> 00:02:01,466
-you're dialed in from. We're going to begin with just an introduction
-
-33
-00:02:01,483 --> 00:02:05,333
-to SQL Server 2012. We've got a couple modules, just kind of
-
-34
-00:02:05,416 --> 00:02:07,466
-levelling the playing field to make sure everyone understands
-
-35
-00:02:07,483 --> 00:02:10,466
-what it is that we're going to address throughout the day, and
-
-36
-00:02:10,483 --> 00:02:13,466
-some of the terms and concepts that we'll be addressing or using
-
-37
-00:02:13,200 --> 00:02:16,466
-throughout the day. We'll then move into the second module and
-
-38
-00:02:16,483 --> 00:02:19,466
-start looking at some of the advanced select statements, things
-
-39
-00:02:19,483 --> 00:02:23,466
-like the distinct clause, the cases, the joins, the merges, filtering
-
-40
-00:02:23,483 --> 00:02:27,466
-and sorting data, and how do we deal with those pesky null values.
-
-41
-00:02:28,333 --> 00:02:31,466
-We'll move into data types. Because, as you know, when we build
-
-42
-00:02:31,483 --> 00:02:34,283
-out new objects in SQL Server, it's very important for us to
-
-43
-00:02:34,366 --> 00:02:38,266
-understand the appropriate data type and apply that data type.
-
-44
-00:02:38,350 --> 00:02:42,316
-So we'll talk about that, the conversion of data types, and actually
-
-45
-00:02:42,400 --> 00:02:44,416
-introduce some SQL Server functions.
-
-46
-00:02:45,166 --> 00:02:48,466
-We'll then move into grouping and aggregating data. And in that
-
-47
-00:02:48,166 --> 00:02:51,466
-area we'll talk about group by and having clauses. We'll talk
-
-48
-00:02:51,483 --> 00:02:55,466
-about subqueries. We'll talk about different views, inline tables,
-
-49
-00:02:55,483 --> 00:03:00,166
-valid functions, and derived tables. So some of the more advanced
-
-50
-00:03:00,483 --> 00:03:03,466
-titles we're talking about grouping and aggregating... aggregating data.
-
-51
-00:03:03,483 --> 00:03:07,466
-We'll then break for lunch. We're posting up there roughly 60 minutes.
-
-52
-00:03:07,483 --> 00:03:10,466
-It may be 45. It may be 60. It may be two hours. No, it won't
-
-53
-00:03:10,483 --> 00:03:13,466
-be two hours, I promise. But will be a roughly 60-minute lunch
-
-54
-00:03:13,483 --> 00:03:17,466
-hour, depending on what time we are, where we are in the curriculum
-
-55
-00:03:17,483 --> 00:03:21,466
-as we go through today's event. We'll then move in after lunch,
-
-56
-00:03:21,483 --> 00:03:24,466
-or roughly somewhere throughout the day, we're going to talk
-
-57
-00:03:24,166 --> 00:03:25,466
-about set operators.
-
-58
-00:03:26,166 --> 00:03:30,300
-Set operators are we're going to include Windows functions, grouping
-
-59
-00:03:30,383 --> 00:03:33,466
-sets using pivot and cubes and rollups. We'll introduce those
-
-60
-00:03:33,483 --> 00:03:36,466
-topics and talk about those for you. We'll talk about modifying
-
-61
-00:03:37,483 --> 00:03:39,466
-data, because it's not all about retrieving data, we need to
-
-62
-00:03:39,483 --> 00:03:42,466
-know how to properly insert, update, and delete content.
-
-63
-00:03:42,483 --> 00:03:45,466
-And we'll look at the use of constraints, default constraints,
-
-64
-00:03:46,483 --> 00:03:49,466
-triggers, to make sure that when we're adding data, we're kind
-
-65
-00:03:49,483 --> 00:03:53,466
-of enforcing data integrity by setting up different defaults,
-
-66
-00:03:53,483 --> 00:03:57,466
-constraints, and triggers. We'll look at programming with T-SQL, Transact-SQL.
-
-67
-00:03:57,483 --> 00:04:01,466
-We'll look some of the programming elements, some error handling,
-
-68
-00:04:01,483 --> 00:04:05,466
-and understanding and implementing transactions within your programming environment.
-
-69
-00:04:05,483 --> 00:04:09,433
-And then we'll wrap up today's class with retrieving SQL Server
-
-70
-00:04:09,483 --> 00:04:12,466
-metadata and improving SQL Server query performance. So we'll
-
-71
-00:04:13,483 --> 00:04:16,466
-look at things like system catalogs, dynamic management views,
-
-72
-00:04:16,483 --> 00:04:20,466
-or DMVs. We'll talk about creating and executing store procedures,
-
-73
-00:04:20,483 --> 00:04:24,183
-and then an overall understanding of ways that we can improve
-
-74
-00:04:24,483 --> 00:04:27,466
-the SQL Server performance specifically when we're querying.
-
-75
-00:04:27,483 --> 00:04:29,466
-So that's what we're going to take a look at. We're going to
-
-76
-00:04:29,483 --> 00:04:33,333
-begin, and like we said, with an introduction to Microsoft SQL Server.
-
-77
-00:04:33,416 --> 00:04:35,466
-Again, feel comfortable using that chat to the right. If you
-
-78
-00:04:35,483 --> 00:04:38,466
-have any great questions for us, feel free to chat in to us so
-
-79
-00:04:38,483 --> 00:04:42,183
-we can get any answers... any questions answered for you as we
-
-80
-00:04:42,266 --> 00:04:45,200
-have a plethora... I love using that word... a plethora of SMEs
-
-81
-00:04:45,283 --> 00:04:48,300
-working behind the scenes working with us. And Tobias and I
-
-82
-00:04:48,383 --> 00:04:52,466
-will also take some live questions as they come into us. So let's
-
-83
-00:04:52,233 --> 00:04:55,466
-go ahead and begin with an introduction to Microsoft SQL Server.
-
-84
-00:04:55,483 --> 00:04:58,466
-And this is going to be Module 1. And, again, kind of like just
-
-85
-00:04:58,483 --> 00:05:02,466
-kind of laying a foundation and understanding or kind of levelling
-
-86
-00:05:02,483 --> 00:05:06,266
-the playing field for people. We're just going to talk a little
-
-87
-00:05:06,350 --> 00:05:08,466
-bit about some of the different types of commands and statement
-
-88
-00:05:08,483 --> 00:05:11,466
-elements that we have out there, and then look at a couple basic
-
-89
-00:05:11,483 --> 00:05:14,466
-select statements where we can actually go in and talk to these...
-
-90
-00:05:14,483 --> 00:05:18,466
-the basic select statements that you might perform.
-
-91
-00:05:18,483 --> 00:05:22,466
-So three types of commands that you can find out there. We have
-
-92
-00:05:22,483 --> 00:05:26,466
-DML, or data manipulation language. And with this class being
-
-93
-00:05:26,483 --> 00:05:30,166
-querying SQL Server, the primary focus is going to be on DML
-
-94
-00:05:30,483 --> 00:05:32,466
-specifically the select statement, but we are... as we talked
-
-95
-00:05:32,483 --> 00:05:35,266
-about, we are going to talk about the insert, the update, and
-
-96
-00:05:35,350 --> 00:05:38,466
-delete commands, which falls in that data manipulation language
-
-97
-00:05:38,483 --> 00:05:42,400
-category of statements. We're also going to talk about DDLs,
-
-98
-00:05:42,483 --> 00:05:45,266
-how we create objects, whether it be a database or a table or
-
-99
-00:05:45,350 --> 00:05:48,466
-a store procedure. And after we create we may need to modify that.
-
-100
-00:05:48,483 --> 00:05:51,466
-We'll talk about ways to alter that. And eventually we may have
-
-101
-00:05:51,483 --> 00:05:55,466
-a reason to drop that. Now, my goal is to change that drop command
-
-102
-00:05:55,483 --> 00:05:58,466
-to the toast command. So I'm trying to get Microsoft to change
-
-103
-00:05:58,483 --> 00:06:01,466
-that from drop to toast. I'm going to be working with Tobias
-
-104
-00:06:01,233 --> 00:06:04,466
-on trying to get that toast command in there instead of the drop command.
-
-105
-00:06:05,166 --> 00:06:07,466
-Is there any way we can get that done by the end of the class?
-
-106
-00:06:07,483 --> 00:06:08,466
->> No.
-
-107
-00:06:08,483 --> 00:06:11,466
->> No. Okay. I'll keep working on that. I'm not going to take
-
-108
-00:06:11,483 --> 00:06:15,333
-no as an answer yet. So if you all are in favor of having a toast
-
-109
-00:06:15,483 --> 00:06:18,166
-command instead of a drop command, please let us know about that,
-
-110
-00:06:18,250 --> 00:06:22,466
-and I think we'll see maybe if we get enough heat on the development
-
-111
-00:06:23,333 --> 00:06:25,466
-team in SQL you get a toast command added for the next version.
-
-112
-00:06:25,483 --> 00:06:29,466
->> I have been trying to tell Brian about this NC standard thing
-
-113
-00:06:29,483 --> 00:06:34,466
-we have going and trying to stay close to standards, and apparently
-
-114
-00:06:34,483 --> 00:06:37,466
-they just haven't come to toast command just yet.
-
-115
-00:06:37,483 --> 00:06:40,466
->> Well, I think you could be setting... you could be setting
-
-116
-00:06:40,483 --> 00:06:44,466
-up new ground for people. Maybe everyone would change to the
-
-117
-00:06:44,483 --> 00:06:46,466
-toast command from the drop command. It's a cool command.
-
-118
-00:06:46,483 --> 00:06:49,466
-We're going to use toast a lot today. Unfortunately I've got
-
-119
-00:06:49,483 --> 00:06:52,466
-to type in drop, but when I type in drop, just think I'm thinking
-
-120
-00:06:52,483 --> 00:06:53,466
-toast when I'm typing that in.
-
-121
-00:06:53,483 --> 00:06:54,466
->> No, no.
-
-122
-00:06:54,483 --> 00:06:57,466
->> But there's not a drop command... there's not a toast command.
-
-123
-00:06:57,483 --> 00:07:00,166
-All right. We're also going to talk about data control statements.
-
-124
-00:07:00,250 --> 00:07:03,466
-Those are where we control access to the different objects within
-
-125
-00:07:03,483 --> 00:07:08,466
-the SQL Server databases. So those are DCL commands. We'll touch
-
-126
-00:07:08,183 --> 00:07:11,316
-on those as well. So three different categories of commands that
-
-127
-00:07:11,400 --> 00:07:11,466
-we'll be using.
-
-128
-00:07:12,483 --> 00:07:17,466
-DML, DDL, and DCL. Now, we have some T-SQL language elements
-
-129
-00:07:17,483 --> 00:07:19,466
-that we're going to be using, we're going to drill into a little
-
-130
-00:07:19,483 --> 00:07:22,466
-bit more detail. I'm going to introduce them and then let Tobias
-
-131
-00:07:22,483 --> 00:07:24,466
-kind of just talk a little bit, a little bit more about these.
-
-132
-00:07:24,483 --> 00:07:27,466
-But we have what are called predicates and operators that we
-
-133
-00:07:27,483 --> 00:07:30,466
-use when we're writing T-SQL commands, different functions that
-
-134
-00:07:30,483 --> 00:07:33,466
-we can call. We may want to reuse something like a store procedure,
-
-135
-00:07:33,483 --> 00:07:37,166
-so we may want to pass variables. We have different expressions
-
-136
-00:07:37,483 --> 00:07:41,450
-that we'll be able to use, ways to have a batch job and we can
-
-137
-00:07:41,483 --> 00:07:44,466
-supply separators in for that. We want to maybe control the flow
-
-138
-00:07:44,483 --> 00:07:48,466
-so we could use things like an if/else statement. And then of
-
-139
-00:07:48,483 --> 00:07:51,266
-course we want to comment because we're always good about commenting
-
-140
-00:07:51,350 --> 00:07:53,466
-content, so we want to make sure we can add comments. And we're
-
-141
-00:07:53,483 --> 00:07:57,466
-going to show you how we add comments to this content. So I'm
-
-142
-00:07:57,483 --> 00:08:01,466
-going to ask Tobias to kind of walk us through some of these
-
-143
-00:08:02,383 --> 00:08:04,466
-elements that we can use when we're working with T-SQL.
-
-144
-00:08:06,483 --> 00:08:07,466
->> Thank you, Brian. Sure.
-
-145
-00:08:07,483 --> 00:08:13,400
-So what you're seeing there is kind of the standard things you
-
-146
-00:08:13,483 --> 00:08:15,466
-would imagine in any programming language, right?
-
-147
-00:08:16,483 --> 00:08:22,466
-We have predicates. That includes the common operators, the common
-
-148
-00:08:22,483 --> 00:08:25,466
-comparison operators including like, which is a special string
-
-149
-00:08:25,483 --> 00:08:30,433
-kind of operator. We have three logical operators in not, and,
-
-150
-00:08:30,450 --> 00:08:30,466
-and or.
-
-151
-00:08:31,483 --> 00:08:36,0
-And we dig into how you use all of these as we go through the class.
-
-152
-00:08:36,483 --> 00:08:38,466
-And I think one thing that's interesting for us to kind of focus
-
-153
-00:08:38,483 --> 00:08:45,233
-on is what's best practices, how should you use the language,
-
-154
-00:08:45,316 --> 00:08:49,466
-what should you think about and what may you want to avoid for
-
-155
-00:08:49,483 --> 00:08:52,466
-various reasons. It's all very context sensitive. Right?
-
-156
-00:08:52,483 --> 00:08:56,466
-So using the right thing at the right moment is clearly going
-
-157
-00:08:56,483 --> 00:08:57,383
-to help you.
-
-158
-00:08:58,483 --> 00:09:01,466
->> All right. So those are the predicates. Now, also we have functions.
-
-159
-00:09:01,483 --> 00:09:04,0
-You see we have three categories of functions. We have string
-
-160
-00:09:04,483 --> 00:09:07,466
-functions, something like if you want to extract a portion of
-
-161
-00:09:07,483 --> 00:09:10,466
-a string or we want to look at the length of a string. We have
-
-162
-00:09:11,483 --> 00:09:13,466
-date and time functions. We want to go out and grab the system
-
-163
-00:09:13,483 --> 00:09:18,333
-date, we want to maybe check and add a certain time frame to
-
-164
-00:09:18,483 --> 00:09:21,200
-a day. And then we have aggregate functions. We want the average
-
-165
-00:09:21,283 --> 00:09:26,466
-sale for a particular salesperson or the total sales for a particular salesperson.
-
-166
-00:09:26,483 --> 00:09:30,466
-Those fall under the aggregate functions. So we can use these functions.
-
-167
-00:09:30,483 --> 00:09:33,466
-And, again, we'll see these as we go out throughout today's presentation.
-
-168
-00:09:34,0 --> 00:09:37,466
-And we'll see these actually in use. Now, the idea of using
-
-169
-00:09:38,166 --> 00:09:41,466
-variables is very powerful because this gives us the opportunity
-
-170
-00:09:41,483 --> 00:09:45,233
-to reuse items like store procedures that we've created and be
-
-171
-00:09:45,316 --> 00:09:48,466
-able to pass different variables or different values with these variables.
-
-172
-00:09:48,483 --> 00:09:52,183
-So we'll see how we can declare a variable. Very straightforward.
-
-173
-00:09:52,466 --> 00:09:55,466
-And we can also now not only declare it but we can also initialize
-
-174
-00:09:56,166 --> 00:09:59,233
-at the same time beginning with SQL Server 2008, in fact.
-
-175
-00:09:59,316 --> 00:10:01,466
-So we'll talk about the use of variables and how powerful they
-
-176
-00:10:02,166 --> 00:10:04,466
-can be to make it a little bit more flexible and dynamic, for
-
-177
-00:10:05,483 --> 00:10:08,200
-instance, store procedure, if we're trying to use that. We have
-
-178
-00:10:08,283 --> 00:10:11,466
-some expressions here. Like we're doing a select, a year, the
-
-179
-00:10:11,483 --> 00:10:15,466
-order date plus 1, we have select order quantity times unit price.
-
-180
-00:10:15,183 --> 00:10:17,466
-So we can get very creative with our select statements. We don't
-
-181
-00:10:17,483 --> 00:10:21,333
-have to just do select asterisk from a table name and walk away.
-
-182
-00:10:21,416 --> 00:10:24,466
-We can actually go in and get creative and kind of customize
-
-183
-00:10:24,483 --> 00:10:26,466
-that result set. And we're going to look at some of the opportunities
-
-184
-00:10:26,483 --> 00:10:30,0
-we have for the customization of that result set by using some
-
-185
-00:10:30,483 --> 00:10:33,333
-of these expressions that we have available to us. And the use
-
-186
-00:10:33,416 --> 00:10:36,466
-of batch jobs are really powerful because this allows us to be
-
-187
-00:10:36,483 --> 00:10:40,466
-able to go in there and script content, and then we can schedule
-
-188
-00:10:40,233 --> 00:10:44,466
-that content to run at a particular time. And if we have multiple
-
-189
-00:10:44,483 --> 00:10:48,466
-statements, we may often have to separate them. We most often
-
-190
-00:10:48,483 --> 00:10:52,466
-do that with the go statement. Now, go is not specific to a SQL
-
-191
-00:10:52,483 --> 00:10:56,466
-Server T-SQL command. It just allows us to go out there and separate
-
-192
-00:10:57,433 --> 00:11:00,466
-the different batch jobs or commands we have within a batch job.
-
-193
-00:11:00,483 --> 00:11:03,466
->> And it's important to know here with go that it's just something
-
-194
-00:11:04,483 --> 00:11:08,466
-that the tool sees such as SQL Server Management Studio. It sees
-
-195
-00:11:08,483 --> 00:11:11,416
-go and it knows that whatever was before go I'll send separately,
-
-196
-00:11:11,483 --> 00:11:13,466
-wait for a response from the server and then I'll send the rest,
-
-197
-00:11:14,483 --> 00:11:17,466
-right, and do this between the go. So SQL Server itself, like
-
-198
-00:11:17,483 --> 00:11:20,466
-Brian mentioned, doesn't really know what go is. It's different
-
-199
-00:11:20,483 --> 00:11:24,166
-tools may use different batch separators. But all our tools
-
-200
-00:11:24,483 --> 00:11:27,466
-default to go as the batch separator.
-
-201
-00:11:28,483 --> 00:11:32,166
->> Some other elements we can use are control of flow. I'll be
-
-202
-00:11:32,483 --> 00:11:36,466
-talking about this briefly. If/else, the while, begin end. Error handling.
-
-203
-00:11:36,483 --> 00:11:39,466
-We're going to look at some ways to catch errors and how we're
-
-204
-00:11:39,483 --> 00:11:42,433
-going to be able to respond to those errors. We'll look at those
-
-205
-00:11:42,483 --> 00:11:46,466
-later on today. And, again, we'll spend some time talking about
-
-206
-00:11:46,483 --> 00:11:49,466
-transactions, how to define a transaction within a batch, for
-
-207
-00:11:49,483 --> 00:11:52,466
-instance, used in a begin transaction, committing that transaction,
-
-208
-00:11:52,483 --> 00:11:55,216
-and potentially having to roll back that transaction.
-
-209
-00:11:55,483 --> 00:11:58,250
-You're going to want to document, especially start getting into
-
-210
-00:11:58,333 --> 00:12:00,316
-batch jobs, you're going to want to document what's going on
-
-211
-00:12:00,400 --> 00:12:02,466
-in there. This gives you the opportunity to use what's called
-
-212
-00:12:02,483 --> 00:12:06,366
-a block of commented code. This allows you to set up comments.
-
-213
-00:12:06,450 --> 00:12:08,466
-As you can see we have a forward slash asterisk. Anything I
-
-214
-00:12:09,333 --> 00:12:13,466
-say after that is a comment until I get the asterisk forward
-
-215
-00:12:13,483 --> 00:12:16,466
-slash again. That closes that block of comments out. If you
-
-216
-00:12:16,483 --> 00:12:20,466
-want just a line of comments, we can use the dash dash. And then
-
-217
-00:12:20,483 --> 00:12:23,466
-you'll just... that line will not be executed. So if you're
-
-218
-00:12:23,483 --> 00:12:27,466
-working on troubleshooting a particular script and there's certain
-
-219
-00:12:27,483 --> 00:12:30,416
-code you don't want to run temporarily, you can kind of comment
-
-220
-00:12:30,483 --> 00:12:34,466
-that out using the block of commented code or these two dashes,
-
-221
-00:12:34,183 --> 00:12:36,466
-and they'll ignore that temporarily. Or if you just want to
-
-222
-00:12:36,483 --> 00:12:40,233
-document what you're doing in there, you know, as the batch job
-
-223
-00:12:40,316 --> 00:12:43,466
-is running, you can actually add some comments to that documentation.
-
-224
-00:12:43,483 --> 00:12:46,466
-Or as documentation to that script or that batch job.
-
-225
-00:12:47,483 --> 00:12:51,183
-Now, the idea of actually executing a query is pretty... if you
-
-226
-00:12:51,266 --> 00:12:54,466
-understand that you got this select, you have the from, you have the...
-
-227
-00:12:54,483 --> 00:12:58,466
-possibly the where, maybe the group by, maybe the order by.
-
-228
-00:12:58,483 --> 00:13:01,466
-Often we look at the way it's written and we think that's the
-
-229
-00:13:01,483 --> 00:13:04,466
-way it's actually executed. What we want to show you here is
-
-230
-00:13:04,483 --> 00:13:08,433
-the logical order of the query being processed. So the first
-
-231
-00:13:08,483 --> 00:13:10,466
-thing that's going to happen is we're going to jump out to the from.
-
-232
-00:13:10,483 --> 00:13:11,466
-We're going to find out to make sure...
-
-233
-00:13:11,483 --> 00:13:15,466
->> So, Brian, just why do I care? Why is it important with the
-
-234
-00:13:15,483 --> 00:13:16,466
-logical query processing?
-
-235
-00:13:16,483 --> 00:13:18,466
->> Because you want to make sure that you understand when you're
-
-236
-00:13:18,483 --> 00:13:21,216
-writing this information, and if you're troubleshooting and trying
-
-237
-00:13:21,300 --> 00:13:25,466
-to optimize it, if you understand the order that these options
-
-238
-00:13:25,483 --> 00:13:28,466
-or these statements are being executed, it might give you the
-
-239
-00:13:28,483 --> 00:13:32,466
-opportunity to optimize that and make it run a little bit faster.
-
-240
-00:13:33,183 --> 00:13:35,366
->> Yeah, that's good. And it's also... it's also important to
-
-241
-00:13:35,450 --> 00:13:39,383
-know the logical query order because it helps you understand
-
-242
-00:13:39,466 --> 00:13:43,466
-exactly what needs to go on under the surface, right, under the covers.
-
-243
-00:13:43,483 --> 00:13:49,0
-So if you don't know exactly how the query language is structured,
-
-244
-00:13:49,483 --> 00:13:53,400
-right, then you may end up not getting the results you want.
-
-245
-00:13:53,483 --> 00:13:56,466
-So it's not... it doesn't mean that whatever you type is exactly
-
-246
-00:13:56,483 --> 00:14:01,466
-what we are going to do, because we have this fancy query optimizer
-
-247
-00:14:01,483 --> 00:14:05,466
-that figures out the right way, the best way to give you the results.
-
-248
-00:14:06,266 --> 00:14:09,466
-But it does mean that we are constrained so that we will always
-
-249
-00:14:09,483 --> 00:14:12,466
-logically execute in this order. So it's super important to
-
-250
-00:14:13,0 --> 00:14:15,466
-understand the logical query processing.
-
-251
-00:14:15,483 --> 00:14:18,466
->> So it actually begins with the from statement and then it goes
-
-252
-00:14:18,483 --> 00:14:20,466
-to the where clause. I'm just going to bring these up, you'll
-
-253
-00:14:20,483 --> 00:14:25,450
-see, as they're numbered here. Group by, having, and then it
-
-254
-00:14:25,483 --> 00:14:27,466
-goes to select. Oddly enough, the first thing that we write is
-
-255
-00:14:27,483 --> 00:14:31,450
-the select, but that really isn't a... you know, isn't addressed until...
-
-256
-00:14:31,483 --> 00:14:35,300
-well, going to call it step 5. And if there's an order by, that's
-
-257
-00:14:35,383 --> 00:14:39,466
-executed last. So, you know, it's good to understand that order,
-
-258
-00:14:39,233 --> 00:14:41,466
-that processing order so when you're writing your queries or
-
-259
-00:14:41,483 --> 00:14:44,333
-if you're trying to optimize your queries, you can see where
-
-260
-00:14:44,416 --> 00:14:45,466
-that information is coming from.
-
-261
-00:14:45,483 --> 00:14:49,466
->> And we get into some more details on logical query processing
-
-262
-00:14:49,483 --> 00:14:53,450
-later, because there are some other elements to the language
-
-263
-00:14:53,483 --> 00:14:56,466
-that are in addition to what we're showing on this slide.
-
-264
-00:14:58,433 --> 00:15:00,466
->> So this is applying the logical order of operations here.
-
-265
-00:15:01,166 --> 00:15:03,466
-We've got this statement here, so let's start from the top, use
-
-266
-00:15:03,483 --> 00:15:06,466
-adventure works. We also... we identify what databases we want
-
-267
-00:15:06,483 --> 00:15:10,466
-to use, and so I always begin a statement with a use so I make
-
-268
-00:15:10,483 --> 00:15:12,466
-sure I'm in the appropriate database.
-
-269
-00:15:13,483 --> 00:15:14,466
-Then we'll add the from.
-
-270
-00:15:15,483 --> 00:15:17,466
-This is actually sales.salesorderheader.
-
-271
-00:15:18,483 --> 00:15:22,266
-Where customer ID equals a certain number. Group by salesperson.
-
-272
-00:15:22,483 --> 00:15:25,466
-And then we have to grab the year off the order date.
-
-273
-00:15:25,483 --> 00:15:27,466
-Having count greater than 1.
-
-274
-00:15:28,483 --> 00:15:30,466
-And then we execute, then we have the select portion. We're not
-
-275
-00:15:30,483 --> 00:15:33,183
-going write the statement this way, but, again, this is how a
-
-276
-00:15:33,266 --> 00:15:36,466
-statement that we have written will be processed by SQL Server.
-
-277
-00:15:37,333 --> 00:15:39,466
-And finally wrap up with the order by.
-
-278
-00:15:39,483 --> 00:15:43,466
->> Yes. So one thing I just wanted to mention on use is we have
-
-279
-00:15:43,483 --> 00:15:46,466
-two big products out there with regard to SQL, right? One is
-
-280
-00:15:46,483 --> 00:15:49,466
-SQL Server 2012, which is our on-premise product, and then we
-
-281
-00:15:49,483 --> 00:15:53,466
-have Windows Azure SQL database, which is our cloud offering
-
-282
-00:15:53,166 --> 00:15:57,333
-in Azure. And the use statement itself is not supported in SQL
-
-283
-00:15:57,416 --> 00:16:02,300
-database because of what we sell is something different from
-
-284
-00:16:02,383 --> 00:16:04,466
-SQL Server. We sell databases rather than instances.
-
-285
-00:16:05,483 --> 00:16:09,466
-So that's important to know. If you want to create software that
-
-286
-00:16:09,483 --> 00:16:13,466
-runs nicely on both of the platforms, you should not use the
-
-287
-00:16:13,483 --> 00:16:16,466
-use statement within your program. You'll very often use it
-
-288
-00:16:16,483 --> 00:16:20,466
-in SQL Server for debugging or for testing your scripts, right,
-
-289
-00:16:20,483 --> 00:16:24,466
-but within your software, your app that you write, you may want
-
-290
-00:16:24,483 --> 00:16:28,466
-to avoid using use. The other thing that's interesting here is
-
-291
-00:16:28,483 --> 00:16:33,166
-if you're interested in it working on both our Azure platform
-
-292
-00:16:33,483 --> 00:16:37,333
-as well as on our on-premise platform, you should look at trying
-
-293
-00:16:37,483 --> 00:16:40,466
-on both. And if you develop against Windows Azure SQL DB, you'll
-
-294
-00:16:40,483 --> 00:16:43,466
-be able to run on SQL Server as well.
-
-295
-00:16:44,0 --> 00:16:47,466
->> Are you suggesting they should test the code before they deploy it?
-
-296
-00:16:47,483 --> 00:16:48,466
->> No, no, no.
-
-297
-00:16:48,483 --> 00:16:50,466
->> Really. Okay. Because I didn't know we were supposed to do that.
-
-298
-00:16:50,483 --> 00:16:54,333
-So all right. All right. Let's take a look at some basic select
-
-299
-00:16:54,416 --> 00:16:58,466
-statements again. Some of these are more advanced and might be
-
-300
-00:16:58,216 --> 00:17:00,466
-familiar with this, but we just want to make sure everyone's
-
-301
-00:17:00,483 --> 00:17:03,466
-on the same page here. So we have a select, we supply the select
-
-302
-00:17:03,483 --> 00:17:05,466
-list, the from, the where, the group by, the order by.
-
-303
-00:17:05,483 --> 00:17:07,466
-We're going to see plenty of these.
-
-304
-00:17:08,416 --> 00:17:10,466
-Here's where we're looking at retrieving call in from a group.
-
-305
-00:17:10,483 --> 00:17:14,466
-We can actually just use select customer ID, store ID from the sales.customer.
-
-306
-00:17:14,483 --> 00:17:19,466
-So we're identifying the object in the schema for that object.
-
-307
-00:17:19,483 --> 00:17:21,466
-So that's about as basic as you can get. Well, you can get a
-
-308
-00:17:21,483 --> 00:17:24,466
-little bit more basic. Instead of identifying the columns, you
-
-309
-00:17:24,483 --> 00:17:26,466
-could swap out the column names and put a asterisk in there.
-
-310
-00:17:26,483 --> 00:17:28,466
-That's the most basic select statement you can write.
-
-311
-00:17:28,483 --> 00:17:31,466
-Select asterisk from table name. We're actually taking it up
-
-312
-00:17:31,483 --> 00:17:32,466
-a notch...
-
-313
-00:17:32,483 --> 00:17:33,166
->> We can make it easier.
-
-314
-00:17:33,250 --> 00:17:34,366
->> Make it easier than that?
-
-315
-00:17:34,450 --> 00:17:36,200
->> Yeah. Select space 1.
-
-316
-00:17:36,283 --> 00:17:37,466
->> Select space 1. That's...
-
-317
-00:17:37,483 --> 00:17:39,466
->> That's probably the easiest you can go.
-
-318
-00:17:39,483 --> 00:17:43,466
->> Okay. Well, okay. So try that. If you want the easiest statement
-
-319
-00:17:43,483 --> 00:17:46,466
-so you can actually go out and brag that you've actually submitted
-
-320
-00:17:46,483 --> 00:17:50,366
-and executed a select statement... what is it, select space 1.
-
-321
-00:17:50,450 --> 00:17:53,283
->> And it's actually not... it sounds like trivial and stupid
-
-322
-00:17:53,366 --> 00:17:55,466
-and why would you ever do that, right, but it's actually interesting
-
-323
-00:17:55,483 --> 00:17:58,466
-when you want to do performance tuning, if you're interested
-
-324
-00:17:58,483 --> 00:18:02,466
-in what is the performance of just speaking to SQL Server, like
-
-325
-00:18:02,483 --> 00:18:06,233
-network, all of these things, rather than going into what actually
-
-326
-00:18:06,316 --> 00:18:10,466
-happens in the database engine, select 1 is a perfect thing to test.
-
-327
-00:18:10,483 --> 00:18:12,466
->> Awesome. Definitely. Select 1.
-
-328
-00:18:13,433 --> 00:18:15,466
-All right. Using calculations. So as you can see here, we've
-
-329
-00:18:15,483 --> 00:18:18,466
-select unit price order quantity and then we're performing a
-
-330
-00:18:19,483 --> 00:18:21,466
-calculation unit price times order quantity and we're going to
-
-331
-00:18:21,483 --> 00:18:25,466
-grab this from the sales order detail table. So we can actually
-
-332
-00:18:25,483 --> 00:18:28,466
-use this. And we have different calculations. Right now we're
-
-333
-00:18:28,483 --> 00:18:31,466
-doing a multiplication here. But we can do an addition, we can
-
-334
-00:18:31,483 --> 00:18:35,166
-do division, we do percentages. So we have these different calculations,
-
-335
-00:18:35,450 --> 00:18:38,433
-scalar calculations that are available to us. We can also do
-
-336
-00:18:38,483 --> 00:18:40,466
-a concatenate. We can concatenate content. Again, we're going
-
-337
-00:18:40,483 --> 00:18:43,466
-to see some samples of these. We're just kind of introducing
-
-338
-00:18:43,483 --> 00:18:45,466
-some of the topics that we're going to go through here.
-
-339
-00:18:46,483 --> 00:18:49,350
-All right. Let's take a look at some basic statements here.
-
-340
-00:18:50,250 --> 00:18:52,466
-So I'll come out of the
-
-341
-00:18:54,266 --> 00:18:58,0
-PowerPoint slide and jump into an image here, then
-
-342
-00:18:59,483 --> 00:19:02,466
-go into SQL Management Studio. And again we've got adventure
-
-343
-00:19:02,483 --> 00:19:05,466
-works and we're already using adventure works. So we can do
-
-344
-00:19:05,483 --> 00:19:06,466
-a select again.
-
-345
-00:19:06,483 --> 00:19:07,466
->> 1, 1, 1.
-
-346
-00:19:07,483 --> 00:19:09,466
->> 1. I'm going to do that one first just so everyone sees that
-
-347
-00:19:09,483 --> 00:19:12,466
-this works. And the cool thing, if you're not familiar with this,
-
-348
-00:19:12,483 --> 00:19:14,466
-you can highlight this and just execute it.
-
-349
-00:19:15,466 --> 00:19:18,433
-And you got no column name but you get the one returned. So as
-
-350
-00:19:18,483 --> 00:19:21,466
-you've said, Tobias, we've gone out, we've communicated with
-
-351
-00:19:21,483 --> 00:19:25,466
-SQL Server, we've got a response. So we know that things are working.
-
-352
-00:19:25,483 --> 00:19:29,466
-We're able to communicate. Now, you can also take it up a notch
-
-353
-00:19:29,483 --> 00:19:32,466
-and go and select asterisk from we'll say sales...
-
-354
-00:19:33,483 --> 00:19:37,416
-sales... and the cool thing with intelli-sense because I couldn't
-
-355
-00:19:37,483 --> 00:19:39,466
-remember exactly what I wanted to go to, we can go to sales or
-
-356
-00:19:40,333 --> 00:19:43,466
-table, order header, and then we can... again, we'll highlight
-
-357
-00:19:44,333 --> 00:19:46,466
-that and execute just that command.
-
-358
-00:19:47,250 --> 00:19:49,466
-And now it gives us a bunch of information here. Probably too
-
-359
-00:19:49,483 --> 00:19:52,466
-much because now I've got every row and I really didn't want
-
-360
-00:19:52,483 --> 00:19:55,466
-every row of... or every column, excuse me. I wanted just a
-
-361
-00:19:55,483 --> 00:19:58,466
-few items about the rows in here. So we can change this again
-
-362
-00:19:59,0 --> 00:20:02,466
-to do a select. We'll grab sales order ID.
-
-363
-00:20:04,483 --> 00:20:05,466
-Let's actually do sales...
-
-364
-00:20:06,216 --> 00:20:07,466
-we'll do it... spell it out all the way.
-
-365
-00:20:09,483 --> 00:20:11,466
-And we'll grab one more.
-
-366
-00:20:12,483 --> 00:20:16,466
-We'll grab due date just so we stay with it here.
-
-367
-00:20:19,483 --> 00:20:22,466
-Due date. And then we'll specify here
-
-368
-00:20:24,216 --> 00:20:28,466
-from the sales.salesorderheader and I'm going to double click
-
-369
-00:20:28,483 --> 00:20:32,466
-here, save a few keystrokes. So we'll again highlight that and
-
-370
-00:20:32,483 --> 00:20:33,466
-execute that.
-
-371
-00:20:33,483 --> 00:20:34,366
->> As sales.
-
-372
-00:20:35,200 --> 00:20:36,333
->> I'm sorry?
-
-373
-00:20:36,483 --> 00:20:41,466
->> You'd have to says as sales for... you can try.
-
-374
-00:20:41,483 --> 00:20:42,466
->> I didn't hear what you said. Sorry.
-
-375
-00:20:43,0 --> 00:20:45,466
->> You have to specify the table alias since you added it...
-
-376
-00:20:45,483 --> 00:20:47,466
-you're using sales dot.
-
-377
-00:20:47,216 --> 00:20:48,466
->> Oh as sales. Gotcha.
-
-378
-00:20:49,483 --> 00:20:50,166
->> Since you added that.
-
-379
-00:20:51,483 --> 00:20:54,466
->> From sales.sales.duedate, sales.orderheader.
-
-380
-00:20:55,483 --> 00:20:59,183
-As sales... didn't really want to do that this early, but we'll
-
-381
-00:20:59,266 --> 00:21:00,350
-do it anyways.
-
-382
-00:21:01,283 --> 00:21:04,466
-There we go. Execute that. There. So now we've set up different...
-
-383
-00:21:04,483 --> 00:21:07,250
-so we've got our sales order ID and our due date set there.
-
-384
-00:21:08,350 --> 00:21:11,183
-All right. So then we've added that. Now we can... so let's...
-
-385
-00:21:11,266 --> 00:21:12,466
-we're seeing all the rows.
-
-386
-00:21:13,383 --> 00:21:16,166
-Let's see if we can control the number of rows being returned.
-
-387
-00:21:16,483 --> 00:21:17,466
-How do we do that?
-
-388
-00:21:17,483 --> 00:21:19,466
-We do that with a request clause. So we're going to do...
-
-389
-00:21:19,483 --> 00:21:22,466
-again, we'll do... I'm going to reuse this. What am I going
-
-390
-00:21:22,483 --> 00:21:24,466
-to do here? I'm going to go up and I'm just going to throw a
-
-391
-00:21:24,483 --> 00:21:27,466
-where in, where we'll say sales
-
-392
-00:21:31,483 --> 00:21:35,466
-order ID is equal or less than or equal to
-
-393
-00:21:36,483 --> 00:21:38,466
-we'll say 45,000.
-
-394
-00:21:40,483 --> 00:21:42,466
-Let's do... this's looks pretty... let's do 44.
-
-395
-00:21:44,483 --> 00:21:47,233
-So now we're eliminating the number of rows. We eliminated the
-
-396
-00:21:47,316 --> 00:21:49,466
-number of columns. Now we're eliminating the number of rows.
-
-397
-00:21:50,483 --> 00:21:53,466
-And now you see that if we jump up to messages real quick, you'll
-
-398
-00:21:53,483 --> 00:21:55,466
-see that we have 342 rows.
-
-399
-00:21:56,333 --> 00:22:01,466
-Now, if we ran this without the where clause as we did before
-
-400
-00:22:01,483 --> 00:22:06,466
-and go to messages, we had 31,465 rows. So the where clause relates...
-
-401
-00:22:06,483 --> 00:22:09,466
-helps reduce the number of rows that are being returned to you
-
-402
-00:22:09,483 --> 00:22:13,466
-and it's given very powerful with managing that type of content.
-
-403
-00:22:14,483 --> 00:22:17,466
-So we can also, you know, just throw one more variation here.
-
-404
-00:22:17,483 --> 00:22:21,466
-We can also do the order by. So we'll order by kind of...
-
-405
-00:22:21,483 --> 00:22:23,466
-we'll go with sales order ID.
-
-406
-00:22:24,483 --> 00:22:25,466
->> You like the sales order ID.
-
-407
-00:22:25,483 --> 00:22:28,466
->> Yeah, it's easy. I like working with numbers better. I think
-
-408
-00:22:28,483 --> 00:22:29,266
-that's what it is.
-
-409
-00:22:30,250 --> 00:22:32,466
-So we're going to do that. We're going to execute that and now
-
-410
-00:22:32,483 --> 00:22:35,466
-it orders it or it sorts it by order ID.
-
-411
-00:22:36,483 --> 00:22:39,466
-All right. So just a few basic select statements that kind of
-
-412
-00:22:39,483 --> 00:22:44,283
-get your feet wet regarding performing select statements inside
-
-413
-00:22:44,366 --> 00:22:48,383
-of SQL Server and try to get you comfortable with the idea we
-
-414
-00:22:48,466 --> 00:22:52,466
-can use... we're going to be spending time in SSMS in that we
-
-415
-00:22:52,483 --> 00:22:55,216
-can highlight whatever we want to execute and we can build on
-
-416
-00:22:55,300 --> 00:22:57,466
-our commands as we're entering these commands in.
-
-417
-00:22:58,483 --> 00:23:00,433
-All right. Back into PowerPoint here.
-
-418
-00:23:01,483 --> 00:23:07,183
-What did I do with my slides here? Over here? I thought I already
-
-419
-00:23:07,266 --> 00:23:08,466
-opened somewhere. Here it is.
-
-420
-00:23:11,483 --> 00:23:14,466
-All right. So that's just a quick demo on writing basic select statements.
-
-421
-00:23:14,483 --> 00:23:17,466
-Just to review, we introduced the three different types of commands,
-
-422
-00:23:17,483 --> 00:23:21,466
-DMLs, DCLs, DDLs. We'll be working with these throughout the day.
-
-423
-00:23:21,483 --> 00:23:24,466
-We talked about different elements like predicates and operators,
-
-424
-00:23:25,0 --> 00:23:29,383
-functions, variables, commenting, control of flow. And, again,
-
-425
-00:23:29,466 --> 00:23:31,466
-we're going to drill into this in more detail. We looked at
-
-426
-00:23:31,483 --> 00:23:35,266
-the different elements and how they are processed. We began
-
-427
-00:23:35,350 --> 00:23:39,283
-with the from, the where, the group by, the having, the select,
-
-428
-00:23:39,366 --> 00:23:41,466
-and then the order by. That's the order that they're actually
-
-429
-00:23:41,483 --> 00:23:45,466
-processed when you're executing a select statement. So that's
-
-430
-00:23:45,483 --> 00:23:48,466
-going to just wrap up the very first section where we're going
-
-431
-00:23:48,483 --> 00:23:52,466
-to come in and we're going to do information or provide information
-
-432
-00:23:52,483 --> 00:23:58,466
-on the basic elements of what we're doing with SQL Server.
+	00:00:00,333 --> 00:00:06,333
+	[Música]
+	
+	2
+	00:00:17,433 --> 00:00:21,333
+	>> ¡Bien!, hola y bienvenidos, en vivo desde la sede de Microsoft aquí
+	
+	3
+	00:00:21,416 --> 00:00:25,466
+	en la zona de Bellevue/Redmond/Seattle. Vamos a estar presentando
+	
+	4
+	00:00:25,483 --> 00:00:30,350
+	una clase de Querying Microsoft SQL Server 2012 para ustedes hoy.
+	
+	5
+	00:00:30,433 --> 00:00:33,466
+	Muchas gracias por tomarse el tiempo de unirse a nosotros. Queremos algún
+	
+	6
+	00:00:33,483 --> 00:00:37,466
+	tipo de interacción para que sean capaces de darnos algún tipo de retroalimentación,
+	
+	7
+	00:00:37,483 --> 00:00:41,333
+	ya que estarán viendo la presentación en las próximas
+	
+	8
+	00:00:41,483 --> 00:00:44,466
+	horas, a la derecha de su pantalla hay una interfáz de chat, 
+	
+	9
+	00:00:44,483 --> 00:00:48,416
+	allí puedes sentirte cómodo respondiendo o enviado algunos mensajes
+	
+	10
+	00:00:48,483 --> 00:00:51,466
+	allí o para algunas conversaciones de allí. Tenemos toneladas de PYMES, expertos
+	
+	11
+	00:00:51,483 --> 00:00:55,466
+	en la materia, trabajando detrás de scena con nosotros. Y mi persona,
+	
+	12
+	00:00:55,483 --> 00:00:59,466
+	Brian Alderman, yo estaré presentando, nosotros también
+	
+	13
+	00:00:59,483 --> 00:01:03,466
+	estaremos monitoreando las conversaciones así cómo lo estarán haciendo desde el estudio.
+	
+	14
+	00:01:03,483 --> 00:01:06,350
+	Y los más interesante es que si nos pueden escribir una buena pregunta,
+	
+	15
+	00:01:06,433 --> 00:01:09,466
+	nos la van a enviar y nos vamos a tomar el tiempo en vivo y
+	
+	16
+	00:01:09,483 --> 00:01:12,466
+	les estaremos respondiendo. La buena noticias es que no vas a
+	
+	17
+	00:01:12,483 --> 00:01:15,433
+	escucharme solo a mi todo todo el día. También se unió a mí en
+	
+	18
+	00:01:15,483 --> 00:01:17,466
+	el estudio Tobias. ¿Cómo estás?
+	
+	19
+	00:01:18,483 --> 00:01:20,466
+	>> No está mal, Brian. Se siente bien estar aquí.
+	
+	20
+	00:01:21,483 --> 00:01:24,300
+	>> Es bueno verte. Gracias por unirte a nosotros hoy. Y acerca de qué
+	
+	21
+	00:01:24,383 --> 00:01:26,300
+	vamos a hablar, Quiero estar seguro de que todos entienden
+	
+	22
+	00:01:26,383 --> 00:01:30,466
+	a lo que sean metido. Esto es más que una clase de nivel 300.
+	
+	23
+	00:01:30,483 --> 00:01:32,466
+	Y estámos tratando de conocer a la audiencia que quiere aprender
+	
+	24
+	00:01:32,483 --> 00:01:36,466
+	los conocimientos técnicos requeridos para algunas de las consultas Transact-SQL
+	
+	25
+	00:01:37,233 --> 00:01:40,466
+	avanzadas dentro de SQL Server. Por lo que deben tener un conocimiento básico
+	
+	26
+	00:01:40,483 --> 00:01:44,466
+	al menos de bases de datos relacionales, entender el uso de
+	
+	27
+	00:01:44,483 --> 00:01:47,200
+	SSMS, o de SQL Server Management Studio, porque vamos
+	
+	28
+	00:01:47,283 --> 00:01:50,466
+	a pasar mucho tiempo en ello, y entonces un conocimiento básico
+	
+	29
+	00:01:50,483 --> 00:01:52,466
+	de algo del sistema operativo Microsoft Windows y algo de
+	
+	30
+	00:01:52,483 --> 00:01:55,466
+	su funcionalidad del núcleo. Vamos a echar un vistazo a lo que vamos
+	
+	31
+	00:01:55,483 --> 00:01:58,466
+	a discutir durante todo el día aquí. O por la noche, donde dependiendo
+	
+	32
+	00:01:58,483 --> 00:02:01,466
+	desde donde se marcó. Vamos a empezar con sólo una introducción
+	
+	33
+	00:02:01,483 --> 00:02:05,333
+	a SQL Server 2012. Tenemos un par de módulos, sólo un poco de
+	
+	34
+	00:02:05,416 --> 00:02:07,466
+	nivelar el campo de juego para asegurarse de que todo el mundo entiende 
+	
+	35
+	00:02:07,483 --> 00:02:10,466
+	qué es lo que vamos a hacer frente a lo largo del día, y
+	
+	36
+	00:02:10,483 --> 00:02:13,466
+	algunos de los términos y conceptos que estaremos abordando o utilizando
+	
+	37
+	00:02:13,200 --> 00:02:16,466
+	Durante todo el día. Bueno a continuación, vamos a pasar en el segundo módulo y	
+	
+	38
+	00:02:16,483 --> 00:02:19,466
+	empezar a buscar en algunas de las sentencias de selección avanzada, cosas
+	
+	39
+	00:02:19,483 --> 00:02:23,466
+	al igual que la cláusula distinta, los casos, las juntas, las fusiones, filtrado
+	
+	40
+	00:02:23,483 --> 00:02:27,466
+	y clasificación de datos, y cómo podemos hacer frente a esos valores nulos molestos.
+	
+	41
+	00:02:28,333 --> 00:02:31,466
+	Vamos a pasar a los tipos de datos. Porque, como ustedes ya saben, cuando construimos
+	
+	42
+	00:02:31,483 --> 00:02:34,283
+	nuevos objetos en SQL Server, es muy importante para nosotros
+	
+	43
+	00:02:34,366 --> 00:02:38,266
+	entender el tipo de datos apropiado y aplicar ese tipo de datos.
+	
+	44
+	00:02:38,350 --> 00:02:42,316
+	Para que nosotros hablar de eso, la conversión de tipos de datos y en realidad
+	
+	45
+	00:02:42,400 --> 00:02:44,416
+	introducir algunas funciones de SQL Server.
+	
+	46
+	00:02:45,166 --> 00:02:48,466
+	Luego trasladaremos en agrupar y agregar datos. Y en esa 
+	
+	47
+	00:02:48,166 --> 00:02:51,466
+	zona vamos a hablar de grupo y tener cláusulas. Vamos a hablar
+	
+	48
+	00:02:51,483 --> 00:02:55,466
+	e subconsultas. Vamos a hablar sobre diferentes puntos de vista, las tablas en línea,
+	
+	49
+	00:02:55,483 --> 00:03:00,166
+	funciones válidas y tablas derivadas. Así que algunos de los títulos más avanzados
+	
+	50
+	00:03:00,483 --> 00:03:03,466
+	estamos hablando de agrupar y agregar... agregar datos.
+	
+	51
+	00:03:03,483 --> 00:03:07,466
+	Entonces lo rompe para el almuerzo. Nos estamos posteando hay aproximadamente 60 minutos.
+	
+	52
+	00:03:07,483 --> 00:03:10,466
+	Puede ser 45. Puede ser 60. Puede ser dos horas. No, no será
+	
+	53
+	00:03:10,483 --> 00:03:13,466
+	de dos horas, lo prometo. Pero será el almuerzo sera de 60 minutos aproximadamente
+	
+	54
+	00:03:13,483 --> 00:03:17,466
+	dependiendo de qué época estamos, donde estamos en el plan de estudios
+	
+	55
+	00:03:17,483 --> 00:03:21,466
+	como pasamos por evento de hoy. Luego trasladaremos después del almuerzo,
+	
+	56
+	00:03:21,483 --> 00:03:24,466
+	o aproximadamente en algún lugar durante todo el día, vamos a hablar
+	
+	57
+	00:03:24,166 --> 00:03:25,466
+	de los operadores.
+	
+	58
+	00:03:26,166 --> 00:03:30,300
+	Los operadores de conjunto son vamos a incluir funciones de Windows, la agrupación
+	
+	59
+	00:03:30,383 --> 00:03:33,466
+	se establece mediante el pivote y cubos y acumulados. Presentaremos los
+	
+	60
+	00:03:33,483 --> 00:03:36,466
+	temas y hablar de aquellos para usted. Vamos a hablar acerca de la modificación
+	
+	61
+	00:03:37,483 --> 00:03:39,466
+	de los datos, porque no es todo acerca de cómo recuperar datos, necesitamos saber
+	
+	62
+	00:03:39,483 --> 00:03:42,466
+	cómo insertar, actualizar y eliminar el contenido correctamente.
+	
+	63
+	00:03:42,483 --> 00:03:45,466
+	Y veremos el uso de restricciones, las limitaciones por defecto,
+	
+	64
+	00:03:46,483 --> 00:03:49,466
+	disparadores, para asegurarse de que cuando estamos añadiendo datos, somos clase
+	
+	65
+	00:03:49,483 --> 00:03:53,466
+	de hacer cumplir la integridad de los datos estableciendo distintos valores predeterminados,
+	
+	66
+	00:03:53,483 --> 00:03:57,466
+	restricciones y desencadenadores. Vamos a ver en la programación con T-SQL, Transact-SQL.
+	
+	67
+	00:03:57,483 --> 00:04:01,466
+	Veremos algunos de los elementos de programación, algunos errores,
+	
+	68
+	00:04:01,483 --> 00:04:05,466
+	y la comprensión y la aplicación de transacciones dentro de su entorno de programación.
+	
+	69
+	00:04:05,483 --> 00:04:09,433
+	Y luego a terminar la clase de hoy con recuperar metadatos de SQL Server
+	
+	70
+	00:04:09,483 --> 00:04:12,466
+	y mejorar el rendimiento de consultas de SQL Server. Así veremos
+	
+	71
+	00:04:13,483 --> 00:04:16,466
+	cosas como catálogos de sistema, vistas de administración dinámica,
+	
+	72
+	00:04:16,483 --> 00:04:20,466
+	o DMV. Vamos a hablar sobre la creación y ejecución de procedimientos de la tienda
+	
+	73
+	00:04:20,483 --> 00:04:24,183
+	y luego una comprensión total de maneras en que podemos mejorar el rendimiento
+	
+	74
+	00:04:24,483 --> 00:04:27,466
+	de SQL Server específicamente cuando estamos consultando.
+	
+	75
+	00:04:27,483 --> 00:04:29,466
+	Por lo es lo que vamos a echar un vistazo. Vamos a
+	
+	76
+	00:04:29,483 --> 00:04:33,333
+	comenzar, y como hemos dicho, con una introducción a Microsoft SQL Server.
+	
+	77
+	00:04:33,416 --> 00:04:35,466
+	Otra vez, sentirse cómodo con ese chat a la derecha. Si tienes
+	
+	78
+	00:04:35,483 --> 00:04:38,466
+	dudas grandes para nosotros, no dude en chat en nosotros
+	
+	79
+	00:04:38,483 --> 00:04:42,183
+	para que podamos conseguir cualquier respuestas... cualquier preguntas para usted ya que
+	
+	80
+	00:04:42,266 --> 00:04:45,200
+	tenemos una gran cantidad... Gusta usar esa palabra... una gran cantidad de SMEs
+	
+	81
+	00:04:45,283 --> 00:04:48,300
+	trabajando detrás de las escenas trabajan con nosotros. Y Tobias y tomaré
+	
+	82
+	00:04:48,383 --> 00:04:52,466
+	también algunos viven las preguntas a medida que llegan a nosotros. Así que
+	
+	83
+	00:04:52,233 --> 00:04:55,466
+	vamos a empezar con una introducción a Microsoft SQL Server.
+	
+	84
+	00:04:55,483 --> 00:04:58,466
+	Y este va a ser el módulo 1. Y, de nuevo, una especie de
+	
+	85
+	00:04:58,483 --> 00:05:02,466
+	solo tipo de sentar una base y comprensión, o tipo de nivelar
+	
+	86
+	00:05:02,483 --> 00:05:06,266
+	el campo de juego para las personas. Sólo vamos a hablar un poco
+	
+	87
+	00:05:06,350 --> 00:05:08,466
+	sobre algunos de los diferentes tipos de comandos y elementos
+	
+	88
+	00:05:08,483 --> 00:05:11,466
+	de afirmación que tenemos ahí fuera, y luego mire un par basic
+	
+	89
+	00:05:11,483 --> 00:05:14,466
+	select donde realmente podemos ir y hablar con estos...
+	
+	90
+	00:05:14,483 --> 00:05:18,466
+	las declaraciones escogidas básicas que podría funcionar.
+	
+	91
+	00:05:18,483 --> 00:05:22,466
+	Por lo tanto tres tipos de comandos que se pueden encontrar por ahí. Tenemos
+	
+	92
+	00:05:22,483 --> 00:05:26,466
+	DML o lenguaje de manipulación de datos. Y con esta clase se
+	
+	93
+	00:05:26,483 --> 00:05:30,166
+	consulta de SQL Server, el enfoque principal va a ser en DML
+	
+	94
+	00:05:30,483 --> 00:05:32,466
+	específicamente la instrucción, pero estamos... ya hablamos,
+	
+	95
+	00:05:32,483 --> 00:05:35,266
+	a hablar de la inserción, actualización y
+	
+	96
+	00:05:35,350 --> 00:05:38,466
+	eliminar comandos, que cae en esa categoría de lenguaje
+	
+	97
+	00:05:38,483 --> 00:05:42,400
+	de manipulación de datos de declaraciones. También vamos a hablar del DDLs
+	
+	98
+	00:05:42,483 --> 00:05:45,266
+	cómo crear objetos, ya sea una base de datos o una tabla o
+	
+	99
+	00:05:45,350 --> 00:05:48,466
+	un procedimiento de la tienda. Y después creamos podemos modificar.
+	
+	100
+	00:05:48,483 --> 00:05:51,466
+	Vamos a hablar sobre maneras de alterar. Y finalmente podemos tener
+	
+	101
+	00:05:51,483 --> 00:05:55,466
+	una razón para la gota. Ahora, mi objetivo es cambiar ese comando
+	
+	102
+	00:05:55,483 --> 00:05:58,466
+	de gota a la orden de pan tostado. Así que estoy tratando de conseguir Microsoft cambiar
+	
+	103
+	00:05:58,483 --> 00:06:01,466
+	eso de gota a tostar. Voy a trabajar con Tobias
+	
+	104
+	00:06:01,233 --> 00:06:04,466
+	en tratando de conseguir esa orden de pan tostado ahí en lugar del comando drop.
+	
+	105
+	00:06:05,166 --> 00:06:07,466
+	¿Hay alguna manera que podemos conseguir que al final de la clase?
+	
+	106
+	00:06:07,483 --> 00:06:08,466
+	>> No.
+	
+	107
+	00:06:08,483 --> 00:06:11,466
+	>> No. Okay. Yo voy seguir trabajando en eso. No voy a tomar
+	
+	108
+	00:06:11,483 --> 00:06:15,333
+	no como una respuesta aún. Así que si estás a favor de tener un brindis
+	
+	109
+	00:06:15,483 --> 00:06:18,166
+	comando en lugar de un comando de gota, por favor déjenos saber acerca de eso,
+	
+	110
+	00:06:18,250 --> 00:06:22,466
+	y creo que vamos a ver tal vez si conseguimos suficiente calor en el
+	
+	111
+	00:06:23,333 --> 00:06:25,466
+	equipo de desarrollo en SQL tienes una orden de tostadas para la próxima versión.
+	
+	112
+	00:06:25,483 --> 00:06:29,466
+	>> He estado tratando de decirle a Brian acerca de este NC standard
+	
+	113
+	00:06:29,483 --> 00:06:34,466
+	tenemos yendo y tratando de quedarnos cerca de estándares, y por lo visto
+	
+	114
+	00:06:34,483 --> 00:06:37,466
+	no han llegado a tostar el mando todavía.
+	
+	115
+	00:06:37,483 --> 00:06:40,466
+	>> Bueno, creo que podría establecer... que podría ser configurando
+	
+	116
+	00:06:40,483 --> 00:06:44,466
+	nuevos caminos para las personas. Tal vez todo el mundo cambiaría al
+	
+	117
+	00:06:44,483 --> 00:06:46,466
+	comando tostadas del comando drop. Es un comando fresco.
+	
+	118
+	00:06:46,483 --> 00:06:49,466
+	Vamos a usar tostadas mucho hoy. Lamentablemente tengo que
+	
+	119
+	00:06:49,483 --> 00:06:52,466
+	tipo de gota, pero cuando escribo en la gota, solo que estoy
+	
+	120
+	00:06:52,483 --> 00:06:53,466
+	tostada de pensamiento cuando yo estoy escribiendo que en.
+	
+	121
+	00:06:53,483 --> 00:06:54,466
+	>> No, no.
+	
+	122
+	00:06:54,483 --> 00:06:57,466
+	>> Pero no hay una caída de mando... no hay un toast command.
+	
+	123
+	00:06:57,483 --> 00:07:00,166
+	Muy bien. También vamos a hablar de data control statements.
+	
+	124
+	00:07:00,250 --> 00:07:03,466
+	Son donde controle el acceso a los diferentes objetos dentro
+	
+	125
+	00:07:03,483 --> 00:07:08,466
+	de las bases de datos de SQL Server. Estas son los comandos DCL. A tocar
+	
+	126
+	00:07:08,183 --> 00:07:11,316
+	en eso así. Así tres categorías diferentes de
+	
+	127
+	00:07:11,400 --> 00:07:11,466
+	comandos que utilizaremos
+	
+	128
+	00:07:12,483 --> 00:07:17,466
+	DML, DDL y DCL. Ahora, tenemos algunos elementos del lenguaje T-SQL
+	
+	129
+	00:07:17,483 --> 00:07:19,466
+	que vamos a utilizar, vamos a profundizar un poco
+	
+	130
+	00:07:19,483 --> 00:07:22,466
+	más de detalle. Voy a introducirlos y luego dejar que Tobias 
+	
+	131
+	00:07:22,483 --> 00:07:24,466
+	hablar de sólo un poco, un poco más sobre estas.
+	
+	132
+	00:07:24,483 --> 00:07:27,466
+	Pero tenemos lo que se llaman predicados y operadores que utilizamos
+	
+	133
+	00:07:27,483 --> 00:07:30,466
+	cuando estamos escribiendo comandos de T-SQL, funciones diferentes que
+	
+	134
+	00:07:30,483 --> 00:07:33,466
+	podemos llamar. Nosotros podemos querer reutilizar algo así como un procedimiento de la tienda,
+	
+	135
+	00:07:33,483 --> 00:07:37,166
+	así que nosotros podemos querer pasar variables. Tenemos expresiones diferentes
+	
+	136
+	00:07:37,483 --> 00:07:41,450
+	que podremos usar, maneras de tener un lote trabajo y podemos
+	
+	137
+	00:07:41,483 --> 00:07:44,466
+	suministrar separadores en para eso. Queremos tal vez controlar el flujo
+	
+	138
+	00:07:44,483 --> 00:07:48,466
+	por lo que podríamos utilizar cosas como un if/else instrucción. Y luego por
+	
+	139
+	00:07:48,483 --> 00:07:51,266
+	supuesto queremos comentar porque siempre somos buenos contenido
+	
+	140
+	00:07:51,350 --> 00:07:53,466
+	comentando, por lo que queremos para asegurarse de que podemos agregar comentarios. Y vamos a
+	
+	141
+	00:07:53,483 --> 00:07:57,466
+	 mostrar cómo agregamos comentarios para este contenido. Así que
+	
+	142
+	00:07:57,483 --> 00:08:01,466
+	voy a Tobias de nosotros caminar a través de algunos de estos
+	
+	143
+	00:08:02,383 --> 00:08:04,466
+	elementos que podemos utilizar cuando estamos trabajando con T-SQL.
+	
+	144
+	00:08:06,483 --> 00:08:07,466
+	>> Gracias, Brian. Seguro.
+	
+	145
+	00:08:07,483 --> 00:08:13,400
+	¿Así que lo que estás viendo es el tipo de estándar lo
+	
+	146
+	00:08:13,483 --> 00:08:15,466
+	que imagino en cualquier lenguaje de programación, VERDAD?
+	
+	147
+	00:08:16,483 --> 00:08:22,466
+	Tenemos predicados. Incluye los operadores comunes,
+	
+	148
+	00:08:22,483 --> 00:08:25,466
+	los operadores de comparación común entre ellos, que es una especie de cadena
+	
+	149
+	00:08:25,483 --> 00:08:30,433
+	especial de operador. Tenemos tres operadores lógicos no y,
+	
+	150
+	00:08:30,450 --> 00:08:30,466
+	y o.
+	
+	151
+	00:08:31,483 --> 00:08:36,0
+	E indagar en cómo utilizar todo esto como vamos a través de la clase.
+	
+	152
+	00:08:36,483 --> 00:08:38,466
+	Y creo que lo que interesa que tipo de enfoque
+	
+	153
+	00:08:38,483 --> 00:08:45,233
+	en es lo que las mejores prácticas, cómo debe utilizarse la lengua,
+	
+	154
+	00:08:45,316 --> 00:08:49,466
+	lo que debe pensar y lo que conviene evitar por
+	
+	155
+	00:08:49,483 --> 00:08:52,466
+	varias razones. Es todo muy sensible al contexto. ¿Verdad?
+	
+	156
+	00:08:52,483 --> 00:08:56,466
+	Así que usando lo correcto en el momento adecuado claramente va
+	
+	157
+	00:08:56,483 --> 00:08:57,383
+	a ayudarte.
+	
+	158
+	00:08:58,483 --> 00:09:01,466
+	>> Muy bien. Estas son los predicados. Ahora, también tenemos funciones.
+	
+	159
+	00:09:01,483 --> 00:09:04,0
+	Verás que tenemos tres categorías de funciones. Tenemos funciones de
+	
+	160
+	00:09:04,483 --> 00:09:07,466
+	cadena, algo así como si desea extraer una porción de
+	
+	161
+	00:09:07,483 --> 00:09:10,466
+	una cadena o queremos mirar la longitud de una cadena. Tenemos
+	
+	162
+	00:09:11,483 --> 00:09:13,466
+	unciones de fecha y hora. Queremos salir y tomar la fecha del sistema,
+	
+	163
+	00:09:13,483 --> 00:09:18,333
+	que queremos tal vez Revise y agregue un cierto marco de tiempo para
+	
+	164
+	00:09:18,483 --> 00:09:21,200
+	un día. Y luego tenemos las funciones de agregado. Queremos que la venta promedio
+	
+	165
+	00:09:21,283 --> 00:09:26,466
+	de un vendedor particular o el total de ventas para un vendedor particular.
+	
+	166
+	00:09:26,483 --> 00:09:30,466
+	Los que caen bajo las funciones de agregado. Para que podamos usar estas funciones.
+	
+	167
+	00:09:30,483 --> 00:09:33,466
+	Y, otra vez, vamos a ver estos como salimos a lo largo de la presentación de hoy.
+	
+	168
+	00:09:34,0 --> 00:09:37,466
+	Y vamos a ver realmente en uso. Ahora, la idea de usar
+	
+	169
+	00:09:38,166 --> 00:09:41,466
+	las variables es muy potente porque esto nos da la oportunidad
+	
+	170
+	00:09:41,483 --> 00:09:45,233
+	de reutilizar elementos como procedimientos de la tienda que hemos creado y poder
+	
+	171
+	00:09:45,316 --> 00:09:48,466
+	pasar las diferentes variables o valores diferentes con estas variables.
+	
+	172
+	00:09:48,483 --> 00:09:52,183
+	Por tanto veremos cómo podemos declarar una variable. Muy franco.
+	
+	173
+	00:09:52,466 --> 00:09:55,466
+	Y ahora también lo podemos declarar no sólo pero también podemos inicializar
+	
+	174
+	00:09:56,166 --> 00:09:59,233
+	el mismo principio de tiempo con SQL Server 2008, de hecho.
+	
+	175
+	00:09:59,316 --> 00:10:01,466
+	Así que vamos a hablar sobre el uso de variables y la potencia pueden
+	
+	176
+	00:10:02,166 --> 00:10:04,466
+	hacerlo un poco más flexible y dinámica, por
+	
+	177
+	00:10:05,483 --> 00:10:08,200
+	ejemplo, tienda procedimiento, si estamos tratando de usar eso. Aquí tenemos
+	
+	178
+	00:10:08,283 --> 00:10:11,466
+	algunas expresiones. Como estamos haciendo una selección, un año, la
+	
+	179
+	00:10:11,483 --> 00:10:15,466
+	fecha de pedido más 1, tenemos precio por unidad pedido seleccione cantidad veces.
+	
+	180
+	00:10:15,183 --> 00:10:17,466
+	Así que podemos conseguir muy creativos con nuestras instrucciones select. No tenemos
+	
+	181
+	00:10:17,483 --> 00:10:21,333
+	sólo seleccione asterisco en un nombre de tabla y el pie.
+	
+	182
+	00:10:21,416 --> 00:10:24,466
+	Podemos ir y ser creativos y personalizar de ese conjunto
+	
+	183
+	00:10:24,483 --> 00:10:26,466
+	de resultados. Y vamos a mirar algunas de las oportunidades
+	
+	184
+	00:10:26,483 --> 00:10:30,0
+	que tenemos para la personalización de ese resultado mediante el uso
+	
+	185
+	00:10:30,483 --> 00:10:33,333
+	de algunas de estas expresiones que tenemos a nuestra disposición. Y el uso
+	
+	186
+	00:10:33,416 --> 00:10:36,466
+	de trabajos por lotes son realmente potentes porque esto nos permite
+	
+	187
+	00:10:36,483 --> 00:10:40,466
+	poder ir allí y contenido de la escritura y luego podemos programar
+	
+	188
+	00:10:40,233 --> 00:10:44,466
+	contenido para ejecutar en un momento determinado. Y si tenemos varias
+	
+	189
+	00:10:44,483 --> 00:10:48,466
+	declaraciones, a menudo debemos separarlos. Más a menudo lo
+	
+	190
+	00:10:48,483 --> 00:10:52,466
+	hacemos con la declaración del ir. Ahora, vaya no es específico a un comando de SQL
+	
+	191
+	00:10:52,483 --> 00:10:56,466
+	Server T-SQL. Sólo nos permite ir por ahí a separar
+	
+	192
+	00:10:57,433 --> 00:11:00,466
+	los diferentes procesos o comandos que tenemos dentro de un trabajo por lotes.
+	
+	193
+	00:11:00,483 --> 00:11:03,466
+	>> Y es importante saber aquí con go eso es algo
+	
+	194
+	00:11:04,483 --> 00:11:08,466
+	que ve a la herramienta como SQL Server Management Studio. Se ve
+	
+	195
+	00:11:08,483 --> 00:11:11,416
+	ve y sabe que todo lo que era antes de ir te lo envío por separado,
+	
+	196
+	00:11:11,483 --> 00:11:13,466
+	esperar una respuesta desde el servidor y luego enviar el resto,
+	
+	197
+	00:11:14,483 --> 00:11:17,466
+	derecho y ello entre el go. Así que SQL Server sí mismo, como
+	
+	198
+	00:11:17,483 --> 00:11:20,466
+	Brian mencionado, realmente no sabe lo que es. Sus diferentes
+	
+	199
+	00:11:20,483 --> 00:11:24,166
+	herramientas pueden utilizar separadores de lotes diferentes. Pero todas nuestras herramientas
+	
+	200
+	00:11:24,483 --> 00:11:27,466
+	por defecto para ir como el separador de lotes.
+	
+	201
+	00:11:28,483 --> 00:11:32,166
+	>> Algunos otros elementos que podemos utilizar son el control de flujo. Voy a estar
+	
+	202
+	00:11:32,483 --> 00:11:36,466
+	hablando de esto brevemente. If/else, al mismo tiempo, comience a fin. El control de errores.
+	
+	203
+	00:11:36,483 --> 00:11:39,466
+	Vamos a ver algunas formas de captura de errores y cómo vamos a
+	
+	204
+	00:11:39,483 --> 00:11:42,433
+	ser capaces de responder a esos errores. Veremos los más
+	
+	205
+	00:11:42,483 --> 00:11:46,466
+	tarde hoy. Y, una vez más, pasaremos algún tiempo hablando acerca de
+	
+	206
+	00:11:46,483 --> 00:11:49,466
+	las transacciones, cómo definir una transacción dentro de un lote, por
+	
+	207
+	00:11:49,483 --> 00:11:52,466
+	ejemplo, en una transacción begin, cometer esa transacción
+	
+	208
+	00:11:52,483 --> 00:11:55,216
+	y potencialmente tener que deshacer la transacción.
+	
+	209
+	00:11:55,483 --> 00:11:58,250
+	Vas a querer documentar, sobre todo a empezar a recibir en los
+	
+	210
+	00:11:58,333 --> 00:12:00,316
+	trabajos por lotes, vas a querer documentar lo que está sucediendo
+	
+	211
+	00:12:00,400 --> 00:12:02,466
+	allí. Esto le da la oportunidad de usar lo que denomina
+	
+	212
+	00:12:02,483 --> 00:12:06,366
+	un bloque de código comentado. Esto le permite crear comentarios.
+	
+	213
+	00:12:06,450 --> 00:12:08,466
+	Como se puede ver tenemos un asterisco barra. Nada que
+	
+	214
+	00:12:09,333 --> 00:12:13,466
+	decir después de un comentario hasta que llego el asterisco barra
+	
+	215
+	00:12:13,483 --> 00:12:16,466
+	oblicua otra vez. Que cierra que el bloque de comentarios hacia fuera. Si desea
+	
+	216
+	00:12:16,483 --> 00:12:20,466
+	sólo una línea de comentarios, podemos utilizar el tablero de la rociada. Y entonces
+	
+	217
+	00:12:20,483 --> 00:12:23,466
+	lo justo... esa línea no se ejecutará. Así que si estás
+	
+	218
+	00:12:23,483 --> 00:12:27,466
+	trabajando en una secuencia particular de la solución de problemas y hay cierto
+	
+	219
+	00:12:27,483 --> 00:12:30,416
+	código que no desea ejecutar temporalmente, usted puede tipo de comentario
+	
+	220
+	00:12:30,483 --> 00:12:34,466
+	que utilizando el bloque de código comentado o estos dos guiones,
+	
+	221
+	00:12:34,183 --> 00:12:36,466
+	y lo ignoran temporalmente. O si desea documentar
+	
+	222
+	00:12:36,483 --> 00:12:40,233
+	lo que haces allí, usted sabe, como se ejecuta el trabajo
+	
+	223
+	00:12:40,316 --> 00:12:43,466
+	por lotes, realmente puede agregar algunos comentarios a esa documentación.
+	
+	224
+	00:12:43,483 --> 00:12:46,466
+	O como documentación para ese script o que el trabajo por lotes.
+	
+	225
+	00:12:47,483 --> 00:12:51,183
+	Ahora, es bonita la idea de realmente ejecutar una consulta... Si
+	
+	226
+	00:12:51,266 --> 00:12:54,466
+	entiendes que tienes esto select, tienes el, tienes la...
+	
+	227
+	00:12:54,483 --> 00:12:58,466
+	posiblemente el donde, tal vez el grupo por, tal vez la orden de.
+	
+	228
+	00:12:58,483 --> 00:13:01,466
+	A menudo nos fijamos en la manera que está escrito y pensamos que es
+	
+	229
+	00:13:01,483 --> 00:13:04,466
+	lo que realmente se ejecuta. Lo que queremos mostrar aquí es
+	
+	230
+	00:13:04,483 --> 00:13:08,433
+	el orden lógico de la consulta está procesando. Así que lo primero
+	
+	231
+	00:13:08,483 --> 00:13:10,466
+	que va a suceder es vas a saltar a la de.
+	
+	232
+	00:13:10,483 --> 00:13:11,466
+	Vamos a averiguar para asegurarse de que...
+	
+	233
+	00:13:11,483 --> 00:13:15,466
+	>> Así, Brian, simplemente ¿por qué me importa? ¿Por qué es importante con
+	
+	234
+	00:13:15,483 --> 00:13:16,466
+	la consulta lógica de procesamiento?
+	
+	235
+	00:13:16,483 --> 00:13:18,466
+	>> Porque tú quieres asegurarte de que tu entiendes cuando estás
+	
+	236
+	00:13:18,483 --> 00:13:21,216
+	escribiendo esta información y si es solución de problemas y tratando
+	
+	237
+	00:13:21,300 --> 00:13:25,466
+	de optimizarla, si comprende la orden que se ejecutan estas opciones
+	
+	238
+	00:13:25,483 --> 00:13:28,466
+	o estas afirmaciones, podría dar la
+	
+	239
+	00:13:28,483 --> 00:13:32,466
+	oportunidad de optimizar el y el hacerla correr un poco más rápido.
+	
+	240
+	00:13:33,183 --> 00:13:35,366
+	>> sí, eso es bueno. Y también es... también es importante
+	
+	241
+	00:13:35,450 --> 00:13:39,383
+	saber el orden lógico de la consulta porque le ayuda a entender
+	
+	242
+	00:13:39,466 --> 00:13:43,466
+	exactamente lo que necesita continuar bajo la superficie, a la derecha, debajo de las cobijas.
+	
+	243
+	00:13:43,483 --> 00:13:49,0
+	Así que si usted no sabe exactamente cómo el lenguaje de consulta estructura
+	
+	244
+	00:13:49,483 --> 00:13:53,400
+	derecha, entonces usted puede terminar no obteniendo los resultados que desea.
+	
+	245
+	00:13:53,483 --> 00:13:56,466
+	Por lo que no... no significa que todo lo que escribes es exactamente
+	
+	246
+	00:13:56,483 --> 00:14:01,466
+	lo que vamos a hacer, porque tenemos este optimizador de lujo
+	
+	247
+	00:14:01,483 --> 00:14:05,466
+	que da cuenta de la manera correcta, la mejor manera de darle los resultados.
+	
+	248
+	00:14:06,266 --> 00:14:09,466
+	Pero significa que nos estamos limitados por lo que lógicamente siempre
+	
+	249
+	00:14:09,483 --> 00:14:12,466
+	ejecutamos en este orden. Por lo que es super importante
+	
+	250
+	00:14:13,0 --> 00:14:15,466
+	comprender el proceso lógico de la consulta..
+	
+	251
+	00:14:15,483 --> 00:14:18,466
+	>> Por lo que en realidad comienza con la declaración y luego se va
+	
+	252
+	00:14:18,483 --> 00:14:20,466
+	al donde cláusula. Yo solo voy a traer éstos, verás,
+	
+	253
+	00:14:20,483 --> 00:14:25,450
+	como que están contados aquí. Grupo por tener y luego se va
+	
+	254
+	00:14:25,483 --> 00:14:27,466
+	a seleccionar. Curiosamente, lo primero que escribimos es
+	
+	255
+	00:14:27,483 --> 00:14:31,450
+	la selección, pero que realmente no es a.... sabes, no es dirigida hasta...
+	
+	256
+	00:14:31,483 --> 00:14:35,300
+	bueno, va a llamar al paso 5. Y si hay un orden, que
+	
+	257
+	00:14:35,383 --> 00:14:39,466
+	se ejecuta finalmente. Así, Sabe usted que es bueno entender ese orden,
+	
+	258
+	00:14:39,233 --> 00:14:41,466
+	que procesamiento de la orden así cuando estás escribiendo tus dudas o
+	
+	259
+	00:14:41,483 --> 00:14:44,333
+	si usted está tratando de optimizar sus consultas, puede ver de donde
+	
+	260
+	00:14:44,416 --> 00:14:45,466
+	viene esa información.
+	
+	261
+	00:14:45,483 --> 00:14:49,466
+	>> Y nos metemos en más detalles sobre el procesamiento de consulta lógica
+	
+	262
+	00:14:49,483 --> 00:14:53,450
+	más adelante, porque hay algunos otros elementos a la lengua
+	
+	263
+	00:14:53,483 --> 00:14:56,466
+	que son además de lo que nos estamos mostrando en esta diapositiva.
+	
+	264
+	00:14:58,433 --> 00:15:00,466
+	>> Así que esto es aplicar el orden lógico de las operaciones.
+	
+	265
+	00:15:01,166 --> 00:15:03,466
+	Tiene esta declaración aquí, así que vamos a empezar desde la parte superior, utilizar
+	
+	266
+	00:15:03,483 --> 00:15:06,466
+	obras de aventura. Nosotros también... identificar qué bases de datos que queremos
+	
+	267
+	00:15:06,483 --> 00:15:10,466
+	usar, y así siempre iniciar una declaración con un uso para asegurarme
+	
+	268
+	00:15:10,483 --> 00:15:12,466
+	de que estoy en la base de datos apropiada.
+	
+	269
+	00:15:13,483 --> 00:15:14,466
+	A continuación vamos a añadir la de.
+	
+	270
+	00:15:15,483 --> 00:15:17,466
+	Esto es realmente sales.salesorderheader.
+	
+	271
+	00:15:18,483 --> 00:15:22,266
+	Donde ID de cliente es igual a un cierto número. Agrupar por vendedor.
+	
+	272
+	00:15:22,483 --> 00:15:25,466
+	Y luego tenemos que agarrar el año de la fecha del pedido.
+	
+	273
+	00:15:25,483 --> 00:15:27,466
+	Habiendo recuento mayor que 1.
+	
+	274
+	00:15:28,483 --> 00:15:30,466
+	Y luego ejecutamos, luego tenemos la porción selecta. No vamos a
+	
+	275
+	00:15:30,483 --> 00:15:33,183
+	escribir la declaración de esta manera, pero, una vez más, se trata de cómo
+	
+	276
+	00:15:33,266 --> 00:15:36,466
+	una declaración que hemos escrito será procesada por SQL Server.
+	
+	277
+	00:15:37,333 --> 00:15:39,466
+	Y finalmente terminar con la orden.
+	
+	278
+	00:15:39,483 --> 00:15:43,466
+	>> Sí. ¿Así que una cosa que sólo quiero mencionar sobre el uso es que
+	
+	279
+	00:15:43,483 --> 00:15:46,466
+	tenemos dos grandes productos que hay con respecto a SQL, derecho? Es
+	
+	280
+	00:15:46,483 --> 00:15:49,466
+	SQL Server 2012, que es nuestro producto local, y entonces tenemos la
+	
+	281
+	00:15:49,483 --> 00:15:53,466
+	base de datos SQL Azure de Windows, que es nuestra nube
+	
+	282
+	00:15:53,166 --> 00:15:57,333
+	en Azure. Y la declaración de uso propio no se admite en SQL
+	
+	283
+	00:15:57,416 --> 00:16:02,300
+	base de datos debido a lo que vendemos es algo diferente de
+	
+	284
+	00:16:02,383 --> 00:16:04,466
+	SQL Server. Vendemos bases de datos en lugar de instancias.
+	
+	285
+	00:16:05,483 --> 00:16:09,466
+	Así es importante saber. Si quieres crear software que
+	
+	286
+	00:16:09,483 --> 00:16:13,466
+	corre bien en ambas plataformas, usted no debe usar el
+	
+	287
+	00:16:13,483 --> 00:16:16,466
+	comando use dentro de su programa. Se va muy a menudo utilizar en
+	
+	288
+	00:16:16,483 --> 00:16:20,466
+	SQL Server para depurar o para probar tus scripts, a la derecha,
+	
+	289
+	00:16:20,483 --> 00:16:24,466
+	pero dentro de su software, su aplicación en la que escribes, puede que desee
+	
+	290
+	00:16:24,483 --> 00:16:28,466
+	evitar el uso de uso. Otra cosa que es interesante aquí es
+	
+	291
+	00:16:28,483 --> 00:16:33,166
+	que si usted está interesado en que funcione en ambos la plataforma Azure,
+	
+	292
+	00:16:33,483 --> 00:16:37,333
+	así como en nuestra plataforma local, debe mirar tratando
+	
+	293
+	00:16:37,483 --> 00:16:40,466
+	en ambos. Y si se desarrollan contra la DB de SQL Azure de Windows, se puede
+	
+	294
+	00:16:40,483 --> 00:16:43,466
+	ejecutar en SQL Server así.
+	
+	295
+	00:16:44,0 --> 00:16:47,466
+	>> ¿Están sugiriendo que deben probar el código antes que implementan?
+	
+	296
+	00:16:47,483 --> 00:16:48,466
+	>> No, no, no.
+	
+	297
+	00:16:48,483 --> 00:16:50,466
+	>> Realmente. Está bien. Porque no sabía que debíamos hacerlo.
+	
+	298
+	00:16:50,483 --> 00:16:54,333
+	Tan bien. Muy bien. Echemos un vistazo a algunas básicas instrucciones select
+	
+	299
+	00:16:54,416 --> 00:16:58,466
+	otra vez. Algunas de estas son más avanzadas y podrían estar
+	
+	300
+	00:16:58,216 --> 00:17:00,466
+	familiarizados con esto, pero queremos sólo para asegurarse de que todos
+	
+	301
+	00:17:00,483 --> 00:17:03,466
+	en la misma página aquí. Así que tenemos una selección, suministrar la
+	
+	302
+	00:17:03,483 --> 00:17:05,466
+	lista de selección, la del donde, el grupo de la orden por.
+	
+	303
+	00:17:05,483 --> 00:17:07,466
+	Vamos a ver muchos de estos.
+	
+	304
+	00:17:08,416 --> 00:17:10,466
+	Aquí es donde estamos buscando recuperar la llamada de un grupo.
+	
+	305
+	00:17:10,483 --> 00:17:14,466
+	Realmente podemos usar simplemente seleccione el ID de cliente, ID de tienda de ventas.Cliente.
+	
+	306
+	00:17:14,483 --> 00:17:19,466
+	Así que vamos a identificar el objeto en el esquema para ese objeto.
+	
+	307
+	00:17:19,483 --> 00:17:21,466
+	Así es casi tan básico como usted puede conseguir. Bien, usted puede conseguir un
+	
+	308
+	00:17:21,483 --> 00:17:24,466
+	poco más básicos. En vez de identificar las columnas, podría
+	
+	309
+	00:17:24,483 --> 00:17:26,466
+	cambiar los nombres de columna y poner un asterisco en allí.
+	
+	310
+	00:17:26,483 --> 00:17:28,466
+	Es la más elemental instrucción select que puede escribir.
+	
+	311
+	00:17:28,483 --> 00:17:31,466
+	Select asterisco de nombre de la tabla. Realmente la llevamos
+	
+	312
+	00:17:31,483 --> 00:17:32,466
+	a otro nivel...
+	
+	313
+	00:17:32,483 --> 00:17:33,166
+	>> Podemos hacer que sea más fácil.
+	
+	314
+	00:17:33,250 --> 00:17:34,366
+	>> ¿Hacen más fácil que eso?
+	
+	315
+	00:17:34,450 --> 00:17:36,200
+	>> sí. Seleccione el espacio 1.
+	
+	316
+	00:17:36,283 --> 00:17:37,466
+	>> Seleccione el espacio 1. Es decir…
+	
+	317
+	00:17:37,483 --> 00:17:39,466
+	>> Es probablemente el más fácil se puede ir.
+	
+	318
+	00:17:39,483 --> 00:17:43,466
+	>> Está bien. Bueno, está bien. Así que trate de eso. Si desea que la instrucción más fácil
+	
+	319
+	00:17:43,483 --> 00:17:46,466
+	para que realmente pueda salir y presumir que efectivamente has enviado
+	
+	320
+	00:17:46,483 --> 00:17:50,366
+	y ejecuta una instrucción select... Qué es, seleccionar espacio 1.
+	
+	321
+	00:17:50,450 --> 00:17:53,283
+	>> Y realmente no es... suena trivial y estúpido
+	
+	322
+	00:17:53,366 --> 00:17:55,466
+	y por qué usted nunca haría eso, correcto, pero es realmente interesante
+	
+	323
+	00:17:55,483 --> 00:17:58,466
+	cuando desea hacer tuning de la performance, si usted está interesado
+	
+	324
+	00:17:58,483 --> 00:18:02,466
+	en lo que es el de hablar a SQL Server, como
+	
+	325
+	00:18:02,483 --> 00:18:06,233
+	la red, todas estas cosas, en lugar de entrar en lo que realmente
+	
+	326
+	00:18:06,316 --> 00:18:10,466
+	sucede en el motor de base de datos, seleccione 1 es perfecto para probar.
+	
+	327
+	00:18:10,483 --> 00:18:12,466
+	>> Impresionante. Definitivamente. Seleccione 1.
+	
+	328
+	00:18:13,433 --> 00:18:15,466
+	Muy bien. Mediante cálculos. Así como se puede ver aquí, hemos
+	
+	329
+	00:18:15,483 --> 00:18:18,466
+	seleccione la unidad precio cantidad de orden estamos realizar un precio unitario de
+	
+	330
+	00:18:19,483 --> 00:18:21,466
+	cálculo tiempos cantidad de la orden y nos vamos a
+	
+	331
+	00:18:21,483 --> 00:18:25,466
+	agarrar esto de la tabla de detalle de pedido de ventas. Para que realmente podamos
+	
+	332
+	00:18:25,483 --> 00:18:28,466
+	usar esto. Y tenemos diferentes cálculos. Ahora estamos haciendo
+	
+	333
+	00:18:28,483 --> 00:18:31,466
+	una multiplicación aquí. Pero podemos hacer una adición, podemos
+	
+	334
+	00:18:31,483 --> 00:18:35,166
+	hacer la división, hacer porcentajes. Así que tenemos estos diferentes cálculos,
+	
+	335
+	00:18:35,450 --> 00:18:38,433
+	cálculos escalares que están a nuestra disposición. También podemos hacer
+	
+	336
+	00:18:38,483 --> 00:18:40,466
+	una concatenación. Podemos concatenar contenido. Otra vez, vamos a
+	
+	337
+	00:18:40,483 --> 00:18:43,466
+	ver algunas muestras de estos. Estamos apenas clase de la introducción
+	
+	338
+	00:18:43,483 --> 00:18:45,466
+	de algunos de los temas que vamos a pasar por aquí.
+	
+	339
+	00:18:46,483 --> 00:18:49,350
+	Muy bien. Echemos un vistazo a algunas declaraciones básicas aquí.
+	
+	340
+	00:18:50,250 --> 00:18:52,466
+	Así que te salgan de la
+	
+	341
+	00:18:54,266 --> 00:18:58,0
+	diapositiva de PowerPoint y saltar en una imagen aquí,
+	
+	342
+	00:18:59,483 --> 00:19:02,466
+	vaya en SQL Management Studio. Y otra vez, tenemos trabajos de aventura
+	
+	343
+	00:19:02,483 --> 00:19:05,466
+	y ya estamos utilizando obras de aventura. Así que podemos hacer un
+	
+	344
+	00:19:05,483 --> 00:19:06,466
+	select otra vez.
+	
+	345
+	00:19:06,483 --> 00:19:07,466
+	>> 1, 1, 1.
+	
+	346
+	00:19:07,483 --> 00:19:09,466
+	>> 1. Voy a hacer que uno primero para que todo el mundo vea que
+	
+	347
+	00:19:09,483 --> 00:19:12,466
+	funciona. Y lo frío, si no estás familiarizado con esto,
+	
+	348
+	00:19:12,483 --> 00:19:14,466
+	puede destacar esto y simplemente ejecutarlo.
+	
+	349
+	00:19:15,466 --> 00:19:18,433
+	No tienes ningún nombre de columna y que obtenga el vuelto. Así que
+	
+	350
+	00:19:18,483 --> 00:19:21,466
+	como has dicho, Tobias, que hemos salido, nos hemos comunicado con
+	
+	351
+	00:19:21,483 --> 00:19:25,466
+	SQL Server, tenemos una respuesta. Así que sabemos que las cosas funcionen.
+	
+	352
+	00:19:25,483 --> 00:19:29,466
+	Somos capaces de comunicar. Ahora, también se puede tomar hasta una muesca
+	
+	353
+	00:19:29,483 --> 00:19:32,466
+	e ir y select asterisco de voy a decir ventas...
+	
+	354
+	00:19:33,483 --> 00:19:37,416
+	ventas... y lo con intelli-sense porque no podía
+	
+	355
+	00:19:37,483 --> 00:19:39,466
+	recordar exactamente lo que quería ir, podemos ir a las ventas
+	
+	356
+	00:19:40,333 --> 00:19:43,466
+	o mesa, orden encabezado y luego puede... otra vez, destacar
+	
+	357
+	00:19:44,333 --> 00:19:46,466
+	que y ejecute a ese comando..
+	
+	358
+	00:19:47,250 --> 00:19:49,466
+	Y ahora nos da un montón de información aquí. Probablemente
+	
+	359
+	00:19:49,483 --> 00:19:52,466
+	demasiado porque ahora tengo cada fila y realmente no quería
+	
+	360
+	00:19:52,483 --> 00:19:55,466
+	que cada fila de... o de cada columna, disculpe. Quería unos
+	
+	361
+	00:19:55,483 --> 00:19:58,466
+	pocos artículos sobre las filas de aquí. Así que podemos cambiar esto otra vez
+	
+	362
+	00:19:59,0 --> 00:20:02,466
+	para hacer una selección. Te coge ID de pedido de ventas.
+	
+	363
+	00:20:04,483 --> 00:20:05,466
+	Vamos a hacer ventas...
+	
+	364
+	00:20:06,216 --> 00:20:07,466
+	Vamos a hacer todo... explicarlo completamente.
+	
+	365
+	00:20:09,483 --> 00:20:11,466
+	Y a uno más.
+	
+	366
+	00:20:12,483 --> 00:20:16,466
+	Agarraremos el vencimiento sólo por tanto nos quedamos con él aquí.
+	
+	367
+	00:20:19,483 --> 00:20:22,466
+	Te especificamos aquí de
+	
+	368
+	00:20:24,216 --> 00:20:28,466
+	la sales.salesorderheader y voy hacer doble clic
+	
+	369
+	00:20:28,483 --> 00:20:32,466
+	en aquí, excepto unas pocas pulsaciones de teclas. Así que otra vez a destacar que
+	
+	370
+	00:20:32,483 --> 00:20:33,466
+	y ejecutar.
+	
+	371
+	00:20:33,483 --> 00:20:34,366
+	>> Como ventas.
+	
+	372
+	00:20:35,200 --> 00:20:36,333
+	>> ¿Disculpa?
+	
+	373
+	00:20:36,483 --> 00:20:41,466
+	>> Usted tendría que decir como ventas de... puedes intentarlo.
+	
+	374
+	00:20:41,483 --> 00:20:42,466
+	>> No escuché lo que dijiste. Lo siento.
+	
+	375
+	00:20:43,0 --> 00:20:45,466
+	>> Tienes que especificar el alias de la tabla ya que Sumaste it...
+	
+	376
+	00:20:45,483 --> 00:20:47,466
+	usas punto ventas.
+	
+	377
+	00:20:47,216 --> 00:20:48,466
+	>> Oh como ventas. Gotcha.
+	
+	378
+	00:20:49,483 --> 00:20:50,166
+	>> Ya ha agregado.
+	
+	379
+	00:20:51,483 --> 00:20:54,466
+	>> De sales.sales.duedate, sales.orderheader.
+	
+	380
+	00:20:55,483 --> 00:20:59,183
+	Como ventas... no realmente quiere hacer esto temprano, pero nos
+	
+	381
+	00:20:59,266 --> 00:21:00,350
+	haremos de todos modos.
+	
+	382
+	00:21:01,283 --> 00:21:04,466
+	Allí vamos. Ejecutar. Allí. Ahora hemos creado diferentes...
+	
+	383
+	00:21:04,483 --> 00:21:07,250
+	así que tenemos nuestro ID de pedido de venta y la fecha de vencimiento allí.
+	
+	384
+	00:21:08,350 --> 00:21:11,183
+	Muy bien. Entonces agregamos. Ahora se puede...
+	
+	385
+	00:21:11,266 --> 00:21:12,466
+	veamos todas las filas.
+	
+	386
+	00:21:13,383 --> 00:21:16,166
+	Vamos a ver si podemos controlar el número de filas devueltas.
+	
+	387
+	00:21:16,483 --> 00:21:17,466
+	¿Cómo hacemos esto?
+	
+	388
+	00:21:17,483 --> 00:21:19,466
+	Lo hacemos con una cláusula de la solicitud. Así que vamos a hacer...
+	
+	389
+	00:21:19,483 --> 00:21:22,466
+	otra vez, vamos a hacer... Voy a volver a esto. ¿Qué voy
+	
+	390
+	00:21:22,483 --> 00:21:24,466
+	a hacer aquí? Voy a subir y me voy a tirar a
+	
+	391
+	00:21:24,483 --> 00:21:27,466
+	donde en donde diremos ID de pedido
+	
+	392
+	00:21:31,483 --> 00:21:35,466
+	de ventas es igual o menor o igual a la
+	
+	393
+	00:21:36,483 --> 00:21:38,466
+	diremos 45.000.
+	
+	394
+	00:21:40,483 --> 00:21:42,466
+	Vamos a hacer... esto es parece bastante... vamos a hacer 44.
+	
+	395
+	00:21:44,483 --> 00:21:47,233
+	Ahora estamos eliminando el número de filas. Eliminamos el
+	
+	396
+	00:21:47,316 --> 00:21:49,466
+	número de columnas. Ahora estamos eliminando el número de filas.
+	
+	397
+	00:21:50,483 --> 00:21:53,466
+	Y ahora ves que si saltamos hasta mensajes realmente rápidos, verás
+	
+	398
+	00:21:53,483 --> 00:21:55,466
+	que tenemos 342 filas.
+	
+	399
+	00:21:56,333 --> 00:22:01,466
+	Ahora, si esto funcionó sin el donde cláusula antes
+	
+	400
+	00:22:01,483 --> 00:22:06,466
+	e ir a mensajes, tuvimos 31.465 filas. Por lo que la cláusula where se refiere...
+	
+	401
+	00:22:06,483 --> 00:22:09,466
+	ayuda a reducir el número de filas que se devuelven a usted
+	
+	402
+	00:22:09,483 --> 00:22:13,466
+	y se la dan muy potente con la gestión de ese tipo de contenido.
+	
+	403
+	00:22:14,483 --> 00:22:17,466
+	Así que podemos también, ya sabes, sólo lanzar una variación más aquí.
+	
+	404
+	00:22:17,483 --> 00:22:21,466
+	También podemos hacer el pedido. Así que te pedimos por tipo de...
+	
+	405
+	00:22:21,483 --> 00:22:23,466
+	vamos a ir con el ID de pedido de ventas.
+	
+	406
+	00:22:24,483 --> 00:22:25,466
+	>> Te gusta el ID de pedido de ventas.
+	
+	407
+	00:22:25,483 --> 00:22:28,466
+	>> sí, es fácil. Me gusta trabajar con números mejor. Creo que
+	
+	408
+	00:22:28,483 --> 00:22:29,266
+	es lo que es.
+	
+	409
+	00:22:30,250 --> 00:22:32,466
+	Así que vamos a hacer eso. Vamos a ejecutar y ahora
+	
+	410
+	00:22:32,483 --> 00:22:35,466
+	lo ordena o lo ordena por ID de orden.
+	
+	411
+	00:22:36,483 --> 00:22:39,466
+	Muy bien. Tan sólo unas pocas sentencias select que tipo de
+	
+	412
+	00:22:39,483 --> 00:22:44,283
+	mojarse los pies sobre la realización instrucciones select dentro
+	
+	413
+	00:22:44,366 --> 00:22:48,383
+	de SQL Server e intentar conseguir que se sienta cómodo con la idea podemos
+	
+	414
+	00:22:48,466 --> 00:22:52,466
+	usar... vamos a estar gastando tiempo en SSMS en que
+	
+	415
+	00:22:52,483 --> 00:22:55,216
+	podemos resaltar lo que queremos ejecutar y podemos construir sobre
+	
+	416
+	00:22:55,300 --> 00:22:57,466
+	nuestros comandos como estamos entrando en estos comandos.
+	
+	417
+	00:22:58,483 --> 00:23:00,433
+	Muy bien. En PowerPoint aquí.
+	
+	418
+	00:23:01,483 --> 00:23:07,183
+	¿Qué hice con mis diapositivas aquí? ¿Aquí? Pensé que ya
+	
+	419
+	00:23:07,266 --> 00:23:08,466
+	abrí un lugar. Aquí está.
+	
+	420
+	00:23:11,483 --> 00:23:14,466
+	Muy bien. Así es sólo una demostración rápida sobre la escritura de sentencias select básicas
+	
+	421
+	00:23:14,483 --> 00:23:17,466
+	Para revisión, presentamos a los tres tipos de comandos,
+	
+	422
+	00:23:17,483 --> 00:23:21,466
+	DMLs, DCLs, DDLs. Vamos a trabajar con estos durante todo el día.
+	
+	423
+	00:23:21,483 --> 00:23:24,466
+	Ya hemos hablado de diferentes elementos como predicados y operadores,
+	
+	424
+	00:23:25,0 --> 00:23:29,383
+	funciones, variables, comentando, control de flujo. Y, otra vez,
+	
+	425
+	00:23:29,466 --> 00:23:31,466
+	vamos a perforar en esto con más detalle. Analizamos los
+	
+	426
+	00:23:31,483 --> 00:23:35,266
+	diferentes elementos y cómo se procesan. Empezamos
+	
+	427
+	00:23:35,350 --> 00:23:39,283
+	con la del donde, el grupo de, tener, la selección
+	
+	428
+	00:23:39,366 --> 00:23:41,466
+	y luego la orden por. Que es el que realmente está
+	
+	429
+	00:23:41,483 --> 00:23:45,466
+	procesados cuando está ejecutando una instrucción select. Por lo que
+	
+	430
+	00:23:45,483 --> 00:23:48,466
+	se va a envolver a la primera sección donde vamos
+	
+	431
+	00:23:48,483 --> 00:23:52,466
+	a entrar y vamos a hacer información o proporcionar información
+	
+	432
+	00:23:52,483 --> 00:23:58,466
+	sobre los elementos básicos de lo que estamos haciendo con SQL Server.
 
